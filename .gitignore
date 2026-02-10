@@ -1,0 +1,6 @@
+.vscode
+*.o
+*.d
+*.out
+.obj
+computor-v2
