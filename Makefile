@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/02/10 14:36:54 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/02/11 18:32:35 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ CC			=	c++
 CFLAGS		=	-W -Wall -Wextra -Werror -Wshadow -Wold-style-cast -Wcast-qual -Wconversion -Wsign-conversion -Wstrict-aliasing
 CDEP		=	-MMD -MP
 OPTION		=	-g3
-OPTIMIZE	=	-O2
+# OPTIMIZE	=	-O2
 
 ERASE		=	\033[2K\r
 GREY		=	\033[30m
@@ -41,12 +41,11 @@ SUR			=	\033[7m
 END			=	\033[0m
 
 all: $(NAME)
-	@printf "$(BLUE)> $(NAME) : $(YELLOW)Project ready !$(END)\n"
+	@printf "$(BLUE)> $(NAME): $(YELLOW)Project ready!$(END)\n"
 
 $(NAME): $(OBJ)
 	$(CC) $^ -o $@
-	@printf "$(ERASE)$(BLUE)> $@ : $(GREEN)Success !$(END)\n\n"
-
+	@printf "$(ERASE)$(BLUE)> $@: $(GREEN)Success!$(END)\n\n"
 -include $(DEP)
 
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.cpp Makefile
