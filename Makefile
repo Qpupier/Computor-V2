@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/02/11 18:32:35 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/02/13 13:42:21 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,9 @@ NAME		=	computor-v2
 DIR_SRC		=	src
 DIR_OBJ		=	.obj
 DIR_INC		=	inc
-LST_SRC		=	main.cpp
+LST_SRC		=	main.cpp	\
+				parser.cpp	\
+				ast.cpp
 LST_OBJ		=	$(LST_SRC:.cpp=.o)
 LST_DEP		=	$(LST_OBJ:.o=.d)
 SRC			=	$(addprefix $(DIR_SRC)/, $(LST_SRC))
@@ -24,7 +26,7 @@ CC			=	c++
 CFLAGS		=	-W -Wall -Wextra -Werror -Wshadow -Wold-style-cast -Wcast-qual -Wconversion -Wsign-conversion -Wstrict-aliasing
 CDEP		=	-MMD -MP
 OPTION		=	-g3
-# OPTIMIZE	=	-O2
+OPTIMIZE	=	-O2
 
 ERASE		=	\033[2K\r
 GREY		=	\033[30m
