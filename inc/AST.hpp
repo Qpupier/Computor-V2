@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 14:34:41 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/13 17:57:31 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/16 19:46:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,22 @@
 
 # include "computor-v2.hpp"
 
+class Token;
+
 class Node
 {
 	public:
-		Node(std::string value): _value(std::move(value)), _left(nullptr), _right(nullptr) {};
+		Node(Token &token): _token(token), _left(nullptr), _right(nullptr) {};
 		~Node() {};
-
-		std::string	getValue() const { return _value; }
+	
+		Token&		getToken() const { return _token; }
 		Node*		getLeft() const { return _left; }
 		Node*		getRight() const { return _right; }
 		void setLeft(Node* left) { _left = left; }
 		void setRight(Node* right) { _right = right; }
 
 	private:
-		std::string _value;
+		Token&		_token;
 		Node*		_left;
 		Node*		_right;
 };

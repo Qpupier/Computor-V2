@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/02/16 14:05:12 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/02/16 19:44:57 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,8 @@ DIR_OBJ		=	.obj
 DIR_INC		=	inc
 LST_SRC		=	main.cpp	\
 				parser.cpp	\
-				ast.cpp
+				ast.cpp		\
+				Token.cpp
 LST_OBJ		=	$(LST_SRC:.cpp=.o)
 LST_DEP		=	$(LST_OBJ:.o=.d)
 SRC			=	$(addprefix $(DIR_SRC)/, $(LST_SRC))
