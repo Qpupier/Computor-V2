@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 13:42:09 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/13 18:40:06 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/16 18:17:20 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,42 +36,43 @@ std::vector<std::string>	find_next_parenthesis_group(const std::vector<std::stri
 	return (std::vector<std::string>());
 }
 
+static long int	select_operator(const std::vector<std::string> &tokens, unsigned long int size, const std::vector<std::string> &operators)
+{
+	unsigned int	depth;
+
+	depth = 0;
+	for (size_t i = 0; i < size; i++)
+	{
+		unsigned long int	pos;
+
+		pos = size - i - 1;
+		if (!depth)
+			for (const std::string &op: operators)
+				if (tokens[pos] == op)
+					return (static_cast<long int>(pos));
+		if (tokens[pos] == ")")
+			depth++;
+		else if (tokens[pos] == "(")
+			depth--;
+	}
+	return (-1);
+}
+
 static unsigned long int	select_less_priority_operator(const std::vector<std::string> &tokens)
 {
 	unsigned long int	size;
-	unsigned int		depth;
+	long int			pos;
 
 	size = tokens.size();
-	depth = 0;
-	for (size_t i = size; i; i--)
-	{
-		if (!depth && (tokens[i] == "+" || tokens[i] == "-"))
-			return (i);
-		if (tokens[i] == ")")
-			depth++;
-		else if (tokens[i] == "(")
-			depth--;
-	}
-	depth = 0;
-	for (size_t i = size; i; i--)
-	{
-		if (!depth && (tokens[i] == "*" || tokens[i] == "/" || tokens[i] == "%"))
-			return (i);
-		if (tokens[i] == ")")
-			depth++;
-		else if (tokens[i] == "(")
-			depth--;
-	}
-	depth = 0;
-	for (size_t i = size; i; i--)
-	{
-		if (!depth && (tokens[i] == "**" || tokens[i] == "^"))
-			return (i);
-		if (tokens[i] == ")")
-			depth++;
-		else if (tokens[i] == "(")
-			depth--;
-	}
+	pos = select_operator(tokens, size, {"-", "+"});
+	if (pos != -1)
+		return (static_cast<unsigned long int>(pos));
+	pos = select_operator(tokens, size, {"*", "/", "%"});
+	if (pos != -1)
+		return (static_cast<unsigned long int>(pos));
+	pos = select_operator(tokens, size, {"**", "^"});
+	if (pos != -1)
+		return (static_cast<unsigned long int>(pos));
 	throw std::logic_error("No operator found in the expression");
 	return (0);
 }
@@ -95,7 +96,7 @@ static bool	can_remove_external_parenthesis(const std::vector<std::string> &toke
 	return (!depth);
 }
 
-Node	*make_ast(const std::vector<std::string> &tokens)
+Node	*make_ast(std::vector<std::string> &tokens)
 {
 	std::vector<std::string>::const_iterator	tokens_begin;
 	std::vector<std::string>::const_iterator	tokens_end;
@@ -115,10 +116,27 @@ Node	*make_ast(const std::vector<std::string> &tokens)
 	if (tokens[0] == "(" && tokens[tokens.size() - 1] == ")" && can_remove_external_parenthesis(sub_tokens))
 		return (make_ast(sub_tokens));
 	pos = select_less_priority_operator(tokens);
+	if (!pos || pos == tokens.size() - 1)
+	{
+		if (!pos && (tokens[0] == "-" || tokens[0] == "+"))
+		{
+			if (tokens[0] == "-")
+			{
+				tokens[0] += "1";
+				tokens.insert(tokens.begin() + 1, "*");
+			}
+			else
+				tokens.erase(tokens.begin());
+			return (make_ast(tokens));
+		}
+		throw std::logic_error("Operator cannot be at the beginning or end of an expression");
+	}
 	std::cout << "Operator: " << tokens[pos] << std::endl;
 	node = new Node(tokens[pos]);
 	tokens_operator = tokens_begin + static_cast<long>(pos);
-	node->setLeft(make_ast(std::vector<std::string>(tokens_begin, tokens_operator)));
-	node->setRight(make_ast(std::vector<std::string>(tokens_operator + 1, tokens_end)));
+	std::vector<std::string> left_tokens(tokens_begin, tokens_operator);
+	std::vector<std::string> right_tokens(tokens_operator + 1, tokens_end);
+	node->setLeft(make_ast(left_tokens));
+	node->setRight(make_ast(right_tokens));
 	return (node);
 }

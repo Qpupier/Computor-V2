@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/13 16:53:31 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/16 17:32:46 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@
 class Node;
 
 # define TOKEN_WHITESPACE		"\\s*"
-# define TOKEN_SIGN				"[-+]?"
+// # define TOKEN_SIGN				"[-+]?"
+# define TOKEN_SIGN				""
 # define TOKEN_QUESTION			TOKEN_WHITESPACE "\\?" TOKEN_WHITESPACE
 # define TOKEN_LIST				"^" TOKEN_QUESTION "$"
 # define TOKEN_EXPRESSION		"[^=\\?]+"
@@ -55,6 +56,7 @@ typedef enum	e_token
 }				t_token;
 
 void	compute_expression(const std::string &line);
-Node	*make_ast(const std::vector<std::string> &tokens);
+Node	*make_ast(std::vector<std::string> &tokens);
+t_token	get_token_type(const std::string &token);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/02/13 13:42:21 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/02/16 14:05:12 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,10 +23,10 @@ SRC			=	$(addprefix $(DIR_SRC)/, $(LST_SRC))
 OBJ			=	$(addprefix $(DIR_OBJ)/, $(LST_OBJ))
 DEP			=	$(addprefix $(DIR_OBJ)/, $(LST_DEP))
 CC			=	c++
-CFLAGS		=	-W -Wall -Wextra -Werror -Wshadow -Wold-style-cast -Wcast-qual -Wconversion -Wsign-conversion -Wstrict-aliasing
+CXXFLAGS	=	-W -Wall -Wextra -Werror -Wshadow -Wold-style-cast -Wcast-qual -Wconversion -Wsign-conversion -Wstrict-aliasing -g3
+CXXFLAGS	+=	-O2 # Optimization
+# CXXFLAGS	+=	-fsanitize=address # Debugging
 CDEP		=	-MMD -MP
-OPTION		=	-g3
-OPTIMIZE	=	-O2
 
 ERASE		=	\033[2K\r
 GREY		=	\033[30m
@@ -46,13 +46,13 @@ all: $(NAME)
 	@printf "$(BLUE)> $(NAME): $(YELLOW)Project ready!$(END)\n"
 
 $(NAME): $(OBJ)
-	$(CC) $^ -o $@
+	$(CC) $(CXXFLAGS) $^ -o $@
 	@printf "$(ERASE)$(BLUE)> $@: $(GREEN)Success!$(END)\n\n"
 -include $(DEP)
 
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.cpp Makefile
 	mkdir -p $(DIR_OBJ)
-	$(CC) $(CFLAGS) $(CDEP) $(OPTION) $(OPTIMIZE) -I $(DIR_INC) -c $< -o $@
+	$(CC) $(CXXFLAGS) $(CDEP) -I $(DIR_INC) -c $< -o $@
 	@printf "$(ERASE)$(BLUE)> Compilation :$(END) $<"
 
 clean:
@@ -65,5 +65,11 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+run: $(NAME)
+	./$<
+
+valgrind: $(NAME)
+	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all -s ./$<
+
+.PHONY: all clean fclean re run valgrind
 .SILENT:

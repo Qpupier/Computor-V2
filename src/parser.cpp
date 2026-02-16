@@ -6,14 +6,13 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/13 17:59:26 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/16 18:41:09 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-// # include "computor-v2.hpp"
 #include "AST.hpp"
 
-static t_token	get_token_type(const std::string &token)
+t_token	get_token_type(const std::string &token)
 {
 	if (std::regex_match(token, std::regex("^" TOKEN_VARIABLE "$")))
 		return (E_VARIABLE);
@@ -65,9 +64,11 @@ static void	test_bounds(std::vector<std::string> &tokens)
 {
 	if (tokens[tokens.size() - 1] == "?")
 		tokens.pop_back();
-	if ((get_token_type(tokens[0]) == E_OPERATOR) 	\
-			|| get_token_type(tokens[tokens.size() - 1]) == E_OPERATOR)
-		throw std::logic_error("Expression cannot start or end with an operator");
+	// if (tokens.empty())
+	// 	return;
+	// if ((get_token_type(tokens[0]) == E_OPERATOR) 	\
+	// 		|| get_token_type(tokens[tokens.size() - 1]) == E_OPERATOR)
+	// 	throw std::logic_error("Expression cannot start or end with an operator");
 }
 
 static void	remove_whitespaces(std::vector<std::string> &tokens)
@@ -89,10 +90,64 @@ static void	test_whitespaces(const std::vector<std::string> &tokens)
 		{
 			prev_token = get_token_type(tokens[i - 1]);
 			next_token = get_token_type(tokens[i + 1]);
-			if (!((prev_token == E_OPERATOR || prev_token == E_LEFT_PARENTHESIS || prev_token == E_QUESTION) 	\
-					^ (next_token == E_OPERATOR || next_token == E_RIGHT_PARENTHESIS || next_token == E_QUESTION)))
-				throw std::logic_error("Invalid expression format2");
+			if ((prev_token != E_OPERATOR && next_token == E_LEFT_PARENTHESIS) 	\
+					|| (prev_token == E_RIGHT_PARENTHESIS && next_token != E_OPERATOR && next_token != E_QUESTION))
+				throw std::logic_error("No space allowed without operator");
 		}
+}
+
+void	free_ast(Node *ast)
+{
+	if (!ast)
+		return;
+	free_ast(ast->getLeft());
+	free_ast(ast->getRight());
+	delete ast;
+}
+
+static const std::string	new_operator(const t_token prev_token, const t_token current_token)
+{
+	// if (sign == '-' || sign == '+')
+	// {
+	// 	tokens[i] = tokens[i].substr(1);
+	// 	return (std::string(1, sign));
+	// }
+	if ((prev_token == E_RIGHT_PARENTHESIS || prev_token == E_VARIABLE || prev_token == E_MATRIX) 	\
+			&& (current_token == E_LEFT_PARENTHESIS || current_token == E_VARIABLE || current_token == E_MATRIX))
+		return ("**");
+	return ("*");
+}
+
+void	set_missing_operators(std::vector<std::string> &tokens)
+{
+	for (unsigned long int i = 1; i < tokens.size(); i++)
+	{
+		t_token	prev_token;
+		t_token	current_token;
+
+		prev_token = get_token_type(tokens[i - 1]);
+		current_token = get_token_type(tokens[i]);
+		if (prev_token != E_OPERATOR && current_token != E_OPERATOR && prev_token != E_LEFT_PARENTHESIS && current_token != E_RIGHT_PARENTHESIS)
+		{
+			if (prev_token == E_VARIABLE && current_token == E_LEFT_PARENTHESIS)
+				continue; // Functions?
+			tokens.insert(tokens.begin() + static_cast<long int>(i), new_operator(prev_token, current_token));
+		}
+	}
+}
+
+static void	verif_signs(const std::vector<std::string> &tokens)
+{
+	if ((get_token_type(tokens[0]) == E_WHITESPACE && (tokens[1] == "-" || tokens[1] == "+") && get_token_type(tokens[2]) == E_WHITESPACE) 	\
+			|| ((tokens[0] == "-" || tokens[0] == "+") && get_token_type(tokens[1]) == E_WHITESPACE))
+		throw std::logic_error("Espace sign");
+	for (unsigned long int i = 2; i < tokens.size(); i++)
+	{
+		if (get_token_type(tokens[i - 2]) == E_LEFT_PARENTHESIS && (tokens[i - 1] == "-" || tokens[i - 1] == "+") && get_token_type(tokens[i]) == E_WHITESPACE)
+			throw std::logic_error("Espace sign");
+		if (i > 2 && get_token_type(tokens[i - 3]) == E_LEFT_PARENTHESIS && get_token_type(tokens[i - 2]) == E_WHITESPACE && (tokens[i - 1] == "-" || tokens[i - 1] == "+") && get_token_type(tokens[i]) == E_WHITESPACE)
+			throw std::logic_error("Espace sign");
+	}
 }
 
 void	compute_expression(const std::string &line)
@@ -100,6 +155,7 @@ void	compute_expression(const std::string &line)
 	std::string::const_iterator	start(line.begin());
 	std::regex					re(TOKEN_NEXT);
 	std::vector<std::string>	tokens;
+	Node						*ast;
 
 	if (!std::regex_match(line, std::regex(TOKEN_FULL_EXPRESSION)))
 		throw std::logic_error("Invalid expression format1");
@@ -114,8 +170,11 @@ void	compute_expression(const std::string &line)
 		tokens.push_back(*it);
 	}
 	test_whitespaces(tokens);
+	verif_signs(tokens);
 	remove_whitespaces(tokens);
-	test_bounds(tokens);
 	semantic_verification(tokens);
-	make_ast(tokens);
+	test_bounds(tokens);
+	set_missing_operators(tokens);
+	ast = make_ast(tokens);
+	free_ast(ast);
 }
