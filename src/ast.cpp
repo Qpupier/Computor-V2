@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 16:48:49 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/17 19:05:49 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/17 19:17:40 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,8 +162,8 @@ Node	*make_ast(std::vector<Token> &tokens)
 	if (adapted_tokens)
 		return (make_ast(*adapted_tokens));
 	std::cout << "Operator: " << tokens[static_cast<unsigned long int>(pos)].get_token() << std::endl;// Debug
+	tokens_operator = tokens_begin + pos;
 	node = new Node({tokens[static_cast<unsigned long int>(pos)]});
-	tokens_operator = tokens_begin + static_cast<long>(pos);
 	std::vector<Token> left_tokens(tokens_begin, tokens_operator);
 	std::vector<Token> right_tokens(tokens_operator + 1, tokens_end);
 	node->setLeft(make_ast(left_tokens));

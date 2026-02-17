@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 14:34:41 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/17 18:44:34 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/17 19:29:19 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,13 @@ class	Node
 
 		// Operator overloads
 		Node& operator=(const Node &other);
+		Node* operator*(const Node &other) const {return new Node(*this);(void)other;};
+		Node* operator+(const Node &other) const {return new Node(*this);(void)other;};
+		Node* operator-(const Node &other) const {return new Node(*this);(void)other;};
+		Node* operator/(const Node &other) const {return new Node(*this);(void)other;};
+		// Node* operator**(const Node &other) const {return new Node(*this);(void)other;};
+		Node* operator%(const Node &other) const {return new Node(*this);(void)other;};
+		Node* operator^(const Node &other) const {return new Node(*this);(void)other;};
 
 		// Getters
 		std::vector<Token>	getTokens(void) const;
