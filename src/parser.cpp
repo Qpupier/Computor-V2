@@ -6,11 +6,12 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/17 16:56:29 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/17 19:06:54 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.hpp"
+#include "Variable.hpp"
 
 static void	semantic_verification(const std::vector<Token> &tokens)
 {
@@ -77,7 +78,30 @@ static void	whitespaces_format_error(const std::vector<Token> &tokens)
 	}
 }
 
-void	set_missing_operators(std::vector<Token> &tokens)
+static std::string	new_operator(Token::t_token prev_token, Token::t_token current_token)
+{
+	if (prev_token == Token::E_MATRIX && current_token == Token::E_MATRIX)
+		return ("**");
+	if ((prev_token == Token::E_RIGHT_PARENTHESIS || prev_token == Token::E_VARIABLE || prev_token == Token::E_MATRIX) 	\
+			&& (current_token == Token::E_LEFT_PARENTHESIS || current_token == Token::E_VARIABLE || current_token == Token::E_MATRIX))
+		return ("***");
+	return ("*");
+}
+
+static bool	test_function(std::vector<Token> &tokens, size_t pos, 	\
+		const std::map<std::string, Type> &stored)
+{
+	if (stored.find(tokens[pos - 1].get_token()) != stored.end() 	\
+			&& !dynamic_cast<const Variable*>(&stored.at(tokens[pos - 1].get_token())))
+	{
+		tokens[pos - 1].set_type(Token::E_FUNCTION);
+		return (true);
+	}
+	return (false);
+}
+
+void	set_missing_operators(std::vector<Token> &tokens, 	\
+		const std::map<std::string, Type> &stored)
 {
 	for (unsigned long int i = 1; i < tokens.size(); i++)
 	{
@@ -88,12 +112,11 @@ void	set_missing_operators(std::vector<Token> &tokens)
 		current_token = tokens[i].get_type();
 		if (prev_token != Token::E_OPERATOR && current_token != Token::E_OPERATOR && prev_token != Token::E_LEFT_PARENTHESIS && current_token != Token::E_RIGHT_PARENTHESIS)
 		{
-			if (prev_token == Token::E_VARIABLE && current_token == Token::E_LEFT_PARENTHESIS)
-				continue; // Functions?
-			tokens.insert(tokens.begin() + static_cast<long int>(i), 											\
-					Token((prev_token == Token::E_RIGHT_PARENTHESIS || prev_token == Token::E_VARIABLE || prev_token == Token::E_MATRIX) 	\
-						&& (current_token == Token::E_LEFT_PARENTHESIS || current_token == Token::E_VARIABLE || current_token == Token::E_MATRIX) 	\
-					? "**" : "*", Token::E_OPERATOR));
+			if (prev_token == Token::E_VARIABLE && current_token == Token::E_LEFT_PARENTHESIS && test_function(tokens, i, stored))
+				continue;
+			tokens.insert(tokens.begin() + static_cast<long int>(i), 	\
+					Token(new_operator(prev_token, current_token), 		\
+					Token::E_OPERATOR));
 		}
 	}
 }
@@ -104,7 +127,10 @@ Node	*reduce_expression(Node *ast)
 	return (ast);
 }
 
-Node	*compute_expression(const std::string &line, const std::map<std::string, std::regex> &patterns, const std::map<const Token::t_token, std::regex> &tokens_types)
+Node	*compute_expression(const std::string &line, 		\
+		const std::map<std::string, std::regex> &patterns, 	\
+		const std::map<const Token::t_token, std::regex> &tokens_types, 	\
+		const std::map<std::string, Type> &stored)
 {
 	std::string::const_iterator	end(line.end());
 	std::vector<Token>			tokens;
@@ -128,6 +154,6 @@ Node	*compute_expression(const std::string &line, const std::map<std::string, st
 	semantic_verification(tokens);
 	if (tokens[tokens.size() - 1].get_type() == Token::E_QUESTION)
 		tokens.pop_back();
-	set_missing_operators(tokens);
+	set_missing_operators(tokens, stored);
 	return (reduce_expression(make_ast(tokens)));
 }

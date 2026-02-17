@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/02/17 16:54:03 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/02/17 18:17:35 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,9 @@ LST_SRC		=	main.cpp	\
 				parser.cpp	\
 				Node.cpp	\
 				Token.cpp	\
-				ast.cpp
+				ast.cpp		\
+				Type.cpp	\
+				Variable.cpp
 LST_OBJ		=	$(LST_SRC:.cpp=.o)
 LST_DEP		=	$(LST_OBJ:.o=.d)
 SRC			=	$(addprefix $(DIR_SRC)/, $(LST_SRC))

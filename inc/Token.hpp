@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:10:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/17 16:25:37 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/17 18:33:13 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ class	Token
 			E_NUMBER,
 			E_IMAGINARY,
 			E_VARIABLE,
+			E_FUNCTION,
 			E_OPERATOR,
 			E_MATRIX,
 			E_WHITESPACE,

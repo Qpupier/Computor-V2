@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 16:48:49 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/17 17:19:13 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/17 19:05:49 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static long int	select_operator(const std::vector<Token> &tokens, unsigned long 
 	return (-1);
 }
 
-static unsigned long int	select_less_priority_operator(const std::vector<Token> &tokens)
+static long int	select_less_priority_operator(const std::vector<Token> &tokens)
 {
 	unsigned long int	size;
 	long int			pos;
@@ -75,15 +75,20 @@ static unsigned long int	select_less_priority_operator(const std::vector<Token> 
 	size = tokens.size();
 	pos = select_operator(tokens, size, {"-", "+"});
 	if (pos != -1)
-		return (static_cast<unsigned long int>(pos));
+		return (pos);
 	pos = select_operator(tokens, size, {"*", "/", "%"});
 	if (pos != -1)
-		return (static_cast<unsigned long int>(pos));
-	pos = select_operator(tokens, size, {"**", "^"});
+		return (pos);
+	pos = select_operator(tokens, size, {"**", "^", "***"});
 	if (pos != -1)
-		return (static_cast<unsigned long int>(pos));
-	throw std::logic_error("No operator found in the expression");
-	return (0);
+	{
+		if (tokens[static_cast<unsigned long int>(pos)].get_token() == "***")
+			std::cout << "Found *** operator at position " << pos << std::endl;
+		return (pos);
+	}
+	// std::cout << "No operator found" << std::endl;
+	// throw std::logic_error("No operator found in the expression");
+	return (-1);
 }
 
 static bool	can_remove_external_parenthesis(const std::vector<Token> &tokens)
@@ -105,14 +110,16 @@ static bool	can_remove_external_parenthesis(const std::vector<Token> &tokens)
 	return (!depth);
 }
 
-static std::vector<Token>	*adapt_tokens(std::vector<Token> &tokens, std::vector<Token> &sub_tokens, unsigned long int *pos)
+static std::vector<Token>	*adapt_tokens(std::vector<Token> &tokens, std::vector<Token> &sub_tokens, long int *pos)
 {
 	if (tokens[0].get_type() == Token::E_LEFT_PARENTHESIS 							\
 			&& tokens[tokens.size() - 1].get_type() == Token::E_RIGHT_PARENTHESIS 	\
 			&& can_remove_external_parenthesis(sub_tokens))
 		return (&sub_tokens);
 	*pos = select_less_priority_operator(tokens);
-	if (!*pos || *pos == tokens.size() - 1)
+	if (*pos < 0)
+		return (nullptr);
+	if (!*pos || static_cast<unsigned long int>(*pos) == tokens.size() - 1)
 	{
 		if (!*pos && (tokens[0].get_token() == "-" || tokens[0].get_token() == "+"))
 		{
@@ -139,7 +146,7 @@ Node	*make_ast(std::vector<Token> &tokens)
 	std::vector<Token>					sub_tokens;
 	std::vector<Token>					*adapted_tokens;
 	Node 								*node;
-	unsigned long int					pos;
+	long int							pos;
 
 	std::cout << "Group: "; for (size_t i = 0; i < tokens.size(); i++) std::cout << "\033[30m[\033[32m" << tokens[i].get_token() << "\033[30m]\033[0m"; std::cout << std::endl;// Debug
 	tokens_begin = tokens.begin();
@@ -147,13 +154,15 @@ Node	*make_ast(std::vector<Token> &tokens)
 	if (tokens.empty())
 		return (nullptr);
 	if (tokens.size() == 1)
-		return (new Node(tokens[0]));
+		return (new Node({tokens[0]}));
 	sub_tokens = std::vector<Token>(tokens_begin + 1, tokens_end - 1);
 	adapted_tokens = adapt_tokens(tokens, sub_tokens, &pos);
+	if (pos == -1)
+		return (new Node(tokens));
 	if (adapted_tokens)
 		return (make_ast(*adapted_tokens));
-	std::cout << "Operator: " << tokens[pos].get_token() << std::endl;// Debug
-	node = new Node(tokens[pos]);
+	std::cout << "Operator: " << tokens[static_cast<unsigned long int>(pos)].get_token() << std::endl;// Debug
+	node = new Node({tokens[static_cast<unsigned long int>(pos)]});
 	tokens_operator = tokens_begin + static_cast<long>(pos);
 	std::vector<Token> left_tokens(tokens_begin, tokens_operator);
 	std::vector<Token> right_tokens(tokens_operator + 1, tokens_end);

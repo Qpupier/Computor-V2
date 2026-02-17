@@ -1,53 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Node.cpp                                           :+:      :+:    :+:   */
+/*   Variable.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/13 13:42:09 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/17 18:45:21 by qpupier          ###   ########lyon.fr   */
+/*   Created: 2026/02/17 17:49:00 by qpupier           #+#    #+#             */
+/*   Updated: 2026/02/17 18:14:17 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Node.hpp"
+#include "Variable.hpp"
 
 // Operator overloads
-Node&	Node::operator=(const Node &other)
+Variable	&Variable::operator=(const Variable &other)
 {
 	if (this != &other)
 	{
-		this->_tokens = other._tokens;
-		this->_left = other._left;
-		this->_right = other._right;
+		this->_name = other._name;
+		this->_value = other._value;
 	}
 	return (*this);
 }
 
 // Getters
-std::vector<Token>	Node::getTokens(void) const
+std::string	Variable::get_name(void) const
 {
-	return (this->_tokens);
+	return (this->_name);
 }
 
-Node*	Node::getLeft(void) const
+// Output stream operator overload
+std::ostream	&operator<<(std::ostream &os, const Variable &var)
 {
-	return (this->_left);
-}
-
-Node*	Node::getRight(void) const
-{
-	return (this->_right);
-}
-
-
-// Setters
-void	Node::setLeft(Node* left)
-{
-	this->_left = left;
-}
-
-void	Node::setRight(Node* right)
-{
-	this->_right = right;
+	os << "Variable: " << var.get_name() << std::endl;
+	return os;
 }
