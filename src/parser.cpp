@@ -6,12 +6,11 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/16 19:56:59 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/17 16:56:29 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "AST.hpp"
-#include "Token.hpp"
+#include "ast.hpp"
 
 static void	semantic_verification(const std::vector<Token> &tokens)
 {
@@ -53,17 +52,21 @@ static void	remove_whitespaces(std::vector<Token> &tokens)
 
 static void	whitespaces_format_error(const std::vector<Token> &tokens)
 {
-	Token::t_token	prev_token;
-	Token::t_token	next_token;
+	unsigned long int	size;
+	Token::t_token		prev_type;
+	Token::t_token		current_type;
+	Token::t_token		next_type;
 
-	for (size_t i = 1; i < tokens.size(); i++)
+	size = tokens.size();
+	for (size_t i = 1; i < size; i++)
 	{
-		if (i < tokens.size() - 1 && tokens[i].get_type() == Token::E_WHITESPACE)
+		prev_type = tokens[i - 1].get_type();
+		current_type = tokens[i].get_type();
+		if (i < size - 1 && current_type == Token::E_WHITESPACE)
 		{
-			prev_token = tokens[i - 1].get_type();
-			next_token = tokens[i + 1].get_type();
-			if ((prev_token != Token::E_OPERATOR && next_token == Token::E_LEFT_PARENTHESIS) 	\
-					|| (prev_token == Token::E_RIGHT_PARENTHESIS && next_token != Token::E_OPERATOR && next_token != Token::E_QUESTION))
+			next_type = tokens[i + 1].get_type();
+			if ((prev_type != Token::E_OPERATOR && next_type == Token::E_LEFT_PARENTHESIS) 	\
+					|| (prev_type == Token::E_RIGHT_PARENTHESIS && next_type != Token::E_OPERATOR && next_type != Token::E_QUESTION))
 				throw std::logic_error("No space allowed without operator");
 		}
 		if ((i > 1 && (i == 2 || tokens[i - 2].get_type() == Token::E_LEFT_PARENTHESIS) 									\
@@ -72,15 +75,6 @@ static void	whitespaces_format_error(const std::vector<Token> &tokens)
 					&& tokens[i - 2].get_type() == Token::E_WHITESPACE && (tokens[i - 1].get_token() == "-" || tokens[i - 1].get_token() == "+") && tokens[i].get_type() == Token::E_WHITESPACE))
 			throw std::logic_error("Espace sign");
 	}
-}
-
-void	free_ast(Node *ast)
-{
-	if (!ast)
-		return;
-	free_ast(ast->getLeft());
-	free_ast(ast->getRight());
-	delete ast;
 }
 
 void	set_missing_operators(std::vector<Token> &tokens)
@@ -104,36 +98,27 @@ void	set_missing_operators(std::vector<Token> &tokens)
 	}
 }
 
-static void	get_token_types(std::map<const Token::t_token, std::regex> &tokens_types)
+Node	*reduce_expression(Node *ast)
 {
-	tokens_types[Token::E_LEFT_PARENTHESIS] = std::regex("^\\($");
-	tokens_types[Token::E_RIGHT_PARENTHESIS] = std::regex("^\\)$");
-	tokens_types[Token::E_NUMBER] = std::regex("^" TOKEN_NUMBER "$");
-	tokens_types[Token::E_IMAGINARY] = std::regex("^" TOKEN_IMAGINARY "$");
-	tokens_types[Token::E_VARIABLE] = std::regex("^" TOKEN_VARIABLE "$");
-	tokens_types[Token::E_OPERATOR] = std::regex("^" TOKEN_OPERATOR "$");
-	tokens_types[Token::E_MATRIX] = std::regex("^" TOKEN_MATRIX "$");
-	tokens_types[Token::E_WHITESPACE] = std::regex("^" TOKEN_WHITESPACE "$");
-	tokens_types[Token::E_QUESTION] = std::regex("^" TOKEN_QUESTION "$");
+	// TODO
+	return (ast);
 }
 
-void	compute_expression(const std::string &line)
+Node	*compute_expression(const std::string &line, const std::map<std::string, std::regex> &patterns, const std::map<const Token::t_token, std::regex> &tokens_types)
 {
-	std::string::const_iterator	start(line.begin());
-	std::regex					re(TOKEN_NEXT);
-	std::vector<Token>	tokens;
-	Node						*ast;
-	std::map<const Token::t_token, std::regex>	tokens_types;
+	std::string::const_iterator	end(line.end());
+	std::vector<Token>			tokens;
+	std::sregex_token_iterator	token_null;
+	std::vector<int>			token_positions({1});
 
-	get_token_types(tokens_types);
-	if (!std::regex_match(line, std::regex(TOKEN_FULL_EXPRESSION)))
-		throw std::logic_error("Invalid expression format1");
-	std::cerr << "\033[33mComputing expression: " << line << "\033[0m" << std::endl;
-	for (; start != line.end();)
+	if (!std::regex_match(line, patterns.at(TOKEN_FULL_EXPRESSION)))
+		throw std::logic_error(ERROR_INVALID_EXPRESSION);
+	std::cerr << "\033[33mComputing expression: " << line << "\033[0m" << std::endl;// Debug
+	for (std::string::const_iterator start(line.begin()); start != end;)
 	{
-		std::sregex_token_iterator	it(start, line.end(), re, std::vector<int>{1});
+		std::sregex_token_iterator	it(start, end, patterns.at(TOKEN_NEXT), token_positions);
 
-		if (it == std::sregex_token_iterator())
+		if (it == token_null)
 			std::__throw_regex_error(std::regex_constants::error_complexity, "Invalid format of TOKEN_NEXT regex");
 		start = it->second;
 		tokens.push_back(Token(*it, get_token_type(*it, tokens_types)));
@@ -144,6 +129,5 @@ void	compute_expression(const std::string &line)
 	if (tokens[tokens.size() - 1].get_type() == Token::E_QUESTION)
 		tokens.pop_back();
 	set_missing_operators(tokens);
-	ast = make_ast(tokens);
-	free_ast(ast);
+	return (reduce_expression(make_ast(tokens)));
 }

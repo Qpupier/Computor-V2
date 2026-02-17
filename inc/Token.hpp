@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:10:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/16 20:04:43 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/17 16:25:37 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ class	Token
 		t_token		_type;
 };
 
-Token::t_token	get_token_type(const std::string &token, std::map<const Token::t_token, std::regex> &tokens_types);
+// Functions
+void			define_token_types(std::map<const Token::t_token, std::regex> &tokens_types);
+Token::t_token	get_token_type(const std::string &token, const std::map<const Token::t_token, std::regex> &tokens_types);
 
 #endif

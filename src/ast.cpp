@@ -5,13 +5,21 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/13 13:42:09 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/16 20:02:18 by qpupier          ###   ########lyon.fr   */
+/*   Created: 2026/02/17 16:48:49 by qpupier           #+#    #+#             */
+/*   Updated: 2026/02/17 17:19:13 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "AST.hpp"
-#include "Token.hpp"
+#include "ast.hpp"
+
+void	free_ast(Node *ast)
+{
+	if (!ast)
+		return;
+	free_ast(ast->getLeft());
+	free_ast(ast->getRight());
+	delete ast;
+}
 
 std::vector<Token>	find_next_parenthesis_group(const std::vector<Token> &tokens)
 {
@@ -97,29 +105,16 @@ static bool	can_remove_external_parenthesis(const std::vector<Token> &tokens)
 	return (!depth);
 }
 
-Node	*make_ast(std::vector<Token> &tokens)
+static std::vector<Token>	*adapt_tokens(std::vector<Token> &tokens, std::vector<Token> &sub_tokens, unsigned long int *pos)
 {
-	std::vector<Token>::const_iterator	tokens_begin;
-	std::vector<Token>::const_iterator	tokens_end;
-	std::vector<Token>::const_iterator	tokens_operator;
-	std::vector<Token>					sub_tokens;
-	Node 								*node;
-	unsigned long int					pos;
-
-	std::cout << "Group: "; for (size_t i = 0; i < tokens.size(); i++) std::cout << "\033[30m[\033[32m" << tokens[i].get_token() << "\033[30m]\033[0m"; std::cout << std::endl;
-	tokens_begin = tokens.begin();
-	tokens_end = tokens.end();
-	if (tokens.empty())
-		return (nullptr);
-	if (tokens.size() == 1)
-		return (new Node(tokens[0]));
-	sub_tokens = std::vector<Token>(tokens_begin + 1, tokens_end - 1);
-	if (tokens[0].get_type() == Token::E_LEFT_PARENTHESIS && tokens[tokens.size() - 1].get_type() == Token::E_RIGHT_PARENTHESIS && can_remove_external_parenthesis(sub_tokens))
-		return (make_ast(sub_tokens));
-	pos = select_less_priority_operator(tokens);
-	if (!pos || pos == tokens.size() - 1)
+	if (tokens[0].get_type() == Token::E_LEFT_PARENTHESIS 							\
+			&& tokens[tokens.size() - 1].get_type() == Token::E_RIGHT_PARENTHESIS 	\
+			&& can_remove_external_parenthesis(sub_tokens))
+		return (&sub_tokens);
+	*pos = select_less_priority_operator(tokens);
+	if (!*pos || *pos == tokens.size() - 1)
 	{
-		if (!pos && (tokens[0].get_token() == "-" || tokens[0].get_token() == "+"))
+		if (!*pos && (tokens[0].get_token() == "-" || tokens[0].get_token() == "+"))
 		{
 			if (tokens[0].get_token() == "-")
 			{
@@ -129,11 +124,35 @@ Node	*make_ast(std::vector<Token> &tokens)
 			}
 			else
 				tokens.erase(tokens.begin());
-			return (make_ast(tokens));
+			return (&tokens);
 		}
 		throw std::logic_error("Operator cannot be at the beginning or end of an expression");
 	}
-	std::cout << "Operator: " << tokens[pos].get_token() << std::endl;
+	return (nullptr);
+}
+
+Node	*make_ast(std::vector<Token> &tokens)
+{
+	std::vector<Token>::const_iterator	tokens_begin;
+	std::vector<Token>::const_iterator	tokens_end;
+	std::vector<Token>::const_iterator	tokens_operator;
+	std::vector<Token>					sub_tokens;
+	std::vector<Token>					*adapted_tokens;
+	Node 								*node;
+	unsigned long int					pos;
+
+	std::cout << "Group: "; for (size_t i = 0; i < tokens.size(); i++) std::cout << "\033[30m[\033[32m" << tokens[i].get_token() << "\033[30m]\033[0m"; std::cout << std::endl;// Debug
+	tokens_begin = tokens.begin();
+	tokens_end = tokens.end();
+	if (tokens.empty())
+		return (nullptr);
+	if (tokens.size() == 1)
+		return (new Node(tokens[0]));
+	sub_tokens = std::vector<Token>(tokens_begin + 1, tokens_end - 1);
+	adapted_tokens = adapt_tokens(tokens, sub_tokens, &pos);
+	if (adapted_tokens)
+		return (make_ast(*adapted_tokens));
+	std::cout << "Operator: " << tokens[pos].get_token() << std::endl;// Debug
 	node = new Node(tokens[pos]);
 	tokens_operator = tokens_begin + static_cast<long>(pos);
 	std::vector<Token> left_tokens(tokens_begin, tokens_operator);

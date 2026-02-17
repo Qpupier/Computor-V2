@@ -1,38 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   AST.hpp                                            :+:      :+:    :+:   */
+/*   ast.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/13 14:34:41 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/16 19:46:56 by qpupier          ###   ########lyon.fr   */
+/*   Created: 2026/02/17 16:51:38 by qpupier           #+#    #+#             */
+/*   Updated: 2026/02/17 16:53:43 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef AST_HPP
 # define AST_HPP
 
-# include "computor-v2.hpp"
+# include "Node.hpp"
 
-class Token;
-
-class Node
-{
-	public:
-		Node(Token &token): _token(token), _left(nullptr), _right(nullptr) {};
-		~Node() {};
-	
-		Token&		getToken() const { return _token; }
-		Node*		getLeft() const { return _left; }
-		Node*		getRight() const { return _right; }
-		void setLeft(Node* left) { _left = left; }
-		void setRight(Node* right) { _right = right; }
-
-	private:
-		Token&		_token;
-		Node*		_left;
-		Node*		_right;
-};
+void	free_ast(Node *ast);
+Node	*compute_expression(const std::string &line, const std::map<std::string, std::regex> &patterns, const std::map<const Token::t_token, std::regex> &tokens_types);
+Node	*make_ast(std::vector<Token> &tokens);
 
 #endif
