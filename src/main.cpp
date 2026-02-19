@@ -6,17 +6,17 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/17 19:04:04 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/19 15:01:12 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.hpp"
 #include "Variable.hpp"
 
-void	stored_variables(const std::map<std::string, Type> &stored)
+void	stored_variables(const std::map<std::string, const IType*> &stored)
 {
 	std::cerr << "\033[33mListing stored variables\033[0m" << std::endl;
-	std::map<std::string, Type>::const_iterator it = stored.begin();
+	std::map<std::string, const IType*>::const_iterator it = stored.begin();
 	while (it != stored.end())
 	{
 		std::cerr << "\033[33m  " << it->first << "\033[0m" << std::endl;
@@ -27,20 +27,20 @@ void	stored_variables(const std::map<std::string, Type> &stored)
 void	compute_equation(const std::string &line, 							\
 		const std::map<std::string, std::regex> &patterns, 					\
 		const std::map<const Token::t_token, std::regex> &tokens_types, 	\
-		std::map<std::string, Type> &stored)
+		std::map<std::string, const IType*> &stored)
 {
 	std::size_t	pos;
 
 	pos = line.find('=');
 	free_ast(compute_expression(line.substr(0, pos), patterns, tokens_types, stored));
 	free_ast(compute_expression(line.substr(pos + 1), patterns, tokens_types, stored));
-	stored["test"] = Variable("test", nullptr);// Debug
+	stored["test"] = new Variable("test", nullptr);// Debug
 }
 
 void	parse_line(const std::string &line, 								\
 		const std::map<std::string, std::regex> &patterns, 					\
 		const std::map<const Token::t_token, std::regex> &tokens_types, 	\
-		std::map<std::string, Type> &stored)
+		std::map<std::string, const IType*> &stored)
 {
 	long int	nb_equal;
 
@@ -56,13 +56,17 @@ void	parse_line(const std::string &line, 								\
 	else if (line.find('?') != std::string::npos)
 		stored_variables(stored);
 	else
-		free_ast(compute_expression(line, patterns, tokens_types, stored));
+	{
+		Node	*ast = compute_expression(line, patterns, tokens_types, stored);
+		print_ast(ast, 0);
+		free_ast(ast);
+	}
 }
 
 void	compute_line(const std::string &line, 							\
 		const std::map<std::string, std::regex> &patterns, 				\
 		const std::map<const Token::t_token, std::regex> &tokens_types, \
-		std::map<std::string, Type> &stored)
+		std::map<std::string, const IType*> &stored)
 {
 	if (line.empty())
 		return;
@@ -87,7 +91,7 @@ int	main(int argc, const char **argv)
 {
 	std::map<std::string, std::regex>			patterns;
 	std::map<const Token::t_token, std::regex>	tokens_types;
-	std::map<std::string, Type>					stored;
+	std::map<std::string, const IType*>			stored;
 
 	if (argc > 1)
 	{

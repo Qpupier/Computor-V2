@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:10:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/17 18:33:13 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/19 14:19:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,25 +54,25 @@ class	Token
 		}				t_token;
 
 		// Constructors and destructor
-		Token(void): _token(), _type(E_ERROR) {};
-		Token(const std::string &token, t_token type): _token(token), _type(type) {};
-		Token(const Token &other): _token(other._token), _type(other._type) {};
+		Token(void): _value(), _type(E_ERROR) {};
+		Token(const std::string &value, t_token type): _value(value), _type(type) {};
+		Token(const Token &other): _value(other._value), _type(other._type) {};
 		~Token(void) {};
 
 		// Operator overloads
 		Token&	operator=(const Token &other);
 
 		// Getters
-		std::string	get_token(void) const;
-		t_token		get_type(void) const;
+		std::string	getValue(void) const;
+		t_token		getType(void) const;
 
 		// Setters
-		void	set_token(const std::string &token);
-		void	set_type(t_token type);
+		void	setValue(const std::string &value);
+		void	setType(t_token type);
 
 	private:
 		// Members
-		std::string	_token;
+		std::string	_value;
 		t_token		_type;
 };
 

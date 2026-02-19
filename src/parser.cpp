@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/17 19:11:36 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/19 14:54:42 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ static void	semantic_verification(const std::vector<Token> &tokens)
 
 	for (size_t i = 1; i < tokens.size(); i++)
 	{
-		prev_type = i > 1 ? current_type : tokens[0].get_type();
-		current_type = tokens[i].get_type();
-		prev_token = i > 1 ? current_token : tokens[0].get_token();
-		current_token = tokens[i].get_token();
+		prev_type = i > 1 ? current_type : tokens[0].getType();
+		current_type = tokens[i].getType();
+		prev_token = i > 1 ? current_token : tokens[0].getValue();
+		current_token = tokens[i].getValue();
 		if (prev_type == Token::E_OPERATOR && current_type == Token::E_OPERATOR)
 			throw std::logic_error("Two operators cannot be adjacent");
 		if ((prev_type == Token::E_MATRIX && current_type == Token::E_IMAGINARY) || (prev_type == Token::E_IMAGINARY && current_type == Token::E_MATRIX))
@@ -45,10 +45,26 @@ static void	semantic_verification(const std::vector<Token> &tokens)
 static void	remove_whitespaces(std::vector<Token> &tokens)
 {
 	for (size_t i = 0; i < tokens.size();)
-		if (tokens[i].get_type() == Token::E_WHITESPACE)
+		if (tokens[i].getType() == Token::E_WHITESPACE)
 			tokens.erase(tokens.begin() + static_cast<long>(i));
 		else
 			i++;
+}
+
+static bool	bad_sign_placement(const std::vector<Token> &tokens, size_t i)
+{
+	bool	prev_is_sign;
+	bool	current_is_whitespace;
+
+	prev_is_sign = tokens[i - 1].getValue() == "-" || tokens[i - 1].getValue() == "+";
+	current_is_whitespace = tokens[i].getType() == Token::E_WHITESPACE;
+	if ((i == 1 || tokens[i - 2].getType() == Token::E_LEFT_PARENTHESIS) 	\
+			&& prev_is_sign && current_is_whitespace)
+		return (true);
+	if (i > 1 && (i == 2 || tokens[i - 3].getType() == Token::E_LEFT_PARENTHESIS) 	\
+			&& tokens[i - 2].getType() == Token::E_WHITESPACE && prev_is_sign && current_is_whitespace)
+		return (true);
+	return (false);
 }
 
 static void	whitespaces_format_error(const std::vector<Token> &tokens)
@@ -61,20 +77,17 @@ static void	whitespaces_format_error(const std::vector<Token> &tokens)
 	size = tokens.size();
 	for (size_t i = 1; i < size; i++)
 	{
-		prev_type = tokens[i - 1].get_type();
-		current_type = tokens[i].get_type();
+		prev_type = tokens[i - 1].getType();
+		current_type = tokens[i].getType();
 		if (i < size - 1 && current_type == Token::E_WHITESPACE)
 		{
-			next_type = tokens[i + 1].get_type();
+			next_type = tokens[i + 1].getType();
 			if ((prev_type != Token::E_OPERATOR && next_type == Token::E_LEFT_PARENTHESIS) 	\
 					|| (prev_type == Token::E_RIGHT_PARENTHESIS && next_type != Token::E_OPERATOR && next_type != Token::E_QUESTION))
 				throw std::logic_error("No space allowed without operator");
 		}
-		if ((i > 1 && (i == 2 || tokens[i - 2].get_type() == Token::E_LEFT_PARENTHESIS) 									\
-					&& (tokens[i - 1].get_token() == "-" || tokens[i - 1].get_token() == "+") && tokens[i].get_type() == Token::E_WHITESPACE) 	\
-				|| (i > 2 && (i == 3 || tokens[i - 3].get_type() == Token::E_LEFT_PARENTHESIS) 							\
-					&& tokens[i - 2].get_type() == Token::E_WHITESPACE && (tokens[i - 1].get_token() == "-" || tokens[i - 1].get_token() == "+") && tokens[i].get_type() == Token::E_WHITESPACE))
-			throw std::logic_error("Espace sign");
+		if (bad_sign_placement(tokens, i))
+			throw std::logic_error("Invalid placement for sign operator");
 	}
 }
 
@@ -89,27 +102,27 @@ static std::string	new_operator(Token::t_token prev_token, Token::t_token curren
 }
 
 static bool	test_function(std::vector<Token> &tokens, size_t pos, 	\
-		const std::map<std::string, Type> &stored)
+		const std::map<std::string, const IType*> &stored)
 {
-	if (stored.find(tokens[pos - 1].get_token()) != stored.end() 	\
-			&& !dynamic_cast<const Variable*>(&stored.at(tokens[pos - 1].get_token())))
+	if (stored.find(tokens[pos - 1].getValue()) != stored.end() 	\
+			&& !dynamic_cast<const Variable*>(stored.at(tokens[pos - 1].getValue())))
 	{
-		tokens[pos - 1].set_type(Token::E_FUNCTION);
+		tokens[pos - 1].setType(Token::E_FUNCTION);
 		return (true);
 	}
 	return (false);
 }
 
 void	set_missing_operators(std::vector<Token> &tokens, 	\
-		const std::map<std::string, Type> &stored)
+		const std::map<std::string, const IType*> &stored)
 {
 	for (unsigned long int i = 1; i < tokens.size(); i++)
 	{
 		Token::t_token	prev_token;
 		Token::t_token	current_token;
 
-		prev_token = tokens[i - 1].get_type();
-		current_token = tokens[i].get_type();
+		prev_token = tokens[i - 1].getType();
+		current_token = tokens[i].getType();
 		if (prev_token != Token::E_OPERATOR && current_token != Token::E_OPERATOR && prev_token != Token::E_LEFT_PARENTHESIS && current_token != Token::E_RIGHT_PARENTHESIS)
 		{
 			if (prev_token == Token::E_VARIABLE && current_token == Token::E_LEFT_PARENTHESIS && test_function(tokens, i, stored))
@@ -124,7 +137,7 @@ void	set_missing_operators(std::vector<Token> &tokens, 	\
 Node	*compute_expression(const std::string &line, 		\
 		const std::map<std::string, std::regex> &patterns, 	\
 		const std::map<const Token::t_token, std::regex> &tokens_types, 	\
-		const std::map<std::string, Type> &stored)
+		const std::map<std::string, const IType*> &stored)
 {
 	std::string::const_iterator	end(line.end());
 	std::vector<Token>			tokens;
@@ -146,7 +159,7 @@ Node	*compute_expression(const std::string &line, 		\
 	whitespaces_format_error(tokens);
 	remove_whitespaces(tokens);
 	semantic_verification(tokens);
-	if (tokens[tokens.size() - 1].get_type() == Token::E_QUESTION)
+	if (tokens[tokens.size() - 1].getType() == Token::E_QUESTION)
 		tokens.pop_back();
 	set_missing_operators(tokens, stored);
 	return (reduce_expression(make_ast(tokens)));

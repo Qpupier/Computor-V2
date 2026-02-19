@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/02/17 19:12:39 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/02/19 14:47:56 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,19 +14,25 @@ NAME		=	computor-v2
 DIR_SRC		=	src
 DIR_OBJ		=	.obj
 DIR_INC		=	inc
-LST_SRC		=	main.cpp		\
-				parser.cpp		\
-				Node.cpp		\
-				Token.cpp		\
-				ast.cpp			\
-				Type.cpp		\
-				Variable.cpp	\
-				interpret.cpp
+LST_SRC		=	main.cpp			\
+				parser.cpp			\
+				Node.cpp			\
+				Token.cpp			\
+				ast.cpp				\
+				interpret.cpp		\
+				types/IType.cpp		\
+				types/Operator.cpp	\
+				types/Variable.cpp	\
+				types/Number.cpp
 LST_OBJ		=	$(LST_SRC:.cpp=.o)
 LST_DEP		=	$(LST_OBJ:.o=.d)
+LST_INC		= 	$(DIR_INC)\
+				$(DIR_INC)/types
 SRC			=	$(addprefix $(DIR_SRC)/, $(LST_SRC))
 OBJ			=	$(addprefix $(DIR_OBJ)/, $(LST_OBJ))
 DEP			=	$(addprefix $(DIR_OBJ)/, $(LST_DEP))
+INC			=	$(addprefix -I./, $(LST_INC))
+DIRS		=	$(DIR_OBJ)/types
 CC			=	c++
 CXXFLAGS	=	-W -Wall -Wextra -Werror -Wshadow -Wold-style-cast -Wcast-qual -Wconversion -Wsign-conversion -Wstrict-aliasing -g3
 CXXFLAGS	+=	-O2 # Optimization
@@ -56,17 +62,17 @@ $(NAME): $(OBJ)
 -include $(DEP)
 
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.cpp Makefile
-	mkdir -p $(DIR_OBJ)
-	$(CC) $(CXXFLAGS) $(CDEP) -I $(DIR_INC) -c $< -o $@
-	@printf "$(ERASE)$(BLUE)> Compilation :$(END) $<"
+	mkdir -p $(DIR_OBJ) $(DIRS)
+	$(CC) $(CXXFLAGS) $(CDEP) $(INC) -c $< -o $@
+	@printf "$(ERASE)$(BLUE)> Compilation:$(END) $<"
 
 clean:
 	@rm -rf $(DIR_OBJ)
-	@printf "$(ERASE)$(ERASE)$(BLUE)> Deleted : $(RED)$(DIR_OBJ)$(END)\n"
+	@printf "$(ERASE)$(ERASE)$(BLUE)> Deleted: $(RED)$(DIR_OBJ)$(END)\n"
 	
 fclean: clean
 	@rm -rf $(NAME)
-	@printf "$(ERASE)$(ERASE)$(BLUE)> Deleted : $(RED)$(NAME)$(END)\n"
+	@printf "$(ERASE)$(ERASE)$(BLUE)> Deleted: $(RED)$(NAME)$(END)\n"
 
 re: fclean all
 

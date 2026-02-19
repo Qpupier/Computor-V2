@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:15:11 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/17 16:25:19 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/19 14:22:38 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ Token& Token::operator=(const Token &other)
 {
 	if (this != &other)
 	{
-		this->_token = other._token;
+		this->_value = other._value;
 		this->_type = other._type;
 	}
 	return (*this);
@@ -25,24 +25,24 @@ Token& Token::operator=(const Token &other)
 
 
 // Getters
-std::string		Token::get_token(void) const
+std::string		Token::getValue(void) const
 {
-	return (_token);
+	return (_value);
 }
 
-Token::t_token	Token::get_type(void) const
+Token::t_token	Token::getType(void) const
 {
 	return (_type);
 }
 
 
 // Setters
-void	Token::set_token(const std::string &token)
+void	Token::setValue(const std::string &value)
 {
-	this->_token = token;
+	this->_value = value;
 }
 
-void	Token::set_type(t_token type)
+void	Token::setType(t_token type)
 {
 	this->_type = type;
 }
@@ -61,11 +61,11 @@ void	define_token_types(std::map<const Token::t_token, std::regex> &tokens_types
 	tokens_types[Token::E_WHITESPACE] = std::regex("^" TOKEN_WHITESPACE "$");
 	tokens_types[Token::E_QUESTION] = std::regex("^" TOKEN_QUESTION "$");
 }
-
-Token::t_token	get_token_type(const std::string &token, const std::map<const Token::t_token, std::regex> &tokens_types)
+Token::t_token get_token_type(const std::string &token, const std::map<const Token::t_token, std::regex> &tokens_types)
 {
-	for (const std::pair<const Token::t_token, std::regex> &pair: tokens_types)
-		if (std::regex_match(token, pair.second))
-			return (pair.first);
+	for (std::map<const Token::t_token, std::regex>::const_iterator it = tokens_types.begin(); 	\
+			it != tokens_types.end(); ++it)
+		if (std::regex_match(token, it->second))
+			return it->first;
 	return (Token::E_ERROR);
 }

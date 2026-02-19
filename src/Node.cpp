@@ -6,28 +6,41 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 13:42:09 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/17 18:45:21 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/19 13:27:34 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Node.hpp"
+#include "Token.hpp"
+// #include "Number.hpp"
+#include "Variable.hpp"
+#include "Operator.hpp"
 
 // Operator overloads
 Node&	Node::operator=(const Node &other)
 {
 	if (this != &other)
 	{
-		this->_tokens = other._tokens;
+		this->_token = other._token;
 		this->_left = other._left;
 		this->_right = other._right;
 	}
 	return (*this);
 }
 
+// Node*	Node::operator*(const Node &other) const
+// {
+// 	Node *result = new Node();
+
+// 	result->_tokens = { Token(Token::E_NUMBER, std::to_string(std::stoi(this->_tokens[0].get_value()) * std::stoi(other._tokens[0].get_value()))) };
+// 	return (result);
+// }
+
+
 // Getters
-std::vector<Token>	Node::getTokens(void) const
+Token	Node::getToken(void) const
 {
-	return (this->_tokens);
+	return (this->_token);
 }
 
 Node*	Node::getLeft(void) const
