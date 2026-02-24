@@ -1,49 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   AST.cpp                                            :+:      :+:    :+:   */
+/*   Rational.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/24 19:55:59 by qpupier          ###   ########lyon.fr   */
+/*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
+/*   Updated: 2026/02/24 19:54:16 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "AST.hpp"
-#include "Token.hpp"
-#include "Complex.hpp"
 #include "Rational.hpp"
 
 // Constructors
-AST::AST(const Token &token): _left(nullptr), _right(nullptr)
+Rational::Rational(std::string str)
 {
-	switch (token.getType())
+	std::size_t	slash_pos;
+	
+	slash_pos = str.find('.');
+	if (slash_pos == std::string::npos)
 	{
-		case Token::E_NUMBER:
-		{
-			_node = new Rational(token);
-			break;
-		}
-		case Token::E_IMAGINARY:
-		{
-			_node = new Complex();
-			break;
-		}
-		default:
-			throw std::logic_error("Invalid token type for AST node");
+		_numerator = std::stoi(str);
+		_denominator = 1;
+	}
+	else
+	{
+		_numerator = std::stoi(str.erase(slash_pos, 1));
+		_denominator = static_cast<int>(std::pow(10, str.size() - slash_pos - 1));
 	}
 }
 
 
 // Operator overloads
-AST& AST::operator=(const AST &other)
+Rational	&Rational::operator=(const Rational &other)
 {
 	if (this != &other)
 	{
-		_node = other._node;
-		_left = other._left;
-		_right = other._right;
+		this->_numerator = other._numerator;
+		this->_denominator = other._denominator;
 	}
 	return (*this);
 }
