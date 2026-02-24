@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 17:47:39 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/19 14:47:40 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/19 17:29:00 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 // # include "IType.hpp"
 # include "Node.hpp"
-# include "computor-v2.hpp"
+// # include "computor-v2.hpp"
 
 class	Variable: public IType
 {
@@ -29,15 +29,24 @@ class	Variable: public IType
 
 		// Operator overloads
 		Variable	&operator=(const Variable &other);
-		// Variable	*operator-(const Variable &other) const { return (new Variable(*this->_value - *other._value)); };
-		// Variable	*operator+(const Variable &other) const { return (new Variable(*this->_value + *other._value)); };
-		Node	*operator*(const IType &other) const {return nullptr; (void)other;};
-		// Variable	*operator/(const Variable &other) const { return (new Variable(*this->_value / *other._value)); };
-		// Variable	*operator%(const Variable &other) const { return (new Variable(*this->_value % *other._value)); };
-		// Variable	*operator^(const Variable &other) const { return (new Variable(*this->_value ^ *other._value)); };
+		Node		*operator+(const IType &other) const {return new Node(Token());(void)other;};
+		Node		*operator+(const Variable &other) const {return new Node(Token());(void)other;};
+		Node		*operator-(const IType &other) const {return new Node(Token());(void)other;};
+		Node		*operator-(const Variable &other) const {return new Node(Token());(void)other;};
+		Node		*operator*(const IType &other) const {return new Node(Token());(void)other;};
+		Node		*operator*(const Variable &other) const {return new Node(Token());(void)other;};
+		Node		*operator/(const IType &other) const {return new Node(Token());(void)other;};
+		Node		*operator/(const Variable &other) const {return new Node(Token());(void)other;};
+		Node		*operator%(const IType &other) const {return new Node(Token());(void)other;};
+		Node		*operator%(const Variable &other) const {return new Node(Token());(void)other;};
+		Node		*operator^(const IType &other) const {return new Node(Token());(void)other;};
+		Node		*operator^(const Variable &other) const {return new Node(Token());(void)other;};
 
 		// Getters
 		std::string	get_name(void) const;
+
+		// Methods
+		Node*	matrix_operator(const IType &other) const;
 
 	private:
 		// Members

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 13:42:09 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/19 13:27:34 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/19 18:00:48 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "Token.hpp"
 // #include "Number.hpp"
 #include "Variable.hpp"
-#include "Operator.hpp"
 
 // Operator overloads
 Node&	Node::operator=(const Node &other)

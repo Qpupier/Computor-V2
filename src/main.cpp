@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/19 15:01:12 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/23 19:17:55 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,9 @@ void	parse_line(const std::string &line, 								\
 	{
 		Node	*ast = compute_expression(line, patterns, tokens_types, stored);
 		print_ast(ast, 0);
+		std::cout << std::endl;
+		if (ast && !ast->getLeft() && !ast->getRight())
+			std::cout << "\033[32m  " << ast->getToken().getValue() << "\033[0m" << std::endl;
 		free_ast(ast);
 	}
 }
@@ -75,7 +78,7 @@ void	compute_line(const std::string &line, 							\
 	try
 	{
 		parse_line(line, patterns, tokens_types, stored);
-		std::cout << "\033[32m  " << line << "\033[0m" << std::endl;
+		// std::cout << "\033[32m  " << line << "\033[0m" << std::endl;
 	}
 	catch(const std::regex_error& e)
 	{

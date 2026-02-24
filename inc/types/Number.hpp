@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 13:35:44 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/19 14:46:53 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/23 17:43:02 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "IType.hpp"
 # include "Token.hpp"
 # include "Node.hpp"
+# include "Imaginary.hpp"
 
 class	Number: public IType
 {
@@ -31,14 +32,28 @@ class	Number: public IType
 
 		// Operator overloads
 		Number	&operator=(const Number &other);
-		// Number	*operator-(const Number &other) const { return (new Number(*this->_value - *other._value)); };
-		// Number	*operator+(const Number &other) const { return (new Number(*this->_value + *other._value)); };
+		Node	*operator+(const IType &other) const;
+		Node	*operator+(const Number &other) const;
+		Node	*operator+(const Imaginary &other) const;
+		Node	*operator-(const IType &other) const;
+		Node	*operator-(const Number &other) const;
+		Node	*operator-(const Imaginary &other) const;
 		Node	*operator*(const IType &other) const;
 		Node	*operator*(const Number &other) const;
-		// Number	*operator/(const Number &other) const { return (new Number(*this->_value / *other._value)); };
+		Node	*operator*(const Imaginary &other) const;
+		Node	*operator/(const IType &other) const;
+		Node	*operator/(const Number &other) const;
+		Node	*operator/(const Imaginary &other) const;
+		Node	*operator%(const IType &other) const;
+		Node	*operator%(const Number &other) const;
+		Node	*operator^(const IType &other) const;
+		Node	*operator^(const Number &other) const;
 
 		// Getters
 		double	get_value(void) const;
+
+		// Methods
+		Node*	matrix_operator(const IType &other) const;
 
 	private:
 		// Members
