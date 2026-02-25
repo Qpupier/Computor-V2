@@ -6,12 +6,13 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/23 19:17:55 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/25 18:38:45 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ast.hpp"
-#include "Variable.hpp"
+#include "AST.hpp"
+#include "Rational.hpp"
+// #include "Variable.hpp"
 
 void	stored_variables(const std::map<std::string, const IType*> &stored)
 {
@@ -32,9 +33,11 @@ void	compute_equation(const std::string &line, 							\
 	std::size_t	pos;
 
 	pos = line.find('=');
-	free_ast(compute_expression(line.substr(0, pos), patterns, tokens_types, stored));
-	free_ast(compute_expression(line.substr(pos + 1), patterns, tokens_types, stored));
-	stored["test"] = new Variable("test", nullptr);// Debug
+	AST *left_ast = compute_expression(line.substr(0, pos), patterns, tokens_types, stored);
+	AST *right_ast = compute_expression(line.substr(pos + 1), patterns, tokens_types, stored);
+	delete left_ast;
+	delete right_ast;
+	// stored["test"] = new Variable("test", nullptr);// Debug
 }
 
 void	parse_line(const std::string &line, 								\
@@ -57,12 +60,9 @@ void	parse_line(const std::string &line, 								\
 		stored_variables(stored);
 	else
 	{
-		Node	*ast = compute_expression(line, patterns, tokens_types, stored);
-		print_ast(ast, 0);
-		std::cout << std::endl;
-		if (ast && !ast->getLeft() && !ast->getRight())
-			std::cout << "\033[32m  " << ast->getToken().getValue() << "\033[0m" << std::endl;
-		free_ast(ast);
+		AST	*ast = compute_expression(line, patterns, tokens_types, stored);
+		std::cout << *ast << std::endl;
+		delete ast;
 	}
 }
 

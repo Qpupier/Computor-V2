@@ -6,12 +6,12 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 13:38:37 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/23 17:47:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/25 14:45:32 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Number.hpp"
-#include "Imaginary.hpp"
+// #include "Imaginary.hpp"
 
 // Operator overloads
 Number	&Number::operator=(const Number &other)

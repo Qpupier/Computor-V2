@@ -6,31 +6,11 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 16:48:49 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/24 18:33:44 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/25 18:40:21 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
-
-void	free_ast(Node *ast)
-{
-	if (!ast)
-		return;
-	// std::cout << "Freeing node with token: " << ast->getToken().getValue() << std::endl;// Debug
-	free_ast(ast->getLeft());
-	free_ast(ast->getRight());
-	delete ast;
-}
-
-void	print_ast(Node *ast, unsigned int depth)
-{
-	if (!ast)
-		return;
-	// std::cout << std::string(depth * 2, ' ') << ast->getToken().getValue() << std::endl;
-	print_ast(ast->getLeft(), depth + 1);
-	std::cout << ast->getToken().getValue();
-	print_ast(ast->getRight(), depth + 1);
-}
 
 std::vector<Token>	find_next_parenthesis_group(const std::vector<Token> &tokens)
 {
@@ -149,43 +129,6 @@ static std::vector<Token>	*adapt_tokens(std::vector<Token> &tokens, std::vector<
 	return (nullptr);
 }
 
-// Node	*make_ast(std::vector<Token> &tokens)
-// {
-// 	std::vector<Token>::const_iterator	tokens_begin;
-// 	std::vector<Token>::const_iterator	tokens_end;
-// 	std::vector<Token>::const_iterator	tokens_operator;
-// 	std::vector<Token>					sub_tokens;
-// 	std::vector<Token>					*adapted_tokens;
-// 	Node 								*node;
-// 	long int							pos;
-
-// 	// std::cout << "Group: "; for (size_t i = 0; i < tokens.size(); i++) std::cout << "\033[30m[\033[32m" << tokens[i].getValue() << "\033[30m]\033[0m"; std::cout << std::endl;// Debug
-// 	tokens_begin = tokens.begin();
-// 	tokens_end = tokens.end();
-// 	if (tokens.empty())
-// 		return (nullptr);
-// 	if (tokens.size() == 1)
-// 		return (new Node(tokens[0]));
-// 	sub_tokens = std::vector<Token>(tokens_begin + 1, tokens_end - 1);
-// 	adapted_tokens = adapt_tokens(tokens, sub_tokens, &pos);
-// 	if (adapted_tokens)
-// 		return (make_ast(*adapted_tokens));
-// 	if (pos == -1)
-// 	{
-// 		if (tokens.size() != 2)
-// 			throw std::logic_error("Invalid expression: no operator found in a multi-token expression");
-// 		return (new Node(Token(tokens[0].getValue() + tokens[1].getValue(), Token::E_FUNCTION)));
-// 	}
-// 	// std::cout << "Operator: " << tokens[static_cast<unsigned long int>(pos)].getValue() << std::endl;// Debug
-// 	tokens_operator = tokens_begin + pos;
-// 	node = new Node(tokens[static_cast<unsigned long int>(pos)]);
-// 	std::vector<Token> left_tokens(tokens_begin, tokens_operator);
-// 	std::vector<Token> right_tokens(tokens_operator + 1, tokens_end);
-// 	node->setLeft(make_ast(left_tokens));
-// 	node->setRight(make_ast(right_tokens));
-// 	return (node);
-// }
-
 
 AST	*build_ast(std::vector<Token> &tokens)
 {
@@ -196,7 +139,6 @@ AST	*build_ast(std::vector<Token> &tokens)
 	std::vector<Token>					*adapted_tokens;
 	std::vector<Token>					left_tokens;
 	std::vector<Token>					right_tokens;
-	AST 								*node;
 	long int							pos;
 
 	// std::cout << "Group: "; for (size_t i = 0; i < tokens.size(); i++) std::cout << "\033[30m[\033[32m" << tokens[i].getValue() << "\033[30m]\033[0m"; std::cout << std::endl;// Debug
@@ -222,26 +164,3 @@ AST	*build_ast(std::vector<Token> &tokens)
 	right_tokens = std::vector<Token>(tokens_operator + 1, tokens_end);
 	return (new AST(tokens[static_cast<unsigned long int>(pos)], build_ast(left_tokens), build_ast(right_tokens)));
 }
-
-
-// AST*	Token_to_IType(Node *node)
-// {
-// 	if (!node)
-// 		return (nullptr);
-// 	if (node->getToken().getType() == Token::E_NUMBER)
-// 		return (new AST(new Number(node)));
-// 	if (node->getToken().getType() == Token::E_IMAGINARY)
-// 		return (new AST(new Imaginary()));
-// 	// if (node->getToken().getType() == Token::E_VARIABLE)
-// 	// 	return (new AST(new Variable(node)));
-// 	return (nullptr);
-// }
-
-// AST*	build_ast(const std::vector<Token> &tokens)
-// {
-// 	std::vector<Token>	tokens_copy(tokens);
-// 	Node				*root;
-
-// 	root = make_ast(tokens_copy);
-	
-// }

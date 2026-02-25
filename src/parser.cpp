@@ -6,12 +6,12 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/19 17:32:24 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/25 18:41:59 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ast.hpp"
-#include "Variable.hpp"
+#include "AST.hpp"
+// #include "Variable.hpp"
 
 static void	semantic_verification(const std::vector<Token> &tokens)
 {
@@ -104,12 +104,15 @@ static std::string	new_operator(Token::t_token prev_token, Token::t_token curren
 static bool	test_function(std::vector<Token> &tokens, size_t pos, 	\
 		const std::map<std::string, const IType*> &stored)
 {
-	if (stored.find(tokens[pos - 1].getValue()) != stored.end() 	\
-			&& !dynamic_cast<const Variable*>(stored.at(tokens[pos - 1].getValue())))
-	{
-		tokens[pos - 1].setType(Token::E_FUNCTION);
-		return (true);
-	}
+	// if (stored.find(tokens[pos - 1].getValue()) != stored.end() 	\
+	// 		&& !dynamic_cast<const Variable*>(stored.at(tokens[pos - 1].getValue())))
+	// {
+	// 	tokens[pos - 1].setType(Token::E_FUNCTION);
+	// 	return (true);
+	// }
+	(void)tokens;
+	(void)pos;
+	(void)stored;
 	return (false);
 }
 
@@ -134,7 +137,7 @@ void	set_missing_operators(std::vector<Token> &tokens, 	\
 	}
 }
 
-Node	*compute_expression(const std::string &line, 		\
+AST	*compute_expression(const std::string &line, 		\
 		const std::map<std::string, std::regex> &patterns, 	\
 		const std::map<const Token::t_token, std::regex> &tokens_types, 	\
 		const std::map<std::string, const IType*> &stored)
@@ -143,6 +146,7 @@ Node	*compute_expression(const std::string &line, 		\
 	std::vector<Token>			tokens;
 	std::sregex_token_iterator	token_null;
 	std::vector<int>			token_positions({1});
+	AST							*ast;
 
 	if (!std::regex_match(line, patterns.at(TOKEN_FULL_EXPRESSION)))
 		throw std::logic_error(ERROR_INVALID_EXPRESSION);
@@ -162,5 +166,7 @@ Node	*compute_expression(const std::string &line, 		\
 	if (tokens[tokens.size() - 1].getType() == Token::E_QUESTION)
 		tokens.pop_back();
 	set_missing_operators(tokens, stored);
-	return (reduce_expression(make_ast(tokens)));
+	ast = build_ast(tokens);
+	ast->reduce_expression();
+	return (ast);
 }

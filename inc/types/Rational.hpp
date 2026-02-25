@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/24 19:55:35 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/25 17:48:34 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define RATIONAL_HPP
 
 # include "IType.hpp"
+# include "Token.hpp"
+# include "AST.hpp"
 # include "computor-v2.hpp"
 
 class	Rational: public IType
@@ -22,7 +24,7 @@ class	Rational: public IType
 		// Constructors and destructor
 		Rational(void): _numerator(0), _denominator(1) {};
 		Rational(int numerator): _numerator(numerator), _denominator(1) {};
-		Rational(int numerator, int denominator): _numerator(numerator), _denominator(denominator) {};
+		Rational(int numerator, int denominator);
 		Rational(std::string str);
 		Rational(const Token &token): Rational(token.getValue()) {};
 		Rational(const Rational &other): _numerator(other._numerator), _denominator(other._denominator) {};
@@ -31,20 +33,21 @@ class	Rational: public IType
 		// Operator overloads
 		Rational	&operator=(const Rational &other);
 		AST			*operator+(const IType &other) const;
-		// AST			*operator+(const Rational &other) const;
+		AST			*operator+(const Rational &other) const;
 		// AST			*operator+(const Rational &other) const;
 		AST			*operator-(const IType &other) const;
-		// AST			*operator-(const Rational &other) const;
+		AST			*operator-(const Rational &other) const;
 		// AST			*operator-(const Rational &other) const;
 		AST			*operator*(const IType &other) const;
-		// AST			*operator*(const Rational &other) const;
+		AST			*operator*(const Rational &other) const;
 		// AST			*operator*(const Rational &other) const;
 		AST			*operator/(const IType &other) const;
-		// AST			*operator/(const Rational &other) const;
+		AST			*operator/(const Rational &other) const;
 		// AST			*operator/(const Rational &other) const;
 		AST			*operator%(const IType &other) const;
+		AST			*operator%(const Rational &other) const;
 		AST			*operator^(const IType &other) const;
-		// AST			*operator^(const Rational &other) const;
+		AST			*operator^(const Rational &other) const;
 		// AST			*operator^(const Rational &other) const;
 
 		// Getters
@@ -53,15 +56,15 @@ class	Rational: public IType
 		double	get_number(void) const;
 
 		// Methods
-		AST*	matrix_operator(const IType &other) const;
+		AST*			matrix_operator(const IType &other) const;
+		int				integer_part(void) const;
+		void			reduce(void);
+		std::ostream	&print(std::ostream &os) const;
 
 	private:
 		// Members
 		int	_numerator;
 		int	_denominator;
 };
-
-// Output stream operator overload
-std::ostream	&operator<<(std::ostream &os, const Rational &num);
 
 #endif

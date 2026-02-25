@@ -6,12 +6,12 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:25:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/23 19:15:43 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/25 14:46:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Number.hpp"
-#include "Imaginary.hpp"
+// #include "Number.hpp"
+// #include "Imaginary.hpp"
 
 // Utils
 static bool	number_in_z(const Number &num)

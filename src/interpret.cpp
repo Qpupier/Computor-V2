@@ -6,33 +6,15 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 19:11:26 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/24 17:48:18 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/25 15:57:06 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 // #include "Node.hpp"
-#include "Number.hpp"
-#include "Imaginary.hpp"
+// #include "Number.hpp"
+// #include "Imaginary.hpp"
 
-static IType	*getIType(Node *node)
-{
-	if (!node)
-		throw std::logic_error("Invalid AST: null node");
-	switch (node->getToken().getType())
-	{
-		case Token::E_NUMBER:
-			return (new Number(node));
-		case Token::E_IMAGINARY:
-			return (new Imaginary());
-		default:
-			break;
-	}
-	// std::cerr << "Invalid token type in leaf node: " << node->getToken().getValue() << std::endl;
-	// throw std::logic_error("Invalid AST: leaf node with invalid token type");
-	return (nullptr);
-}
-
-Node	*reduce_expression(Node *ast)
+AST	*reduce_expression(AST *ast)
 {
 	// TODO
 	// Si pas de variable

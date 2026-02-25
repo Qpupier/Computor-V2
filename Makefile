@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/02/23 17:40:57 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/02/25 16:30:06 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,10 +19,10 @@ LST_SRC		=	main.cpp			\
 				Node.cpp			\
 				Token.cpp			\
 				ast.cpp				\
-				interpret.cpp		\
-				types/Variable.cpp	\
-				types/Number.cpp	\
-				types/Imaginary.cpp
+				AST.cpp				\
+				types/IType.cpp		\
+				types/Operator.cpp	\
+				types/Rational.cpp
 LST_OBJ		=	$(LST_SRC:.cpp=.o)
 LST_DEP		=	$(LST_OBJ:.o=.d)
 LST_INC		= 	$(DIR_INC)\
@@ -34,7 +34,7 @@ INC			=	$(addprefix -I./, $(LST_INC))
 DIRS		=	$(DIR_OBJ)/types
 CC			=	c++
 CXXFLAGS	=	-W -Wall -Wextra -Werror -Wshadow -Wold-style-cast -Wcast-qual -Wconversion -Wsign-conversion -Wstrict-aliasing -g3
-CXXFLAGS	+=	-O2 # Optimization
+# CXXFLAGS	+=	-O2 # Optimization
 # CXXFLAGS	+=	-fsanitize=address # Debugging
 CDEP		=	-MMD -MP
 
