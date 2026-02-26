@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/25 15:52:09 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 11:31:28 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,4 +138,9 @@ std::ostream	&Operator::print(std::ostream &os) const
 	}
 	os << " ";
 	return (os);
+}
+
+IType*	Operator::clone(void) const
+{
+	return (new Operator(*this));
 }

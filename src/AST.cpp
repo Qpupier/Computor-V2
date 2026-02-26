@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/25 20:03:14 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 11:33:57 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,8 @@ AST& AST::operator=(const AST &other)
 {
 	if (this != &other)
 	{
-		delete this->_node;
-		delete this->_left;
-		delete this->_right;
-		_node = other._node;
+		this->~AST();
+		_node = other._node->clone();
 		_left = other._left;
 		_right = other._right;
 	}

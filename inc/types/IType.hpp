@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 17:42:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/25 18:09:14 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 11:29:58 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ class	IType
 		// Methods
 		virtual AST*	matrix_operator(const IType &other) const = 0;
 		virtual std::ostream	&print(std::ostream &os) const = 0;
+		virtual IType*	clone(void) const = 0;
 
 	protected:
 		// Constructor

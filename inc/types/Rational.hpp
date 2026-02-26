@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/25 17:48:34 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 11:30:18 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ class	Rational: public IType
 		int				integer_part(void) const;
 		void			reduce(void);
 		std::ostream	&print(std::ostream &os) const;
+		IType*			clone(void) const;
 
 	private:
 		// Members

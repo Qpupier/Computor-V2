@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 14:55:07 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/25 15:39:10 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 11:31:19 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ class	Operator: public IType
 		// Methods
 		AST*			matrix_operator(const IType &other) const;
 		std::ostream	&print(std::ostream &os) const;
+		IType*			clone(void) const;
 
 	private:
 		// Members

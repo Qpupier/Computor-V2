@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/25 19:58:36 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 12:10:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ Rational::Rational(std::string str)
 	else
 	{
 		_numerator = std::stoi(str.erase(slash_pos, 1));
-		_denominator = static_cast<int>(std::pow(10, str.size() - slash_pos - 1));
+		_denominator = static_cast<int>(std::pow(10, str.size() - slash_pos));
 	}
 	this->reduce();
 }
@@ -122,20 +122,27 @@ AST	*Rational::operator/(const IType &other) const
 
 AST	*Rational::operator%(const Rational &other) const
 {
-	AST	*operation_result;
+	AST			*operation_result;
 	Rational	*operation_result_rational;
 
 	operation_result = *this / other;
-	operation_result_rational = dynamic_cast<Rational*>(operation_result->getNode());
+	operation_result_rational = dynamic_cast<Rational*>(operation_result->getNode()->clone());
 	delete operation_result;
-	if (!operation_result_rational)
-		throw std::logic_error("Modulo operation is only supported for rational numbers");
-	operation_result = other * Rational(operation_result_rational->integer_part());
-	operation_result_rational = dynamic_cast<Rational*>(operation_result->getNode());
-	delete operation_result;
-	if (!operation_result_rational)
-		throw std::logic_error("Modulo operation is only supported for rational numbers");
-	return (*this - *operation_result_rational);
+	if (operation_result_rational)
+	{
+		operation_result = other * Rational(operation_result_rational->integer_part());
+		delete operation_result_rational;
+		operation_result_rational = dynamic_cast<Rational*>(operation_result->getNode()->clone());
+		delete operation_result;
+		if (operation_result_rational)
+		{
+			operation_result = *this - *operation_result_rational;
+			delete operation_result_rational;
+			return (operation_result);
+		}
+	}
+	throw std::logic_error("Modulo operation is only supported for rational numbers");
+	return (nullptr);
 }
 
 AST	*Rational::operator%(const IType &other) const
@@ -221,4 +228,9 @@ std::ostream&	Rational::print(std::ostream &os) const
 	if (copy.get_denominator() == 1)
 		return (os << copy.get_numerator());
 	return (os << copy.get_numerator() << "/" << copy.get_denominator());
+}
+
+IType*	Rational::clone(void) const
+{
+	return (new Rational(*this));
 }
