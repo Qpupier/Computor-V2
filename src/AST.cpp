@@ -6,11 +6,11 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 14:10:16 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 15:30:11 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Complex.hpp"
+// #include "Complex.hpp"
 #include "Rational.hpp"
 #include "Operator.hpp"
 
@@ -112,7 +112,7 @@ void	AST::reduce_expression(void)
 	Operator *op = dynamic_cast<Operator*>(this->_node);
 	if (op)
 	{
-		AST* result = nullptr;
+		IType* result = nullptr;
 		try
 		{
 			switch (op->getOperator())
@@ -165,8 +165,10 @@ void	AST::reduce_expression(void)
 			delete this;
 			throw;
 		}
-		*this = *result;
-		delete result;
+		AST *tmp = new AST(result);
+		*this = *tmp;
+		delete tmp;
+		// delete result;
 	}
 	return;
 }

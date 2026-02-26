@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 14:06:45 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 15:23:40 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ Rational::Rational(std::string str)
 
 
 // Operator overloads
-Rational	&Rational::operator=(const Rational &other)
+Rational&	Rational::operator=(const Rational &other)
 {
 	if (this != &other)
 	{
@@ -59,13 +59,12 @@ Rational	&Rational::operator=(const Rational &other)
 	return (*this);
 }
 
-AST	*Rational::operator+(const Rational &other) const
+Rational*	Rational::operator+(const Rational &other) const
 {
-	return (new AST(
-		new Rational(this->_numerator * other._denominator + other._numerator * this->_denominator, this->_denominator * other._denominator)));
+	return (new Rational(this->_numerator * other._denominator + other._numerator * this->_denominator, this->_denominator * other._denominator));
 }
 
-AST	*Rational::operator+(const IType &other) const
+IType*	Rational::operator+(const IType &other) const
 {
 	const Rational	*other_rational;
 
@@ -75,12 +74,12 @@ AST	*Rational::operator+(const IType &other) const
 	return (nullptr);
 }
 
-AST	*Rational::operator-(const Rational &other) const
+Rational*	Rational::operator-(const Rational &other) const
 {
-	return (new AST(new Rational(this->_numerator * other._denominator - other._numerator * this->_denominator, this->_denominator * other._denominator)));
+	return (new Rational(this->_numerator * other._denominator - other._numerator * this->_denominator, this->_denominator * other._denominator));
 }
 
-AST	*Rational::operator-(const IType &other) const
+IType*	Rational::operator-(const IType &other) const
 {
 	const Rational	*other_rational;
 
@@ -90,12 +89,12 @@ AST	*Rational::operator-(const IType &other) const
 	return (nullptr);
 }
 
-AST	*Rational::operator*(const Rational &other) const
+Rational*	Rational::operator*(const Rational &other) const
 {
-	return (new AST(new Rational(this->_numerator * other._numerator, this->_denominator * other._denominator)));
+	return (new Rational(this->_numerator * other._numerator, this->_denominator * other._denominator));
 }
 
-AST	*Rational::operator*(const IType &other) const
+IType*	Rational::operator*(const IType &other) const
 {
 	const Rational	*other_rational;
 
@@ -105,12 +104,12 @@ AST	*Rational::operator*(const IType &other) const
 	return (nullptr);
 }
 
-AST	*Rational::operator/(const Rational &other) const
+Rational*	Rational::operator/(const Rational &other) const
 {
 	return (*this * Rational(other.get_denominator(), other.get_numerator()));
 }
 
-AST	*Rational::operator/(const IType &other) const
+IType*	Rational::operator/(const IType &other) const
 {
 	const Rational	*other_rational;
 
@@ -120,32 +119,22 @@ AST	*Rational::operator/(const IType &other) const
 	return (nullptr);
 }
 
-AST	*Rational::operator%(const Rational &other) const
+Rational*	Rational::operator%(const Rational &other) const
 {
-	AST			*operation_result;
-	Rational	*operation_result_rational;
+	Rational	*result;
+	Rational	*tmp;
 
-	operation_result = *this / other;
-	operation_result_rational = dynamic_cast<Rational*>(operation_result->getNode()->clone());
-	delete operation_result;
-	if (operation_result_rational)
-	{
-		operation_result = other * Rational(operation_result_rational->integer_part());
-		delete operation_result_rational;
-		operation_result_rational = dynamic_cast<Rational*>(operation_result->getNode()->clone());
-		delete operation_result;
-		if (operation_result_rational)
-		{
-			operation_result = *this - *operation_result_rational;
-			delete operation_result_rational;
-			return (operation_result);
-		}
-	}
-	throw std::runtime_error("Modulo operation failed");
-	return (nullptr);
+	result = *this / other;
+	tmp = result;
+	result = other * Rational(result->integer_part());
+	delete tmp;
+	tmp = result;
+	result = *this - *result;
+	delete tmp;
+	return (result);
 }
 
-AST	*Rational::operator%(const IType &other) const
+IType*	Rational::operator%(const IType &other) const
 {
 	const Rational	*other_rational;
 
@@ -155,17 +144,17 @@ AST	*Rational::operator%(const IType &other) const
 	return (nullptr);
 }
 
-AST	*Rational::operator^(const Rational &other) const
+Rational*	Rational::operator^(const Rational &other) const
 {
 	int	exponent;
 
 	exponent = other.get_numerator();
 	if (other.get_denominator() != 1)
 		throw std::logic_error("Exponentiation with non-integer base is not supported");
-	return (new AST(new Rational(static_cast<int>(std::pow(this->get_numerator(), exponent)), static_cast<int>(std::pow(this->get_denominator(), exponent)))));
+	return (new Rational(static_cast<int>(std::pow(this->get_numerator(), exponent)), static_cast<int>(std::pow(this->get_denominator(), exponent))));
 }
 
-AST	*Rational::operator^(const IType &other) const
+IType*	Rational::operator^(const IType &other) const
 {
 	const Rational	*other_rational;
 
@@ -194,7 +183,7 @@ double	Rational::get_number(void) const
 
 
 // Methods
-AST*	Rational::matrix_operator(const IType &other) const
+IType*	Rational::matrix_operator(const IType &other) const
 {
 	throw std::logic_error("Matrix operator (**) cannot be applied to rational numbers");
 	(void)other;

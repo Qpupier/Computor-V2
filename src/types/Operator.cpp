@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 14:07:08 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 15:25:27 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,44 +35,44 @@ Operator::Operator(std::string op)
 
 
 // Operator overloads
-Operator	&Operator::operator=(const Operator &other)
+Operator&	Operator::operator=(const Operator &other)
 {
 	if (this != &other)
 		this->_op = other._op;
 	return (*this);
 }
 
-AST	*Operator::operator+(const IType &other) const
+IType*	Operator::operator+(const IType &other) const
 {
 	(void)other;
 	return (nullptr);
 }
 
-AST	*Operator::operator-(const IType &other) const
+IType*	Operator::operator-(const IType &other) const
 {
 	(void)other;
 	return (nullptr);
 }
 
-AST	*Operator::operator*(const IType &other) const
+IType*	Operator::operator*(const IType &other) const
 {
 	(void)other;
 	return (nullptr);
 }
 
-AST	*Operator::operator/(const IType &other) const
+IType*	Operator::operator/(const IType &other) const
 {
 	(void)other;
 	return (nullptr);
 }
 
-AST	*Operator::operator%(const IType &other) const
+IType*	Operator::operator%(const IType &other) const
 {
 	(void)other;
 	return (nullptr);
 }
 
-AST	*Operator::operator^(const IType &other) const
+IType*	Operator::operator^(const IType &other) const
 {
 	(void)other;
 	return (nullptr);
@@ -87,7 +87,7 @@ Operator::t_operator	Operator::getOperator(void) const
 
 
 // Methods
-AST*	Operator::matrix_operator(const IType &other) const
+IType*	Operator::matrix_operator(const IType &other) const
 {
 	(void)other;
 	return (nullptr);

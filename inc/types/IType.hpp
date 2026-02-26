@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 17:42:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 11:29:58 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 15:09:52 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 
 # include "computor-v2.hpp"
 
-class	AST;
-
 class	IType
 {
 	public:
@@ -24,15 +22,15 @@ class	IType
 		virtual ~IType(void) {};
 
 		// Operator overloads
-		virtual AST*	operator+(const IType &other) const = 0;
-		virtual AST*	operator-(const IType &other) const = 0;
-		virtual AST*	operator*(const IType &other) const = 0;
-		virtual AST*	operator/(const IType &other) const = 0;
-		virtual AST*	operator%(const IType &other) const = 0;
-		virtual AST*	operator^(const IType &other) const = 0;
+		virtual IType*	operator+(const IType &other) const = 0;
+		virtual IType*	operator-(const IType &other) const = 0;
+		virtual IType*	operator*(const IType &other) const = 0;
+		virtual IType*	operator/(const IType &other) const = 0;
+		virtual IType*	operator%(const IType &other) const = 0;
+		virtual IType*	operator^(const IType &other) const = 0;
 
 		// Methods
-		virtual AST*	matrix_operator(const IType &other) const = 0;
+		virtual IType*	matrix_operator(const IType &other) const = 0;
 		virtual std::ostream	&print(std::ostream &os) const = 0;
 		virtual IType*	clone(void) const = 0;
 

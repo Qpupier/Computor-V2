@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 14:55:07 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 11:31:19 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 15:24:24 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,19 @@ class	Operator: public IType
 		~Operator(void) {};
 
 		// Operator overloads
-		Operator	&operator=(const Operator &other);
-		AST			*operator+(const IType &other) const;
-		AST			*operator-(const IType &other) const;
-		AST			*operator*(const IType &other) const;
-		AST			*operator/(const IType &other) const;
-		AST			*operator%(const IType &other) const;
-		AST			*operator^(const IType &other) const;
+		Operator&	operator=(const Operator &other);
+		IType*		operator+(const IType &other) const;
+		IType*		operator-(const IType &other) const;
+		IType*		operator*(const IType &other) const;
+		IType*		operator/(const IType &other) const;
+		IType*		operator%(const IType &other) const;
+		IType*		operator^(const IType &other) const;
 
 		// Getters
 		t_operator	getOperator(void) const;
 
 		// Methods
-		AST*			matrix_operator(const IType &other) const;
+		IType*			matrix_operator(const IType &other) const;
 		std::ostream	&print(std::ostream &os) const;
 		IType*			clone(void) const;
 
