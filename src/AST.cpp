@@ -6,13 +6,13 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 15:30:11 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 16:54:15 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "Complex.hpp"
-#include "Rational.hpp"
 #include "Operator.hpp"
+#include "Rational.hpp"
+#include "Complex.hpp"
 
 // Constructors and destructor
 AST::AST(const Token &token): _left(nullptr), _right(nullptr)
@@ -27,6 +27,11 @@ AST::AST(const Token &token): _left(nullptr), _right(nullptr)
 		case Token::E_NUMBER:
 		{
 			_node = new Rational(token);
+			break;
+		}
+		case Token::E_IMAGINARY:
+		{
+			_node = new Complex();
 			break;
 		}
 		default:

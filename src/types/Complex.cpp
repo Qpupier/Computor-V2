@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 15:38:53 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 18:10:41 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@
 
 
 // Operator overloads
+bool	Complex::operator!() const
+{
+	return (!this->_real && !this->_imaginary);
+}
+
 Complex	&Complex::operator=(const Complex &other)
 {
 	if (this != &other)
@@ -58,12 +63,12 @@ Complex*	Complex::operator+(const Complex &other) const
 	return (result);
 }
 
-AST	*Complex::operator+(const Rational &other) const
+Complex*	Complex::operator+(const Rational &other) const
 {
 	return (*this + Complex(other, Rational()));
 }
 
-AST	*Complex::operator+(const IType &other) const
+IType*	Complex::operator+(const IType &other) const
 {
 	const Complex	*other_complex;
 	const Rational	*other_number;
@@ -77,30 +82,26 @@ AST	*Complex::operator+(const IType &other) const
 	return (nullptr);
 }
 
-AST	*Complex::operator-(const Complex &other) const
+Complex*	Complex::operator-(const Complex &other) const
 {
-	AST *operation_real;
-	AST *operation_imaginary;
-	Rational *operation_real_rational;
-	Rational *operation_imaginary_rational;
-	
-	operation_real = this->_real - other._real;
-	operation_real_rational = dynamic_cast<Rational*>(operation_real->getNode()->clone());
-	delete operation_real;
-	operation_imaginary = this->_imaginary - other._imaginary;
-	operation_imaginary_rational = dynamic_cast<Rational*>(operation_imaginary->getNode()->clone());
-	delete operation_imaginary;
-	if (!operation_real_rational || !operation_imaginary_rational)
-		throw std::runtime_error("Failed to clone Rational result of Complex subtraction");
-	return (new AST(new Complex(*operation_real_rational, *operation_imaginary_rational)));
+	Rational*	real;
+	Rational*	imaginary;
+	Complex*	result;
+
+	real = this->_real - other._real;
+	imaginary = this->_imaginary - other._imaginary;
+	result = new Complex(*real, *imaginary);
+	delete real;
+	delete imaginary;
+	return (result);
 }
 
-AST	*Complex::operator-(const Rational &other) const
+Complex*	Complex::operator-(const Rational &other) const
 {
 	return (*this - Complex(other, Rational()));
 }
 
-AST	*Complex::operator-(const IType &other) const
+IType*	Complex::operator-(const IType &other) const
 {
 	const Complex	*other_complex;
 	const Rational	*other_number;
@@ -114,31 +115,45 @@ AST	*Complex::operator-(const IType &other) const
 	return (nullptr);
 }
 
-AST	*Complex::operator*(const Complex &other) const
+Complex*	Complex::operator*(const Complex &other) const
 {
-	AST *operation_real;
-	AST *operation_imaginary;
-	Rational *operation_real_rational;
-	Rational *operation_imaginary_rational;
-	
-	operation_real = this->_imaginary * other._real + this->_real * other._imaginary;
-	operation_real_rational = dynamic_cast<Rational*>(operation_real->getNode()->clone());
-	delete operation_real;
-	operation_imaginary = this->_real * other._real - this->_imaginary * other._imaginary;
-	operation_imaginary_rational = dynamic_cast<Rational*>(operation_imaginary->getNode()->clone());
-	delete operation_imaginary;
-	if (!operation_real_rational || !operation_imaginary_rational)
-		throw std::runtime_error("Failed to clone Rational result of Complex subtraction");
-	return (new AST(new Complex(*operation_real_rational, *operation_imaginary_rational)));
-	return (complex_to_node(Complex(this->_imaginary * other._real + this->_real * other._imaginary, this->_real * other._real - this->_imaginary * other._imaginary)));
+	Rational*	part1;
+	Rational*	part2;
+	Rational*	real;
+	Rational*	imaginary;
+	Complex*	result;
+
+	part1 = this->_imaginary * other._real;
+	part2 = this->_real * other._imaginary;
+	real = *part1 + *part2;
+	delete part1;
+	delete part2;
+	part1 = this->_real * other._real;
+	part2 = this->_imaginary * other._imaginary;
+	imaginary = *part1 - *part2;
+	delete part1;
+	delete part2;
+	result = new Complex(*real, *imaginary);
+	delete real;
+	delete imaginary;
+	return (result);
 }
 
-AST	*Complex::operator*(const Rational &other) const
+Complex*	Complex::operator*(const Rational &other) const
 {
-	return (complex_to_node(Complex(this->_imaginary * other.get_value(), this->_real * other.get_value())));
+	Rational*	real;
+	Rational*	imaginary;
+	Complex*	result;
+
+	real = this->_real * other;
+	imaginary = this->_imaginary * other;
+	result = new Complex(*real, *imaginary);
+	delete real;
+	delete imaginary;
+	return (result);
 }
 
-AST	*Complex::operator*(const IType &other) const
+IType*	Complex::operator*(const IType &other) const
 {
 	const Complex	*other_complex;
 	const Rational	*other_number;
@@ -152,23 +167,50 @@ AST	*Complex::operator*(const IType &other) const
 	return (nullptr);
 }
 
-AST	*Complex::operator/(const Complex &other) const
+Complex*	Complex::operator/(const Complex &other) const
 {
-	double	denominator = other._real * other._real + other._imaginary * other._imaginary;
+	Rational*	part1;
+	Rational*	part2;
+	Rational*	numerator;
+	Rational*	denominator;
+	Rational*	real;
+	Rational*	imaginary;
+	Complex*	result;
 
-	if (denominator == 0)
+	part1 = other._real * other._real;
+	part2 = other._imaginary * other._imaginary;
+	denominator = *part1 + *part2;
+	if (!denominator)
 		throw std::runtime_error("Division by zero");
-	return (complex_to_node(Complex((this->_imaginary * other._real - this->_real * other._imaginary) / denominator, (this->_real * other._real + this->_imaginary * other._imaginary) / denominator)));
+	delete part1;
+	delete part2;
+	part1 = this->_imaginary * other._real;
+	part2 = this->_real * other._imaginary;
+	numerator = *part1 - *part2;
+	delete part1;
+	delete part2;
+	real = *numerator / *denominator;
+	delete numerator;
+	part1 = this->_real * other._real;
+	part2 = this->_imaginary * other._imaginary;
+	numerator = *part1 + *part2;
+	delete part1;
+	delete part2;
+	imaginary = *numerator / *denominator;
+	delete numerator;
+	delete denominator;
+	result = new Complex(*real, *imaginary);
+	delete real;
+	delete imaginary;
+	return (result);
 }
 
-AST	*Complex::operator/(const Rational &other) const
+Complex*	Complex::operator/(const Rational &other) const
 {
-	if (other.get_value() == 0)
-		throw std::runtime_error("Division by zero");
-	return (complex_to_node(Complex(this->_imaginary / other.get_value(), this->_real / other.get_value())));
+	return (*this / Complex(other, Rational()));
 }
 
-AST	*Complex::operator/(const IType &other) const
+IType*	Complex::operator/(const IType &other) const
 {
 	const Complex	*other_complex;
 	const Rational	*other_number;
@@ -182,29 +224,69 @@ AST	*Complex::operator/(const IType &other) const
 	return (nullptr);
 }
 
-AST	*Complex::operator%(const IType &other) const
-{
-	throw std::logic_error("Modulo operator (%) cannot be applied to complex numbers");
-	(void)other;
-	return (nullptr);
-}
-
-AST	*Complex::operator^(const Rational &other) const
-{
-	if (!number_in_z(other))
-		throw std::logic_error("Only integers (ℤ) can be used as exponents");
-	// TODO: Implement exponentiation for complex numbers
-	return (nullptr);
-}
-
-AST	*Complex::operator^(const IType &other) const
+IType*	Complex::operator%(const IType &other) const
 {
 	const Complex	*other_complex;
 	const Rational	*other_number;
+	Rational		*test;
+
+	*test = this;
+	if (test)
+	{
+		other_complex = dynamic_cast<const Complex*>(&other);
+		if (other_complex)
+		{
+			*test = other_complex;
+			if (test)
+			{
+				delete other_complex;
+				return (*this ^ *test);
+			}
+		}
+		other_number = dynamic_cast<const Rational*>(&other);
+		if (other_number)
+			return (*this ^ *other_number);
+	}
+	throw std::logic_error("Modulo operator (%) cannot be applied to complex numbers");
+	return (nullptr);
+}
+
+Complex*	Complex::operator^(const Rational &other) const
+{
+	Rational	exponent;
+	Complex*	result;
+
+	exponent = other;
+	exponent.reduce();
+	if (!exponent.is_integer())
+		throw std::logic_error("Only integers (ℤ) can be used as exponents");
+	result = new Complex(*this);
+	for (int i = 1; i < exponent.get_numerator(); i++)
+	{
+		Complex*	tmp;
+
+		tmp = result;
+		result = *result * *this;
+		delete tmp;
+	}
+	return (result);
+}
+
+IType*	Complex::operator^(const IType &other) const
+{
+	const Complex	*other_complex;
+	const Rational	*other_number;
+	Rational		*test;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
-		throw std::logic_error("A complex number cannot be a power");
+	{
+		*test = other_complex;
+		if (!test)
+			throw std::logic_error("A complex number cannot be a power");
+		delete other_complex;
+		return (*this ^ *test);
+	}
 	other_number = dynamic_cast<const Rational*>(&other);
 	if (other_number)
 		return (*this ^ *other_number);
@@ -225,7 +307,7 @@ Rational	Complex::get_real(void) const
 
 
 // Methods
-AST*	Complex::matrix_operator(const IType &other) const
+IType*	Complex::matrix_operator(const IType &other) const
 {
 	throw std::logic_error("Matrix operator (**) cannot be applied to complex numbers");
 	(void)other;
@@ -234,8 +316,7 @@ AST*	Complex::matrix_operator(const IType &other) const
 
 std::ostream	&Complex::print(std::ostream &os) const
 {
-	os << "Complex: " << this->_imaginary << "i" << " + " << this->_real;
-	return (os);
+	return (os << "Complex: " << this->_real << " + " << this->_imaginary << "i");
 }
 
 IType*	Complex::clone(void) const
@@ -244,9 +325,8 @@ IType*	Complex::clone(void) const
 }
 
 
-// Output stream operator overload
-std::ostream	&operator<<(std::ostream &os, const Complex &num)
-{
-	os << "Complex: " << num.get_imaginary() << "i" << " + " << num.get_real() << std::endl;
-	return (os);
-}
+// // Output stream operator overload
+// std::ostream	&operator<<(std::ostream &os, const Complex &num)
+// {
+// 	return (num.print(os) << std::endl);
+// }

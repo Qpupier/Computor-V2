@@ -6,14 +6,17 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 15:15:20 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 18:08:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RATIONAL_HPP
 # define RATIONAL_HPP
 
-# include "AST.hpp"
+// # include "AST.hpp"
+# include "IType.hpp"
+# include "Token.hpp"
+# include "Complex.hpp"
 
 class	Rational: public IType
 {
@@ -28,19 +31,28 @@ class	Rational: public IType
 		~Rational(void) {};
 
 		// Operator overloads
+		bool		operator!() const;
 		Rational&	operator=(const Rational &other);
+		Rational*	operator=(const Complex &other);
+		Rational*	operator=(const Complex *other);
 		IType*		operator+(const IType &other) const;
 		Rational*	operator+(const Rational &other) const;
+		Complex*	operator+(const Complex &other) const;
 		IType*		operator-(const IType &other) const;
 		Rational*	operator-(const Rational &other) const;
+		Complex*	operator-(const Complex &other) const;
 		IType*		operator*(const IType &other) const;
 		Rational*	operator*(const Rational &other) const;
+		Complex*	operator*(const Complex &other) const;
 		IType*		operator/(const IType &other) const;
 		Rational*	operator/(const Rational &other) const;
+		Complex*	operator/(const Complex &other) const;
 		IType*		operator%(const IType &other) const;
 		Rational*	operator%(const Rational &other) const;
+		Complex*	operator%(const Complex &other) const;
 		IType*		operator^(const IType &other) const;
 		Rational*	operator^(const Rational &other) const;
+		Complex*	operator^(const Complex &other) const;
 
 		// Getters
 		int		get_numerator(void) const;
@@ -53,6 +65,7 @@ class	Rational: public IType
 		void			reduce(void);
 		std::ostream&	print(std::ostream &os) const;
 		IType*			clone(void) const;
+		bool			is_integer(void) const;
 
 	private:
 		// Members

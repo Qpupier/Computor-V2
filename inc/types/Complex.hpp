@@ -6,16 +6,18 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:35:43 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 15:34:49 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 18:10:12 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COMPLEX_HPP
 # define COMPLEX_HPP
 
-// # include "IType.hpp"
 // # include "AST.hpp"
+# include "IType.hpp"
 # include "Rational.hpp"
+
+// class	Rational;
 
 class	Complex: public IType
 {
@@ -30,6 +32,7 @@ class	Complex: public IType
 		~Complex(void) {};
 
 		// Operator overloads
+		bool		operator!() const;
 		Complex&	operator=(const Complex &other);
 		IType*		operator+(const IType &other) const;
 		Complex*	operator+(const Complex &other) const;
@@ -44,11 +47,11 @@ class	Complex: public IType
 		Complex*	operator/(const Complex &other) const;
 		Complex*	operator/(const Rational &other) const;
 		IType*		operator%(const IType &other) const;
-		Complex*	operator%(const Complex &other) const;
 		Complex*	operator%(const Rational &other) const;
+		Complex*	operator%(const Complex &other) const;
 		IType*		operator^(const IType &other) const;
-		Complex*	operator^(const Complex &other) const;
 		Complex*	operator^(const Rational &other) const;
+		Complex*	operator^(const Complex &other) const;
 
 		// Getters
 		Rational	get_imaginary(void) const;
@@ -66,6 +69,6 @@ class	Complex: public IType
 };
 
 // Output stream operator overload
-std::ostream	&operator<<(std::ostream &os, const Complex &num);
+// std::ostream	&operator<<(std::ostream &os, const Complex &num);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 15:23:40 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 18:09:17 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,14 @@ Rational::Rational(std::string str)
 
 
 // Operator overloads
+bool	Rational::operator!() const
+{
+	Rational	copy(*this);
+
+	copy.reduce();
+	return (!copy._numerator);
+}
+
 Rational&	Rational::operator=(const Rational &other)
 {
 	if (this != &other)
@@ -59,9 +67,34 @@ Rational&	Rational::operator=(const Rational &other)
 	return (*this);
 }
 
+Rational*	Rational::operator=(const Complex &other)
+{
+	Rational	imaginary(other.get_imaginary());
+
+	imaginary.reduce();
+	if (!imaginary)
+		return (new Rational(other.get_real()));
+	return (nullptr);
+}
+
+Rational*	Rational::operator=(const Complex *other)
+{
+	Rational	imaginary(other->get_imaginary());
+
+	imaginary.reduce();
+	if (!imaginary)
+		return (new Rational(other->get_real()));
+	return (nullptr);
+}
+
 Rational*	Rational::operator+(const Rational &other) const
 {
 	return (new Rational(this->_numerator * other._denominator + other._numerator * this->_denominator, this->_denominator * other._denominator));
+}
+
+Complex*	Rational::operator+(const Complex &other) const
+{
+	return (Complex(*this, Rational()) + other);
 }
 
 IType*	Rational::operator+(const IType &other) const
@@ -79,6 +112,11 @@ Rational*	Rational::operator-(const Rational &other) const
 	return (new Rational(this->_numerator * other._denominator - other._numerator * this->_denominator, this->_denominator * other._denominator));
 }
 
+Complex*	Rational::operator-(const Complex &other) const
+{
+	return (Complex(*this, Rational()) - other);
+}
+
 IType*	Rational::operator-(const IType &other) const
 {
 	const Rational	*other_rational;
@@ -94,6 +132,11 @@ Rational*	Rational::operator*(const Rational &other) const
 	return (new Rational(this->_numerator * other._numerator, this->_denominator * other._denominator));
 }
 
+Complex*	Rational::operator*(const Complex &other) const
+{
+	return (Complex(*this, Rational()) * other);
+}
+
 IType*	Rational::operator*(const IType &other) const
 {
 	const Rational	*other_rational;
@@ -107,6 +150,11 @@ IType*	Rational::operator*(const IType &other) const
 Rational*	Rational::operator/(const Rational &other) const
 {
 	return (*this * Rational(other.get_denominator(), other.get_numerator()));
+}
+
+Complex*	Rational::operator/(const Complex &other) const
+{
+	return (Complex(*this, Rational()) / other);
 }
 
 IType*	Rational::operator/(const IType &other) const
@@ -134,6 +182,11 @@ Rational*	Rational::operator%(const Rational &other) const
 	return (result);
 }
 
+Complex*	Rational::operator%(const Complex &other) const
+{
+	return (Complex(*this, Rational()) % other);
+}
+
 IType*	Rational::operator%(const IType &other) const
 {
 	const Rational	*other_rational;
@@ -152,6 +205,11 @@ Rational*	Rational::operator^(const Rational &other) const
 	if (other.get_denominator() != 1)
 		throw std::logic_error("Exponentiation with non-integer base is not supported");
 	return (new Rational(static_cast<int>(std::pow(this->get_numerator(), exponent)), static_cast<int>(std::pow(this->get_denominator(), exponent))));
+}
+
+Complex*	Rational::operator^(const Complex &other) const
+{
+	return (Complex(*this, Rational()) ^ other);
 }
 
 IType*	Rational::operator^(const IType &other) const
@@ -222,4 +280,11 @@ std::ostream&	Rational::print(std::ostream &os) const
 IType*	Rational::clone(void) const
 {
 	return (new Rational(*this));
+}
+
+bool	Rational::is_integer(void) const
+{
+	Rational	copy(*this);
+	copy.reduce();
+	return (copy.get_denominator() == 1);
 }

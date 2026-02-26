@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 15:25:27 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 16:32:52 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,11 @@ Operator::Operator(std::string op)
 
 
 // Operator overloads
+bool	Operator::operator!() const
+{
+	return (false);
+}
+
 Operator&	Operator::operator=(const Operator &other)
 {
 	if (this != &other)

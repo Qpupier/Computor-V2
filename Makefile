@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/02/26 15:09:28 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/02/26 16:54:26 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,8 @@ LST_SRC		=	main.cpp			\
 				AST.cpp				\
 				types/IType.cpp		\
 				types/Operator.cpp	\
-				types/Rational.cpp
+				types/Rational.cpp	\
+				types/Complex.cpp
 LST_OBJ		=	$(LST_SRC:.cpp=.o)
 LST_DEP		=	$(LST_OBJ:.o=.d)
 LST_INC		= 	$(DIR_INC)\
