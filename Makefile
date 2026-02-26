@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/02/25 16:30:06 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/02/26 12:53:08 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,6 @@ DIR_OBJ		=	.obj
 DIR_INC		=	inc
 LST_SRC		=	main.cpp			\
 				parser.cpp			\
-				Node.cpp			\
 				Token.cpp			\
 				ast.cpp				\
 				AST.cpp				\

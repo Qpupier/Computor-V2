@@ -6,14 +6,13 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:01:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 11:33:45 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 12:51:33 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef AST_HPP
 # define AST_HPP
 
-# include "Node.hpp"
 # include "Token.hpp"
 # include "IType.hpp"
 
@@ -57,8 +56,6 @@ AST*	compute_expression(const std::string &line, 						\
 		const std::map<std::string, std::regex> &patterns, 					\
 		const std::map<const Token::t_token, std::regex> &tokens_types, 	\
 		const std::map<std::string, const IType*> &stored);
-// Node	*make_ast(std::vector<Token> &tokens);
-// Node	*reduce_expression(Node *ast);
 AST	*build_ast(std::vector<Token> &tokens);
 
 

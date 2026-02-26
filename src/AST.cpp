@@ -6,12 +6,10 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 11:33:57 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 14:10:16 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "AST.hpp"
-#include "Token.hpp"
 #include "Complex.hpp"
 #include "Rational.hpp"
 #include "Operator.hpp"
@@ -115,48 +113,57 @@ void	AST::reduce_expression(void)
 	if (op)
 	{
 		AST* result = nullptr;
-		switch (op->getOperator())
+		try
 		{
-			case Operator::E_ADD:
+			switch (op->getOperator())
 			{
-				result = *left_entity + *right_entity;
-				break;
+				case Operator::E_ADD:
+				{
+					result = *left_entity + *right_entity;
+					break;
+				}
+				case Operator::E_SUBTRACT:
+				{
+					result = *left_entity - *right_entity;
+					break;
+				}
+				case Operator::E_MULTIPLY:
+				{
+					result = *left_entity * *right_entity;
+					break;
+				}
+				case Operator::E_DIVIDE:
+				{
+					result = *left_entity / *right_entity;
+					break;
+				}
+				case Operator::E_MODULO:
+				{
+					result = *left_entity % *right_entity;
+					break;
+				}
+				case Operator::E_POWER:
+				{
+					result = *left_entity ^ *right_entity;
+					break;
+				}
+				case Operator::E_MATRIX:
+				{
+					result = left_entity->matrix_operator(*right_entity);
+					break;
+				}
+				default:
+				{
+					throw std::runtime_error("Unknown operator");
+					break;
+				}
 			}
-			case Operator::E_SUBTRACT:
-			{
-				result = *left_entity - *right_entity;
-				break;
-			}
-			case Operator::E_MULTIPLY:
-			{
-				result = *left_entity * *right_entity;
-				break;
-			}
-			case Operator::E_DIVIDE:
-			{
-				result = *left_entity / *right_entity;
-				break;
-			}
-			case Operator::E_MODULO:
-			{
-				result = *left_entity % *right_entity;
-				break;
-			}
-			case Operator::E_POWER:
-			{
-				result = *left_entity ^ *right_entity;
-				break;
-			}
-			case Operator::E_MATRIX:
-			{
-				result = left_entity->matrix_operator(*right_entity);
-				break;
-			}
-			default:
-			{
-				throw std::logic_error("Invalid operator in AST node");
-				break;
-			}
+		}
+		catch (const std::exception &e)
+		{
+			delete result;
+			delete this;
+			throw;
 		}
 		*this = *result;
 		delete result;

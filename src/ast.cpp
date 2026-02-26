@@ -6,35 +6,11 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 16:48:49 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/25 18:40:21 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 14:10:50 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
-
-std::vector<Token>	find_next_parenthesis_group(const std::vector<Token> &tokens)
-{
-	std::vector<Token>::const_iterator	start;
-	unsigned int						depth;
-
-	depth = 0;
-	for (unsigned long int i = 0; i < tokens.size(); i++)
-		if (tokens[i].getType() == Token::E_LEFT_PARENTHESIS)
-		{
-			if (!depth)
-				start = tokens.begin() + static_cast<long>(i) + 1;
-			depth++;
-		}
-		else if (tokens[i].getType() == Token::E_RIGHT_PARENTHESIS)
-		{
-			depth--;
-			if (!depth)
-				return (std::vector<Token>(start, tokens.begin() + static_cast<long>(i)));
-		}
-	if (depth)
-		throw std::logic_error("Mismatched parentheses");
-	return (std::vector<Token>());
-}
 
 static long int	select_operator(const std::vector<Token> &tokens, unsigned long int size, const std::vector<std::string> &operators)
 {

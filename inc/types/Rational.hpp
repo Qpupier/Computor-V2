@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 11:30:18 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 12:52:14 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,21 +34,16 @@ class	Rational: public IType
 		Rational	&operator=(const Rational &other);
 		AST			*operator+(const IType &other) const;
 		AST			*operator+(const Rational &other) const;
-		// AST			*operator+(const Rational &other) const;
 		AST			*operator-(const IType &other) const;
 		AST			*operator-(const Rational &other) const;
-		// AST			*operator-(const Rational &other) const;
 		AST			*operator*(const IType &other) const;
 		AST			*operator*(const Rational &other) const;
-		// AST			*operator*(const Rational &other) const;
 		AST			*operator/(const IType &other) const;
 		AST			*operator/(const Rational &other) const;
-		// AST			*operator/(const Rational &other) const;
 		AST			*operator%(const IType &other) const;
 		AST			*operator%(const Rational &other) const;
 		AST			*operator^(const IType &other) const;
 		AST			*operator^(const Rational &other) const;
-		// AST			*operator^(const Rational &other) const;
 
 		// Getters
 		int		get_numerator(void) const;

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/25 18:41:59 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 14:04:01 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,6 @@ static void	semantic_verification(const std::vector<Token> &tokens)
 			throw std::logic_error("Imaginary unit cannot be used with modulus operator");
 		if ((prev_type == Token::E_MATRIX && current_token == "%") || (prev_token == "%" && current_type == Token::E_MATRIX))
 			throw std::logic_error("Matrix cannot be used with modulus operator");
-		if ((prev_token == "**" && (current_type == Token::E_IMAGINARY || current_type == Token::E_NUMBER))  \
-				|| ((prev_type == Token::E_VARIABLE || prev_type == Token::E_IMAGINARY || prev_type == Token::E_NUMBER) && current_token == "**"))
-			throw std::logic_error("Exponentiation operator cannot be used with imaginary unit, rational numbers or variables");
 	}
 }
 
@@ -137,8 +134,8 @@ void	set_missing_operators(std::vector<Token> &tokens, 	\
 	}
 }
 
-AST	*compute_expression(const std::string &line, 		\
-		const std::map<std::string, std::regex> &patterns, 	\
+AST	*compute_expression(const std::string &line, 							\
+		const std::map<std::string, std::regex> &patterns, 					\
 		const std::map<const Token::t_token, std::regex> &tokens_types, 	\
 		const std::map<std::string, const IType*> &stored)
 {

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 11:31:28 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 14:07:08 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ Operator::Operator(std::string op)
 	else if (op == "**")
 		_op = E_MATRIX;
 	else
-		throw std::invalid_argument("Invalid op");
+		throw std::runtime_error("Invalid operator: " + op);
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 12:10:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/26 14:06:45 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	compute_gcd(int a, int b)
 Rational::Rational(int numerator, int denominator): _numerator(numerator), _denominator(denominator)
 {
 	if (denominator == 0)
-		throw std::runtime_error("Denominator cannot be zero");
+		throw std::logic_error("Denominator cannot be zero");
 	this->reduce();
 }
 
@@ -141,7 +141,7 @@ AST	*Rational::operator%(const Rational &other) const
 			return (operation_result);
 		}
 	}
-	throw std::logic_error("Modulo operation is only supported for rational numbers");
+	throw std::runtime_error("Modulo operation failed");
 	return (nullptr);
 }
 
