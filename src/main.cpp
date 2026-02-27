@@ -6,13 +6,12 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 14:46:29 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/27 18:12:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
 #include "Rational.hpp"
-// #include "Variable.hpp"
 
 void	stored_variables(const std::map<std::string, const IType*> &stored)
 {

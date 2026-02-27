@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/27 17:19:05 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/27 18:34:09 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 
 # include "IType.hpp"
 # include "Token.hpp"
+
+# define EXPONENT_INTEGER std::logic_error("Only integers (ℤ) can be used as exponents")
+# define ERROR_DIVISION_BY_ZERO std::logic_error("Division by zero is impossible")
 
 class	Complex;
 
@@ -32,7 +35,6 @@ class	Rational: public IType
 
 		// Operator overloads
 		explicit 	operator bool() const;
-		bool		operator!() const;
 		bool		operator==(const Rational &other) const;
 		bool		operator!=(const Rational &other) const;
 		bool		operator<(const Rational &other) const;

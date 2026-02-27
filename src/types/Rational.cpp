@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/27 17:18:02 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/27 18:34:01 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	compute_gcd(int a, int b)
 Rational::Rational(int numerator, int denominator): _numerator(numerator), _denominator(denominator)
 {
 	if (denominator == 0)
-		throw std::logic_error("Denominator cannot be zero");
+		throw ERROR_DIVISION_BY_ZERO;
 	this->reduce();//keep?
 }
 
@@ -52,11 +52,6 @@ Rational::Rational(std::string str)
 Rational::operator bool() const
 {
 	return (this->_numerator);
-}
-
-bool	Rational::operator!() const
-{
-	return (!this->_numerator);
 }
 
 bool	Rational::operator==(const Rational &other) const
@@ -102,7 +97,7 @@ Rational&	Rational::operator=(const Rational &other)
 Rational	Rational::operator=(const Complex &other)
 {
 	if (other.getImaginary())
-		throw std::logic_error("Cannot assign a complex number with a non-zero imaginary part to a rational number");
+		throw ERROR_CONVERT_COMPLEX_TO_RATIONAL;
 	return (Rational(other.getReal()));
 }
 
@@ -242,7 +237,7 @@ Rational*	Rational::operator^(const Rational &other) const
 
 	exponent = other.getNumerator();
 	if (other.getDenominator() != 1)
-		throw std::logic_error("Exponentiation with non-integer base is not supported");
+		throw EXPONENT_INTEGER;
 	return (new Rational(static_cast<int>(std::pow(this->getNumerator(), exponent)), static_cast<int>(std::pow(this->getDenominator(), exponent))));
 }
 
@@ -296,7 +291,7 @@ void	Rational::reduce(void)
 
 IType*	Rational::matrix_operator(const IType &other) const
 {
-	throw std::logic_error("Matrix operator (**) cannot be applied to rational numbers");
+	throw ERROR_MATRIX_OPERATOR;
 	(void)other;
 	return (nullptr);
 }

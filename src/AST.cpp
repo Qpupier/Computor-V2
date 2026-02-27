@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/27 17:14:41 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/27 18:07:01 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,8 @@ std::ostream	&AST::print(std::ostream &os) const
 
 void	AST::reduce_expression(void)
 {
+	AST	*tmp;
+
 	// TODO
 	// Si pas de variable
 	// return;
@@ -171,10 +173,9 @@ void	AST::reduce_expression(void)
 			delete this;
 			throw;
 		}
-		AST *tmp = new AST(result);
+		tmp = new AST(result);
 		*this = *tmp;
 		delete tmp;
-		// delete result;
 	}
 	return;
 }

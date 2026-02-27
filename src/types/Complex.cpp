@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/27 17:18:02 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/27 18:34:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,6 @@ static std::string	print_imaginary(Rational imaginary)
 inline	Complex::operator bool() const
 {
 	return (this->_real || this->_imaginary);
-}
-
-bool	Complex::operator!() const
-{
-	return (!this->_real && !this->_imaginary);
 }
 
 bool	Complex::operator==(const Complex &other) const
@@ -239,7 +234,7 @@ Rational*	Complex::operator%(const Complex &other) const
 	}
 	catch (const std::logic_error &e)
 	{
-		throw std::logic_error("Modulo operator (%) cannot be applied to complex numbers");
+		throw ERROR_MODULO_COMPLEX;
 	}
 	return (rational % other_rational);
 }
@@ -254,7 +249,7 @@ Rational*	Complex::operator%(const Rational &other) const
 	}
 	catch(const std::logic_error &e)
 	{
-		throw std::logic_error("Modulo operator (%) cannot be applied to complex numbers");
+		throw ERROR_MODULO_COMPLEX;
 	}
 	return (rational % other);
 }
@@ -283,11 +278,11 @@ Complex*	Complex::operator^(const Rational &other) const
 	{
 		exponent = other;
 		if (!exponent.is_integer())
-			throw std::logic_error("Exponent must be an integer");
+			throw EXPONENT_INTEGER;
 	}
 	catch (const std::logic_error &e)
 	{
-		throw std::logic_error("Only integers (ℤ) can be used as exponents");
+		throw EXPONENT_INTEGER;
 	}
 	result = new Complex(*this);
 	for (int i = 1; i < exponent.getNumerator(); i++)
@@ -309,7 +304,7 @@ Complex*	Complex::operator^(const Complex &other) const
 	}
 	catch (const std::logic_error &e)
 	{
-		throw std::logic_error("Only integers (ℤ) can be used as exponents");
+		throw EXPONENT_INTEGER;
 	}
 	return (*this ^ other_rational);
 }
@@ -344,7 +339,7 @@ Rational	Complex::getReal(void) const
 // Methods
 IType*	Complex::matrix_operator(const IType &other) const
 {
-	throw std::logic_error("Matrix operator (**) cannot be applied to complex numbers");
+	throw ERROR_MATRIX_OPERATOR;
 	(void)other;
 	return (nullptr);
 }
@@ -352,7 +347,7 @@ IType*	Complex::matrix_operator(const IType &other) const
 Rational	Complex::to_rational(void) const
 {
 	if (this->_imaginary)
-		throw std::logic_error("Cannot convert a complex number with a non-zero imaginary part to a rational number");
+		throw ERROR_CONVERT_COMPLEX_TO_RATIONAL;
 	return (this->_real);
 }
 

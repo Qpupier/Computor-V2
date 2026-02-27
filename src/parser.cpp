@@ -6,12 +6,11 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 14:04:01 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/27 18:09:50 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
-// #include "Variable.hpp"
 
 static void	semantic_verification(const std::vector<Token> &tokens)
 {
