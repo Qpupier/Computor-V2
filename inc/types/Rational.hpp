@@ -6,17 +6,17 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 18:08:44 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/27 17:19:05 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RATIONAL_HPP
 # define RATIONAL_HPP
 
-// # include "AST.hpp"
 # include "IType.hpp"
 # include "Token.hpp"
-# include "Complex.hpp"
+
+class	Complex;
 
 class	Rational: public IType
 {
@@ -31,10 +31,16 @@ class	Rational: public IType
 		~Rational(void) {};
 
 		// Operator overloads
+		explicit 	operator bool() const;
 		bool		operator!() const;
+		bool		operator==(const Rational &other) const;
+		bool		operator!=(const Rational &other) const;
+		bool		operator<(const Rational &other) const;
+		bool		operator<=(const Rational &other) const;
+		bool		operator>(const Rational &other) const;
+		bool		operator>=(const Rational &other) const;
 		Rational&	operator=(const Rational &other);
-		Rational*	operator=(const Complex &other);
-		Rational*	operator=(const Complex *other);
+		Rational	operator=(const Complex &other);
 		IType*		operator+(const IType &other) const;
 		Rational*	operator+(const Rational &other) const;
 		Complex*	operator+(const Complex &other) const;
@@ -49,28 +55,33 @@ class	Rational: public IType
 		Complex*	operator/(const Complex &other) const;
 		IType*		operator%(const IType &other) const;
 		Rational*	operator%(const Rational &other) const;
-		Complex*	operator%(const Complex &other) const;
+		Rational*	operator%(const Complex &other) const;
 		IType*		operator^(const IType &other) const;
 		Rational*	operator^(const Rational &other) const;
 		Complex*	operator^(const Complex &other) const;
 
 		// Getters
-		int		get_numerator(void) const;
-		int		get_denominator(void) const;
-		double	get_number(void) const;
+		int		getNumerator(void) const;
+		int		getDenominator(void) const;
+		double	getNumber(void) const;
 
 		// Methods
-		IType*			matrix_operator(const IType &other) const;
-		int				integer_part(void) const;
 		void			reduce(void);
-		std::ostream&	print(std::ostream &os) const;
+		IType*			matrix_operator(const IType &other) const;
 		IType*			clone(void) const;
 		bool			is_integer(void) const;
+		int				integer_part(void) const;
+		std::ostream&	print(std::ostream &os) const;
 
 	private:
 		// Members
 		int	_numerator;
 		int	_denominator;
 };
+
+// Output stream operator overload
+std::ostream&	operator<<(std::ostream &os, const Rational &num);
+
+# include "Complex.hpp"
 
 #endif

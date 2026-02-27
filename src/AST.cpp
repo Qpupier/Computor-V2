@@ -6,10 +6,11 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 16:54:15 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/27 17:14:41 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "AST.hpp"
 #include "Operator.hpp"
 #include "Rational.hpp"
 #include "Complex.hpp"

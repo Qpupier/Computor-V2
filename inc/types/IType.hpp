@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 17:42:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 16:32:22 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/27 17:01:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ class	IType
 		virtual ~IType(void) {};
 
 		// Operator overloads
-		virtual bool	operator!() const = 0;
 		virtual IType*	operator+(const IType &other) const = 0;
 		virtual IType*	operator-(const IType &other) const = 0;
 		virtual IType*	operator*(const IType &other) const = 0;

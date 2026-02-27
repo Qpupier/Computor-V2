@@ -6,37 +6,40 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 18:10:41 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/27 17:18:02 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Complex.hpp"
 
 // Utils
-// static AST	*complex_to_node(const Complex &complex)
-// {
-// 	AST	*result;
-// 	AST	*imaginary;
-
-// 	result = new AST("+", Token::E_OPERATOR);
-// 	imaginary = new AST("*", Token::E_OPERATOR);
-// 	imaginary->setLeft(new AST(std::to_string(complex.get_imaginary()), Token::E_NUMBER));
-// 	imaginary->setRight(new AST("i", Token::E_IMAGINARY));
-// 	result->setLeft(imaginary);
-// 	result->setRight(new AST(std::to_string(complex.get_real()), Token::E_NUMBER));
-// 	return (result);
-// }
-
-// static bool	number_in_z(const Rational &num)
-// {
-// 	return (num.get_value() == static_cast<int>(num.get_value()));
-// }
+static std::string	print_imaginary(Rational imaginary)
+{
+	if (imaginary.is_integer())
+		return std::to_string(imaginary.getNumerator()) + "i";
+	return (std::to_string(imaginary.getNumerator()) + "i/" + std::to_string(imaginary.getDenominator()));
+}
 
 
 // Operator overloads
+inline	Complex::operator bool() const
+{
+	return (this->_real || this->_imaginary);
+}
+
 bool	Complex::operator!() const
 {
 	return (!this->_real && !this->_imaginary);
+}
+
+bool	Complex::operator==(const Complex &other) const
+{
+	return (this->_real == other._real && this->_imaginary == other._imaginary);
+}
+
+bool	Complex::operator!=(const Complex &other) const
+{
+	return (!(*this == other));
 }
 
 Complex	&Complex::operator=(const Complex &other)
@@ -71,14 +74,14 @@ Complex*	Complex::operator+(const Rational &other) const
 IType*	Complex::operator+(const IType &other) const
 {
 	const Complex	*other_complex;
-	const Rational	*other_number;
+	const Rational	*other_rational;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
 		return (*this + *other_complex);
-	other_number = dynamic_cast<const Rational*>(&other);
-	if (other_number)
-		return (*this + *other_number);
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (*this + *other_rational);
 	return (nullptr);
 }
 
@@ -104,14 +107,14 @@ Complex*	Complex::operator-(const Rational &other) const
 IType*	Complex::operator-(const IType &other) const
 {
 	const Complex	*other_complex;
-	const Rational	*other_number;
+	const Rational	*other_rational;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
 		return (*this - *other_complex);
-	other_number = dynamic_cast<const Rational*>(&other);
-	if (other_number)
-		return (*this - *other_number);
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (*this - *other_rational);
 	return (nullptr);
 }
 
@@ -123,14 +126,14 @@ Complex*	Complex::operator*(const Complex &other) const
 	Rational*	imaginary;
 	Complex*	result;
 
-	part1 = this->_imaginary * other._real;
-	part2 = this->_real * other._imaginary;
-	real = *part1 + *part2;
-	delete part1;
-	delete part2;
 	part1 = this->_real * other._real;
 	part2 = this->_imaginary * other._imaginary;
-	imaginary = *part1 - *part2;
+	real = *part1 - *part2;
+	delete part1;
+	delete part2;
+	part1 = this->_real * other._imaginary;
+	part2 = this->_imaginary * other._real;
+	imaginary = *part1 + *part2;
 	delete part1;
 	delete part2;
 	result = new Complex(*real, *imaginary);
@@ -156,14 +159,14 @@ Complex*	Complex::operator*(const Rational &other) const
 IType*	Complex::operator*(const IType &other) const
 {
 	const Complex	*other_complex;
-	const Rational	*other_number;
+	const Rational	*other_rational;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
 		return (*this * *other_complex);
-	other_number = dynamic_cast<const Rational*>(&other);
-	if (other_number)
-		return (*this * *other_number);
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (*this * *other_rational);
 	return (nullptr);
 }
 
@@ -213,41 +216,60 @@ Complex*	Complex::operator/(const Rational &other) const
 IType*	Complex::operator/(const IType &other) const
 {
 	const Complex	*other_complex;
-	const Rational	*other_number;
+	const Rational	*other_rational;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
 		return (*this / *other_complex);
-	other_number = dynamic_cast<const Rational*>(&other);
-	if (other_number)
-		return (*this / *other_number);
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (*this / *other_rational);
 	return (nullptr);
+}
+
+Rational*	Complex::operator%(const Complex &other) const
+{
+	Rational	rational;
+	Rational	other_rational;
+
+	try
+	{
+		rational = *this;
+		other_rational = other;
+	}
+	catch (const std::logic_error &e)
+	{
+		throw std::logic_error("Modulo operator (%) cannot be applied to complex numbers");
+	}
+	return (rational % other_rational);
+}
+
+Rational*	Complex::operator%(const Rational &other) const
+{
+	Rational	rational;
+
+	try
+	{
+		rational = *this;
+	}
+	catch(const std::logic_error &e)
+	{
+		throw std::logic_error("Modulo operator (%) cannot be applied to complex numbers");
+	}
+	return (rational % other);
 }
 
 IType*	Complex::operator%(const IType &other) const
 {
 	const Complex	*other_complex;
-	const Rational	*other_number;
-	Rational		*test;
+	const Rational	*other_rational;
 
-	*test = this;
-	if (test)
-	{
-		other_complex = dynamic_cast<const Complex*>(&other);
-		if (other_complex)
-		{
-			*test = other_complex;
-			if (test)
-			{
-				delete other_complex;
-				return (*this ^ *test);
-			}
-		}
-		other_number = dynamic_cast<const Rational*>(&other);
-		if (other_number)
-			return (*this ^ *other_number);
-	}
-	throw std::logic_error("Modulo operator (%) cannot be applied to complex numbers");
+	other_complex = dynamic_cast<const Complex*>(&other);
+	if (other_complex)
+		return (*this % *other_complex);
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (*this % *other_rational);
 	return (nullptr);
 }
 
@@ -255,16 +277,21 @@ Complex*	Complex::operator^(const Rational &other) const
 {
 	Rational	exponent;
 	Complex*	result;
+	Complex*	tmp;
 
-	exponent = other;
-	exponent.reduce();
-	if (!exponent.is_integer())
-		throw std::logic_error("Only integers (ℤ) can be used as exponents");
-	result = new Complex(*this);
-	for (int i = 1; i < exponent.get_numerator(); i++)
+	try
 	{
-		Complex*	tmp;
-
+		exponent = other;
+		if (!exponent.is_integer())
+			throw std::logic_error("Exponent must be an integer");
+	}
+	catch (const std::logic_error &e)
+	{
+		throw std::logic_error("Only integers (ℤ) can be used as exponents");
+	}
+	result = new Complex(*this);
+	for (int i = 1; i < exponent.getNumerator(); i++)
+	{
 		tmp = result;
 		result = *result * *this;
 		delete tmp;
@@ -272,35 +299,43 @@ Complex*	Complex::operator^(const Rational &other) const
 	return (result);
 }
 
+Complex*	Complex::operator^(const Complex &other) const
+{
+	Rational	other_rational;
+
+	try
+	{
+		other_rational = other;
+	}
+	catch (const std::logic_error &e)
+	{
+		throw std::logic_error("Only integers (ℤ) can be used as exponents");
+	}
+	return (*this ^ other_rational);
+}
+
 IType*	Complex::operator^(const IType &other) const
 {
 	const Complex	*other_complex;
-	const Rational	*other_number;
-	Rational		*test;
+	const Rational	*other_rational;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
-	{
-		*test = other_complex;
-		if (!test)
-			throw std::logic_error("A complex number cannot be a power");
-		delete other_complex;
-		return (*this ^ *test);
-	}
-	other_number = dynamic_cast<const Rational*>(&other);
-	if (other_number)
-		return (*this ^ *other_number);
+		return (*this ^ *other_complex);
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (*this ^ *other_rational);
 	return (nullptr);
 }
 
 
 // Getters
-Rational	Complex::get_imaginary(void) const
+Rational	Complex::getImaginary(void) const
 {
 	return (this->_imaginary);
 }
 
-Rational	Complex::get_real(void) const
+Rational	Complex::getReal(void) const
 {
 	return (this->_real);
 }
@@ -314,9 +349,51 @@ IType*	Complex::matrix_operator(const IType &other) const
 	return (nullptr);
 }
 
+Rational	Complex::to_rational(void) const
+{
+	if (this->_imaginary)
+		throw std::logic_error("Cannot convert a complex number with a non-zero imaginary part to a rational number");
+	return (this->_real);
+}
+
 std::ostream	&Complex::print(std::ostream &os) const
 {
-	return (os << "Complex: " << this->_real << " + " << this->_imaginary << "i");
+	Rational	*operation;
+
+	if (!this->_real)
+	{
+		if (!this->_imaginary)
+			os << "0";
+		else if (this->_imaginary == Rational(1))
+			os << "i";
+		else if (this->_imaginary == Rational(-1))
+			os << "-i";
+		else
+			os << this->_imaginary << "i";
+	}
+	else
+	{
+		os << this->_real;
+		if (this->_imaginary)
+		{
+			if (this->_imaginary == Rational(1))
+				os << " + i";
+			else if (this->_imaginary == Rational(-1))
+				os << " - i";
+			else
+			{
+				if (this->_imaginary > Rational(0))
+					os << " + " << print_imaginary(this->_imaginary);
+				else if (this->_imaginary < Rational(0))
+				{
+					operation = Rational(-1) * this->_imaginary;
+					os << " - " << print_imaginary(*operation);
+					delete operation;
+				}
+			}
+		}
+	}
+	return (os);
 }
 
 IType*	Complex::clone(void) const
@@ -325,8 +402,8 @@ IType*	Complex::clone(void) const
 }
 
 
-// // Output stream operator overload
-// std::ostream	&operator<<(std::ostream &os, const Complex &num)
-// {
-// 	return (num.print(os) << std::endl);
-// }
+// Output stream operator overload
+std::ostream	&operator<<(std::ostream &os, const Complex &num)
+{
+	return (num.print(os) << std::endl);
+}

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 14:55:07 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 16:32:39 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/27 17:13:52 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,12 @@
 # define OPERATOR_HPP
 
 # include "IType.hpp"
-# include "AST.hpp"
 # include "Token.hpp"
-# include "computor-v2.hpp"
 
 class	Operator: public IType
 {
 	public:
+		// Types
 		typedef enum	e_operator
 		{
 			E_ADD,
@@ -39,7 +38,6 @@ class	Operator: public IType
 		~Operator(void) {};
 
 		// Operator overloads
-		bool		operator!() const;
 		Operator&	operator=(const Operator &other);
 		IType*		operator+(const IType &other) const;
 		IType*		operator-(const IType &other) const;
@@ -53,8 +51,8 @@ class	Operator: public IType
 
 		// Methods
 		IType*			matrix_operator(const IType &other) const;
-		std::ostream	&print(std::ostream &os) const;
 		IType*			clone(void) const;
+		std::ostream	&print(std::ostream &os) const;
 
 	private:
 		// Members

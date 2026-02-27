@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:01:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/26 12:51:33 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/02/27 17:19:24 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ class	AST
 		// Constructors and destructor
 		AST(IType *node): _node(node), _left(nullptr), _right(nullptr) {};
 		AST(IType *node, AST *left, AST *right): _node(node), _left(left), _right(right) {};
-		// AST(Rational *node): _node(node), _left(nullptr), _right(nullptr) {};
 		AST(const Token &token);
 		AST(const Token &token, AST *left, AST *right);
 		AST(const AST &other): _node(other._node), _left(other._left), _right(other._right) {};
@@ -56,7 +55,6 @@ AST*	compute_expression(const std::string &line, 						\
 		const std::map<std::string, std::regex> &patterns, 					\
 		const std::map<const Token::t_token, std::regex> &tokens_types, 	\
 		const std::map<std::string, const IType*> &stored);
-AST	*build_ast(std::vector<Token> &tokens);
-
+AST		*build_ast(std::vector<Token> &tokens);
 
 #endif
