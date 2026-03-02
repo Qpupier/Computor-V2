@@ -1,6 +1,4 @@
 #!/bin/sh
-make
-
 run()
 {
 	echo "Testing: \"$1\""

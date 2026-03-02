@@ -10,5 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Compilation
+        run: make -j
       - name: Unit tests
         run: ./unit_tests/test.sh
