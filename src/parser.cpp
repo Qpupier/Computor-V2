@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/02 15:37:41 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/02 19:54:05 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ static std::string	new_operator(Token::t_token prev_token, Token::t_token curren
 static bool	test_function(std::vector<Token> &tokens, size_t pos, 	\
 		const std::map<std::string, const IType*> &stored)
 {
-	// if (stored.find(tokens[pos - 1].getValue()) != stored.end() 	\
+	// if (stored.find(tokens[pos - 1].getValue()) != stored.end() 	
 	// 		&& !dynamic_cast<const Variable*>(stored.at(tokens[pos - 1].getValue())))
 	// {
 	// 	tokens[pos - 1].setType(Token::E_FUNCTION);
