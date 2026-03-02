@@ -6,14 +6,13 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/27 18:12:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/02 15:37:41 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
-#include "Rational.hpp"
 
-void	stored_variables(const std::map<std::string, const IType*> &stored)
+static void	stored_variables(const std::map<std::string, const IType*> &stored)
 {
 	std::cerr << "\033[33mListing stored variables\033[0m" << std::endl;
 	std::map<std::string, const IType*>::const_iterator it = stored.begin();
@@ -24,7 +23,7 @@ void	stored_variables(const std::map<std::string, const IType*> &stored)
 	}
 }
 
-void	compute_equation(const std::string &line, 							\
+static void	compute_equation(const std::string &line, 						\
 		const std::map<std::string, std::regex> &patterns, 					\
 		const std::map<const Token::t_token, std::regex> &tokens_types, 	\
 		std::map<std::string, const IType*> &stored)
@@ -39,7 +38,7 @@ void	compute_equation(const std::string &line, 							\
 	// stored["test"] = new Variable("test", nullptr);// Debug
 }
 
-void	parse_line(const std::string &line, 								\
+static void	parse_line(const std::string &line, 							\
 		const std::map<std::string, std::regex> &patterns, 					\
 		const std::map<const Token::t_token, std::regex> &tokens_types, 	\
 		std::map<std::string, const IType*> &stored)
@@ -52,7 +51,7 @@ void	parse_line(const std::string &line, 								\
 	if (std::count(line.begin(), line.end(), '?') > 1)
 		throw std::logic_error("Too many '?' in the expression");
 	if (!std::regex_match(line, patterns.at(TOKEN_FULL)))
-		throw std::logic_error(ERROR_INVALID_EXPRESSION);
+		throw ERROR_INVALID_EXPRESSION;
 	if (nb_equal)
 		compute_equation(line, patterns, tokens_types, stored);
 	else if (line.find('?') != std::string::npos)
@@ -65,7 +64,7 @@ void	parse_line(const std::string &line, 								\
 	}
 }
 
-void	compute_line(const std::string &line, 							\
+static void	compute_line(const std::string &line, 						\
 		const std::map<std::string, std::regex> &patterns, 				\
 		const std::map<const Token::t_token, std::regex> &tokens_types, \
 		std::map<std::string, const IType*> &stored)

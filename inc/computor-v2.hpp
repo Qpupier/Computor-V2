@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/19 17:59:52 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/02 15:37:08 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,6 @@
 # include <algorithm>
 # include <cmath>
 
-# define ERROR_INVALID_EXPRESSION "Invalid expression format"
+# define ERROR_INVALID_EXPRESSION std::logic_error("Invalid expression format")
 
 #endif
