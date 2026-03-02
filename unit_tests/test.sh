@@ -6,6 +6,16 @@ run()
 	sed -i 's/\x1b\[[0-9;]*m//g' out err
 }
 
+print_error()
+{
+	echo "Standard output:"
+	cat out
+	echo "Error output:"
+	cat err
+	rm -f expected
+	exit 1
+}
+
 run_test()
 {
 	run $1
@@ -13,11 +23,10 @@ run_test()
 	if ! diff -u expected out > /dev/null; then
 		echo "Output differs from expected:"
 		diff -u expected out
-		cat err
-		rm -f expected
-		exit 1
+		print_error
 	fi
 	rm -f expected
+	echo "\n"
 }
 
 run_error()
@@ -27,11 +36,10 @@ run_error()
 	if ! diff -u expected err >/dev/null; then
 		echo "Error output differs from expected:"
 		diff -u expected err
-		cat out
-		rm -f expected
-		exit 1
+		print_error
 	fi
 	rm -f expected
+	echo "\n"
 }
 
 run_test "1+1" "2"
