@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. ./utils.sh
+. ./unit_tests/utils.sh
 
 run_test "1+1" "2"
 run_test "1+2" "3"
