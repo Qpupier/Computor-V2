@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/02 15:37:41 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/02 18:54:50 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,18 @@ int	main(int argc, const char **argv)
 
 		std::cout << "> ";
 		std::getline(std::cin, line);
+		if (std::cin.bad())
+		{
+			std::cerr << "\033[31mError reading input\033[0m" << std::endl;
+			exit(EXIT_FAILURE);
+		}
+		if (std::cin.eof())
+		{
+			std::cout << std::endl;
+			exit(EXIT_FAILURE);
+		}
 		if (line == "quit")
-			break;
+			exit(EXIT_SUCCESS);
 		compute_line(line, patterns, tokens_types, stored);
 	}
 	(void)argv;

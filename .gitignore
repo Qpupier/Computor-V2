@@ -47,3 +47,6 @@
 *.out
 .obj
 computor-v2
+out
+err
+expected
