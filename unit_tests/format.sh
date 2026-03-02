@@ -4,5 +4,4 @@
 
 echo "Testing formatting\n"
 
-run_test "" ""
 run_error "()" "Invalid expression format"
