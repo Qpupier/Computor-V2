@@ -26,7 +26,7 @@ run_test()
 		print_error
 	fi
 	rm -f expected
-	echo "\n"
+	echo ""
 }
 
 run_error()
@@ -39,7 +39,7 @@ run_error()
 		print_error
 	fi
 	rm -f expected
-	echo "\n"
+	echo ""
 }
 
 run_test "1+1" "2"
