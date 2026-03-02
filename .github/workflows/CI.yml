@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/02 20:28:20 by qpupier           #+#    #+#              #
-#    Updated: 2026/03/02 20:28:21 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/03/02 20:39:03 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,5 +24,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Compilation
         run: make -j
-      - name: Unit tests
-        run: ./unit_tests/test.sh
+      - name: Unit tests - Format
+        run: ./unit_tests/format.sh
+      - name: Unit tests - Logic errors
+        run: ./unit_tests/logic_error.sh
+      - name: Unit tests - Numbers
+        run: ./unit_tests/numbers.sh
