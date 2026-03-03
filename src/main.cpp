@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/02 18:54:50 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/03 19:10:46 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ int	main(int argc, const char **argv)
 	std::map<std::string, std::regex>			patterns;
 	std::map<const Token::t_token, std::regex>	tokens_types;
 	std::map<std::string, const IType*>			stored;
+	bool										is_interactive;
 
 	if (argc > 1)
 	{
@@ -104,25 +105,24 @@ int	main(int argc, const char **argv)
 	patterns[TOKEN_NEXT] = std::regex(TOKEN_NEXT);
 	patterns[TOKEN_FULL_EXPRESSION] = std::regex(TOKEN_FULL_EXPRESSION);
 	define_token_types(tokens_types);
+	is_interactive = isatty(STDIN_FILENO);
 	while (true)
 	{
 		std::string	line;
 
-		std::cout << "> ";
+		if (is_interactive)
+			std::cout << "> ";
 		std::getline(std::cin, line);
 		if (std::cin.bad())
 		{
 			std::cerr << "\033[31mError reading input\033[0m" << std::endl;
-			exit(EXIT_FAILURE);
-		}
-		if (std::cin.eof())
-		{
-			std::cout << std::endl;
-			exit(EXIT_FAILURE);
+			return (EXIT_FAILURE);
 		}
 		if (line == "quit")
-			exit(EXIT_SUCCESS);
+			return (EXIT_SUCCESS);
 		compute_line(line, patterns, tokens_types, stored);
+		if (std::cin.eof())
+			return (EXIT_SUCCESS);
 	}
 	(void)argv;
 	return (EXIT_SUCCESS);
