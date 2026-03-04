@@ -29,7 +29,7 @@ test_leaks_and_errors()
 	echo "$1" | MAKEFLAGS=--no-print-directory make valgrind > out 2> err
 	if ! grep -q "All heap blocks were freed -- no leaks are possible" err || ! grep -q "ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)" err; then
 		echo "❌"
-		if [ "$2" != "Github" ]; then
+		if [ "$2" != "debug" ]; then
 			return 1
 		fi
 		cat err
@@ -47,7 +47,7 @@ run_test()
 	printf '%s' "$2" > expected
 	if ! diff -u expected out > /dev/null; then
 		echo "❌"
-		if [ "$3" != "Github" ]; then
+		if [ "$3" != "debug" ]; then
 			return 1
 		fi
 		echo "Output differs from expected:"
@@ -63,7 +63,7 @@ run_error()
 	printf '%s' "$2" > expected
 	if ! diff -u expected err > /dev/null; then
 		echo "❌"
-		if [ "$3" != "Github" ]; then
+		if [ "$3" != "debug" ]; then
 			return 1
 		fi
 		echo "Error output differs from expected:"

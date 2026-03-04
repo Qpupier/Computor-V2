@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/27 18:34:07 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/04 14:15:47 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,10 +178,13 @@ Complex*	Complex::operator/(const Complex &other) const
 	part1 = other._real * other._real;
 	part2 = other._imaginary * other._imaginary;
 	denominator = *part1 + *part2;
-	if (!denominator)
-		throw std::runtime_error("Division by zero");
 	delete part1;
 	delete part2;
+	if (!*denominator)
+	{
+		delete denominator;
+		throw ERROR_DIVISION_BY_ZERO;
+	}
 	part1 = this->_imaginary * other._real;
 	part2 = this->_real * other._imaginary;
 	numerator = *part1 - *part2;
