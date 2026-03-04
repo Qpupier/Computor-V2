@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/03/02 19:55:25 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/03/04 12:04:20 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,5 +81,8 @@ run: $(NAME)
 valgrind: $(NAME)
 	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all -s ./$<
 
-.PHONY: all clean fclean re run valgrind
+test: $(NAME)
+	./unit_tests/run_tests.sh
+
+.PHONY: all clean fclean re run valgrind test
 .SILENT:

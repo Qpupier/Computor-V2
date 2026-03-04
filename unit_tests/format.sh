@@ -2,7 +2,7 @@
 
 . ./unit_tests/utils.sh
 
-echo "Testing formatting\n"
+echo "\033[34;1mTesting formatting\033[0m\n"
 
-run_error "" ""
-run_error "()" "Invalid expression format"
+run_error "" "" $1
+run_error "()" "Invalid expression format" $1

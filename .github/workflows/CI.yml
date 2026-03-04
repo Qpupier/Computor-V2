@@ -27,8 +27,8 @@ jobs:
       - name: Compilation
         run: make -j
       - name: Unit tests - Format
-        run: ./unit_tests/format.sh
+        run: ./unit_tests/format.sh Github
       - name: Unit tests - Logic errors
-        run: ./unit_tests/logic_error.sh
+        run: ./unit_tests/logic_error.sh Github
       - name: Unit tests - Numbers
-        run: ./unit_tests/numbers.sh
+        run: ./unit_tests/numbers.sh Github

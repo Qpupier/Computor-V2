@@ -2,12 +2,16 @@
 
 . ./unit_tests/utils.sh
 
-echo "Testing numbers in 1 epression\n"
+echo "\033[34;1mTesting numbers in 1 expression\033[0m\n"
 
-run_test "1+1" "2"
-run_test " 1    	+	1" "2"
-run_test "1+2" "3"
-run_test "2+1" "3"
-run_test "0*1" "0"
-run_error "1/0" "Division by zero is impossible"
-run_error "1 / (3 * 4 + (-12))" "Division by zero is impossible"
+status=0
+
+run_test "1+1" "2" $1 ; status=$((status ^ $?))
+run_test " 1    	+	1" "2" $1 ; status=$((status ^ $?))
+run_test "1+2" "3" $1 ; status=$((status ^ $?))
+run_test "2+1" "3" $1 ; status=$((status ^ $?))
+run_test "0*1" "0" $1 ; status=$((status ^ $?))
+run_error "1/0" "Division by zero is impossible" $1 ; status=$((status ^ $?))
+run_error "1 / (3 * 4 + (-12))" "Division by zero is impossible" $1 ; status=$((status ^ $?))
+
+return $status
