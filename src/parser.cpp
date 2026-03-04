@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/04 13:30:59 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/04 14:37:28 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,11 @@ static void	whitespaces_format_error(const std::vector<Token> &tokens)
 		if (i < size - 1 && current_type == Token::E_WHITESPACE)
 		{
 			next_type = tokens[i + 1].getType();
-			if ((prev_type != Token::E_OPERATOR && next_type == Token::E_LEFT_PARENTHESIS) 	\
-					|| (prev_type == Token::E_RIGHT_PARENTHESIS && next_type != Token::E_OPERATOR && next_type != Token::E_QUESTION))
+			if (prev_type != Token::E_OPERATOR 					\
+					&& prev_type != Token::E_LEFT_PARENTHESIS 	\
+					&& next_type != Token::E_OPERATOR 			\
+					&& next_type != Token::E_RIGHT_PARENTHESIS 	\
+					&& next_type != Token::E_QUESTION)
 				throw std::logic_error("No space allowed without operator");
 		}
 		if (bad_sign_placement(tokens, i))

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 16:48:49 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/02 15:26:45 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/04 14:50:20 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,5 +138,13 @@ AST	*build_ast(std::vector<Token> &tokens)
 	tokens_operator = tokens_begin + pos;
 	left_tokens = std::vector<Token>(tokens_begin, tokens_operator);
 	right_tokens = std::vector<Token>(tokens_operator + 1, tokens_end);
-	return (new AST(tokens[static_cast<unsigned long int>(pos)], build_ast(left_tokens), build_ast(right_tokens)));
+	AST	*left_child = build_ast(left_tokens);
+	AST	*right_child = build_ast(right_tokens);
+	if (!left_child || !right_child)
+	{
+		if (!right_child)
+			delete left_child;
+		throw std::logic_error("Invalid expression: empty parenthesis");
+	}
+	return (new AST(tokens[static_cast<unsigned long int>(pos)], left_child, right_child));
 }
