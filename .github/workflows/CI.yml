@@ -34,3 +34,5 @@ jobs:
         run: ./unit_tests/numbers.sh debug
       - name: Unit tests - Complex numbers
         run: ./unit_tests/complexes.sh debug
+      - name: Unit tests - Matrices
+        run: ./unit_tests/matrices.sh debug
