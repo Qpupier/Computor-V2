@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/03 19:10:46 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/04 18:59:29 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,25 +23,19 @@ static void	stored_variables(const std::map<std::string, const IType*> &stored)
 	}
 }
 
-static void	compute_equation(const std::string &line, 						\
-		const std::map<std::string, std::regex> &patterns, 					\
-		const std::map<const Token::t_token, std::regex> &tokens_types, 	\
-		std::map<std::string, const IType*> &stored)
+static void	compute_equation(const std::string &line, t_data &data)
 {
 	std::size_t	pos;
 
 	pos = line.find('=');
-	AST *left_ast = compute_expression(line.substr(0, pos), patterns, tokens_types, stored);
-	AST *right_ast = compute_expression(line.substr(pos + 1), patterns, tokens_types, stored);
+	AST *left_ast = compute_expression(line.substr(0, pos), data);
+	AST *right_ast = compute_expression(line.substr(pos + 1), data);
 	delete left_ast;
 	delete right_ast;
 	// stored["test"] = new Variable("test", nullptr);// Debug
 }
 
-static void	parse_line(const std::string &line, 							\
-		const std::map<std::string, std::regex> &patterns, 					\
-		const std::map<const Token::t_token, std::regex> &tokens_types, 	\
-		std::map<std::string, const IType*> &stored)
+static void	parse_line(const std::string &line, t_data &data)
 {
 	long int	nb_equal;
 
@@ -50,32 +44,29 @@ static void	parse_line(const std::string &line, 							\
 		throw std::logic_error("Too many '=' in the expression");
 	if (std::count(line.begin(), line.end(), '?') > 1)
 		throw std::logic_error("Too many '?' in the expression");
-	if (!std::regex_match(line, patterns.at(TOKEN_FULL)))
+	if (!std::regex_match(line, data.patterns.at(TOKEN_FULL)))
 		throw ERROR_INVALID_EXPRESSION;
 	if (nb_equal)
-		compute_equation(line, patterns, tokens_types, stored);
+		compute_equation(line, data);
 	else if (line.find('?') != std::string::npos)
-		stored_variables(stored);
+		stored_variables(data.stored);
 	else
 	{
-		AST	*ast = compute_expression(line, patterns, tokens_types, stored);
+		AST	*ast = compute_expression(line, data);
 		std::cout << *ast << std::endl;
 		delete ast;
 	}
 }
 
-static void	compute_line(const std::string &line, 						\
-		const std::map<std::string, std::regex> &patterns, 				\
-		const std::map<const Token::t_token, std::regex> &tokens_types, \
-		std::map<std::string, const IType*> &stored)
+static void	compute_line(const std::string &line, t_data &data)
 {
 	if (line.empty())
 		return;
-	if (std::regex_match(line, patterns.at(TOKEN_LIST)))
-		return stored_variables(stored);
+	if (std::regex_match(line, data.patterns.at(TOKEN_LIST)))
+		return stored_variables(data.stored);
 	try
 	{
-		parse_line(line, patterns, tokens_types, stored);
+		parse_line(line, data);
 		// std::cout << "\033[32m  " << line << "\033[0m" << std::endl;
 	}
 	catch(const std::regex_error& e)
@@ -90,21 +81,19 @@ static void	compute_line(const std::string &line, 						\
 
 int	main(int argc, const char **argv)
 {
-	std::map<std::string, std::regex>			patterns;
-	std::map<const Token::t_token, std::regex>	tokens_types;
-	std::map<std::string, const IType*>			stored;
-	bool										is_interactive;
+	t_data	data;
+	bool	is_interactive;
 
 	if (argc > 1)
 	{
 		std::cerr << "Usage: ./computor-v2" << std::endl;
 		return (EXIT_FAILURE);
 	}
-	patterns[TOKEN_FULL] = std::regex(TOKEN_FULL);
-	patterns[TOKEN_LIST] = std::regex(TOKEN_LIST);
-	patterns[TOKEN_NEXT] = std::regex(TOKEN_NEXT);
-	patterns[TOKEN_FULL_EXPRESSION] = std::regex(TOKEN_FULL_EXPRESSION);
-	define_token_types(tokens_types);
+	data.patterns[TOKEN_FULL] = std::regex(TOKEN_FULL);
+	data.patterns[TOKEN_LIST] = std::regex(TOKEN_LIST);
+	data.patterns[TOKEN_NEXT] = std::regex(TOKEN_NEXT);
+	data.patterns[TOKEN_FULL_EXPRESSION] = std::regex(TOKEN_FULL_EXPRESSION);
+	define_token_types(data.tokens_types);
 	is_interactive = isatty(STDIN_FILENO);
 	while (true)
 	{
@@ -120,7 +109,7 @@ int	main(int argc, const char **argv)
 		}
 		if (line == "quit")
 			return (EXIT_SUCCESS);
-		compute_line(line, patterns, tokens_types, stored);
+		compute_line(line, data);
 		if (std::cin.eof())
 			return (EXIT_SUCCESS);
 	}

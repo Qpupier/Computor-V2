@@ -6,14 +6,15 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:10:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/19 14:19:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/04 18:58:21 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKEN_HPP
 # define TOKEN_HPP
 
-# include "computor-v2.hpp"
+# include <regex>
+# include <iostream>
 
 # define TOKEN_WHITESPACE		"\\s*"
 # define TOKEN_QUESTION			TOKEN_WHITESPACE "\\?" TOKEN_WHITESPACE

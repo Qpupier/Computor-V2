@@ -15,9 +15,9 @@ run()
 
 print_error()
 {
-	echo -n "\nStandard output:	["
+	echo -n "\nStandard output:	\033[30m[\033[0m"
 	cat out
-	echo -n "]\nError output:		["
+	echo -n "\033[30m]\033[0m\nError output:		["
 	cat err
 	echo "]"
 	delete_files

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/04 14:48:20 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/04 19:04:14 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 #include "Operator.hpp"
 #include "Rational.hpp"
 #include "Complex.hpp"
+#include "Matrix.hpp"
 
 // Constructors and destructor
-AST::AST(const Token &token): _left(nullptr), _right(nullptr)
+AST::AST(const Token &token, t_data &data): _left(nullptr), _right(nullptr)
 {
 	switch (token.getType())
 	{
@@ -35,12 +36,17 @@ AST::AST(const Token &token): _left(nullptr), _right(nullptr)
 			_node = new Complex();
 			break;
 		}
+		case Token::E_MATRIX:
+		{
+			_node = new Matrix(token, data);
+			break;
+		}
 		default:
 			throw std::logic_error("Invalid token type for AST node");
 	}
 }
 
-AST::AST(const Token &token, AST *left, AST *right): AST(token)
+AST::AST(const Token &token, AST *left, AST *right, t_data &data): AST(token, data)
 {
 	this->_left = left;
 	this->_right = right;
@@ -75,6 +81,16 @@ AST& AST::operator=(const AST &other)
 IType*	AST::getNode(void) const
 {
 	return (this->_node);
+}
+
+AST*	AST::getLeft(void) const
+{
+	return (this->_left);
+}
+
+AST*	AST::getRight(void) const
+{
+	return (this->_right);
 }
 
 

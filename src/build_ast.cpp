@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 16:48:49 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/04 14:50:20 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/04 19:01:23 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ static std::vector<Token>	*adapt_tokens(std::vector<Token> &tokens, std::vector<
 }
 
 
-AST	*build_ast(std::vector<Token> &tokens)
+AST	*build_ast(std::vector<Token> &tokens, t_data &data)
 {
 	std::vector<Token>::const_iterator	tokens_begin;
 	std::vector<Token>::const_iterator	tokens_end;
@@ -123,28 +123,28 @@ AST	*build_ast(std::vector<Token> &tokens)
 	if (tokens.empty())
 		return (nullptr);
 	if (tokens.size() == 1)
-		return (new AST(tokens[0]));
+		return (new AST(tokens[0], data));
 	sub_tokens = std::vector<Token>(tokens_begin + 1, tokens_end - 1);
 	adapted_tokens = adapt_tokens(tokens, sub_tokens, &pos);
 	if (adapted_tokens)
-		return (build_ast(*adapted_tokens));
+		return (build_ast(*adapted_tokens, data));
 	if (pos == -1)
 	{
 		if (tokens.size() != 2)
 			throw std::logic_error("Invalid expression: no operator found in a multi-token expression");
-		return (new AST(Token(tokens[0].getValue() + tokens[1].getValue(), Token::E_FUNCTION)));
+		return (new AST(Token(tokens[0].getValue() + tokens[1].getValue(), Token::E_FUNCTION), data));
 	}
 	// std::cout << "Operator: " << tokens[static_cast<unsigned long int>(pos)].getValue() << std::endl;// Debug
 	tokens_operator = tokens_begin + pos;
 	left_tokens = std::vector<Token>(tokens_begin, tokens_operator);
 	right_tokens = std::vector<Token>(tokens_operator + 1, tokens_end);
-	AST	*left_child = build_ast(left_tokens);
-	AST	*right_child = build_ast(right_tokens);
+	AST	*left_child = build_ast(left_tokens, data);
+	AST	*right_child = build_ast(right_tokens, data);
 	if (!left_child || !right_child)
 	{
 		if (!right_child)
 			delete left_child;
 		throw std::logic_error("Invalid expression: empty parenthesis");
 	}
-	return (new AST(tokens[static_cast<unsigned long int>(pos)], left_child, right_child));
+	return (new AST(tokens[static_cast<unsigned long int>(pos)], left_child, right_child, data));
 }

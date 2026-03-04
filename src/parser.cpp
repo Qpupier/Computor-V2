@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/04 14:37:28 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/04 18:59:55 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,10 +136,7 @@ void	set_missing_operators(std::vector<Token> &tokens, 	\
 	}
 }
 
-AST	*compute_expression(const std::string &line, 							\
-		const std::map<std::string, std::regex> &patterns, 					\
-		const std::map<const Token::t_token, std::regex> &tokens_types, 	\
-		const std::map<std::string, const IType*> &stored)
+AST	*compute_expression(const std::string &line, t_data &data)
 {
 	std::string::const_iterator	end(line.end());
 	std::vector<Token>			tokens;
@@ -147,25 +144,25 @@ AST	*compute_expression(const std::string &line, 							\
 	std::vector<int>			token_positions({1});
 	AST							*ast;
 
-	if (!std::regex_match(line, patterns.at(TOKEN_FULL_EXPRESSION)))
+	if (!std::regex_match(line, data.patterns.at(TOKEN_FULL_EXPRESSION)))
 		throw ERROR_INVALID_EXPRESSION;
 	// std::cerr << "\033[33mComputing expression: " << line << "\033[0m" << std::endl;// Debug
 	for (std::string::const_iterator start(line.begin()); start != end;)
 	{
-		std::sregex_token_iterator	it(start, end, patterns.at(TOKEN_NEXT), token_positions);
+		std::sregex_token_iterator	it(start, end, data.patterns.at(TOKEN_NEXT), token_positions);
 
 		if (it == token_null)
 			std::__throw_regex_error(std::regex_constants::error_complexity, "Invalid format of TOKEN_NEXT regex");
 		start = it->second;
-		tokens.push_back(Token(*it, get_token_type(*it, tokens_types)));
+		tokens.push_back(Token(*it, get_token_type(*it, data.tokens_types)));
 	}
 	whitespaces_format_error(tokens);
 	remove_whitespaces(tokens);
 	semantic_verification(tokens);
 	if (tokens.size() && tokens[tokens.size() - 1].getType() == Token::E_QUESTION)
 		tokens.pop_back();
-	set_missing_operators(tokens, stored);
-	ast = build_ast(tokens);
+	set_missing_operators(tokens, data.stored);
+	ast = build_ast(tokens, data);
 	if (!ast)
 		throw ERROR_INVALID_EXPRESSION;
 	ast->reduce_expression();

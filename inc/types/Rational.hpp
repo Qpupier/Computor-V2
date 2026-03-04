@@ -6,15 +6,14 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/04 14:14:09 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/04 19:02:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RATIONAL_HPP
 # define RATIONAL_HPP
 
-# include "IType.hpp"
-# include "Token.hpp"
+# include "computor-v2.hpp"
 
 # define EXPONENT_INTEGER std::logic_error("Only integers (ℤ) can be used as exponents")
 # define ERROR_DIVISION_BY_ZERO std::logic_error("Division by zero is impossible")
