@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 14:55:07 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/27 17:13:52 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/05 19:58:09 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,9 @@ class	Operator: public IType
 			E_MULTIPLY,
 			E_DIVIDE,
 			E_MODULO,
+			E_MATRIX,
 			E_POWER,
-			E_MATRIX
+			E_UNKNOWN
 		}				t_operator;
 
 		// Constructors and destructor

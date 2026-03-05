@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 16:48:49 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/04 19:01:23 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/05 19:57:17 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,10 @@ static long int	select_less_priority_operator(const std::vector<Token> &tokens)
 	pos = select_operator(tokens, size, {"*", "/", "%"});
 	if (pos != -1)
 		return (pos);
-	pos = select_operator(tokens, size, {"**", "^", "***"});
+	pos = select_operator(tokens, size, {"**", "***"});
+	if (pos != -1)
+		return (pos);
+	pos = select_operator(tokens, size, {"^"});
 	if (pos != -1)
 	{
 		if (tokens[static_cast<unsigned long int>(pos)].getValue() == "***")

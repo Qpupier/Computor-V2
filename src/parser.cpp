@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/04 18:59:55 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/05 19:50:36 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,6 @@ static void	semantic_verification(const std::vector<Token> &tokens)
 		current_token = tokens[i].getValue();
 		if (prev_type == Token::E_OPERATOR && current_type == Token::E_OPERATOR)
 			throw std::logic_error("Two operators cannot be adjacent");
-		if ((prev_type == Token::E_MATRIX && current_type == Token::E_IMAGINARY) || (prev_type == Token::E_IMAGINARY && current_type == Token::E_MATRIX))
-			throw std::logic_error("Matrix and imaginary unit cannot multiply each other");
-		// if (prev_token == "^" && (current_type == Token::E_IMAGINARY || current_type == Token::E_MATRIX))
-		// 	throw std::logic_error("Imaginary unit and matrix cannot be a power");
-		// if ((prev_type == Token::E_IMAGINARY && current_token == "%") || (prev_token == "%" && current_type == Token::E_IMAGINARY))
-		// 	throw std::logic_error("Imaginary unit cannot be used with modulus operator");
-		// if ((prev_type == Token::E_MATRIX && current_token == "%") || (prev_token == "%" && current_type == Token::E_MATRIX))
-		// 	throw std::logic_error("Matrix cannot be used with modulus operator");
 	}
 }
 

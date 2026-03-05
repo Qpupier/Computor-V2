@@ -14,5 +14,6 @@ run_error "42 i" "No space allowed without operator" $1 ; status=$((status ^ $?)
 run_error "i i" "No space allowed without operator" $1 ; status=$((status ^ $?))
 run_error "i / 0" "Division by zero is impossible" $1 ; status=$((status ^ $?))
 run_error "i % 0" "Modulo operator (%) cannot be applied to complex numbers" $1 ; status=$((status ^ $?))
+run_error "i[[42]]" "Matrix multiplication error: cannot multiply complex number with matrix" $1 ; status=$((status ^ $?))
 
 return $status

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/27 17:18:02 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/05 19:58:42 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,12 @@ Operator::Operator(std::string op)
 		_op = E_DIVIDE;
 	else if (op == "%")
 		_op = E_MODULO;
-	else if (op == "^")
-		_op = E_POWER;
 	else if (op == "**")
 		_op = E_MATRIX;
+	else if (op == "^")
+		_op = E_POWER;
+	else if (op == "***")
+		_op = E_UNKNOWN;
 	else
 		throw std::runtime_error("Invalid operator: " + op);
 }

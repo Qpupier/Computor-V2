@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/04 19:04:14 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/05 20:22:43 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,14 +166,22 @@ void	AST::reduce_expression(void)
 					result = *left_entity % *right_entity;
 					break;
 				}
+				case Operator::E_MATRIX:
+				{
+					result = left_entity->matrix_operator(*right_entity);
+					break;
+				}
 				case Operator::E_POWER:
 				{
 					result = *left_entity ^ *right_entity;
 					break;
 				}
-				case Operator::E_MATRIX:
+				case Operator::E_UNKNOWN:
 				{
-					result = left_entity->matrix_operator(*right_entity);
+					if (dynamic_cast<Matrix*>(left_entity) && dynamic_cast<Matrix*>(right_entity))
+						result = left_entity->matrix_operator(*right_entity);
+					else
+						result = (*left_entity * *right_entity);
 					break;
 				}
 				default:
