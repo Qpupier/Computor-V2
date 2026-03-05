@@ -33,5 +33,6 @@ run_error "[[1,2];[3]]" "Invalid matrix format: inconsistent row sizes" $1 ; sta
 run_error "[[42*]]" "Invalid matrix format: Operator cannot be at the beginning or end of an expression" $1 ; status=$((status ^ $?))
 run_error "[[6];[7];[8]] ** [[0, 1, 2];[3, 4, 5]]" "Matrix operator error: incompatible dimensions" $1 ; status=$((status ^ $?))
 run_error "[[0, 1, 2]] ** 42" "Matrix operator (**) can only be applied to matrices" $1 ; status=$((status ^ $?))
+run_error "[[1,2]] / 0" "Division by zero is impossible" $1 ; status=$((status ^ $?))
 
 return $status

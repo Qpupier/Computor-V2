@@ -5,6 +5,8 @@ status=0
 echo "\033[34;1mRUNNING UNIT TESTS\033[0m\n"
 echo "\033[30m==============================\033[0m\n"
 
+# Must be run_test in first (risk of conflict with compilation)
+
 ./unit_tests/format.sh "$1" ; status=$((status ^ $?))
 echo "\n\033[30m==============================\033[0m\n"
 ./unit_tests/logic_error.sh "$1" ; status=$((status ^ $?))

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:35:43 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/05 13:57:49 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/05 17:47:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 
 # include "IType.hpp"
 # include "Rational.hpp"
-
-# define ERROR_MODULO_COMPLEX std::logic_error("Modulo operator (%) cannot be applied to complex numbers")
-# define ERROR_CONVERT_COMPLEX_TO_RATIONAL std::logic_error("Cannot convert a complex number with a non-zero imaginary part to a rational number")
+# include "Matrix.hpp"
 
 class	Complex: public IType
 {
@@ -29,28 +27,34 @@ class	Complex: public IType
 		~Complex(void) {};
 
 		// Operator overloads
+		Complex&	operator=(const Complex &other);
 		explicit	operator bool() const;
 		bool		operator==(const Complex &other) const;
 		bool		operator!=(const Complex &other) const;
-		Complex&	operator=(const Complex &other);
 		IType*		operator+(const IType &other) const;
 		Complex*	operator+(const Complex &other) const;
 		Complex*	operator+(const Rational &other) const;
+		Matrix*		operator+(const Matrix &other) const;
 		IType*		operator-(const IType &other) const;
 		Complex*	operator-(const Complex &other) const;
 		Complex*	operator-(const Rational &other) const;
+		Matrix*		operator-(const Matrix &other) const;
 		IType*		operator*(const IType &other) const;
 		Complex*	operator*(const Complex &other) const;
 		Complex*	operator*(const Rational &other) const;
+		Matrix*		operator*(const Matrix &other) const;
 		IType*		operator/(const IType &other) const;
 		Complex*	operator/(const Complex &other) const;
 		Complex*	operator/(const Rational &other) const;
+		Matrix*		operator/(const Matrix &other) const;
 		IType*		operator%(const IType &other) const;
 		Rational*	operator%(const Rational &other) const;
 		Rational*	operator%(const Complex &other) const;
+		Matrix*		operator%(const Matrix &other) const;
 		IType*		operator^(const IType &other) const;
 		Complex*	operator^(const Rational &other) const;
 		Complex*	operator^(const Complex &other) const;
+		Matrix*		operator^(const Matrix &other) const;
 
 		// Getters
 		Rational	getReal(void) const;

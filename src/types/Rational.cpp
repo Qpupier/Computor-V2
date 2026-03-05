@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/05 13:34:20 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/05 18:29:11 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,34 @@ Rational::Rational(std::string str)
 
 
 // Operator overloads
+Rational&	Rational::operator=(const Rational &other)
+{
+	if (this != &other)
+	{
+		this->_numerator = other._numerator;
+		this->_denominator = other._denominator;
+	}
+	return (*this);
+}
+
+Rational&	Rational::operator=(const Rational *other)
+{
+	if (this != other)
+	{
+		this->_numerator = other->_numerator;
+		this->_denominator = other->_denominator;
+		delete other;
+	}
+	return (*this);
+}
+
+Rational	Rational::operator=(const Complex &other)
+{
+	if (other.getImaginary())
+		throw ERROR_CONVERT_COMPLEX_TO_RATIONAL;
+	return (Rational(other.getReal()));
+}
+
 Rational::operator bool() const
 {
 	return (this->_numerator);
@@ -84,34 +112,6 @@ bool	Rational::operator>=(const Rational &other) const
 	return (this->_numerator * other._denominator >= other._numerator * this->_denominator);
 }
 
-Rational&	Rational::operator=(const Rational &other)
-{
-	if (this != &other)
-	{
-		this->_numerator = other._numerator;
-		this->_denominator = other._denominator;
-	}
-	return (*this);
-}
-
-Rational&	Rational::operator=(const Rational *other)
-{
-	if (this != other)
-	{
-		this->_numerator = other->_numerator;
-		this->_denominator = other->_denominator;
-		delete other;
-	}
-	return (*this);
-}
-
-Rational	Rational::operator=(const Complex &other)
-{
-	if (other.getImaginary())
-		throw ERROR_CONVERT_COMPLEX_TO_RATIONAL;
-	return (Rational(other.getReal()));
-}
-
 Rational*	Rational::operator+(const Rational &other) const
 {
 	return (new Rational(this->_numerator * other._denominator + other._numerator * this->_denominator, this->_denominator * other._denominator));
@@ -122,10 +122,22 @@ Complex*	Rational::operator+(const Complex &other) const
 	return (Complex(*this, Rational()) + other);
 }
 
+Matrix*	Rational::operator+(const Matrix &other) const
+{
+	Matrix	*result;
+
+	result = new Matrix(other.getWidth(), other.getHeight());
+	for (unsigned int i = 0; i < other.getHeight(); i++)
+		for (unsigned int j = 0; j < other.getWidth(); j++)
+			result->setValue(i, j, *this + other[i][j]);
+	return (result);
+}
+
 IType*	Rational::operator+(const IType &other) const
 {
 	const Rational	*other_rational;
 	const Complex	*other_complex;
+	const Matrix	*other_matrix;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
@@ -133,6 +145,9 @@ IType*	Rational::operator+(const IType &other) const
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
 		return (*this + *other_complex);
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this + *other_matrix);
 	return (nullptr);
 }
 
@@ -146,10 +161,22 @@ Complex*	Rational::operator-(const Complex &other) const
 	return (Complex(*this, Rational()) - other);
 }
 
+Matrix*	Rational::operator-(const Matrix &other) const
+{
+	Matrix	*result;
+
+	result = new Matrix(other.getWidth(), other.getHeight());
+	for (unsigned int i = 0; i < other.getHeight(); i++)
+		for (unsigned int j = 0; j < other.getWidth(); j++)
+			result->setValue(i, j, *this - other[i][j]);
+	return (result);
+}
+
 IType*	Rational::operator-(const IType &other) const
 {
 	const Rational	*other_rational;
 	const Complex	*other_complex;
+	const Matrix	*other_matrix;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
@@ -157,6 +184,9 @@ IType*	Rational::operator-(const IType &other) const
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
 		return (*this - *other_complex);
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this - *other_matrix);
 	return (nullptr);
 }
 
@@ -170,10 +200,22 @@ Complex*	Rational::operator*(const Complex &other) const
 	return (Complex(*this, Rational()) * other);
 }
 
+Matrix*	Rational::operator*(const Matrix &other) const
+{
+	Matrix	*result;
+
+	result = new Matrix(other.getWidth(), other.getHeight());
+	for (unsigned int i = 0; i < other.getHeight(); i++)
+		for (unsigned int j = 0; j < other.getWidth(); j++)
+			result->setValue(i, j, *this * other[i][j]);
+	return (result);
+}
+
 IType*	Rational::operator*(const IType &other) const
 {
 	const Rational	*other_rational;
 	const Complex	*other_complex;
+	const Matrix	*other_matrix;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
@@ -181,6 +223,9 @@ IType*	Rational::operator*(const IType &other) const
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
 		return (*this * *other_complex);
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this * *other_matrix);
 	return (nullptr);
 }
 
@@ -194,10 +239,30 @@ Complex*	Rational::operator/(const Complex &other) const
 	return (Complex(*this, Rational()) / other);
 }
 
+Matrix*	Rational::operator/(const Matrix &other) const
+{
+	Matrix	*result;
+
+	result = new Matrix(other.getWidth(), other.getHeight());
+	for (unsigned int i = 0; i < other.getHeight(); i++)
+		for (unsigned int j = 0; j < other.getWidth(); j++)
+			try
+			{
+				result->setValue(i, j, *this / other[i][j]);
+			}
+			catch (const std::exception &e)
+			{
+				delete result;
+				throw;
+			}
+	return (result);
+}
+
 IType*	Rational::operator/(const IType &other) const
 {
 	const Rational	*other_rational;
 	const Complex	*other_complex;
+	const Matrix	*other_matrix;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
@@ -205,6 +270,9 @@ IType*	Rational::operator/(const IType &other) const
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
 		return (*this / *other_complex);
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this / *other_matrix);
 	return (nullptr);
 }
 
@@ -228,10 +296,30 @@ Rational*	Rational::operator%(const Complex &other) const
 	return (Complex(*this, Rational()) % other);
 }
 
+Matrix*	Rational::operator%(const Matrix &other) const
+{
+	Matrix	*result;
+
+	result = new Matrix(other.getWidth(), other.getHeight());
+	for (unsigned int i = 0; i < other.getHeight(); i++)
+		for (unsigned int j = 0; j < other.getWidth(); j++)
+			try
+			{
+				result->setValue(i, j, *this % other[i][j]);
+			}
+			catch (const std::exception &e)
+			{
+				delete result;
+				throw;
+			}
+	return (result);
+}
+
 IType*	Rational::operator%(const IType &other) const
 {
 	const Rational	*other_rational;
 	const Complex	*other_complex;
+	const Matrix	*other_matrix;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
@@ -239,6 +327,9 @@ IType*	Rational::operator%(const IType &other) const
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
 		return (*this % *other_complex);
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this % *other_matrix);
 	return (nullptr);
 }
 
@@ -257,13 +348,40 @@ Complex*	Rational::operator^(const Complex &other) const
 	return (Complex(*this, Rational()) ^ other);
 }
 
+Matrix*	Rational::operator^(const Matrix &other) const
+{
+	Matrix	*result;
+
+	result = new Matrix(other.getWidth(), other.getHeight());
+	for (unsigned int i = 0; i < other.getHeight(); i++)
+		for (unsigned int j = 0; j < other.getWidth(); j++)
+			try
+			{
+				result->setValue(i, j, *this ^ other[i][j]);
+			}
+			catch (const std::exception &e)
+			{
+				delete result;
+				throw;
+			}
+	return (result);
+}
+
 IType*	Rational::operator^(const IType &other) const
 {
 	const Rational	*other_rational;
+	const Complex	*other_complex;
+	const Matrix	*other_matrix;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
 		return (*this ^ *other_rational);
+	other_complex = dynamic_cast<const Complex*>(&other);
+	if (other_complex)
+		return (*this ^ *other_complex);
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this ^ *other_matrix);
 	return (nullptr);
 }
 

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/04 14:15:47 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/05 17:47:28 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,16 @@ static std::string	print_imaginary(Rational imaginary)
 
 
 // Operator overloads
+Complex	&Complex::operator=(const Complex &other)
+{
+	if (this != &other)
+	{
+		this->_real = other._real;
+		this->_imaginary = other._imaginary;
+	}
+	return (*this);
+}
+
 inline	Complex::operator bool() const
 {
 	return (this->_real || this->_imaginary);
@@ -35,16 +45,6 @@ bool	Complex::operator==(const Complex &other) const
 bool	Complex::operator!=(const Complex &other) const
 {
 	return (!(*this == other));
-}
-
-Complex	&Complex::operator=(const Complex &other)
-{
-	if (this != &other)
-	{
-		this->_real = other._real;
-		this->_imaginary = other._imaginary;
-	}
-	return (*this);
 }
 
 Complex*	Complex::operator+(const Complex &other) const
@@ -66,10 +66,26 @@ Complex*	Complex::operator+(const Rational &other) const
 	return (*this + Complex(other, Rational()));
 }
 
+Matrix*	Complex::operator+(const Matrix &other) const
+{
+	Rational	rational;
+
+	try
+	{
+		rational = this->to_rational();
+	}
+	catch (const std::logic_error &e)
+	{
+		throw std::logic_error("Matrix addition error: cannot add complex number to matrix");
+	}
+	return (rational + other);
+}
+
 IType*	Complex::operator+(const IType &other) const
 {
 	const Complex	*other_complex;
 	const Rational	*other_rational;
+	const Matrix	*other_matrix;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -77,6 +93,9 @@ IType*	Complex::operator+(const IType &other) const
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
 		return (*this + *other_rational);
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this + *other_matrix);
 	return (nullptr);
 }
 
@@ -99,10 +118,26 @@ Complex*	Complex::operator-(const Rational &other) const
 	return (*this - Complex(other, Rational()));
 }
 
+Matrix*	Complex::operator-(const Matrix &other) const
+{
+	Rational	rational;
+
+	try
+	{
+		rational = this->to_rational();
+	}
+	catch (const std::logic_error &e)
+	{
+		throw std::logic_error("Matrix subtraction error: cannot subtract complex number from matrix");
+	}
+	return (rational - other);
+}
+
 IType*	Complex::operator-(const IType &other) const
 {
 	const Complex	*other_complex;
 	const Rational	*other_rational;
+	const Matrix	*other_matrix;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -110,6 +145,9 @@ IType*	Complex::operator-(const IType &other) const
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
 		return (*this - *other_rational);
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this - *other_matrix);
 	return (nullptr);
 }
 
@@ -151,10 +189,26 @@ Complex*	Complex::operator*(const Rational &other) const
 	return (result);
 }
 
+Matrix*	Complex::operator*(const Matrix &other) const
+{
+	Rational	rational;
+
+	try
+	{
+		rational = this->to_rational();
+	}
+	catch (const std::logic_error &e)
+	{
+		throw std::logic_error("Matrix multiplication error: cannot multiply complex number with matrix");
+	}
+	return (rational * other);
+}
+
 IType*	Complex::operator*(const IType &other) const
 {
 	const Complex	*other_complex;
 	const Rational	*other_rational;
+	const Matrix	*other_matrix;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -162,6 +216,9 @@ IType*	Complex::operator*(const IType &other) const
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
 		return (*this * *other_rational);
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this * *other_matrix);
 	return (nullptr);
 }
 
@@ -211,10 +268,26 @@ Complex*	Complex::operator/(const Rational &other) const
 	return (*this / Complex(other, Rational()));
 }
 
+Matrix*	Complex::operator/(const Matrix &other) const
+{
+	Rational	rational;
+
+	try
+	{
+		rational = this->to_rational();
+	}
+	catch (const std::logic_error &e)
+	{
+		throw std::logic_error("Matrix division error: cannot divide complex number by matrix");
+	}
+	return (rational / other);
+}
+
 IType*	Complex::operator/(const IType &other) const
 {
 	const Complex	*other_complex;
 	const Rational	*other_rational;
+	const Matrix	*other_matrix;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -222,6 +295,9 @@ IType*	Complex::operator/(const IType &other) const
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
 		return (*this / *other_rational);
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this / *other_matrix);
 	return (nullptr);
 }
 
@@ -257,10 +333,26 @@ Rational*	Complex::operator%(const Rational &other) const
 	return (rational % other);
 }
 
+Matrix*	Complex::operator%(const Matrix &other) const
+{
+	Rational	rational;
+
+	try
+	{
+		rational = *this;
+	}
+	catch(const std::logic_error &e)
+	{
+		throw ERROR_MODULO_COMPLEX;
+	}
+	return (rational % other);
+}
+
 IType*	Complex::operator%(const IType &other) const
 {
 	const Complex	*other_complex;
 	const Rational	*other_rational;
+	const Matrix	*other_matrix;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -268,6 +360,9 @@ IType*	Complex::operator%(const IType &other) const
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
 		return (*this % *other_rational);
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this % *other_matrix);
 	return (nullptr);
 }
 
@@ -312,10 +407,26 @@ Complex*	Complex::operator^(const Complex &other) const
 	return (*this ^ other_rational);
 }
 
+Matrix*	Complex::operator^(const Matrix &other) const
+{
+	Rational	rational;
+
+	try
+	{
+		rational = this->to_rational();
+	}
+	catch (const std::logic_error &e)
+	{
+		throw EXPONENT_INTEGER;
+	}
+	return (rational ^ other);
+}
+
 IType*	Complex::operator^(const IType &other) const
 {
 	const Complex	*other_complex;
 	const Rational	*other_rational;
+	const Matrix	*other_matrix;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -323,6 +434,9 @@ IType*	Complex::operator^(const IType &other) const
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
 		return (*this ^ *other_rational);
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this ^ *other_matrix);
 	return (nullptr);
 }
 

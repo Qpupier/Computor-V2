@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/05 13:59:44 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/05 18:07:28 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,10 @@
 # define RATIONAL_HPP
 
 # include "computor-v2.hpp"
-
-# define EXPONENT_INTEGER std::logic_error("Only integers (ℤ) can be used as exponents")
-# define ERROR_DIVISION_BY_ZERO std::logic_error("Division by zero is impossible")
-# define ERROR_MATRIX_OPERATOR std::logic_error("Matrix operator (**) can only be applied to matrices")
-
+// # include "Matrix.hpp"
 
 class	Complex;
+class	Matrix;
 
 class	Rational: public IType
 {
@@ -35,6 +32,9 @@ class	Rational: public IType
 		~Rational(void) {};
 
 		// Operator overloads
+		Rational&	operator=(const Rational &other);
+		Rational&	operator=(const Rational *other);
+		Rational	operator=(const Complex &other);
 		explicit 	operator bool() const;
 		bool		operator==(const Rational &other) const;
 		bool		operator!=(const Rational &other) const;
@@ -42,27 +42,30 @@ class	Rational: public IType
 		bool		operator<=(const Rational &other) const;
 		bool		operator>(const Rational &other) const;
 		bool		operator>=(const Rational &other) const;
-		Rational&	operator=(const Rational &other);
-		Rational&	operator=(const Rational *other);
-		Rational	operator=(const Complex &other);
 		IType*		operator+(const IType &other) const;
 		Rational*	operator+(const Rational &other) const;
 		Complex*	operator+(const Complex &other) const;
+		Matrix*		operator+(const Matrix &other) const;
 		IType*		operator-(const IType &other) const;
 		Rational*	operator-(const Rational &other) const;
 		Complex*	operator-(const Complex &other) const;
+		Matrix*		operator-(const Matrix &other) const;
 		IType*		operator*(const IType &other) const;
 		Rational*	operator*(const Rational &other) const;
 		Complex*	operator*(const Complex &other) const;
+		Matrix*		operator*(const Matrix &other) const;
 		IType*		operator/(const IType &other) const;
 		Rational*	operator/(const Rational &other) const;
 		Complex*	operator/(const Complex &other) const;
+		Matrix*		operator/(const Matrix &other) const;
 		IType*		operator%(const IType &other) const;
 		Rational*	operator%(const Rational &other) const;
 		Rational*	operator%(const Complex &other) const;
+		Matrix*		operator%(const Matrix &other) const;
 		IType*		operator^(const IType &other) const;
 		Rational*	operator^(const Rational &other) const;
 		Complex*	operator^(const Complex &other) const;
+		Matrix*		operator^(const Matrix &other) const;
 
 		// Getters
 		int		getNumerator(void) const;
@@ -87,5 +90,6 @@ class	Rational: public IType
 std::ostream&	operator<<(std::ostream &os, const Rational &num);
 
 # include "Complex.hpp"
+# include "Matrix.hpp"
 
 #endif
