@@ -6,15 +6,14 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/04 19:43:45 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/05 13:58:15 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Matrix.hpp"
 #include "AST.hpp"
 
-// Constructors and destructor
-
+// Utils
 static std::vector<std::string>	parse_line(std::string &line, unsigned long *width)
 {
 	std::vector<std::string>	row;
@@ -72,6 +71,19 @@ static void	free_matrix(Rational **matrix, unsigned long height)
 	for (unsigned int i = 0; i < height; i++)
 		delete[] matrix[i];
 	delete[] matrix;
+}
+
+
+// Constructors and destructor
+Matrix::Matrix(unsigned long width, unsigned long height): _width(width), _height(height)
+{
+	this->_matrix = new Rational*[this->_height];
+	for (unsigned int i = 0; i < this->_height; i++)
+	{
+		this->_matrix[i] = new Rational[this->_width];
+		for (unsigned int j = 0; j < this->_width; j++)
+			this->_matrix[i][j] = Rational();
+	}
 }
 
 Matrix::Matrix(std::string str, t_data &data): _width(0), _height(0)
@@ -183,76 +195,232 @@ Rational*	Matrix::operator[](unsigned int index) const
 	return (this->_matrix[index]);
 }
 
-IType*	Matrix::operator+(const IType &other) const
-{
-	return (nullptr);
-	(void)other;
-}
-
 Matrix*	Matrix::operator+(const Matrix &other) const
 {
-	return (nullptr);
-	(void)other;
+	Matrix	*result;
+
+	if (this->_width != other._width || this->_height != other._height)
+		throw std::logic_error("Matrix addition error: incompatible dimensions");
+	result = new Matrix(this->_width, this->_height);
+	for (unsigned int i = 0; i < this->_height; i++)
+		for (unsigned int j = 0; j < this->_width; j++)
+			result->_matrix[i][j] = this->_matrix[i][j] + other._matrix[i][j];
+	return (result);
 }
 
-IType*	Matrix::operator-(const IType &other) const
+Matrix*	Matrix::operator+(const Rational &other) const
 {
+	Matrix	*result;
+
+	result = new Matrix(this->_width, this->_height);
+	for (unsigned int i = 0; i < this->_height; i++)
+		for (unsigned int j = 0; j < this->_width; j++)
+			result->_matrix[i][j] = this->_matrix[i][j] + other;
+	return (result);
+}
+
+IType*	Matrix::operator+(const IType &other) const
+{
+	const Matrix	*other_matrix;
+	const Rational	*other_rational;
+
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this + *other_matrix);
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (*this + *other_rational);
 	return (nullptr);
-	(void)other;
 }
 
 Matrix*	Matrix::operator-(const Matrix &other) const
 {
-	return (nullptr);
-	(void)other;
+	Matrix	*result;
+
+	if (this->_width != other._width || this->_height != other._height)
+		throw std::logic_error("Matrix addition error: incompatible dimensions");
+	result = new Matrix(this->_width, this->_height);
+	for (unsigned int i = 0; i < this->_height; i++)
+		for (unsigned int j = 0; j < this->_width; j++)
+			result->_matrix[i][j] = this->_matrix[i][j] - other._matrix[i][j];
+	return (result);
 }
 
-IType*	Matrix::operator*(const IType &other) const
+Matrix*	Matrix::operator-(const Rational &other) const
 {
+	Matrix	*result;
+
+	result = new Matrix(this->_width, this->_height);
+	for (unsigned int i = 0; i < this->_height; i++)
+		for (unsigned int j = 0; j < this->_width; j++)
+			result->_matrix[i][j] = this->_matrix[i][j] - other;
+	return (result);
+}
+
+IType*	Matrix::operator-(const IType &other) const
+{
+	const Matrix	*other_matrix;
+	const Rational	*other_rational;
+
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this - *other_matrix);
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (*this - *other_rational);
 	return (nullptr);
-	(void)other;
 }
 
 Matrix*	Matrix::operator*(const Matrix &other) const
 {
-	return (nullptr);
-	(void)other;
+	Matrix	*result;
+
+	if (this->_width != other._width || this->_height != other._height)
+		throw std::logic_error("Matrix addition error: incompatible dimensions");
+	result = new Matrix(this->_width, this->_height);
+	for (unsigned int i = 0; i < this->_height; i++)
+		for (unsigned int j = 0; j < this->_width; j++)
+			result->_matrix[i][j] = this->_matrix[i][j] * other._matrix[i][j];
+	return (result);
 }
 
-IType*	Matrix::operator/(const IType &other) const
+Matrix*	Matrix::operator*(const Rational &other) const
 {
+	Matrix	*result;
+
+	result = new Matrix(this->_width, this->_height);
+	for (unsigned int i = 0; i < this->_height; i++)
+		for (unsigned int j = 0; j < this->_width; j++)
+			result->_matrix[i][j] = this->_matrix[i][j] * other;
+	return (result);
+}
+
+IType*	Matrix::operator*(const IType &other) const
+{
+	const Matrix	*other_matrix;
+	const Rational	*other_rational;
+
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this * *other_matrix);
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (*this * *other_rational);
 	return (nullptr);
-	(void)other;
 }
 
 Matrix*	Matrix::operator/(const Matrix &other) const
 {
-	return (nullptr);
-	(void)other;
+	Matrix	*result;
+
+	if (this->_width != other._width || this->_height != other._height)
+		throw std::logic_error("Matrix addition error: incompatible dimensions");
+	result = new Matrix(this->_width, this->_height);
+	for (unsigned int i = 0; i < this->_height; i++)
+		for (unsigned int j = 0; j < this->_width; j++)
+			result->_matrix[i][j] = this->_matrix[i][j] / other._matrix[i][j];
+	return (result);
 }
 
-IType*	Matrix::operator%(const IType &other) const
+Matrix*	Matrix::operator/(const Rational &other) const
 {
+	Matrix	*result;
+
+	result = new Matrix(this->_width, this->_height);
+	for (unsigned int i = 0; i < this->_height; i++)
+		for (unsigned int j = 0; j < this->_width; j++)
+			result->_matrix[i][j] = this->_matrix[i][j] / other;
+	return (result);
+}
+
+IType*	Matrix::operator/(const IType &other) const
+{
+	const Matrix	*other_matrix;
+	const Rational	*other_rational;
+
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this / *other_matrix);
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (*this / *other_rational);
 	return (nullptr);
-	(void)other;
 }
 
 Matrix*	Matrix::operator%(const Matrix &other) const
 {
-	return (nullptr);
-	(void)other;
+	Matrix	*result;
+
+	if (this->_width != other._width || this->_height != other._height)
+		throw std::logic_error("Matrix addition error: incompatible dimensions");
+	result = new Matrix(this->_width, this->_height);
+	for (unsigned int i = 0; i < this->_height; i++)
+		for (unsigned int j = 0; j < this->_width; j++)
+			result->_matrix[i][j] = this->_matrix[i][j] % other._matrix[i][j];
+	return (result);
 }
 
-IType*	Matrix::operator^(const IType &other) const
+Matrix*	Matrix::operator%(const Rational &other) const
 {
+	Matrix	*result;
+
+	result = new Matrix(this->_width, this->_height);
+	for (unsigned int i = 0; i < this->_height; i++)
+		for (unsigned int j = 0; j < this->_width; j++)
+			result->_matrix[i][j] = this->_matrix[i][j] % other;
+	return (result);
+}
+
+IType*	Matrix::operator%(const IType &other) const
+{
+	const Matrix	*other_matrix;
+	const Rational	*other_rational;
+
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this % *other_matrix);
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (*this % *other_rational);
 	return (nullptr);
-	(void)other;
 }
 
 Matrix*	Matrix::operator^(const Matrix &other) const
 {
+	Matrix		*result;
+
+	if (this->_width != other._width || this->_height != other._height)
+		throw std::logic_error("Matrix addition error: incompatible dimensions");
+	result = new Matrix(this->_width, this->_height);
+	for (unsigned int i = 0; i < this->_height; i++)
+		for (unsigned int j = 0; j < this->_width; j++)
+			result->_matrix[i][j] = this->_matrix[i][j] ^ other._matrix[i][j];
+	return (result);
+}
+
+Matrix*	Matrix::operator^(const Rational &other) const
+{
+	Matrix	*result;
+
+	result = new Matrix(this->_width, this->_height);
+	for (unsigned int i = 0; i < this->_height; i++)
+		for (unsigned int j = 0; j < this->_width; j++)
+			result->_matrix[i][j] = this->_matrix[i][j] ^ other;
+	return (result);
+}
+
+IType*	Matrix::operator^(const IType &other) const
+{
+	const Matrix	*other_matrix;
+	const Rational	*other_rational;
+
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this ^ *other_matrix);
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (*this ^ *other_rational);
 	return (nullptr);
-	(void)other;
 }
 
 
@@ -269,10 +437,52 @@ unsigned long	Matrix::getHeight(void) const
 
 
 // Methods
+IType*	Matrix::matrix_operator(const Matrix &other) const
+{
+	Matrix		*result;
+	Rational	*cell;
+	Rational	*mul;
+	Rational	*tmp;
+
+	if (this->_width != other._height)
+		throw std::logic_error("Matrix operator error: incompatible dimensions");
+	result = new Matrix(other._width, this->_height);
+	for (unsigned int i = 0; i < result->_height; i++)
+		for (unsigned int j = 0; j < result->_width; j++)
+		{
+			cell = new Rational();
+			for (unsigned int k = 0; k < this->_width; k++)
+			{
+				mul = this->_matrix[i][k] * other._matrix[k][j];
+				tmp = cell;
+				cell = *cell + *mul;
+				delete tmp;
+				delete mul;//TODO - operator Rational +=
+			}
+			result->_matrix[i][j] = cell;
+		}
+	return (result);
+}
+
+IType*	Matrix::matrix_operator(const Rational &other) const
+{
+	throw ERROR_MATRIX_OPERATOR;
+	(void)other;
+	return (nullptr);
+}
+
 IType*	Matrix::matrix_operator(const IType &other) const
 {
+	const Matrix	*other_matrix;
+	const Rational	*other_rational;
+
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (this->matrix_operator(*other_matrix));
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (this->matrix_operator(*other_rational));
 	return (nullptr);
-	(void)other;
 }
 
 std::ostream&	Matrix::print(std::ostream &os) const

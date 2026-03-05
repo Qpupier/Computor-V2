@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/04 19:02:07 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/05 13:59:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 
 # define EXPONENT_INTEGER std::logic_error("Only integers (ℤ) can be used as exponents")
 # define ERROR_DIVISION_BY_ZERO std::logic_error("Division by zero is impossible")
+# define ERROR_MATRIX_OPERATOR std::logic_error("Matrix operator (**) can only be applied to matrices")
+
 
 class	Complex;
 
@@ -41,6 +43,7 @@ class	Rational: public IType
 		bool		operator>(const Rational &other) const;
 		bool		operator>=(const Rational &other) const;
 		Rational&	operator=(const Rational &other);
+		Rational&	operator=(const Rational *other);
 		Rational	operator=(const Complex &other);
 		IType*		operator+(const IType &other) const;
 		Rational*	operator+(const Rational &other) const;
