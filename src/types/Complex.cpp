@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/05 17:47:28 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/06 18:31:15 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,17 @@
 // Utils
 static std::string	print_imaginary(Rational imaginary)
 {
+	std::string	numerator;
+
+	numerator = std::to_string(imaginary.getNumerator());
 	if (imaginary.is_integer())
-		return std::to_string(imaginary.getNumerator()) + "i";
-	return (std::to_string(imaginary.getNumerator()) + "i/" + std::to_string(imaginary.getDenominator()));
+		return numerator + "i";
+	return (numerator + "i/" + std::to_string(imaginary.getDenominator()));
 }
 
 
 // Operator overloads
-Complex	&Complex::operator=(const Complex &other)
+Complex		&Complex::operator=(const Complex &other)
 {
 	if (this != &other)
 	{
@@ -32,17 +35,17 @@ Complex	&Complex::operator=(const Complex &other)
 	return (*this);
 }
 
-inline	Complex::operator bool() const
+inline		Complex::operator bool() const
 {
 	return (this->_real || this->_imaginary);
 }
 
-bool	Complex::operator==(const Complex &other) const
+bool		Complex::operator==(const Complex &other) const
 {
 	return (this->_real == other._real && this->_imaginary == other._imaginary);
 }
-
-bool	Complex::operator!=(const Complex &other) const
+	
+bool		Complex::operator!=(const Complex &other) const
 {
 	return (!(*this == other));
 }
@@ -66,22 +69,22 @@ Complex*	Complex::operator+(const Rational &other) const
 	return (*this + Complex(other, Rational()));
 }
 
-Matrix*	Complex::operator+(const Matrix &other) const
+Matrix*		Complex::operator+(const Matrix &other) const
 {
 	Rational	rational;
 
 	try
 	{
-		rational = this->to_rational();
+		rational = *this;
 	}
 	catch (const std::logic_error &e)
 	{
-		throw std::logic_error("Matrix addition error: cannot add complex number to matrix");
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (rational + other);
 }
 
-IType*	Complex::operator+(const IType &other) const
+IType*		Complex::operator+(const IType &other) const
 {
 	const Complex	*other_complex;
 	const Rational	*other_rational;
@@ -118,22 +121,22 @@ Complex*	Complex::operator-(const Rational &other) const
 	return (*this - Complex(other, Rational()));
 }
 
-Matrix*	Complex::operator-(const Matrix &other) const
+Matrix*		Complex::operator-(const Matrix &other) const
 {
 	Rational	rational;
 
 	try
 	{
-		rational = this->to_rational();
+		rational = *this;
 	}
 	catch (const std::logic_error &e)
 	{
-		throw std::logic_error("Matrix subtraction error: cannot subtract complex number from matrix");
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (rational - other);
 }
 
-IType*	Complex::operator-(const IType &other) const
+IType*		Complex::operator-(const IType &other) const
 {
 	const Complex	*other_complex;
 	const Rational	*other_rational;
@@ -189,22 +192,22 @@ Complex*	Complex::operator*(const Rational &other) const
 	return (result);
 }
 
-Matrix*	Complex::operator*(const Matrix &other) const
+Matrix*		Complex::operator*(const Matrix &other) const
 {
 	Rational	rational;
 
 	try
 	{
-		rational = this->to_rational();
+		rational = *this;
 	}
 	catch (const std::logic_error &e)
 	{
-		throw std::logic_error("Matrix multiplication error: cannot multiply complex number with matrix");
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (rational * other);
 }
 
-IType*	Complex::operator*(const IType &other) const
+IType*		Complex::operator*(const IType &other) const
 {
 	const Complex	*other_complex;
 	const Rational	*other_rational;
@@ -268,22 +271,22 @@ Complex*	Complex::operator/(const Rational &other) const
 	return (*this / Complex(other, Rational()));
 }
 
-Matrix*	Complex::operator/(const Matrix &other) const
+Matrix*		Complex::operator/(const Matrix &other) const
 {
 	Rational	rational;
 
 	try
 	{
-		rational = this->to_rational();
+		rational = *this;
 	}
 	catch (const std::logic_error &e)
 	{
-		throw std::logic_error("Matrix division error: cannot divide complex number by matrix");
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (rational / other);
 }
 
-IType*	Complex::operator/(const IType &other) const
+IType*		Complex::operator/(const IType &other) const
 {
 	const Complex	*other_complex;
 	const Rational	*other_rational;
@@ -333,7 +336,7 @@ Rational*	Complex::operator%(const Rational &other) const
 	return (rational % other);
 }
 
-Matrix*	Complex::operator%(const Matrix &other) const
+Matrix*		Complex::operator%(const Matrix &other) const
 {
 	Rational	rational;
 
@@ -348,7 +351,7 @@ Matrix*	Complex::operator%(const Matrix &other) const
 	return (rational % other);
 }
 
-IType*	Complex::operator%(const IType &other) const
+IType*		Complex::operator%(const IType &other) const
 {
 	const Complex	*other_complex;
 	const Rational	*other_rational;
@@ -371,19 +374,21 @@ Complex*	Complex::operator^(const Rational &other) const
 	Rational	exponent;
 	Complex*	result;
 	Complex*	tmp;
+	int			numerator;
 
 	try
 	{
 		exponent = other;
 		if (!exponent.is_integer())
-			throw EXPONENT_INTEGER;
+			throw ERROR_EXPONENT_INTEGER;
 	}
 	catch (const std::logic_error &e)
 	{
-		throw EXPONENT_INTEGER;
+		throw ERROR_EXPONENT_INTEGER;
 	}
 	result = new Complex(*this);
-	for (int i = 1; i < exponent.getNumerator(); i++)
+	numerator = exponent.getNumerator();
+	for (int i = 1; i < numerator; i++)
 	{
 		tmp = result;
 		result = *result * *this;
@@ -402,27 +407,27 @@ Complex*	Complex::operator^(const Complex &other) const
 	}
 	catch (const std::logic_error &e)
 	{
-		throw EXPONENT_INTEGER;
+		throw ERROR_EXPONENT_INTEGER;
 	}
 	return (*this ^ other_rational);
 }
 
-Matrix*	Complex::operator^(const Matrix &other) const
+Matrix*		Complex::operator^(const Matrix &other) const
 {
 	Rational	rational;
 
 	try
 	{
-		rational = this->to_rational();
+		rational = *this;
 	}
 	catch (const std::logic_error &e)
 	{
-		throw EXPONENT_INTEGER;
+		throw ERROR_EXPONENT_INTEGER;
 	}
 	return (rational ^ other);
 }
 
-IType*	Complex::operator^(const IType &other) const
+IType*		Complex::operator^(const IType &other) const
 {
 	const Complex	*other_complex;
 	const Rational	*other_rational;
@@ -454,31 +459,27 @@ Rational	Complex::getReal(void) const
 
 
 // Methods
-IType*	Complex::matrix_operator(const IType &other) const
+IType*			Complex::matrix_operator(const IType &other) const
 {
 	throw ERROR_MATRIX_OPERATOR;
 	(void)other;
 	return (nullptr);
 }
 
-Rational	Complex::to_rational(void) const
-{
-	if (this->_imaginary)
-		throw ERROR_CONVERT_COMPLEX_TO_RATIONAL;
-	return (this->_real);
-}
-
-std::ostream	&Complex::print(std::ostream &os) const
+std::ostream&	Complex::print(std::ostream &os) const
 {
 	Rational	*operation;
+	Rational	minus_one(-1);
+	Rational	zero(0);
+	Rational	one(1);
 
 	if (!this->_real)
 	{
 		if (!this->_imaginary)
 			os << "0";
-		else if (this->_imaginary == Rational(1))
+		else if (this->_imaginary == one)
 			os << "i";
-		else if (this->_imaginary == Rational(-1))
+		else if (this->_imaginary == minus_one)
 			os << "-i";
 		else
 			os << this->_imaginary << "i";
@@ -488,17 +489,17 @@ std::ostream	&Complex::print(std::ostream &os) const
 		os << this->_real;
 		if (this->_imaginary)
 		{
-			if (this->_imaginary == Rational(1))
+			if (this->_imaginary == one)
 				os << " + i";
-			else if (this->_imaginary == Rational(-1))
+			else if (this->_imaginary == minus_one)
 				os << " - i";
 			else
 			{
-				if (this->_imaginary > Rational(0))
+				if (this->_imaginary > zero)
 					os << " + " << print_imaginary(this->_imaginary);
-				else if (this->_imaginary < Rational(0))
+				else if (this->_imaginary < zero)
 				{
-					operation = Rational(-1) * this->_imaginary;
+					operation = minus_one * this->_imaginary;
 					os << " - " << print_imaginary(*operation);
 					delete operation;
 				}
@@ -508,7 +509,7 @@ std::ostream	&Complex::print(std::ostream &os) const
 	return (os);
 }
 
-IType*	Complex::clone(void) const
+IType*			Complex::clone(void) const
 {
 	return (new Complex(*this));
 }

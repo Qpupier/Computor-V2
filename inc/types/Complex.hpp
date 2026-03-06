@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:35:43 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/05 17:47:44 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/06 18:31:25 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,7 @@ class	Complex: public IType
 		// Methods
 		IType*			matrix_operator(const IType &other) const;
 		IType*			clone(void) const;
-		Rational		to_rational(void) const;
-		std::ostream	&print(std::ostream &os) const;
+		std::ostream&	print(std::ostream &os) const;
 
 	private:
 		// Members

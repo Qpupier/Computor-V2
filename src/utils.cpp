@@ -1,19 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   IType.cpp                                          :+:      :+:    :+:   */
+/*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/25 15:34:40 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/06 18:32:40 by qpupier          ###   ########lyon.fr   */
+/*   Created: 2026/03/06 20:00:36 by qpupier           #+#    #+#             */
+/*   Updated: 2026/03/06 20:00:36 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "IType.hpp"
-
-// Output stream operator overload
-std::ostream	&operator<<(std::ostream &os, const IType &type)
-{
-	return (type.print(os));
-}

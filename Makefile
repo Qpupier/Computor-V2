@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/03/04 19:37:26 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/03/06 16:46:20 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,25 +54,25 @@ SUR			=	\033[7m
 END			=	\033[0m
 
 all: $(NAME)
-	@printf "$(BLUE)> $(NAME): $(YELLOW)Project ready!$(END)\n" >&2
+	@printf "$(BLUE)> $(NAME): $(YELLOW)Project ready!$(END)\n"
 
 $(NAME): $(OBJ)
 	$(CC) $(CXXFLAGS) $^ -o $@
-	@printf "$(ERASE)$(BLUE)> $@: $(GREEN)Success!$(END)\n\n" >&2
+	@printf "$(ERASE)$(BLUE)> $@: $(GREEN)Success!$(END)\n\n"
 -include $(DEP)
 
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.cpp Makefile
 	mkdir -p $(DIR_OBJ) $(DIRS)
 	$(CC) $(CXXFLAGS) $(CDEP) $(INC) -c $< -o $@
-	@printf "$(ERASE)$(BLUE)> Compilation:$(END) $<" >&2
+	@printf "$(ERASE)$(BLUE)> Compilation:$(END) $<"
 
 clean:
 	@rm -rf $(DIR_OBJ)
-	@printf "$(ERASE)$(ERASE)$(BLUE)> Deleted: $(RED)$(DIR_OBJ)$(END)\n" >&2
+	@printf "$(ERASE)$(ERASE)$(BLUE)> Deleted: $(RED)$(DIR_OBJ)$(END)\n"
 	
 fclean: clean
 	@rm -rf $(NAME)
-	@printf "$(ERASE)$(ERASE)$(BLUE)> Deleted: $(RED)$(NAME)$(END)\n" >&2
+	@printf "$(ERASE)$(ERASE)$(BLUE)> Deleted: $(RED)$(NAME)$(END)\n"
 
 re: fclean all
 
@@ -83,9 +83,11 @@ valgrind: $(NAME)
 	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all -s ./$<
 
 test: $(NAME)
+	@echo &> /dev/null
 	./unit_tests/run_tests.sh
 
 test_debug: $(NAME)
+	@echo &> /dev/null
 	./unit_tests/run_tests.sh debug
 
 .PHONY: all clean fclean re run valgrind test test_debug

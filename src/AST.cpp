@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/05 20:22:43 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/06 19:50:03 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,38 @@
 #include "Rational.hpp"
 #include "Complex.hpp"
 #include "Matrix.hpp"
+
+// Utils
+static IType*	get_result(IType *left_entity, IType *right_entity, 	\
+		Operator::t_operator op)
+{
+	switch (op)
+	{
+		case Operator::E_ADD:
+			return (*left_entity + *right_entity);
+		case Operator::E_SUBTRACT:
+			return (*left_entity - *right_entity);
+		case Operator::E_MULTIPLY:
+			return (*left_entity * *right_entity);
+		case Operator::E_DIVIDE:
+			return (*left_entity / *right_entity);
+		case Operator::E_MODULO:
+			return (*left_entity % *right_entity);
+		case Operator::E_MATRIX:
+			return (left_entity->matrix_operator(*right_entity));
+		case Operator::E_POWER:
+			return (*left_entity ^ *right_entity);
+		case Operator::E_UNKNOWN:
+			if (dynamic_cast<Matrix*>(left_entity) && dynamic_cast<Matrix*>(right_entity))
+				return (left_entity->matrix_operator(*right_entity));
+			else
+				return (*left_entity * *right_entity);
+		default:
+			throw std::runtime_error("Unknown operator");
+	}
+	return (nullptr);
+}
+
 
 // Constructors and destructor
 AST::AST(const Token &token, t_data &data): _left(nullptr), _right(nullptr)
@@ -42,7 +74,7 @@ AST::AST(const Token &token, t_data &data): _left(nullptr), _right(nullptr)
 			break;
 		}
 		default:
-			throw std::logic_error("Invalid token type for AST node");
+			throw std::runtime_error("Invalid token type for AST node");
 	}
 }
 
@@ -64,11 +96,11 @@ AST::~AST(void)
 
 
 // Operator overloads
-AST& AST::operator=(const AST &other)
+AST&	AST::operator=(const AST &other)
 {
 	if (this != &other)
 	{
-		this->~AST();
+		delete this;
 		_node = other._node->clone();
 		_left = other._left;
 		_right = other._right;
@@ -107,7 +139,7 @@ void	AST::setRight(AST *right)
 
 
 // Methods
-std::ostream	&AST::print(std::ostream &os) const
+std::ostream&	AST::print(std::ostream &os) const// To delete
 {
 	if (this->_left)
 		os << *this->_left;
@@ -118,90 +150,42 @@ std::ostream	&AST::print(std::ostream &os) const
 	return (os);
 }
 
-void	AST::reduce_expression(void)
+bool			AST::end_of_tree(void) const
 {
-	AST	*tmp;
-
-	// TODO
-	// Si pas de variable
-	// return;
 	if (!this->_left || !this->_right)
+	{
+		if (this->_left || this->_right)
+			throw ERROR_OPERATOR_EXPECTED;
+		return (true);
+	}
+	return (false);
+}
+
+void			AST::reduce_expression(void)
+{
+	IType*		result;
+	Operator*	op;
+
+	// TODO remplacer les variables par leur valeur
+	if (this->end_of_tree())
 		return;
 	this->_left->reduce_expression();
 	this->_right->reduce_expression();
-	IType	*left_entity = this->_left->getNode();
-	IType	*right_entity = this->_right->getNode();
-	if (!left_entity || !right_entity)
+	if (this->end_of_tree())
 		return;
-	Operator *op = dynamic_cast<Operator*>(this->_node);
-	if (op)
+	op = dynamic_cast<Operator*>(this->_node);
+	if (!op)
+		throw ERROR_OPERATOR_EXPECTED;
+	try
 	{
-		IType* result = nullptr;
-		try
-		{
-			switch (op->getOperator())
-			{
-				case Operator::E_ADD:
-				{
-					result = *left_entity + *right_entity;
-					break;
-				}
-				case Operator::E_SUBTRACT:
-				{
-					result = *left_entity - *right_entity;
-					break;
-				}
-				case Operator::E_MULTIPLY:
-				{
-					result = *left_entity * *right_entity;
-					break;
-				}
-				case Operator::E_DIVIDE:
-				{
-					result = *left_entity / *right_entity;
-					break;
-				}
-				case Operator::E_MODULO:
-				{
-					result = *left_entity % *right_entity;
-					break;
-				}
-				case Operator::E_MATRIX:
-				{
-					result = left_entity->matrix_operator(*right_entity);
-					break;
-				}
-				case Operator::E_POWER:
-				{
-					result = *left_entity ^ *right_entity;
-					break;
-				}
-				case Operator::E_UNKNOWN:
-				{
-					if (dynamic_cast<Matrix*>(left_entity) && dynamic_cast<Matrix*>(right_entity))
-						result = left_entity->matrix_operator(*right_entity);
-					else
-						result = (*left_entity * *right_entity);
-					break;
-				}
-				default:
-				{
-					throw std::runtime_error("Unknown operator");
-					break;
-				}
-			}
-		}
-		catch (const std::exception &e)
-		{
-			delete result;
-			delete this;
-			throw;
-		}
-		tmp = new AST(result);
-		*this = *tmp;
-		delete tmp;
+		result = get_result(this->_left->_node, this->_right->_node, op->getOperator());
 	}
-	return;
+	catch (const std::exception &e)
+	{
+		delete this;
+		throw;
+	}
+	*this = AST(result);
 }
 
 

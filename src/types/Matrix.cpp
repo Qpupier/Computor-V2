@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/05 18:26:44 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/06 18:29:40 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "AST.hpp"
 
 // Utils
-static std::vector<std::string>	parse_line(std::string &line, unsigned long *width)
+static std::vector<std::string>					parse_line(std::string &line, unsigned long *width)
 {
 	std::vector<std::string>	row;
 	std::size_t					pos;
@@ -43,9 +43,9 @@ static std::vector<std::string>	parse_line(std::string &line, unsigned long *wid
 
 static std::vector<std::vector<std::string>>	parse_matrix(std::string &matrix, unsigned long *width)
 {
-	std::size_t								pos;
 	std::vector<std::vector<std::string>>	rows;
 	std::string								line;
+	std::size_t								pos;
 
 	matrix = matrix.substr(1, matrix.size() - 2);
 	pos = 0;
@@ -66,13 +66,6 @@ static std::vector<std::vector<std::string>>	parse_matrix(std::string &matrix, u
 	return (rows);
 }
 
-static void	free_matrix(Rational **matrix, unsigned long height)
-{
-	for (unsigned int i = 0; i < height; i++)
-		delete[] matrix[i];
-	delete[] matrix;
-}
-
 
 // Constructors and destructor
 Matrix::Matrix(unsigned long width, unsigned long height): _width(width), _height(height)
@@ -91,13 +84,15 @@ Matrix::Matrix(std::string str, t_data &data): _width(0), _height(0)
 	std::vector<std::vector<std::string>>	rows;
 	AST										*cell;
 	Rational								*rational;
+	unsigned long int						height;
 
 	rows = parse_matrix(str, &this->_width);
-	this->_height = rows.size();
-	this->_matrix = new Rational*[this->_height];
-	for (unsigned int i = 0; i < this->_height; i++)
+	height = rows.size();
+	this->_matrix = new Rational*[height];
+	for (unsigned int i = 0; i < height; i++)
 	{
 		this->_matrix[i] = new Rational[this->_width];
+		this->_height++;
 		for (unsigned int j = 0; j < this->_width; j++)
 		{
 			try
@@ -106,27 +101,19 @@ Matrix::Matrix(std::string str, t_data &data): _width(0), _height(0)
 			}
 			catch (const std::exception &e)
 			{
-				free_matrix(this->_matrix, this->_height);
-				throw std::logic_error(std::string("Invalid matrix format: ") + e.what());
+				this->error(std::logic_error(std::string("Invalid matrix format: ") + e.what()));
 			}
 			if (!cell)
-			{
-				free_matrix(this->_matrix, this->_height);
-				throw std::logic_error("Invalid matrix format: invalid element");
-			}
+				this->error(std::logic_error("Invalid matrix format: invalid element"));
 			if (cell->getLeft() || cell->getRight())
 			{
 				delete cell;
-				free_matrix(this->_matrix, this->_height);
-				throw std::logic_error("Invalid matrix format: incomplete element");
+				this->error(std::logic_error("Invalid matrix format: incomplete element"));
 			}
 			rational = dynamic_cast<Rational*>(cell->getNode()->clone());
 			delete cell;
 			if (!rational)
-			{
-				free_matrix(this->_matrix, this->_height);
-				throw std::logic_error("Invalid matrix format: non-rational element");
-			}
+				this->error(std::logic_error("Invalid matrix format: non-rational element"));
 			this->_matrix[i][j] = *rational;
 			delete rational;
 		}
@@ -153,26 +140,18 @@ Matrix::~Matrix()
 
 
 // Operator overloads
-Matrix&	Matrix::operator=(const Matrix &other)
+Matrix&		Matrix::operator=(const Matrix &other)
 {
+	Matrix	new_matrix(other);
+
 	if (this == &other)
 		return (*this);
-	for (unsigned int i = 0; i < this->_height; i++)
-		delete[] this->_matrix[i];
-	delete[] this->_matrix;
-	this->_width = other._width;
-	this->_height = other._height;
-	this->_matrix = new Rational*[this->_height];
-	for (unsigned int i = 0; i < this->_height; i++)
-	{
-		this->_matrix[i] = new Rational[this->_width];
-		for (unsigned int j = 0; j < this->_width; j++)
-			this->_matrix[i][j] = other._matrix[i][j];
-	}
+	this->~Matrix();
+	*this = new_matrix;
 	return (*this);
 }
 
-bool	Matrix::operator==(const Matrix &other) const
+bool		Matrix::operator==(const Matrix &other) const
 {
 	if (this->_width != other._width || this->_height != other._height)
 		return (false);
@@ -183,7 +162,7 @@ bool	Matrix::operator==(const Matrix &other) const
 	return (true);
 }
 
-bool	Matrix::operator!=(const Matrix &other) const
+bool		Matrix::operator!=(const Matrix &other) const
 {
 	return (!(*this == other));
 }
@@ -191,16 +170,16 @@ bool	Matrix::operator!=(const Matrix &other) const
 Rational*	Matrix::operator[](unsigned int index) const
 {
 	if (index >= this->_height)
-		throw std::out_of_range("Matrix index out of range");
+		throw ERROR_MATRIX_OUT_OF_RANGE;
 	return (this->_matrix[index]);
 }
 
-Matrix*	Matrix::operator+(const Matrix &other) const
+Matrix*		Matrix::operator+(const Matrix &other) const
 {
 	Matrix	*result;
 
 	if (this->_width != other._width || this->_height != other._height)
-		throw std::logic_error("Matrix addition error: incompatible dimensions");
+		throw ERROR_MATRIX_DIMENSIONS;
 	result = new Matrix(this->_width, this->_height);
 	for (unsigned int i = 0; i < this->_height; i++)
 		for (unsigned int j = 0; j < this->_width; j++)
@@ -208,7 +187,7 @@ Matrix*	Matrix::operator+(const Matrix &other) const
 	return (result);
 }
 
-Matrix*	Matrix::operator+(const Rational &other) const
+Matrix*		Matrix::operator+(const Rational &other) const
 {
 	Matrix	*result;
 
@@ -219,22 +198,22 @@ Matrix*	Matrix::operator+(const Rational &other) const
 	return (result);
 }
 
-Matrix*	Matrix::operator+(const Complex &other) const
+Matrix*		Matrix::operator+(const Complex &other) const
 {
 	Rational	rational;
 
 	try
 	{
-		rational = other.to_rational();
+		rational = other;
 	}
 	catch (const std::logic_error &e)
 	{
-		throw std::logic_error("Matrix addition error: cannot add complex number to matrix");
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (*this + rational);
 }
 
-IType*	Matrix::operator+(const IType &other) const
+IType*		Matrix::operator+(const IType &other) const
 {
 	const Matrix	*other_matrix;
 	const Rational	*other_rational;
@@ -252,12 +231,12 @@ IType*	Matrix::operator+(const IType &other) const
 	return (nullptr);
 }
 
-Matrix*	Matrix::operator-(const Matrix &other) const
+Matrix*		Matrix::operator-(const Matrix &other) const
 {
 	Matrix	*result;
 
 	if (this->_width != other._width || this->_height != other._height)
-		throw std::logic_error("Matrix addition error: incompatible dimensions");
+		throw ERROR_MATRIX_DIMENSIONS;
 	result = new Matrix(this->_width, this->_height);
 	for (unsigned int i = 0; i < this->_height; i++)
 		for (unsigned int j = 0; j < this->_width; j++)
@@ -265,7 +244,7 @@ Matrix*	Matrix::operator-(const Matrix &other) const
 	return (result);
 }
 
-Matrix*	Matrix::operator-(const Rational &other) const
+Matrix*		Matrix::operator-(const Rational &other) const
 {
 	Matrix	*result;
 
@@ -276,22 +255,22 @@ Matrix*	Matrix::operator-(const Rational &other) const
 	return (result);
 }
 
-Matrix*	Matrix::operator-(const Complex &other) const
+Matrix*		Matrix::operator-(const Complex &other) const
 {
 	Rational	rational;
 
 	try
 	{
-		rational = other.to_rational();
+		rational = other;
 	}
 	catch (const std::logic_error &e)
 	{
-		throw std::logic_error("Matrix subtraction error: cannot subtract complex number from matrix");
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (*this - rational);
 }
 
-IType*	Matrix::operator-(const IType &other) const
+IType*		Matrix::operator-(const IType &other) const
 {
 	const Matrix	*other_matrix;
 	const Rational	*other_rational;
@@ -309,12 +288,12 @@ IType*	Matrix::operator-(const IType &other) const
 	return (nullptr);
 }
 
-Matrix*	Matrix::operator*(const Matrix &other) const
+Matrix*		Matrix::operator*(const Matrix &other) const
 {
 	Matrix	*result;
 
 	if (this->_width != other._width || this->_height != other._height)
-		throw std::logic_error("Matrix addition error: incompatible dimensions");
+		throw ERROR_MATRIX_DIMENSIONS;
 	result = new Matrix(this->_width, this->_height);
 	for (unsigned int i = 0; i < this->_height; i++)
 		for (unsigned int j = 0; j < this->_width; j++)
@@ -322,7 +301,7 @@ Matrix*	Matrix::operator*(const Matrix &other) const
 	return (result);
 }
 
-Matrix*	Matrix::operator*(const Rational &other) const
+Matrix*		Matrix::operator*(const Rational &other) const
 {
 	Matrix	*result;
 
@@ -333,22 +312,22 @@ Matrix*	Matrix::operator*(const Rational &other) const
 	return (result);
 }
 
-Matrix*	Matrix::operator*(const Complex &other) const
+Matrix*		Matrix::operator*(const Complex &other) const
 {
 	Rational	rational;
 
 	try
 	{
-		rational = other.to_rational();
+		rational = other;
 	}
 	catch (const std::logic_error &e)
 	{
-		throw std::logic_error("Matrix multiplication error: cannot multiply matrix by complex number");
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (*this * rational);
 }
 
-IType*	Matrix::operator*(const IType &other) const
+IType*		Matrix::operator*(const IType &other) const
 {
 	const Matrix	*other_matrix;
 	const Rational	*other_rational;
@@ -366,12 +345,12 @@ IType*	Matrix::operator*(const IType &other) const
 	return (nullptr);
 }
 
-Matrix*	Matrix::operator/(const Matrix &other) const
+Matrix*		Matrix::operator/(const Matrix &other) const
 {
 	Matrix	*result;
 
 	if (this->_width != other._width || this->_height != other._height)
-		throw std::logic_error("Matrix addition error: incompatible dimensions");
+		throw ERROR_MATRIX_DIMENSIONS;
 	result = new Matrix(this->_width, this->_height);
 	for (unsigned int i = 0; i < this->_height; i++)
 		for (unsigned int j = 0; j < this->_width; j++)
@@ -387,7 +366,7 @@ Matrix*	Matrix::operator/(const Matrix &other) const
 	return (result);
 }
 
-Matrix*	Matrix::operator/(const Rational &other) const
+Matrix*		Matrix::operator/(const Rational &other) const
 {
 	Matrix	*result;
 
@@ -406,22 +385,22 @@ Matrix*	Matrix::operator/(const Rational &other) const
 	return (result);
 }
 
-Matrix*	Matrix::operator/(const Complex &other) const
+Matrix*		Matrix::operator/(const Complex &other) const
 {
 	Rational	rational;
 
 	try
 	{
-		rational = other.to_rational();
+		rational = other;
 	}
 	catch (const std::logic_error &e)
 	{
-		throw std::logic_error("Matrix division error: cannot divide matrix by complex number");
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (*this / rational);
 }
 
-IType*	Matrix::operator/(const IType &other) const
+IType*		Matrix::operator/(const IType &other) const
 {
 	const Matrix	*other_matrix;
 	const Rational	*other_rational;
@@ -439,12 +418,12 @@ IType*	Matrix::operator/(const IType &other) const
 	return (nullptr);
 }
 
-Matrix*	Matrix::operator%(const Matrix &other) const
+Matrix*		Matrix::operator%(const Matrix &other) const
 {
 	Matrix	*result;
 
 	if (this->_width != other._width || this->_height != other._height)
-		throw std::logic_error("Matrix addition error: incompatible dimensions");
+		throw ERROR_MATRIX_DIMENSIONS;
 	result = new Matrix(this->_width, this->_height);
 	for (unsigned int i = 0; i < this->_height; i++)
 		for (unsigned int j = 0; j < this->_width; j++)
@@ -460,7 +439,7 @@ Matrix*	Matrix::operator%(const Matrix &other) const
 	return (result);
 }
 
-Matrix*	Matrix::operator%(const Rational &other) const
+Matrix*		Matrix::operator%(const Rational &other) const
 {
 	Matrix	*result;
 
@@ -479,22 +458,22 @@ Matrix*	Matrix::operator%(const Rational &other) const
 	return (result);
 }
 
-Matrix*	Matrix::operator%(const Complex &other) const
+Matrix*		Matrix::operator%(const Complex &other) const
 {
 	Rational	rational;
 
 	try
 	{
-		rational = other.to_rational();
+		rational = other;
 	}
 	catch (const std::logic_error &e)
 	{
-		throw std::logic_error("Matrix modulo error: cannot apply modulo operator to complex number");
+		throw ERROR_MODULO_COMPLEX;
 	}
 	return (*this % rational);
 }
 
-IType*	Matrix::operator%(const IType &other) const
+IType*		Matrix::operator%(const IType &other) const
 {
 	const Matrix	*other_matrix;
 	const Rational	*other_rational;
@@ -512,12 +491,12 @@ IType*	Matrix::operator%(const IType &other) const
 	return (nullptr);
 }
 
-Matrix*	Matrix::operator^(const Matrix &other) const
+Matrix*		Matrix::operator^(const Matrix &other) const
 {
 	Matrix		*result;
 
 	if (this->_width != other._width || this->_height != other._height)
-		throw std::logic_error("Matrix addition error: incompatible dimensions");
+		throw ERROR_MATRIX_DIMENSIONS;
 	result = new Matrix(this->_width, this->_height);
 	for (unsigned int i = 0; i < this->_height; i++)
 		for (unsigned int j = 0; j < this->_width; j++)
@@ -533,7 +512,7 @@ Matrix*	Matrix::operator^(const Matrix &other) const
 	return (result);
 }
 
-Matrix*	Matrix::operator^(const Rational &other) const
+Matrix*		Matrix::operator^(const Rational &other) const
 {
 	Matrix	*result;
 
@@ -552,22 +531,22 @@ Matrix*	Matrix::operator^(const Rational &other) const
 	return (result);
 }
 
-Matrix*	Matrix::operator^(const Complex &other) const
+Matrix*		Matrix::operator^(const Complex &other) const
 {
 	Rational	rational;
 
 	try
 	{
-		rational = other.to_rational();
+		rational = other;
 	}
 	catch (const std::logic_error &e)
 	{
-		throw std::logic_error("Matrix exponentiation error: cannot apply exponentiation operator to complex number");
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (*this ^ rational);
 }
 
-IType*	Matrix::operator^(const IType &other) const
+IType*		Matrix::operator^(const IType &other) const
 {
 	const Matrix	*other_matrix;
 	const Rational	*other_rational;
@@ -602,13 +581,13 @@ unsigned long	Matrix::getHeight(void) const
 void	Matrix::setValue(unsigned int i, unsigned int j, Rational *value)
 {
 	if (i >= this->_height || j >= this->_width)
-		throw std::out_of_range("Matrix index out of range");
+		throw ERROR_MATRIX_OUT_OF_RANGE;
 	this->_matrix[i][j] = value;
 }
 
 
 // Methods
-Matrix*	Matrix::matrix_operator(const Matrix &other) const
+Matrix*			Matrix::matrix_operator(const Matrix &other) const
 {
 	Matrix		*result;
 	Rational	*cell;
@@ -616,7 +595,7 @@ Matrix*	Matrix::matrix_operator(const Matrix &other) const
 	Rational	*tmp;
 
 	if (this->_width != other._height)
-		throw std::logic_error("Matrix operator error: incompatible dimensions");
+		throw ERROR_MATRIX_DIMENSIONS;
 	result = new Matrix(other._width, this->_height);
 	for (unsigned int i = 0; i < result->_height; i++)
 		for (unsigned int j = 0; j < result->_width; j++)
@@ -628,28 +607,28 @@ Matrix*	Matrix::matrix_operator(const Matrix &other) const
 				tmp = cell;
 				cell = *cell + *mul;
 				delete tmp;
-				delete mul;//TODO - operator Rational +=
+				delete mul;
 			}
 			result->_matrix[i][j] = cell;
 		}
 	return (result);
 }
 
-Matrix*	Matrix::matrix_operator(const Rational &other) const
+Matrix*			Matrix::matrix_operator(const Rational &other) const
 {
 	throw ERROR_MATRIX_OPERATOR;
 	(void)other;
 	return (nullptr);
 }
 
-Matrix*	Matrix::matrix_operator(const Complex &other) const
+Matrix*			Matrix::matrix_operator(const Complex &other) const
 {
 	throw ERROR_MATRIX_OPERATOR;
 	(void)other;
 	return (nullptr);
 }
 
-IType*	Matrix::matrix_operator(const IType &other) const
+IType*			Matrix::matrix_operator(const IType &other) const
 {
 	const Matrix	*other_matrix;
 	const Rational	*other_rational;
@@ -669,25 +648,36 @@ IType*	Matrix::matrix_operator(const IType &other) const
 
 std::ostream&	Matrix::print(std::ostream &os) const
 {
-	for (unsigned int i = 0; i < this->getHeight(); i++)
+	unsigned long	width;
+	unsigned long	height;
+
+	width = this->getWidth();
+	height = this->getHeight();
+	for (unsigned int i = 0; i < height; i++)
 	{
 		os << "[ ";
-		for (unsigned int j = 0; j < this->getWidth(); j++)
+		for (unsigned int j = 0; j < width; j++)
 		{
 			os << this->_matrix[i][j];
-			if (j < this->getWidth() - 1)
+			if (j < width - 1)
 				os << " , ";
 		}
 		os << " ]";
-		if (i < this->getHeight() - 1)
+		if (i < height - 1)
 			os << std::endl;
 	}
 	return (os);
 }
 
-IType*	Matrix::clone(void) const
+IType*			Matrix::clone(void) const
 {
 	return (new Matrix(*this));
+}
+
+void			Matrix::error(const std::logic_error &e) const
+{
+	this->~Matrix();
+	throw e;
 }
 
 

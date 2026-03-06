@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:10:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/04 18:58:21 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/06 16:19:15 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 # define TOKEN_VARIABLE			"(?:[a-zA-Z]{2,}|[a-hj-zA-HJ-Z])"
 # define TOKEN_NUMBER			"\\d+(?:\\.\\d+)?"
 # define TOKEN_IMAGINARY		"i"
-// # define TOKEN_FUNCTION			TOKEN_VARIABLE "\\(" TOKEN_EXPRESSION "\\)"
 # define TOKEN_OPERATOR			"(?:\\*\\*|[\\+\\-\\*\\/\\^%])"
 # define TOKEN_RATIONAL			"[\\(\\)]|" TOKEN_NUMBER "|" TOKEN_VARIABLE "|" TOKEN_OPERATOR
 # define TOKEN_MATRIX_ELEMMENT	"(?:" TOKEN_WHITESPACE "(?:" TOKEN_RATIONAL "))+" TOKEN_WHITESPACE

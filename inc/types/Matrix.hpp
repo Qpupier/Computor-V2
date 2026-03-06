@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/05 17:32:59 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/06 17:33:57 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ class	Matrix: public IType
 		Matrix*			matrix_operator(const Complex &other) const;
 		std::ostream	&print(std::ostream &os) const;
 		IType*			clone(void) const;
+		void			error(const std::logic_error &e) const;
 
 	private:
 		// Members

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/05 19:50:36 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/06 16:00:20 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,6 @@ AST	*compute_expression(const std::string &line, t_data &data)
 
 	if (!std::regex_match(line, data.patterns.at(TOKEN_FULL_EXPRESSION)))
 		throw ERROR_INVALID_EXPRESSION;
-	// std::cerr << "\033[33mComputing expression: " << line << "\033[0m" << std::endl;// Debug
 	for (std::string::const_iterator start(line.begin()); start != end;)
 	{
 		std::sregex_token_iterator	it(start, end, data.patterns.at(TOKEN_NEXT), token_positions);

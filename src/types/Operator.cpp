@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/05 19:58:42 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/06 18:35:36 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,37 +44,37 @@ Operator&	Operator::operator=(const Operator &other)
 	return (*this);
 }
 
-IType*	Operator::operator+(const IType &other) const
+IType*		Operator::operator+(const IType &other) const
 {
 	(void)other;
 	return (nullptr);
 }
 
-IType*	Operator::operator-(const IType &other) const
+IType*		Operator::operator-(const IType &other) const
 {
 	(void)other;
 	return (nullptr);
 }
 
-IType*	Operator::operator*(const IType &other) const
+IType*		Operator::operator*(const IType &other) const
 {
 	(void)other;
 	return (nullptr);
 }
 
-IType*	Operator::operator/(const IType &other) const
+IType*		Operator::operator/(const IType &other) const
 {
 	(void)other;
 	return (nullptr);
 }
 
-IType*	Operator::operator%(const IType &other) const
+IType*		Operator::operator%(const IType &other) const
 {
 	(void)other;
 	return (nullptr);
 }
 
-IType*	Operator::operator^(const IType &other) const
+IType*		Operator::operator^(const IType &other) const
 {
 	(void)other;
 	return (nullptr);
@@ -89,13 +89,13 @@ Operator::t_operator	Operator::getOperator(void) const
 
 
 // Methods
-IType*	Operator::matrix_operator(const IType &other) const
+IType*			Operator::matrix_operator(const IType &other) const
 {
 	(void)other;
 	return (nullptr);
 }
 
-std::ostream	&Operator::print(std::ostream &os) const
+std::ostream&	Operator::print(std::ostream &os) const
 {
 	os << " ";
 	switch (this->_op)
@@ -142,7 +142,7 @@ std::ostream	&Operator::print(std::ostream &os) const
 	return (os);
 }
 
-IType*	Operator::clone(void) const
+IType*			Operator::clone(void) const
 {
 	return (new Operator(*this));
 }

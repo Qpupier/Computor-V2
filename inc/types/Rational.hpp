@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/05 18:07:28 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/06 18:50:22 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define RATIONAL_HPP
 
 # include "computor-v2.hpp"
-// # include "Matrix.hpp"
 
 class	Complex;
 class	Matrix;
@@ -70,7 +69,6 @@ class	Rational: public IType
 		// Getters
 		int		getNumerator(void) const;
 		int		getDenominator(void) const;
-		double	getNumber(void) const;
 
 		// Methods
 		void			reduce(void);
