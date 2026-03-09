@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/06 20:00:22 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/09 13:50:47 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,31 +86,8 @@ static void	compute_line(const std::string &line, t_data &data)
 	}
 }
 
-static int	usage(void)
+static int	loop(std::string &line, t_data &data, bool is_interactive)
 {
-	std::cerr << "Usage: ./computor-v2" << std::endl;
-	return (EXIT_FAILURE);
-}
-
-static void	define_patterns(std::map<std::string, std::regex> &patterns)
-{
-	patterns[TOKEN_FULL] = std::regex(TOKEN_FULL);
-	patterns[TOKEN_LIST] = std::regex(TOKEN_LIST);
-	patterns[TOKEN_NEXT] = std::regex(TOKEN_NEXT);
-	patterns[TOKEN_FULL_EXPRESSION] = std::regex(TOKEN_FULL_EXPRESSION);
-}
-
-int			main(int argc, const char **argv)
-{
-	t_data		data;
-	std::string	line;
-	bool		is_interactive;
-
-	if (argc > 1)
-		return (usage());
-	define_patterns(data.patterns);
-	define_token_types(data.tokens_types);
-	is_interactive = isatty(STDIN_FILENO);
 	while (true)
 	{
 		if (is_interactive)
@@ -127,6 +104,18 @@ int			main(int argc, const char **argv)
 		if (std::cin.eof())
 			return (EXIT_SUCCESS);
 	}
-	return (EXIT_SUCCESS);
+	
+}
+
+int			main(int argc, const char **argv)
+{
+	t_data		data;
+	std::string	line;
+
+	if (argc > 1)
+		return (usage());
+	define_patterns(data.patterns);
+	define_token_types(data.tokens_types);
+	return (loop(line, data, isatty(STDIN_FILENO)));
 	(void)argv;
 }

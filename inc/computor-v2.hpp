@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/06 19:38:48 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/09 12:30:09 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,8 @@ typedef struct	s_data
 	std::map<const Token::t_token, std::regex>	tokens_types;
 	std::map<std::string, const IType*>			stored;
 }				t_data;
+
+int		usage(void);
+void	define_patterns(std::map<std::string, std::regex> &patterns);
 
 #endif

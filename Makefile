@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/03/06 16:46:20 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/03/09 12:37:29 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ LST_SRC		=	main.cpp			\
 				Token.cpp			\
 				build_ast.cpp		\
 				AST.cpp				\
+				utils.cpp			\
 				types/IType.cpp		\
 				types/Operator.cpp	\
 				types/Rational.cpp	\

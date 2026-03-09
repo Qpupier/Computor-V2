@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:15:11 by qpupier           #+#    #+#             */
-/*   Updated: 2026/02/19 14:22:38 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/09 12:36:49 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ void	Token::setType(t_token type)
 
 
 // Functions
-void	define_token_types(std::map<const Token::t_token, std::regex> &tokens_types)
+void			define_token_types(std::map<const Token::t_token, 	\
+		std::regex> &tokens_types)
 {
 	tokens_types[Token::E_LEFT_PARENTHESIS] = std::regex("^\\($");
 	tokens_types[Token::E_RIGHT_PARENTHESIS] = std::regex("^\\)$");
@@ -61,7 +62,9 @@ void	define_token_types(std::map<const Token::t_token, std::regex> &tokens_types
 	tokens_types[Token::E_WHITESPACE] = std::regex("^" TOKEN_WHITESPACE "$");
 	tokens_types[Token::E_QUESTION] = std::regex("^" TOKEN_QUESTION "$");
 }
-Token::t_token get_token_type(const std::string &token, const std::map<const Token::t_token, std::regex> &tokens_types)
+
+Token::t_token	get_token_type(const std::string &token, 			\
+		const std::map<const Token::t_token, std::regex> &tokens_types)
 {
 	for (std::map<const Token::t_token, std::regex>::const_iterator it = tokens_types.begin(); 	\
 			it != tokens_types.end(); ++it)

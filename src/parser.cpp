@@ -6,13 +6,13 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/06 16:00:20 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/09 12:27:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
 
-static void	semantic_verification(const std::vector<Token> &tokens)
+static void			semantic_verification(const std::vector<Token> &tokens)
 {
 	Token::t_token	prev_type;
 	Token::t_token	current_type;
@@ -30,7 +30,7 @@ static void	semantic_verification(const std::vector<Token> &tokens)
 	}
 }
 
-static void	remove_whitespaces(std::vector<Token> &tokens)
+static void			remove_whitespaces(std::vector<Token> &tokens)
 {
 	for (size_t i = 0; i < tokens.size();)
 		if (tokens[i].getType() == Token::E_WHITESPACE)
@@ -39,7 +39,7 @@ static void	remove_whitespaces(std::vector<Token> &tokens)
 			i++;
 }
 
-static bool	bad_sign_placement(const std::vector<Token> &tokens, size_t i)
+static bool			bad_sign_placement(const std::vector<Token> &tokens, size_t i)
 {
 	bool	prev_is_sign;
 	bool	current_is_whitespace;
@@ -55,7 +55,7 @@ static bool	bad_sign_placement(const std::vector<Token> &tokens, size_t i)
 	return (false);
 }
 
-static void	whitespaces_format_error(const std::vector<Token> &tokens)
+static void			whitespaces_format_error(const std::vector<Token> &tokens)
 {
 	unsigned long int	size;
 	Token::t_token		prev_type;
@@ -92,7 +92,7 @@ static std::string	new_operator(Token::t_token prev_token, Token::t_token curren
 	return ("*");
 }
 
-static bool	test_function(std::vector<Token> &tokens, size_t pos, 	\
+static bool			test_function(std::vector<Token> &tokens, size_t pos, 	\
 		const std::map<std::string, const IType*> &stored)
 {
 	// if (stored.find(tokens[pos - 1].getValue()) != stored.end() 	
@@ -107,7 +107,7 @@ static bool	test_function(std::vector<Token> &tokens, size_t pos, 	\
 	return (false);
 }
 
-void	set_missing_operators(std::vector<Token> &tokens, 	\
+static void			set_missing_operators(std::vector<Token> &tokens, 	\
 		const std::map<std::string, const IType*> &stored)
 {
 	for (unsigned long int i = 1; i < tokens.size(); i++)
@@ -128,25 +128,30 @@ void	set_missing_operators(std::vector<Token> &tokens, 	\
 	}
 }
 
-AST	*compute_expression(const std::string &line, t_data &data)
+static Token		create_token(std::string::const_iterator &start, 	\
+		const std::string::const_iterator &end, const t_data &data)
+{
+	std::vector<int>			token_positions({1});
+	std::sregex_token_iterator	token_null;
+	std::sregex_token_iterator	it(start, end, 	\
+			data.patterns.at(TOKEN_NEXT), token_positions);
+
+	if (it == token_null)
+		std::__throw_regex_error(std::regex_constants::error_complexity, "Invalid format of TOKEN_NEXT regex");
+	start = it->second;
+	return Token(*it, get_token_type(*it, data.tokens_types));
+}
+
+AST					*compute_expression(const std::string &line, t_data &data)
 {
 	std::string::const_iterator	end(line.end());
 	std::vector<Token>			tokens;
-	std::sregex_token_iterator	token_null;
-	std::vector<int>			token_positions({1});
 	AST							*ast;
 
 	if (!std::regex_match(line, data.patterns.at(TOKEN_FULL_EXPRESSION)))
 		throw ERROR_INVALID_EXPRESSION;
 	for (std::string::const_iterator start(line.begin()); start != end;)
-	{
-		std::sregex_token_iterator	it(start, end, data.patterns.at(TOKEN_NEXT), token_positions);
-
-		if (it == token_null)
-			std::__throw_regex_error(std::regex_constants::error_complexity, "Invalid format of TOKEN_NEXT regex");
-		start = it->second;
-		tokens.push_back(Token(*it, get_token_type(*it, data.tokens_types)));
-	}
+		tokens.push_back(create_token(start, end, data));
 	whitespaces_format_error(tokens);
 	remove_whitespaces(tokens);
 	semantic_verification(tokens);

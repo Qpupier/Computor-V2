@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/06 19:50:03 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/09 13:51:43 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,8 +163,8 @@ bool			AST::end_of_tree(void) const
 
 void			AST::reduce_expression(void)
 {
-	IType*		result;
 	Operator*	op;
+	IType*		result;
 
 	// TODO remplacer les variables par leur valeur
 	if (this->end_of_tree())
@@ -180,12 +180,15 @@ void			AST::reduce_expression(void)
 	{
 		result = get_result(this->_left->_node, this->_right->_node, op->getOperator());
 	}
-	catch (const std::exception &e)
+	catch (const std::logic_error &e)
 	{
 		delete this;
 		throw;
 	}
-	*this = AST(result);
+	this->~AST();
+	this->_node = result;
+	this->_left = nullptr;
+	this->_right = nullptr;
 }
 
 
