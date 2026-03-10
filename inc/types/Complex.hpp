@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:35:43 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/06 18:31:25 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/10 16:19:01 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "IType.hpp"
 # include "Rational.hpp"
 # include "Matrix.hpp"
+# include "Variable.hpp"
 
 class	Complex: public IType
 {
@@ -35,26 +36,32 @@ class	Complex: public IType
 		Complex*	operator+(const Complex &other) const;
 		Complex*	operator+(const Rational &other) const;
 		Matrix*		operator+(const Matrix &other) const;
+		Variable*	operator+(const Variable &other) const;
 		IType*		operator-(const IType &other) const;
 		Complex*	operator-(const Complex &other) const;
 		Complex*	operator-(const Rational &other) const;
 		Matrix*		operator-(const Matrix &other) const;
+		Variable*	operator-(const Variable &other) const;
 		IType*		operator*(const IType &other) const;
 		Complex*	operator*(const Complex &other) const;
 		Complex*	operator*(const Rational &other) const;
 		Matrix*		operator*(const Matrix &other) const;
+		Variable*	operator*(const Variable &other) const;
 		IType*		operator/(const IType &other) const;
 		Complex*	operator/(const Complex &other) const;
 		Complex*	operator/(const Rational &other) const;
 		Matrix*		operator/(const Matrix &other) const;
+		Variable*	operator/(const Variable &other) const;
 		IType*		operator%(const IType &other) const;
 		Rational*	operator%(const Rational &other) const;
 		Rational*	operator%(const Complex &other) const;
 		Matrix*		operator%(const Matrix &other) const;
+		Variable*	operator%(const Variable &other) const;
 		IType*		operator^(const IType &other) const;
 		Complex*	operator^(const Rational &other) const;
 		Complex*	operator^(const Complex &other) const;
 		Matrix*		operator^(const Matrix &other) const;
+		Variable*	operator^(const Variable &other) const;
 
 		// Getters
 		Rational	getReal(void) const;

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/06 17:33:57 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/10 16:30:14 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "Token.hpp"
 # include "Rational.hpp"
 # include "Complex.hpp"
+# include "Variable.hpp"
 
 class	Matrix: public IType
 {
@@ -30,6 +31,7 @@ class	Matrix: public IType
 
 		// Operator overloads
 		Matrix&		operator=(const Matrix &other);
+		explicit	operator bool() const;
 		bool		operator==(const Matrix &other) const;
 		bool		operator!=(const Matrix &other) const;
 		Rational*	operator[](unsigned int index) const;
@@ -37,26 +39,32 @@ class	Matrix: public IType
 		Matrix*		operator+(const Matrix &other) const;
 		Matrix*		operator+(const Rational &other) const;
 		Matrix*		operator+(const Complex &other) const;
+		Variable*	operator+(const Variable &other) const;
 		IType*		operator-(const IType &other) const;
 		Matrix*		operator-(const Matrix &other) const;
 		Matrix*		operator-(const Rational &other) const;
 		Matrix*		operator-(const Complex &other) const;
+		Variable*	operator-(const Variable &other) const;
 		IType*		operator*(const IType &other) const;
 		Matrix*		operator*(const Matrix &other) const;
 		Matrix*		operator*(const Rational &other) const;
 		Matrix*		operator*(const Complex &other) const;
+		Variable*	operator*(const Variable &other) const;
 		IType*		operator/(const IType &other) const;
 		Matrix*		operator/(const Matrix &other) const;
 		Matrix*		operator/(const Rational &other) const;
 		Matrix*		operator/(const Complex &other) const;
+		Variable*	operator/(const Variable &other) const;
 		IType*		operator%(const IType &other) const;
 		Matrix*		operator%(const Matrix &other) const;
 		Matrix*		operator%(const Rational &other) const;
 		Matrix*		operator%(const Complex &other) const;
+		Variable*	operator%(const Variable &other) const;
 		IType*		operator^(const IType &other) const;
 		Matrix*		operator^(const Matrix &other) const;
 		Matrix*		operator^(const Rational &other) const;
 		Matrix*		operator^(const Complex &other) const;
+		Variable*	operator^(const Variable &other) const;
 
 		// Getters
 		unsigned long	getWidth(void) const;
@@ -70,6 +78,7 @@ class	Matrix: public IType
 		Matrix*			matrix_operator(const Matrix &other) const;
 		Matrix*			matrix_operator(const Rational &other) const;
 		Matrix*			matrix_operator(const Complex &other) const;
+		Variable*		matrix_operator(const Variable &other) const;
 		std::ostream	&print(std::ostream &os) const;
 		IType*			clone(void) const;
 		void			error(const std::logic_error &e) const;

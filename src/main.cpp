@@ -6,11 +6,12 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/09 13:50:47 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/10 14:49:41 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
+#include "UnsupportedError.hpp"
 
 static void	stored_variables(const std::map<std::string, const IType*> &stored)
 {
@@ -80,9 +81,13 @@ static void	compute_line(const std::string &line, t_data &data)
 	{
 		std::cerr << "\033[31m" << e.what() << "\033[0m" << std::endl;
 	}
-	catch(const std::exception& e)
+	catch(const std::runtime_error& e)
 	{
 		std::cerr << "\033[31mUnexpected error: " << e.what() << "\033[0m" << std::endl;
+	}
+	catch(const UnsupportedError& e)
+	{
+		std::cerr << "\033[33mUnsupported: " << e.what() << "\033[0m" << std::endl;
 	}
 }
 

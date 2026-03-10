@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/09 13:51:43 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/10 17:20:32 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include "Rational.hpp"
 #include "Complex.hpp"
 #include "Matrix.hpp"
+#include "Variable.hpp"
+#include "UnsupportedError.hpp"
 
 // Utils
 static IType*	get_result(IType *left_entity, IType *right_entity, 	\
@@ -71,6 +73,11 @@ AST::AST(const Token &token, t_data &data): _left(nullptr), _right(nullptr)
 		case Token::E_MATRIX:
 		{
 			_node = new Matrix(token, data);
+			break;
+		}
+		case Token::E_VARIABLE:
+		{
+			_node = new Variable(token);
 			break;
 		}
 		default:
@@ -180,7 +187,22 @@ void			AST::reduce_expression(void)
 	{
 		result = get_result(this->_left->_node, this->_right->_node, op->getOperator());
 	}
-	catch (const std::logic_error &e)
+	catch(const std::regex_error& e)// Review le try/catch ?
+	{
+		delete this;
+		throw;
+	}
+	catch(const std::logic_error& e)
+	{
+		delete this;
+		throw;
+	}
+	catch(const std::runtime_error& e)
+	{
+		delete this;
+		throw;
+	}
+	catch(const UnsupportedError& e)
 	{
 		delete this;
 		throw;

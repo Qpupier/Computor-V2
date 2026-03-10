@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/06 18:35:36 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/09 20:29:18 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,11 @@ Operator&	Operator::operator=(const Operator &other)
 	if (this != &other)
 		this->_op = other._op;
 	return (*this);
+}
+
+Operator::operator bool() const
+{
+	return (false);
 }
 
 IType*		Operator::operator+(const IType &other) const

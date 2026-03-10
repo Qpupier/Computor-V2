@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/09 12:30:09 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/09 19:24:17 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # define ERROR_MATRIX_DIMENSIONS std::logic_error("Matrix operation: incompatible dimensions")
 # define ERROR_MATRIX_OUT_OF_RANGE std::logic_error("Matrix index out of range")
 # define ERROR_OPERATOR_EXPECTED std::runtime_error("Invalid expression: operator expected")
+# define UNSUPPORTED_DIVISION UnsupportedError("Division not supported between polynomials with these powers")
 
 typedef struct	s_data
 {

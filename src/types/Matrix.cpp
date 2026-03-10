@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/06 18:29:40 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/10 17:04:16 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,11 @@ Matrix&		Matrix::operator=(const Matrix &other)
 	return (*this);
 }
 
+Matrix::operator bool() const
+{
+	return (false);
+}
+
 bool		Matrix::operator==(const Matrix &other) const
 {
 	if (this->_width != other._width || this->_height != other._height)
@@ -213,11 +218,17 @@ Matrix*		Matrix::operator+(const Complex &other) const
 	return (*this + rational);
 }
 
+Variable*	Matrix::operator+(const Variable &other) const
+{
+	return (new Variable(other.getName(), other.getPower2()->clone(), other.getPower1()->clone(), *this + *other.getPower0()));
+}
+
 IType*		Matrix::operator+(const IType &other) const
 {
 	const Matrix	*other_matrix;
 	const Rational	*other_rational;
 	const Complex	*other_complex;
+	const Variable	*other_variable;
 
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
@@ -228,6 +239,9 @@ IType*		Matrix::operator+(const IType &other) const
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
 		return (*this + *other_complex);
+	other_variable = dynamic_cast<const Variable*>(&other);
+	if (other_variable)
+		return (*this + *other_variable);
 	return (nullptr);
 }
 
@@ -270,11 +284,17 @@ Matrix*		Matrix::operator-(const Complex &other) const
 	return (*this - rational);
 }
 
+Variable*	Matrix::operator-(const Variable &other) const
+{
+	return (new Variable(other.getName(), other.getPower2()->clone(), other.getPower1()->clone(), *this - *other.getPower0()));
+}
+
 IType*		Matrix::operator-(const IType &other) const
 {
 	const Matrix	*other_matrix;
 	const Rational	*other_rational;
 	const Complex	*other_complex;
+	const Variable	*other_variable;
 
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
@@ -285,6 +305,9 @@ IType*		Matrix::operator-(const IType &other) const
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
 		return (*this - *other_complex);
+	other_variable = dynamic_cast<const Variable*>(&other);
+	if (other_variable)
+		return (*this - *other_variable);
 	return (nullptr);
 }
 
@@ -327,11 +350,17 @@ Matrix*		Matrix::operator*(const Complex &other) const
 	return (*this * rational);
 }
 
+Variable*	Matrix::operator*(const Variable &other) const
+{
+	return (new Variable(other.getName(), *this * *other.getPower2(), *this * *other.getPower1(), *this * *other.getPower0()));
+}
+
 IType*		Matrix::operator*(const IType &other) const
 {
 	const Matrix	*other_matrix;
 	const Rational	*other_rational;
 	const Complex	*other_complex;
+	const Variable	*other_variable;
 
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
@@ -342,6 +371,9 @@ IType*		Matrix::operator*(const IType &other) const
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
 		return (*this * *other_complex);
+	other_variable = dynamic_cast<const Variable*>(&other);
+	if (other_variable)
+		return (*this * *other_variable);
 	return (nullptr);
 }
 
@@ -400,11 +432,17 @@ Matrix*		Matrix::operator/(const Complex &other) const
 	return (*this / rational);
 }
 
+Variable*	Matrix::operator/(const Variable &other) const
+{
+	return (Variable(other.getName(), new Rational(0), new Rational(0), this->clone()) / other);
+}
+
 IType*		Matrix::operator/(const IType &other) const
 {
 	const Matrix	*other_matrix;
 	const Rational	*other_rational;
 	const Complex	*other_complex;
+	const Variable	*other_variable;
 
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
@@ -415,6 +453,9 @@ IType*		Matrix::operator/(const IType &other) const
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
 		return (*this / *other_complex);
+	other_variable = dynamic_cast<const Variable*>(&other);
+	if (other_variable)
+		return (*this / *other_variable);
 	return (nullptr);
 }
 
@@ -473,11 +514,17 @@ Matrix*		Matrix::operator%(const Complex &other) const
 	return (*this % rational);
 }
 
+Variable*	Matrix::operator%(const Variable &other) const
+{
+	return (Variable(other.getName(), new Rational(0), new Rational(0), this->clone()) % other);
+}
+
 IType*		Matrix::operator%(const IType &other) const
 {
 	const Matrix	*other_matrix;
 	const Rational	*other_rational;
 	const Complex	*other_complex;
+	const Variable	*other_variable;
 
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
@@ -488,6 +535,9 @@ IType*		Matrix::operator%(const IType &other) const
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
 		return (*this % *other_complex);
+	other_variable = dynamic_cast<const Variable*>(&other);
+	if (other_variable)
+		return (*this % *other_variable);
 	return (nullptr);
 }
 
@@ -546,11 +596,17 @@ Matrix*		Matrix::operator^(const Complex &other) const
 	return (*this ^ rational);
 }
 
+Variable*	Matrix::operator^(const Variable &other) const
+{
+	return (Variable(other.getName(), new Rational(0), new Rational(0), this->clone()) ^ other);
+}
+
 IType*		Matrix::operator^(const IType &other) const
 {
 	const Matrix	*other_matrix;
 	const Rational	*other_rational;
 	const Complex	*other_complex;
+	const Variable	*other_variable;
 
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
@@ -561,6 +617,9 @@ IType*		Matrix::operator^(const IType &other) const
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
 		return (*this ^ *other_complex);
+	other_variable = dynamic_cast<const Variable*>(&other);
+	if (other_variable)
+		return (*this ^ *other_variable);
 	return (nullptr);
 }
 

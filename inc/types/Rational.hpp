@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/06 18:50:22 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/10 16:09:29 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 class	Complex;
 class	Matrix;
+class	Variable;
 
 class	Rational: public IType
 {
@@ -34,7 +35,7 @@ class	Rational: public IType
 		Rational&	operator=(const Rational &other);
 		Rational&	operator=(const Rational *other);
 		Rational	operator=(const Complex &other);
-		explicit 	operator bool() const;
+		explicit	operator bool() const;
 		bool		operator==(const Rational &other) const;
 		bool		operator!=(const Rational &other) const;
 		bool		operator<(const Rational &other) const;
@@ -45,26 +46,32 @@ class	Rational: public IType
 		Rational*	operator+(const Rational &other) const;
 		Complex*	operator+(const Complex &other) const;
 		Matrix*		operator+(const Matrix &other) const;
+		Variable*	operator+(const Variable &other) const;
 		IType*		operator-(const IType &other) const;
 		Rational*	operator-(const Rational &other) const;
 		Complex*	operator-(const Complex &other) const;
 		Matrix*		operator-(const Matrix &other) const;
+		Variable*	operator-(const Variable &other) const;
 		IType*		operator*(const IType &other) const;
 		Rational*	operator*(const Rational &other) const;
 		Complex*	operator*(const Complex &other) const;
 		Matrix*		operator*(const Matrix &other) const;
+		Variable*	operator*(const Variable &other) const;
 		IType*		operator/(const IType &other) const;
 		Rational*	operator/(const Rational &other) const;
 		Complex*	operator/(const Complex &other) const;
 		Matrix*		operator/(const Matrix &other) const;
+		Variable*	operator/(const Variable &other) const;
 		IType*		operator%(const IType &other) const;
 		Rational*	operator%(const Rational &other) const;
 		Rational*	operator%(const Complex &other) const;
 		Matrix*		operator%(const Matrix &other) const;
+		Variable*	operator%(const Variable &other) const;
 		IType*		operator^(const IType &other) const;
 		Rational*	operator^(const Rational &other) const;
 		Complex*	operator^(const Complex &other) const;
 		Matrix*		operator^(const Matrix &other) const;
+		Variable*	operator^(const Variable &other) const;
 
 		// Getters
 		int		getNumerator(void) const;
@@ -89,5 +96,6 @@ std::ostream&	operator<<(std::ostream &os, const Rational &num);
 
 # include "Complex.hpp"
 # include "Matrix.hpp"
+# include "Variable.hpp"
 
 #endif

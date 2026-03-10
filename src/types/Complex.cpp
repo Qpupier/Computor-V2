@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/06 18:31:15 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/10 17:04:08 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,17 @@ Matrix*		Complex::operator+(const Matrix &other) const
 	return (rational + other);
 }
 
+Variable*	Complex::operator+(const Variable &other) const
+{
+	return (new Variable(other.getName(), other.getPower2()->clone(), other.getPower1()->clone(), *this + *other.getPower0()));
+}
+
 IType*		Complex::operator+(const IType &other) const
 {
 	const Complex	*other_complex;
 	const Rational	*other_rational;
 	const Matrix	*other_matrix;
+	const Variable	*other_variable;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -99,6 +105,9 @@ IType*		Complex::operator+(const IType &other) const
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (*this + *other_matrix);
+	other_variable = dynamic_cast<const Variable*>(&other);
+	if (other_variable)
+		return (*this + *other_variable);
 	return (nullptr);
 }
 
@@ -136,11 +145,17 @@ Matrix*		Complex::operator-(const Matrix &other) const
 	return (rational - other);
 }
 
+Variable*	Complex::operator-(const Variable &other) const
+{
+	return (new Variable(other.getName(), other.getPower2()->clone(), other.getPower1()->clone(), *this - *other.getPower0()));
+}
+
 IType*		Complex::operator-(const IType &other) const
 {
 	const Complex	*other_complex;
 	const Rational	*other_rational;
 	const Matrix	*other_matrix;
+	const Variable	*other_variable;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -151,6 +166,9 @@ IType*		Complex::operator-(const IType &other) const
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (*this - *other_matrix);
+	other_variable = dynamic_cast<const Variable*>(&other);
+	if (other_variable)
+		return (*this - *other_variable);
 	return (nullptr);
 }
 
@@ -207,11 +225,17 @@ Matrix*		Complex::operator*(const Matrix &other) const
 	return (rational * other);
 }
 
+Variable*	Complex::operator*(const Variable &other) const
+{
+	return (new Variable(other.getName(), *this * *other.getPower2(), *this * *other.getPower1(), *this * *other.getPower0()));
+}
+
 IType*		Complex::operator*(const IType &other) const
 {
 	const Complex	*other_complex;
 	const Rational	*other_rational;
 	const Matrix	*other_matrix;
+	const Variable	*other_variable;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -222,6 +246,9 @@ IType*		Complex::operator*(const IType &other) const
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (*this * *other_matrix);
+	other_variable = dynamic_cast<const Variable*>(&other);
+	if (other_variable)
+		return (*this * *other_variable);
 	return (nullptr);
 }
 
@@ -286,11 +313,17 @@ Matrix*		Complex::operator/(const Matrix &other) const
 	return (rational / other);
 }
 
+Variable*	Complex::operator/(const Variable &other) const
+{
+	return (Variable(other.getName(), new Rational(0), new Rational(0), this->clone()) / other);
+}
+
 IType*		Complex::operator/(const IType &other) const
 {
 	const Complex	*other_complex;
 	const Rational	*other_rational;
 	const Matrix	*other_matrix;
+	const Variable	*other_variable;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -301,6 +334,9 @@ IType*		Complex::operator/(const IType &other) const
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (*this / *other_matrix);
+	other_variable = dynamic_cast<const Variable*>(&other);
+	if (other_variable)
+		return (*this / *other_variable);
 	return (nullptr);
 }
 
@@ -351,11 +387,17 @@ Matrix*		Complex::operator%(const Matrix &other) const
 	return (rational % other);
 }
 
+Variable*	Complex::operator%(const Variable &other) const
+{
+	return (Variable(other.getName(), new Rational(0), new Rational(0), this->clone()) % other);
+}
+
 IType*		Complex::operator%(const IType &other) const
 {
 	const Complex	*other_complex;
 	const Rational	*other_rational;
 	const Matrix	*other_matrix;
+	const Variable	*other_variable;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -366,6 +408,9 @@ IType*		Complex::operator%(const IType &other) const
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (*this % *other_matrix);
+	other_variable = dynamic_cast<const Variable*>(&other);
+	if (other_variable)
+		return (*this % *other_variable);
 	return (nullptr);
 }
 
@@ -427,11 +472,17 @@ Matrix*		Complex::operator^(const Matrix &other) const
 	return (rational ^ other);
 }
 
+Variable*	Complex::operator^(const Variable &other) const
+{
+	return (Variable(other.getName(), new Rational(0), new Rational(0), this->clone()) ^ other);
+}
+
 IType*		Complex::operator^(const IType &other) const
 {
 	const Complex	*other_complex;
 	const Rational	*other_rational;
 	const Matrix	*other_matrix;
+	const Variable	*other_variable;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -442,6 +493,9 @@ IType*		Complex::operator^(const IType &other) const
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (*this ^ *other_matrix);
+	other_variable = dynamic_cast<const Variable*>(&other);
+	if (other_variable)
+		return (*this ^ *other_variable);
 	return (nullptr);
 }
 

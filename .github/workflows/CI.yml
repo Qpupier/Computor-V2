@@ -36,3 +36,5 @@ jobs:
         run: ./unit_tests/complexes.sh debug
       - name: Unit tests - Matrices
         run: ./unit_tests/matrices.sh debug
+      - name: Unit tests - Variables
+        run: ./unit_tests/variables.sh debug
