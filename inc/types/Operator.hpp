@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 14:55:07 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/09 20:28:55 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 15:52:42 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,12 @@ class	Operator: public IType
 		// Operator overloads
 		Operator&	operator=(const Operator &other);
 		explicit	operator bool() const;
+		bool		operator==(const IType &other) const;
+		bool		operator!=(const IType &other) const;
+		bool		operator<(const IType &other) const;
+		bool		operator<=(const IType &other) const;
+		bool		operator>(const IType &other) const;
+		bool		operator>=(const IType &other) const;
 		IType*		operator+(const IType &other) const;
 		IType*		operator-(const IType &other) const;
 		IType*		operator*(const IType &other) const;
@@ -55,6 +61,8 @@ class	Operator: public IType
 		IType*			matrix_operator(const IType &other) const;
 		IType*			clone(void) const;
 		std::ostream&	print(std::ostream &os) const;
+		std::ostream&	print_variable(std::ostream &os, 	\
+				const std::string &var) const;
 
 	private:
 		// Members

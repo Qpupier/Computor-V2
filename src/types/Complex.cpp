@@ -6,21 +6,41 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/10 17:04:08 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 16:47:23 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Complex.hpp"
 
 // Utils
-static std::string	print_imaginary(Rational imaginary)
+static std::ostream&	print_value(std::ostream &os, Rational value, const std::string &i, bool is_first)
 {
-	std::string	numerator;
+	Rational	copy(value);
 
-	numerator = std::to_string(imaginary.getNumerator());
-	if (imaginary.is_integer())
-		return numerator + "i";
-	return (numerator + "i/" + std::to_string(imaginary.getDenominator()));
+	if (!value)
+		return (os);
+	if (!is_first)
+	{
+		if (value < Rational(0))
+		{
+			os << " - ";
+			copy = value * Rational(-1);
+		}
+		else
+			os << " + ";
+	}
+	else if (value < Rational(0) && i != std::string())
+	{
+		os << "-";
+		copy = value * Rational(-1);
+	}
+	if (i == std::string() || copy != Rational(1))
+		os << copy.getNumerator();
+	if (i != std::string())
+		os << i;
+	if (copy.getDenominator() != 1)
+		os << "/" << copy.getDenominator();
+	return (os);
 }
 
 
@@ -44,10 +64,68 @@ bool		Complex::operator==(const Complex &other) const
 {
 	return (this->_real == other._real && this->_imaginary == other._imaginary);
 }
-	
-bool		Complex::operator!=(const Complex &other) const
+
+bool		Complex::operator==(const Rational &other) const
+{
+	return (!this->_imaginary && this->_real == other);
+}
+
+bool		Complex::operator==(const Matrix &other) const
+{
+	(void)other;
+	return (false);
+}
+
+bool		Complex::operator==(const Variable &other) const
+{
+	return (!other.getPower2() && !other.getPower1() && *this == *other.getPower0());
+}
+
+bool		Complex::operator==(const IType &other) const
+{
+	const Complex	*other_complex;
+	const Rational	*other_rational;
+	const Matrix	*other_matrix;
+	const Variable	*other_variable;
+
+	other_complex = dynamic_cast<const Complex*>(&other);
+	if (other_complex)
+		return (*this == *other_complex);
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (*this == *other_rational);
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this == *other_matrix);
+	other_variable = dynamic_cast<const Variable*>(&other);
+	if (other_variable)
+		return (*this == *other_variable);
+	return (false);
+}
+
+bool		Complex::operator!=(const IType &other) const
 {
 	return (!(*this == other));
+}
+
+bool		Complex::operator<(const IType &other) const
+{
+	return (!this->_imaginary && this->_real < other);
+}
+
+bool		Complex::operator<=(const IType &other) const
+{
+	return (!this->_imaginary && this->_real <= other);
+}
+
+bool		Complex::operator>(const IType &other) const
+{
+	return (!this->_imaginary && this->_real > other);
+}
+
+bool		Complex::operator>=(const IType &other) const
+{
+	return (!this->_imaginary && this->_real >= other);
 }
 
 Complex*	Complex::operator+(const Complex &other) const
@@ -77,7 +155,7 @@ Matrix*		Complex::operator+(const Matrix &other) const
 	{
 		rational = *this;
 	}
-	catch (const std::logic_error &e)
+	catch (const LogicError &e)
 	{
 		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
@@ -108,6 +186,7 @@ IType*		Complex::operator+(const IType &other) const
 	other_variable = dynamic_cast<const Variable*>(&other);
 	if (other_variable)
 		return (*this + *other_variable);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -138,7 +217,7 @@ Matrix*		Complex::operator-(const Matrix &other) const
 	{
 		rational = *this;
 	}
-	catch (const std::logic_error &e)
+	catch (const LogicError &e)
 	{
 		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
@@ -169,6 +248,7 @@ IType*		Complex::operator-(const IType &other) const
 	other_variable = dynamic_cast<const Variable*>(&other);
 	if (other_variable)
 		return (*this - *other_variable);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -218,7 +298,7 @@ Matrix*		Complex::operator*(const Matrix &other) const
 	{
 		rational = *this;
 	}
-	catch (const std::logic_error &e)
+	catch (const LogicError &e)
 	{
 		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
@@ -249,6 +329,7 @@ IType*		Complex::operator*(const IType &other) const
 	other_variable = dynamic_cast<const Variable*>(&other);
 	if (other_variable)
 		return (*this * *other_variable);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -306,7 +387,7 @@ Matrix*		Complex::operator/(const Matrix &other) const
 	{
 		rational = *this;
 	}
-	catch (const std::logic_error &e)
+	catch (const LogicError &e)
 	{
 		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
@@ -337,6 +418,7 @@ IType*		Complex::operator/(const IType &other) const
 	other_variable = dynamic_cast<const Variable*>(&other);
 	if (other_variable)
 		return (*this / *other_variable);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -350,7 +432,7 @@ Rational*	Complex::operator%(const Complex &other) const
 		rational = *this;
 		other_rational = other;
 	}
-	catch (const std::logic_error &e)
+	catch (const LogicError &e)
 	{
 		throw ERROR_MODULO_COMPLEX;
 	}
@@ -365,7 +447,7 @@ Rational*	Complex::operator%(const Rational &other) const
 	{
 		rational = *this;
 	}
-	catch(const std::logic_error &e)
+	catch(const LogicError &e)
 	{
 		throw ERROR_MODULO_COMPLEX;
 	}
@@ -380,7 +462,7 @@ Matrix*		Complex::operator%(const Matrix &other) const
 	{
 		rational = *this;
 	}
-	catch(const std::logic_error &e)
+	catch(const LogicError &e)
 	{
 		throw ERROR_MODULO_COMPLEX;
 	}
@@ -411,6 +493,7 @@ IType*		Complex::operator%(const IType &other) const
 	other_variable = dynamic_cast<const Variable*>(&other);
 	if (other_variable)
 		return (*this % *other_variable);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -427,7 +510,7 @@ Complex*	Complex::operator^(const Rational &other) const
 		if (!exponent.is_integer())
 			throw ERROR_EXPONENT_INTEGER;
 	}
-	catch (const std::logic_error &e)
+	catch (const LogicError &e)
 	{
 		throw ERROR_EXPONENT_INTEGER;
 	}
@@ -450,7 +533,7 @@ Complex*	Complex::operator^(const Complex &other) const
 	{
 		other_rational = other;
 	}
-	catch (const std::logic_error &e)
+	catch (const LogicError &e)
 	{
 		throw ERROR_EXPONENT_INTEGER;
 	}
@@ -465,7 +548,7 @@ Matrix*		Complex::operator^(const Matrix &other) const
 	{
 		rational = *this;
 	}
-	catch (const std::logic_error &e)
+	catch (const LogicError &e)
 	{
 		throw ERROR_EXPONENT_INTEGER;
 	}
@@ -496,6 +579,7 @@ IType*		Complex::operator^(const IType &other) const
 	other_variable = dynamic_cast<const Variable*>(&other);
 	if (other_variable)
 		return (*this ^ *other_variable);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -517,50 +601,8 @@ IType*			Complex::matrix_operator(const IType &other) const
 {
 	throw ERROR_MATRIX_OPERATOR;
 	(void)other;
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
-}
-
-std::ostream&	Complex::print(std::ostream &os) const
-{
-	Rational	*operation;
-	Rational	minus_one(-1);
-	Rational	zero(0);
-	Rational	one(1);
-
-	if (!this->_real)
-	{
-		if (!this->_imaginary)
-			os << "0";
-		else if (this->_imaginary == one)
-			os << "i";
-		else if (this->_imaginary == minus_one)
-			os << "-i";
-		else
-			os << this->_imaginary << "i";
-	}
-	else
-	{
-		os << this->_real;
-		if (this->_imaginary)
-		{
-			if (this->_imaginary == one)
-				os << " + i";
-			else if (this->_imaginary == minus_one)
-				os << " - i";
-			else
-			{
-				if (this->_imaginary > zero)
-					os << " + " << print_imaginary(this->_imaginary);
-				else if (this->_imaginary < zero)
-				{
-					operation = minus_one * this->_imaginary;
-					os << " - " << print_imaginary(*operation);
-					delete operation;
-				}
-			}
-		}
-	}
-	return (os);
 }
 
 IType*			Complex::clone(void) const
@@ -568,9 +610,35 @@ IType*			Complex::clone(void) const
 	return (new Complex(*this));
 }
 
+std::ostream&	Complex::print(std::ostream &os) const
+{
+	if (!this->_real && !this->_imaginary)
+		return (os << "0");
+	else if (this->_real < Rational(0) && this->_imaginary > Rational(0))
+	{
+		print_value(os, this->_imaginary, "i", true);
+		print_value(os, this->_real, "", false);
+	}
+	else
+	{
+		print_value(os, this->_real, "", true);
+		print_value(os, this->_imaginary, "i", !this->_real);
+	}
+	return (os);
+}
+
+std::ostream&	Complex::print_variable(std::ostream &os, const std::string &var) const
+{
+	if (!this->_imaginary)
+		return (this->_real.print_variable(os, var));
+	if (!this->_real)
+		return (os << *this << " * " << var);
+	return (os << "(" << *this << ")" << var);
+}
+
 
 // Output stream operator overload
 std::ostream	&operator<<(std::ostream &os, const Complex &num)
 {
-	return (num.print(os) << std::endl);
+	return (num.print(os));
 }

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/10 17:04:16 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 16:45:18 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,11 @@ static std::vector<std::string>					parse_line(std::string &line, unsigned long 
 			row.push_back(line);
 	}
 	if (row.empty())
-		throw std::logic_error("Invalid matrix format: empty row");
+		throw LogicError("Invalid matrix format: empty row");
 	if (!*width)
 		*width = row.size();
 	else if (row.size() != *width)
-		throw std::logic_error("Invalid matrix format: inconsistent row sizes");
+		throw LogicError("Invalid matrix format: inconsistent row sizes");
 	return (row);
 }
 
@@ -62,7 +62,7 @@ static std::vector<std::vector<std::string>>	parse_matrix(std::string &matrix, u
 		rows.push_back(parse_line(line, width));
 	}
 	if (rows.empty())
-		throw std::logic_error("Invalid matrix format: empty matrix");
+		throw LogicError("Invalid matrix format: empty matrix");
 	return (rows);
 }
 
@@ -101,19 +101,19 @@ Matrix::Matrix(std::string str, t_data &data): _width(0), _height(0)
 			}
 			catch (const std::exception &e)
 			{
-				this->error(std::logic_error(std::string("Invalid matrix format: ") + e.what()));
+				this->error(LogicError(std::string("Invalid matrix format: ") + e.what()));
 			}
 			if (!cell)
-				this->error(std::logic_error("Invalid matrix format: invalid element"));
+				this->error(LogicError("Invalid matrix format: invalid element"));
 			if (cell->getLeft() || cell->getRight())
 			{
 				delete cell;
-				this->error(std::logic_error("Invalid matrix format: incomplete element"));
+				this->error(LogicError("Invalid matrix format: incomplete element"));
 			}
 			rational = dynamic_cast<Rational*>(cell->getNode()->clone());
 			delete cell;
 			if (!rational)
-				this->error(std::logic_error("Invalid matrix format: non-rational element"));
+				this->error(LogicError("Invalid matrix format: non-rational element"));
 			this->_matrix[i][j] = *rational;
 			delete rational;
 		}
@@ -153,6 +153,10 @@ Matrix&		Matrix::operator=(const Matrix &other)
 
 Matrix::operator bool() const
 {
+	for (unsigned int i = 0; i < this->_height; i++)
+		for (unsigned int j = 0; j < this->_width; j++)
+			if (this->_matrix[i][j])
+				return (true);
 	return (false);
 }
 
@@ -167,9 +171,73 @@ bool		Matrix::operator==(const Matrix &other) const
 	return (true);
 }
 
-bool		Matrix::operator!=(const Matrix &other) const
+bool		Matrix::operator==(const Rational &other) const
+{
+	(void)other;
+	return (false);
+}
+
+bool		Matrix::operator==(const Complex &other) const
+{
+	(void)other;
+	return (false);
+}
+
+bool		Matrix::operator==(const Variable &other) const
+{
+	return (!other.getPower2() && !other.getPower1() && *this == *other.getPower0());
+}
+
+bool		Matrix::operator==(const IType &other) const
+{
+	const Matrix	*other_matrix;
+	const Rational	*other_rational;
+	const Complex	*other_complex;
+	const Variable	*other_variable;
+
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this == *other_matrix);
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (*this == *other_rational);
+	other_complex = dynamic_cast<const Complex*>(&other);
+	if (other_complex)
+		return (*this == *other_complex);
+	other_variable = dynamic_cast<const Variable*>(&other);
+	if (other_variable)
+		return (*this == *other_variable);
+	throw ERROR_UNEXPECTED;
+	return (false);
+}
+
+bool		Matrix::operator!=(const IType &other) const
 {
 	return (!(*this == other));
+}
+
+bool		Matrix::operator<(const IType &other) const
+{
+	(void)other;
+	return (false);
+}
+
+bool		Matrix::operator<=(const IType &other) const
+{
+	(void)other;
+	return (false);
+}
+
+bool		Matrix::operator>(const IType &other) const
+{
+	(void)other;
+	return (false);
+}
+
+bool		Matrix::operator>=(const IType &other) const
+{
+	(void)other;
+	return (false);
 }
 
 Rational*	Matrix::operator[](unsigned int index) const
@@ -211,7 +279,7 @@ Matrix*		Matrix::operator+(const Complex &other) const
 	{
 		rational = other;
 	}
-	catch (const std::logic_error &e)
+	catch (const LogicError &e)
 	{
 		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
@@ -242,6 +310,7 @@ IType*		Matrix::operator+(const IType &other) const
 	other_variable = dynamic_cast<const Variable*>(&other);
 	if (other_variable)
 		return (*this + *other_variable);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -277,7 +346,7 @@ Matrix*		Matrix::operator-(const Complex &other) const
 	{
 		rational = other;
 	}
-	catch (const std::logic_error &e)
+	catch (const LogicError &e)
 	{
 		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
@@ -308,6 +377,7 @@ IType*		Matrix::operator-(const IType &other) const
 	other_variable = dynamic_cast<const Variable*>(&other);
 	if (other_variable)
 		return (*this - *other_variable);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -343,7 +413,7 @@ Matrix*		Matrix::operator*(const Complex &other) const
 	{
 		rational = other;
 	}
-	catch (const std::logic_error &e)
+	catch (const LogicError &e)
 	{
 		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
@@ -374,6 +444,7 @@ IType*		Matrix::operator*(const IType &other) const
 	other_variable = dynamic_cast<const Variable*>(&other);
 	if (other_variable)
 		return (*this * *other_variable);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -390,7 +461,7 @@ Matrix*		Matrix::operator/(const Matrix &other) const
 			{
 				result->_matrix[i][j] = this->_matrix[i][j] / other._matrix[i][j];
 			}
-			catch(const std::logic_error& e)
+			catch(const LogicError& e)
 			{
 				delete result;
 				throw;
@@ -409,7 +480,7 @@ Matrix*		Matrix::operator/(const Rational &other) const
 			{
 				result->_matrix[i][j] = this->_matrix[i][j] / other;
 			}
-			catch(const std::logic_error& e)
+			catch(const std::exception &e)
 			{
 				delete result;
 				throw;
@@ -425,7 +496,7 @@ Matrix*		Matrix::operator/(const Complex &other) const
 	{
 		rational = other;
 	}
-	catch (const std::logic_error &e)
+	catch (const LogicError &e)
 	{
 		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
@@ -456,6 +527,7 @@ IType*		Matrix::operator/(const IType &other) const
 	other_variable = dynamic_cast<const Variable*>(&other);
 	if (other_variable)
 		return (*this / *other_variable);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -472,7 +544,7 @@ Matrix*		Matrix::operator%(const Matrix &other) const
 			{
 				result->_matrix[i][j] = this->_matrix[i][j] % other._matrix[i][j];
 			}
-			catch(const std::logic_error& e)
+			catch(const LogicError& e)
 			{
 				delete result;
 				throw;
@@ -491,7 +563,7 @@ Matrix*		Matrix::operator%(const Rational &other) const
 			{
 				result->_matrix[i][j] = this->_matrix[i][j] % other;
 			}
-			catch(const std::logic_error& e)
+			catch(const LogicError& e)
 			{
 				delete result;
 				throw;
@@ -507,7 +579,7 @@ Matrix*		Matrix::operator%(const Complex &other) const
 	{
 		rational = other;
 	}
-	catch (const std::logic_error &e)
+	catch (const LogicError &e)
 	{
 		throw ERROR_MODULO_COMPLEX;
 	}
@@ -538,6 +610,7 @@ IType*		Matrix::operator%(const IType &other) const
 	other_variable = dynamic_cast<const Variable*>(&other);
 	if (other_variable)
 		return (*this % *other_variable);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -554,7 +627,7 @@ Matrix*		Matrix::operator^(const Matrix &other) const
 			{
 				result->_matrix[i][j] = this->_matrix[i][j] ^ other._matrix[i][j];
 			}
-			catch(const std::logic_error& e)
+			catch(const LogicError& e)
 			{
 				delete result;
 				throw;
@@ -573,7 +646,7 @@ Matrix*		Matrix::operator^(const Rational &other) const
 			{
 				result->_matrix[i][j] = this->_matrix[i][j] ^ other;
 			}
-			catch(const std::logic_error& e)
+			catch(const LogicError& e)
 			{
 				delete result;
 				throw;
@@ -589,7 +662,7 @@ Matrix*		Matrix::operator^(const Complex &other) const
 	{
 		rational = other;
 	}
-	catch (const std::logic_error &e)
+	catch (const LogicError &e)
 	{
 		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
@@ -620,6 +693,7 @@ IType*		Matrix::operator^(const IType &other) const
 	other_variable = dynamic_cast<const Variable*>(&other);
 	if (other_variable)
 		return (*this ^ *other_variable);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -677,6 +751,7 @@ Matrix*			Matrix::matrix_operator(const Rational &other) const
 {
 	throw ERROR_MATRIX_OPERATOR;
 	(void)other;
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -684,6 +759,7 @@ Matrix*			Matrix::matrix_operator(const Complex &other) const
 {
 	throw ERROR_MATRIX_OPERATOR;
 	(void)other;
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -702,7 +778,13 @@ IType*			Matrix::matrix_operator(const IType &other) const
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
 		return (this->matrix_operator(*other_complex));
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
+}
+
+IType*			Matrix::clone(void) const
+{
+	return (new Matrix(*this));
 }
 
 std::ostream&	Matrix::print(std::ostream &os) const
@@ -728,12 +810,12 @@ std::ostream&	Matrix::print(std::ostream &os) const
 	return (os);
 }
 
-IType*			Matrix::clone(void) const
+std::ostream&	Matrix::print_variable(std::ostream &os, const std::string &var) const
 {
-	return (new Matrix(*this));
+	return (os << *this << var);
 }
 
-void			Matrix::error(const std::logic_error &e) const
+void			Matrix::error(const LogicError &e) const
 {
 	this->~Matrix();
 	throw e;

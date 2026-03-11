@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/10 16:09:29 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 15:53:11 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,32 @@ class	Rational: public IType
 		Rational&	operator=(const Rational *other);
 		Rational	operator=(const Complex &other);
 		explicit	operator bool() const;
+		bool		operator==(const IType &other) const;
 		bool		operator==(const Rational &other) const;
-		bool		operator!=(const Rational &other) const;
+		bool		operator==(const Complex &other) const;
+		bool		operator==(const Matrix &other) const;
+		bool		operator==(const Variable &other) const;
+		bool		operator!=(const IType&other) const;
+		bool		operator<(const IType &other) const;
 		bool		operator<(const Rational &other) const;
+		bool		operator<(const Complex &other) const;
+		bool		operator<(const Matrix &other) const;
+		bool		operator<(const Variable &other) const;
+		bool		operator<=(const IType &other) const;
 		bool		operator<=(const Rational &other) const;
+		bool		operator<=(const Complex &other) const;
+		bool		operator<=(const Matrix &other) const;
+		bool		operator<=(const Variable &other) const;
+		bool		operator>(const IType &other) const;
 		bool		operator>(const Rational &other) const;
+		bool		operator>(const Complex &other) const;
+		bool		operator>(const Matrix &other) const;
+		bool		operator>(const Variable &other) const;
+		bool		operator>=(const IType &other) const;
 		bool		operator>=(const Rational &other) const;
+		bool		operator>=(const Complex &other) const;
+		bool		operator>=(const Matrix &other) const;
+		bool		operator>=(const Variable &other) const;
 		IType*		operator+(const IType &other) const;
 		Rational*	operator+(const Rational &other) const;
 		Complex*	operator+(const Complex &other) const;
@@ -78,12 +98,14 @@ class	Rational: public IType
 		int		getDenominator(void) const;
 
 		// Methods
-		void			reduce(void);
 		IType*			matrix_operator(const IType &other) const;
 		IType*			clone(void) const;
+		std::ostream&	print(std::ostream &os) const;
+		std::ostream&	print_variable(std::ostream &os, 	\
+				const std::string &var) const;
+		void			reduce(void);
 		bool			is_integer(void) const;
 		int				integer_part(void) const;
-		std::ostream&	print(std::ostream &os) const;
 
 	private:
 		// Members

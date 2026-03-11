@@ -8,7 +8,7 @@ delete_files()
 run()
 {
 	echo -n "\033[35;3mTesting:\033[0m \"$1\"\n$2 "
-	echo "$1" | MAKEFLAGS=--no-print-directory make run > output 2> error
+	echo "$1" | ./computor-v2 > output 2> error
 	truncate -s -1 output error
 	sed -i 's/\x1b\[[0-9;]*m//g' output error
 }
@@ -31,7 +31,7 @@ print_error()
 
 test_leaks_and_errors()
 {
-	echo "$1" | MAKEFLAGS=--no-print-directory make valgrind > output 2> error
+	echo "$1" | valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all -s ./computor-v2 > output 2> error
 	if ! grep -q "All heap blocks were freed -- no leaks are possible" error || ! grep -q "ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)" error; then
 		echo "❌"
 		if [ "$2" != "debug" ]; then

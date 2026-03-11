@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 17:42:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/09 20:34:20 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 15:52:35 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,12 @@ class	IType
 
 		// Operator overloads
 		virtual explicit	operator bool() const = 0;
+		virtual bool		operator==(const IType &other) const = 0;
+		virtual bool		operator!=(const IType &other) const = 0;
+		virtual bool		operator<(const IType &other) const = 0;
+		virtual bool		operator<=(const IType &other) const = 0;
+		virtual bool		operator>(const IType &other) const = 0;
+		virtual bool		operator>=(const IType &other) const = 0;
 		virtual IType*		operator+(const IType &other) const = 0;
 		virtual IType*		operator-(const IType &other) const = 0;
 		virtual IType*		operator*(const IType &other) const = 0;
@@ -32,8 +38,10 @@ class	IType
 
 		// Methods
 		virtual IType*			matrix_operator(const IType &other) const = 0;
-		virtual std::ostream	&print(std::ostream &os) const = 0;
 		virtual IType*			clone(void) const = 0;
+		virtual std::ostream	&print(std::ostream &os) const = 0;
+		virtual std::ostream	&print_variable(std::ostream &os, 	\
+				const std::string &var) const = 0;
 
 	protected:
 		// Constructor

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:35:43 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/10 16:19:01 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 15:53:22 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,16 @@ class	Complex: public IType
 		// Operator overloads
 		Complex&	operator=(const Complex &other);
 		explicit	operator bool() const;
+		bool		operator==(const IType &other) const;
 		bool		operator==(const Complex &other) const;
-		bool		operator!=(const Complex &other) const;
+		bool		operator==(const Rational &other) const;
+		bool		operator==(const Matrix &other) const;
+		bool		operator==(const Variable &other) const;
+		bool		operator!=(const IType &other) const;
+		bool		operator<(const IType &other) const;
+		bool		operator<=(const IType &other) const;
+		bool		operator>(const IType &other) const;
+		bool		operator>=(const IType &other) const;
 		IType*		operator+(const IType &other) const;
 		Complex*	operator+(const Complex &other) const;
 		Complex*	operator+(const Rational &other) const;
@@ -71,6 +79,8 @@ class	Complex: public IType
 		IType*			matrix_operator(const IType &other) const;
 		IType*			clone(void) const;
 		std::ostream&	print(std::ostream &os) const;
+		std::ostream&	print_variable(std::ostream &os, 	\
+				const std::string &var) const;
 
 	private:
 		// Members

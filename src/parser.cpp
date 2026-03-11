@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/09 12:27:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 12:13:38 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void			semantic_verification(const std::vector<Token> &tokens)
 		prev_token = i > 1 ? current_token : tokens[0].getValue();
 		current_token = tokens[i].getValue();
 		if (prev_type == Token::E_OPERATOR && current_type == Token::E_OPERATOR)
-			throw std::logic_error("Two operators cannot be adjacent");
+			throw LogicError("Two operators cannot be adjacent");
 	}
 }
 
@@ -75,10 +75,10 @@ static void			whitespaces_format_error(const std::vector<Token> &tokens)
 					&& next_type != Token::E_OPERATOR 			\
 					&& next_type != Token::E_RIGHT_PARENTHESIS 	\
 					&& next_type != Token::E_QUESTION)
-				throw std::logic_error("No space allowed without operator");
+				throw LogicError("No space allowed without operator");
 		}
 		if (bad_sign_placement(tokens, i))
-			throw std::logic_error("Invalid placement for sign operator");
+			throw LogicError("Invalid placement for sign operator");
 	}
 }
 

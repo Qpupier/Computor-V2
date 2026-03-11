@@ -6,12 +6,11 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/10 17:20:46 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 16:45:18 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Variable.hpp"
-#include "UnsupportedError.hpp"
 
 // Utils
 static bool			is_multiplication_supported(const Variable &var1, const Variable &var2)
@@ -162,6 +161,45 @@ static Variable*	division_with_power0(const Variable &var1, const Variable &var2
 	return (new Variable(var1.getName(), power2, power1, power0));
 }
 
+static void			print_first_power(std::ostream &os, const IType *power, const std::string &var, const char *exponent)
+{
+	Rational	minus_one(-1);
+
+	if (!*power)
+		return ;
+	if (*power == minus_one)
+		os << "-" << var << exponent;
+	else if (var == std::string() || *power != Rational(1))
+		power->print_variable(os, var + exponent);
+	else
+		os << var << exponent;
+}
+
+static void			print_power(std::ostream &os, bool first_power, const IType *power, const std::string &var)
+{
+	Rational	minus_one(-1);
+	IType		*copy;
+	IType		*tmp;
+
+	if (!*power)
+		return ;
+	copy = power->clone();
+	if (!first_power)
+	{
+		if (*power < Rational(0))
+		{
+			os << " - ";
+			tmp = copy;
+			copy = *copy * minus_one;
+			delete tmp;
+		}
+		else
+			os << " + ";
+	}
+	print_first_power(os, copy, var, "");
+	delete copy;
+}
+
 
 // Destructor
 Variable::~Variable(void)
@@ -191,10 +229,78 @@ Variable::operator bool() const
 	return (!*this->_power2 && !*this->_power1 && !*this->_power0);
 }
 
+bool		Variable::operator==(const Variable &other) const
+{
+	return (this->_name == other._name && *this->_power2 == *other._power2 && *this->_power1 == *other._power1 && *this->_power0 == *other._power0);
+}
+
+bool		Variable::operator==(const Rational &other) const
+{
+	return (!*this->_power2 && !*this->_power1 && *this->_power0 == other);
+}
+
+bool		Variable::operator==(const Complex &other) const
+{
+	return (!*this->_power2 && !*this->_power1 && *this->_power0 == other);
+}
+
+bool		Variable::operator==(const Matrix &other) const
+{
+	return (!*this->_power2 && !*this->_power1 && *this->_power0 == other);
+}
+
+bool		Variable::operator==(const IType &other) const
+{
+	const Variable	*other_variable;
+	const Rational	*other_rational;
+	const Complex	*other_complex;
+	const Matrix	*other_matrix;
+
+	other_variable = dynamic_cast<const Variable*>(&other);
+	if (other_variable)
+		return (*this == *other_variable);
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (*this == *other_rational);
+	other_complex = dynamic_cast<const Complex*>(&other);
+	if (other_complex)
+		return (*this == *other_complex);
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this == *other_matrix);
+	throw ERROR_UNEXPECTED;
+	return (false);
+}
+
+bool		Variable::operator!=(const IType &other) const
+{
+	return (!(*this == other));
+}
+
+bool		Variable::operator<(const IType &other) const
+{
+	return (!*this->_power2 && !*this->_power1 && *this->_power0 < other);
+}
+
+bool		Variable::operator<=(const IType &other) const
+{
+	return (!*this->_power2 && !*this->_power1 && *this->_power0 <= other);
+}
+
+bool		Variable::operator>(const IType &other) const
+{
+	return (!*this->_power2 && !*this->_power1 && *this->_power0 > other);
+}
+
+bool		Variable::operator>=(const IType &other) const
+{
+	return (!*this->_power2 && !*this->_power1 && *this->_power0 >= other);
+}
+
 Variable*	Variable::operator+(const Variable &other) const
 {
 	if (this->_name != other._name)
-		throw UnsupportedError("Multiple unknown variables are not supported");
+		throw UNSUPPORTED_MULTI_VARIABLES;
 	return (new Variable(this->_name, *this->_power2 + *other._power2, *this->_power1 + *other._power1, *this->_power0 + *other._power0));
 }
 
@@ -232,13 +338,14 @@ IType*		Variable::operator+(const IType &other) const
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (*this + *other_matrix);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
 Variable*	Variable::operator-(const Variable &other) const
 {
 	if (this->_name != other._name)
-		throw UnsupportedError("Multiple unknown variables are not supported");
+		throw UNSUPPORTED_MULTI_VARIABLES;
 	return (new Variable(this->_name, *this->_power2 - *other._power2, *this->_power1 - *other._power1, *this->_power0 - *other._power0));
 }
 
@@ -276,6 +383,7 @@ IType*		Variable::operator-(const IType &other) const
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (*this - *other_matrix);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -288,7 +396,7 @@ Variable*	Variable::operator*(const Variable &other) const
 	IType	*tmp3;
 
 	if (this->_name != other._name)
-		throw UnsupportedError("Multiple unknown variables are not supported");
+		throw UNSUPPORTED_MULTI_VARIABLES;
 	if (!is_multiplication_supported(*this, other))
 		throw UnsupportedError("Powers higher than 2 are not supported in polynomial expressions");
 	tmp1 = *this->_power2 * *other._power0;
@@ -342,13 +450,14 @@ IType*		Variable::operator*(const IType &other) const
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (*this * *other_matrix);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
 Variable*	Variable::operator/(const Variable &other) const
 {
 	if (this->_name != other._name)
-		throw UnsupportedError("Multiple unknown variables are not supported");
+		throw UNSUPPORTED_MULTI_VARIABLES;
 	if (is_division_supported(*this, other))
 		return (polynomial_divion(*this, other));
 	if (!other._power1 && !other._power0)
@@ -467,6 +576,7 @@ IType*		Variable::operator/(const IType &other) const
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (*this / *other_matrix);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -482,7 +592,7 @@ Variable*	Variable::operator%(const Variable &other) const
 	if (division->getPower2() || division->getPower1() || !rational)
 	{
 		delete division;
-		throw std::logic_error("Impossible modulo");
+		throw LogicError("Only rational numbers can be used as modulo");
 	}
 	tmp = other * Rational(rational->integer_part());
 	delete division;
@@ -525,6 +635,7 @@ IType*		Variable::operator%(const IType &other) const
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (*this % *other_matrix);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -533,12 +644,12 @@ Variable*	Variable::operator^(const Variable &other) const
 	Rational	*power0;
 
 	if (this->_name != other._name)
-		throw UnsupportedError("Multiple unknown variables are not supported");
+		throw UNSUPPORTED_MULTI_VARIABLES;
 	if (other._power2 || other._power1)
 		throw UnsupportedError("An unknown variable cannot be a power");
 	power0 = dynamic_cast<Rational*>(other.getPower0());
 	if (!power0)
-		throw std::logic_error("Impossible modulo");
+		throw LogicError("Only rational numbers can be used as exponent");
 	return (*this ^ *power0);
 }
 
@@ -555,7 +666,7 @@ Variable*	Variable::operator^(const Rational &other) const
 		if (!exponent.is_integer())
 			throw ERROR_EXPONENT_INTEGER;
 	}
-	catch (const std::logic_error &e)
+	catch (const LogicError &e)
 	{
 		throw ERROR_EXPONENT_INTEGER;
 	}
@@ -599,6 +710,7 @@ IType*		Variable::operator^(const IType &other) const
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (*this ^ *other_matrix);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -631,6 +743,7 @@ IType*			Variable::matrix_operator(const Variable &other) const
 	if (!this->_power2 && !this->_power1)
 		return (this->matrix_operator(*other.getPower0()));
 	throw ERROR_MATRIX_OPERATOR;
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -653,6 +766,7 @@ IType*			Variable::matrix_operator(const IType &other) const
 	if (other_matrix)
 		return (this->matrix_operator(*other_matrix));
 	throw ERROR_MATRIX_OPERATOR;
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -663,20 +777,16 @@ IType*			Variable::clone(void) const
 
 std::ostream&	Variable::print(std::ostream &os) const
 {
-	if (*this->_power2)// To improve
-		os << *this->_power2 << this->_name << "^2";
-	if (*this->_power1)
-	{
-		if (*this->_power2)
-			os << " + ";
-		os << *this->_power1 << this->_name;
-	}
-	if (*this->_power0)
-	{
-		if (*this->_power2 || *this->_power1)
-			os << " + ";
-		os << *this->_power0;
-	}
+	print_power(os, true, this->_power2, this->_name + std::string("^2"));
+	print_power(os, !*this->_power2, this->_power1, this->_name);
+	print_power(os, !*this->_power2 && !*this->_power1, this->_power0, std::string());
+	return (os);
+}
+
+std::ostream&	Variable::print_variable(std::ostream &os, const std::string &var) const
+{
+	throw ERROR_UNEXPECTED;
+	(void)var;
 	return (os);
 }
 

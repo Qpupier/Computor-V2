@@ -6,12 +6,11 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/10 14:49:41 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 13:49:37 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
-#include "UnsupportedError.hpp"
 
 static void	stored_variables(const std::map<std::string, const IType*> &stored)
 {
@@ -37,6 +36,7 @@ static void	compute_equation(const std::string &line, t_data &data)
 	delete left_ast;
 	delete right_ast;
 	// stored["test"] = new Variable("test", nullptr);// Debug
+	// TODO
 }
 
 static void	parse_line(const std::string &line, t_data &data)
@@ -46,9 +46,9 @@ static void	parse_line(const std::string &line, t_data &data)
 
 	nb_equal = std::count(line.begin(), line.end(), '=');
 	if (nb_equal > 1)
-		throw std::logic_error("Too many '=' in the expression");
+		throw LogicError("Too many '=' in the expression");
 	if (std::count(line.begin(), line.end(), '?') > 1)
-		throw std::logic_error("Too many '?' in the expression");
+		throw LogicError("Too many '?' in the expression");
 	if (!std::regex_match(line, data.patterns.at(TOKEN_FULL)))
 		throw ERROR_INVALID_EXPRESSION;
 	if (nb_equal)
@@ -77,17 +77,9 @@ static void	compute_line(const std::string &line, t_data &data)
 	{
 		std::cerr << "\033[33mRegex error: " << e.what() << "\033[0m" << std::endl;
 	}
-	catch(const std::logic_error& e)
+	catch(const std::exception& e)
 	{
-		std::cerr << "\033[31m" << e.what() << "\033[0m" << std::endl;
-	}
-	catch(const std::runtime_error& e)
-	{
-		std::cerr << "\033[31mUnexpected error: " << e.what() << "\033[0m" << std::endl;
-	}
-	catch(const UnsupportedError& e)
-	{
-		std::cerr << "\033[33mUnsupported: " << e.what() << "\033[0m" << std::endl;
+		std::cerr << e.what() << std::endl;
 	}
 }
 

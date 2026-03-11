@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/10 17:04:20 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 15:55:54 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ Rational&	Rational::operator=(const Rational *other)
 Rational	Rational::operator=(const Complex &other)
 {
 	if (other.getImaginary())
-		throw std::logic_error("Cannot convert a complex number with a non-zero imaginary part to a rational number");
+		throw LogicError("Cannot convert a complex number with a non-zero imaginary part to a rational number");
 	return (Rational(other.getReal()));
 }
 
@@ -87,7 +87,46 @@ bool		Rational::operator==(const Rational &other) const
 	return (this->_numerator * other._denominator == other._numerator * this->_denominator);
 }
 
-bool		Rational::operator!=(const Rational &other) const
+bool		Rational::operator==(const Complex &other) const
+{
+	return (!other.getImaginary() && *this == other.getReal());
+}
+
+bool		Rational::operator==(const Matrix &other) const
+{
+	(void)other;
+	return (false);
+}
+
+bool		Rational::operator==(const Variable &other) const
+{
+	return (!other.getPower2() && !other.getPower1() && *this == *other.getPower0());
+}
+
+bool		Rational::operator==(const IType &other) const
+{
+	const Rational	*other_rational;
+	const Complex	*other_complex;
+	const Matrix	*other_matrix;
+	const Variable	*other_variable;
+
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (*this == *other_rational);
+	other_complex = dynamic_cast<const Complex*>(&other);
+	if (other_complex)
+		return (*this == *other_complex);
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this == *other_matrix);
+	other_variable = dynamic_cast<const Variable*>(&other);
+	if (other_variable)
+		return (*this == *other_variable);
+	throw ERROR_UNEXPECTED;
+	return (false);
+}
+
+bool		Rational::operator!=(const IType &other) const
 {
 	return (!(*this == other));
 }
@@ -97,9 +136,85 @@ bool		Rational::operator<(const Rational &other) const
 	return (this->_numerator * other._denominator < other._numerator * this->_denominator);
 }
 
+bool		Rational::operator<(const Complex &other) const
+{
+	return (!other.getImaginary() && *this < other.getReal());
+}
+
+bool		Rational::operator<(const Matrix &other) const
+{
+	(void)other;
+	return (false);
+}
+
+bool		Rational::operator<(const Variable &other) const
+{
+	return (!other.getPower2() && !other.getPower1() && *this < *other.getPower0());
+}
+
+bool		Rational::operator<(const IType &other) const
+{
+	const Rational	*other_rational;
+	const Complex	*other_complex;
+	const Matrix	*other_matrix;
+	const Variable	*other_variable;
+
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (*this < *other_rational);
+	other_complex = dynamic_cast<const Complex*>(&other);
+	if (other_complex)
+		return (*this < *other_complex);
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this < *other_matrix);
+	other_variable = dynamic_cast<const Variable*>(&other);
+	if (other_variable)
+		return (*this < *other_variable);
+	return (false);
+}
+
 bool		Rational::operator<=(const Rational &other) const
 {
 	return (this->_numerator * other._denominator <= other._numerator * this->_denominator);
+}
+
+bool		Rational::operator<=(const Complex &other) const
+{
+	return (!other.getImaginary() && *this <= other.getReal());
+}
+
+bool		Rational::operator<=(const Matrix &other) const
+{
+	(void)other;
+	return (false);
+}
+
+bool		Rational::operator<=(const Variable &other) const
+{
+	return (!other.getPower2() && !other.getPower1() && *this <= *other.getPower0());
+}
+
+bool		Rational::operator<=(const IType &other) const
+{
+	const Rational	*other_rational;
+	const Complex	*other_complex;
+	const Matrix	*other_matrix;
+	const Variable	*other_variable;
+
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (*this <= *other_rational);
+	other_complex = dynamic_cast<const Complex*>(&other);
+	if (other_complex)
+		return (*this <= *other_complex);
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this <= *other_matrix);
+	other_variable = dynamic_cast<const Variable*>(&other);
+	if (other_variable)
+		return (*this <= *other_variable);
+	return (false);
 }
 
 bool		Rational::operator>(const Rational &other) const
@@ -107,9 +222,85 @@ bool		Rational::operator>(const Rational &other) const
 	return (this->_numerator * other._denominator > other._numerator * this->_denominator);
 }
 
+bool		Rational::operator>(const Complex &other) const
+{
+	return (!other.getImaginary() && *this > other.getReal());
+}
+
+bool		Rational::operator>(const Matrix &other) const
+{
+	(void)other;
+	return (false);
+}
+
+bool		Rational::operator>(const Variable &other) const
+{
+	return (!other.getPower2() && !other.getPower1() && *this > *other.getPower0());
+}
+
+bool		Rational::operator>(const IType &other) const
+{
+	const Rational	*other_rational;
+	const Complex	*other_complex;
+	const Matrix	*other_matrix;
+	const Variable	*other_variable;
+
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (*this > *other_rational);
+	other_complex = dynamic_cast<const Complex*>(&other);
+	if (other_complex)
+		return (*this > *other_complex);
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this > *other_matrix);
+	other_variable = dynamic_cast<const Variable*>(&other);
+	if (other_variable)
+		return (*this > *other_variable);
+	return (false);
+}
+
 bool		Rational::operator>=(const Rational &other) const
 {
 	return (this->_numerator * other._denominator >= other._numerator * this->_denominator);
+}
+
+bool		Rational::operator>=(const Complex &other) const
+{
+	return (!other.getImaginary() && *this >= other.getReal());
+}
+
+bool		Rational::operator>=(const Matrix &other) const
+{
+	(void)other;
+	return (false);
+}
+
+bool		Rational::operator>=(const Variable &other) const
+{
+	return (!other.getPower2() && !other.getPower1() && *this >= *other.getPower0());
+}
+
+bool		Rational::operator>=(const IType &other) const
+{
+	const Rational	*other_rational;
+	const Complex	*other_complex;
+	const Matrix	*other_matrix;
+	const Variable	*other_variable;
+
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (*this >= *other_rational);
+	other_complex = dynamic_cast<const Complex*>(&other);
+	if (other_complex)
+		return (*this >= *other_complex);
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (*this >= *other_matrix);
+	other_variable = dynamic_cast<const Variable*>(&other);
+	if (other_variable)
+		return (*this >= *other_variable);
+	return (false);
 }
 
 Rational*	Rational::operator+(const Rational &other) const
@@ -161,6 +352,7 @@ IType*		Rational::operator+(const IType &other) const
 	other_variable = dynamic_cast<const Variable*>(&other);
 	if (other_variable)
 		return (*this + *other_variable);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -213,6 +405,7 @@ IType*		Rational::operator-(const IType &other) const
 	other_variable = dynamic_cast<const Variable*>(&other);
 	if (other_variable)
 		return (*this - *other_variable);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -265,6 +458,7 @@ IType*		Rational::operator*(const IType &other) const
 	other_variable = dynamic_cast<const Variable*>(&other);
 	if (other_variable)
 		return (*this * *other_variable);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -325,6 +519,7 @@ IType*		Rational::operator/(const IType &other) const
 	other_variable = dynamic_cast<const Variable*>(&other);
 	if (other_variable)
 		return (*this / *other_variable);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -395,6 +590,7 @@ IType*		Rational::operator%(const IType &other) const
 	other_variable = dynamic_cast<const Variable*>(&other);
 	if (other_variable)
 		return (*this % *other_variable);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -460,6 +656,7 @@ IType*		Rational::operator^(const IType &other) const
 	other_variable = dynamic_cast<const Variable*>(&other);
 	if (other_variable)
 		return (*this ^ *other_variable);
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -477,6 +674,42 @@ int	Rational::getDenominator(void) const
 
 
 // Methods
+IType*			Rational::matrix_operator(const IType &other) const
+{
+	throw ERROR_MATRIX_OPERATOR;
+	(void)other;
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Rational::clone(void) const
+{
+	return (new Rational(*this));
+}
+
+std::ostream&	Rational::print(std::ostream &os) const
+{
+	Rational	copy(*this);
+	int			numerator;
+
+	numerator = copy.getNumerator();
+	if (copy.is_integer())
+		return (os << numerator);
+	return (os << numerator << "/" << copy.getDenominator());
+}
+
+std::ostream&	Rational::print_variable(std::ostream &os, 	\
+		const std::string &var) const
+{
+	Rational	copy(*this);
+	int			numerator;
+
+	numerator = copy.getNumerator();
+	if (copy.is_integer())
+		return (os << numerator << var);
+	return (os << numerator << var << "/" << copy.getDenominator());
+}
+
 void			Rational::reduce(void)
 {
 	int	gcd;
@@ -497,18 +730,6 @@ void			Rational::reduce(void)
 	}
 }
 
-IType*			Rational::matrix_operator(const IType &other) const
-{
-	throw ERROR_MATRIX_OPERATOR;
-	(void)other;
-	return (nullptr);
-}
-
-IType*			Rational::clone(void) const
-{
-	return (new Rational(*this));
-}
-
 bool			Rational::is_integer(void) const
 {
 	Rational	copy(*this);
@@ -520,17 +741,6 @@ bool			Rational::is_integer(void) const
 int				Rational::integer_part(void) const
 {
 	return (this->_numerator / this->_denominator);
-}
-
-std::ostream&	Rational::print(std::ostream &os) const
-{
-	Rational	copy(*this);
-	int			numerator;
-
-	numerator = copy.getNumerator();
-	if (copy.is_integer())
-		return (os << numerator);
-	return (os << numerator << "/" << copy.getDenominator());
 }
 
 

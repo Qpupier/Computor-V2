@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/10 16:05:27 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 15:54:42 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,16 @@ class	Variable: public IType
 		// Operator overloads
 		Variable&	operator=(const Variable &other);
 		explicit	operator bool() const;
+		bool		operator==(const IType &other) const;
+		bool		operator==(const Variable &other) const;
+		bool		operator==(const Rational &other) const;
+		bool		operator==(const Complex &other) const;
+		bool		operator==(const Matrix &other) const;
+		bool		operator!=(const IType &other) const;
+		bool		operator<(const IType &other) const;
+		bool		operator<=(const IType &other) const;
+		bool		operator>(const IType &other) const;
+		bool		operator>=(const IType &other) const;
 		IType*		operator+(const IType &other) const;
 		Variable*	operator+(const Variable &other) const;
 		Variable*	operator+(const Rational &other) const;
@@ -75,6 +85,8 @@ class	Variable: public IType
 		IType*			matrix_operator(const Matrix &other) const;
 		IType*			clone(void) const;
 		std::ostream&	print(std::ostream &os) const;
+		std::ostream&	print_variable(std::ostream &os, 	\
+				const std::string &var) const;
 
 	private:
 		// Members

@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/03/09 20:27:41 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/03/11 12:43:29 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,16 +26,18 @@ LST_SRC		=	main.cpp			\
 				types/Complex.cpp	\
 				types/Matrix.cpp	\
 				types/Variable.cpp	\
-				UnsupportedError.cpp
+				errors.cpp
 LST_OBJ		=	$(LST_SRC:.cpp=.o)
 LST_DEP		=	$(LST_OBJ:.o=.d)
-LST_INC		= 	$(DIR_INC)\
-				$(DIR_INC)/types
+LST_INC		= 	$(DIR_INC)			\
+				$(DIR_INC)/types	\
+				$(DIR_INC)/errors
 SRC			=	$(addprefix $(DIR_SRC)/, $(LST_SRC))
 OBJ			=	$(addprefix $(DIR_OBJ)/, $(LST_OBJ))
 DEP			=	$(addprefix $(DIR_OBJ)/, $(LST_DEP))
 INC			=	$(addprefix -I./, $(LST_INC))
-DIRS		=	$(DIR_OBJ)/types
+DIRS		=	$(DIR_OBJ)/types	\
+				$(DIR_OBJ)/errors
 CC			=	c++
 CXXFLAGS	=	-W -Wall -Wextra -Werror -Wshadow -Wold-style-cast -Wcast-qual -Wconversion -Wsign-conversion -Wstrict-aliasing -g3
 # CXXFLAGS	+=	-O2 # Optimization

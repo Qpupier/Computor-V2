@@ -6,11 +6,12 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/09 20:29:18 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 15:58:34 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Operator.hpp"
+#include "computor-v2.hpp"
 
 // Constructors
 Operator::Operator(std::string op)
@@ -32,7 +33,7 @@ Operator::Operator(std::string op)
 	else if (op == "***")
 		_op = E_UNKNOWN;
 	else
-		throw std::runtime_error("Invalid operator: " + op);
+		throw UnexpectedError("Invalid operator: " + op);
 }
 
 
@@ -49,38 +50,80 @@ Operator::operator bool() const
 	return (false);
 }
 
+bool		Operator::operator==(const IType &other) const
+{
+	(void)other;
+	return (false);
+}
+
+bool		Operator::operator!=(const IType &other) const
+{
+	(void)other;
+	return (true);
+}
+
+bool		Operator::operator<(const IType &other) const
+{
+	(void)other;
+	return (false);
+}
+
+bool		Operator::operator<=(const IType &other) const
+{
+	(void)other;
+	return (false);
+}
+
+bool		Operator::operator>(const IType &other) const
+{
+	(void)other;
+	return (false);
+}
+
+bool		Operator::operator>=(const IType &other) const
+{
+	(void)other;
+	return (false);
+}
+
 IType*		Operator::operator+(const IType &other) const
 {
+	throw ERROR_UNEXPECTED;
 	(void)other;
 	return (nullptr);
 }
 
 IType*		Operator::operator-(const IType &other) const
 {
+	throw ERROR_UNEXPECTED;
 	(void)other;
 	return (nullptr);
 }
 
 IType*		Operator::operator*(const IType &other) const
 {
+	throw ERROR_UNEXPECTED;
 	(void)other;
 	return (nullptr);
 }
 
 IType*		Operator::operator/(const IType &other) const
 {
+	throw ERROR_UNEXPECTED;
 	(void)other;
 	return (nullptr);
 }
 
 IType*		Operator::operator%(const IType &other) const
 {
+	throw ERROR_UNEXPECTED;
 	(void)other;
 	return (nullptr);
 }
 
 IType*		Operator::operator^(const IType &other) const
 {
+	throw ERROR_UNEXPECTED;
 	(void)other;
 	return (nullptr);
 }
@@ -96,8 +139,14 @@ Operator::t_operator	Operator::getOperator(void) const
 // Methods
 IType*			Operator::matrix_operator(const IType &other) const
 {
+	throw ERROR_UNEXPECTED;
 	(void)other;
 	return (nullptr);
+}
+
+IType*			Operator::clone(void) const
+{
+	return (new Operator(*this));
 }
 
 std::ostream&	Operator::print(std::ostream &os) const
@@ -147,7 +196,9 @@ std::ostream&	Operator::print(std::ostream &os) const
 	return (os);
 }
 
-IType*			Operator::clone(void) const
+std::ostream&	Operator::print_variable(std::ostream &os, 	\
+		const std::string &var) const
 {
-	return (new Operator(*this));
+	(void)var;
+	return (os);
 }

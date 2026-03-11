@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 16:48:49 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/06 19:49:23 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 12:13:38 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ static std::vector<Token>	*adapt_tokens(std::vector<Token> &tokens, 	\
 				tokens.erase(tokens.begin());
 			return (&tokens);
 		}
-		throw std::logic_error("Operator cannot be at the beginning or end of an expression");
+		throw LogicError("Operator cannot be at the beginning or end of an expression");
 	}
 	return (nullptr);
 }
@@ -128,7 +128,7 @@ static AST					*build_node(std::vector<Token> &tokens, 	\
 	{
 		if (!right_child)
 			delete left_child;
-		throw std::logic_error("Invalid expression: empty parenthesis");
+		throw LogicError("Invalid expression: empty parenthesis");
 	}
 	return (new AST(tokens[static_cast<unsigned long int>(pos)], left_child, right_child, data));
 }
@@ -154,7 +154,7 @@ AST							*build_ast(std::vector<Token> &tokens, t_data &data)
 	if (pos == -1)
 	{
 		if (tokens.size() != 2)
-			throw std::logic_error("Invalid expression format: operator expected");
+			throw LogicError("Invalid expression format: operator expected");
 		return (new AST(Token(tokens[0].getValue() + tokens[1].getValue(), Token::E_FUNCTION), data));
 	}
 	return (build_node(tokens, tokens_begin, tokens_end, pos, data));

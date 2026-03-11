@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/10 17:20:32 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 13:32:17 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include "Complex.hpp"
 #include "Matrix.hpp"
 #include "Variable.hpp"
-#include "UnsupportedError.hpp"
 
 // Utils
 static IType*	get_result(IType *left_entity, IType *right_entity, 	\
@@ -44,7 +43,7 @@ static IType*	get_result(IType *left_entity, IType *right_entity, 	\
 			else
 				return (*left_entity * *right_entity);
 		default:
-			throw std::runtime_error("Unknown operator");
+			throw UnexpectedError("Unknown operator");
 	}
 	return (nullptr);
 }
@@ -81,7 +80,7 @@ AST::AST(const Token &token, t_data &data): _left(nullptr), _right(nullptr)
 			break;
 		}
 		default:
-			throw std::runtime_error("Invalid token type for AST node");
+			throw UnexpectedError("Invalid token type for AST node");
 	}
 }
 
@@ -146,7 +145,7 @@ void	AST::setRight(AST *right)
 
 
 // Methods
-std::ostream&	AST::print(std::ostream &os) const// To delete
+std::ostream&	AST::print(std::ostream &os) const
 {
 	if (this->_left)
 		os << *this->_left;
@@ -187,22 +186,7 @@ void			AST::reduce_expression(void)
 	{
 		result = get_result(this->_left->_node, this->_right->_node, op->getOperator());
 	}
-	catch(const std::regex_error& e)// Review le try/catch ?
-	{
-		delete this;
-		throw;
-	}
-	catch(const std::logic_error& e)
-	{
-		delete this;
-		throw;
-	}
-	catch(const std::runtime_error& e)
-	{
-		delete this;
-		throw;
-	}
-	catch(const UnsupportedError& e)
+	catch(const std::exception& e)
 	{
 		delete this;
 		throw;

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/10 16:30:14 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 15:54:20 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,16 @@ class	Matrix: public IType
 		// Operator overloads
 		Matrix&		operator=(const Matrix &other);
 		explicit	operator bool() const;
+		bool		operator==(const IType &other) const;
 		bool		operator==(const Matrix &other) const;
-		bool		operator!=(const Matrix &other) const;
+		bool		operator==(const Rational &other) const;
+		bool		operator==(const Complex &other) const;
+		bool		operator==(const Variable &other) const;
+		bool		operator!=(const IType &other) const;
+		bool		operator<(const IType &other) const;
+		bool		operator<=(const IType &other) const;
+		bool		operator>(const IType &other) const;
+		bool		operator>=(const IType &other) const;
 		Rational*	operator[](unsigned int index) const;
 		IType*		operator+(const IType &other) const;
 		Matrix*		operator+(const Matrix &other) const;
@@ -79,9 +87,11 @@ class	Matrix: public IType
 		Matrix*			matrix_operator(const Rational &other) const;
 		Matrix*			matrix_operator(const Complex &other) const;
 		Variable*		matrix_operator(const Variable &other) const;
-		std::ostream	&print(std::ostream &os) const;
 		IType*			clone(void) const;
-		void			error(const std::logic_error &e) const;
+		std::ostream&	print(std::ostream &os) const;
+		std::ostream&	print_variable(std::ostream &os, 	
+				const std::string &var) const;
+		void			error(const LogicError &e) const;
 
 	private:
 		// Members
