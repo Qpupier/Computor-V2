@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Variable.cpp                                       :+:      :+:    :+:   */
+/*   Polynomial.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/11 16:45:18 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 17:18:55 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Variable.hpp"
+#include "Polynomial.hpp"
 
 // Utils
-static bool			is_multiplication_supported(const Variable &var1, const Variable &var2)
+static bool			is_multiplication_supported(const Polynomial &var1, 	\
+		const Polynomial &var2)
 {
 	IType	*power4;
 	IType	*power3;
 	IType	*tmp1;
 	IType	*tmp2;
 	bool	result;
-	
+
 	power4 = *var1.getPower2() * *var2.getPower2();
 	tmp1 = *var1.getPower2() * *var2.getPower1();
 	tmp2 = *var1.getPower1() * *var2.getPower2();
@@ -33,7 +34,8 @@ static bool			is_multiplication_supported(const Variable &var1, const Variable &
 	return (!result);
 }
 
-static bool			is_division_supported(const Variable &var1, const Variable &var2)
+static bool			is_division_supported(const Polynomial &var1, 		\
+		const Polynomial &var2)
 {
 	IType	*test1;
 	IType	*test2;
@@ -57,7 +59,8 @@ static bool			is_division_supported(const Variable &var1, const Variable &var2)
 	return (!result);
 }
 
-static Variable*	polynomial_divion(const Variable &var1, const Variable &var2)
+static Polynomial*	polynomial_divion(const Polynomial &var1, 			\
+		const Polynomial &var2)
 {
 	IType	*power2;
 	IType	*power1;
@@ -75,10 +78,11 @@ static Variable*	polynomial_divion(const Variable &var1, const Variable &var2)
 		delete power1;
 		throw;
 	}
-	return (new Variable(var1.getName(), power2, power1, power0));
+	return (new Polynomial(var1.getName(), power2, power1, power0));
 }
 
-static Variable*	division_with_power2(const Variable &var1, const Variable &var2)
+static Polynomial*	division_with_power2(const Polynomial &var1, 			\
+		const Polynomial &var2)
 {
 	IType	*power2;
 	IType	*power1;
@@ -98,10 +102,11 @@ static Variable*	division_with_power2(const Variable &var1, const Variable &var2
 		delete power1;
 		throw;
 	}
-	return (new Variable(var1.getName(), power2, power1, power0));
+	return (new Polynomial(var1.getName(), power2, power1, power0));
 }
 
-static Variable*	division_with_power1(const Variable &var1, const Variable &var2)
+static Polynomial*	division_with_power1(const Polynomial &var1, 			\
+		const Polynomial &var2)
 {
 	IType	*power2;
 	IType	*power1;
@@ -129,10 +134,11 @@ static Variable*	division_with_power1(const Variable &var1, const Variable &var2
 		delete power1;
 		throw;
 	}
-	return (new Variable(var1.getName(), power2, power1, power0));
+	return (new Polynomial(var1.getName(), power2, power1, power0));
 }
 
-static Variable*	division_with_power0(const Variable &var1, const Variable &var2)
+static Polynomial*	division_with_power0(const Polynomial &var1, 			\
+		const Polynomial &var2)
 {
 	IType	*power2;
 	IType	*power1;
@@ -158,10 +164,11 @@ static Variable*	division_with_power0(const Variable &var1, const Variable &var2
 		delete power1;
 		throw;
 	}
-	return (new Variable(var1.getName(), power2, power1, power0));
+	return (new Polynomial(var1.getName(), power2, power1, power0));
 }
 
-static void			print_first_power(std::ostream &os, const IType *power, const std::string &var, const char *exponent)
+static void			print_first_power(std::ostream &os, 				\
+		const IType *power, const std::string &var, const char *exponent)
 {
 	Rational	minus_one(-1);
 
@@ -170,12 +177,13 @@ static void			print_first_power(std::ostream &os, const IType *power, const std:
 	if (*power == minus_one)
 		os << "-" << var << exponent;
 	else if (var == std::string() || *power != Rational(1))
-		power->print_variable(os, var + exponent);
+		power->print_polynomial(os, var + exponent);
 	else
 		os << var << exponent;
 }
 
-static void			print_power(std::ostream &os, bool first_power, const IType *power, const std::string &var)
+static void			print_power(std::ostream &os, bool first_power, 	\
+		const IType *power, const std::string &var)
 {
 	Rational	minus_one(-1);
 	IType		*copy;
@@ -202,7 +210,7 @@ static void			print_power(std::ostream &os, bool first_power, const IType *power
 
 
 // Destructor
-Variable::~Variable(void)
+Polynomial::~Polynomial(void)
 {
 	delete this->_power2;
 	delete this->_power1;
@@ -211,11 +219,11 @@ Variable::~Variable(void)
 
 
 // Operator overloads
-Variable&	Variable::operator=(const Variable &other)
+Polynomial&	Polynomial::operator=(const Polynomial &other)
 {
 	if (this != &other)
 	{
-		this->~Variable();
+		this->~Polynomial();
 		this->_name = other._name;
 		this->_power2 = other._power2->clone();
 		this->_power1 = other._power1->clone();
@@ -224,41 +232,41 @@ Variable&	Variable::operator=(const Variable &other)
 	return (*this);
 }
 
-Variable::operator bool() const
+Polynomial::operator bool() const
 {
 	return (!*this->_power2 && !*this->_power1 && !*this->_power0);
 }
 
-bool		Variable::operator==(const Variable &other) const
+bool		Polynomial::operator==(const Polynomial &other) const
 {
 	return (this->_name == other._name && *this->_power2 == *other._power2 && *this->_power1 == *other._power1 && *this->_power0 == *other._power0);
 }
 
-bool		Variable::operator==(const Rational &other) const
+bool		Polynomial::operator==(const Rational &other) const
 {
 	return (!*this->_power2 && !*this->_power1 && *this->_power0 == other);
 }
 
-bool		Variable::operator==(const Complex &other) const
+bool		Polynomial::operator==(const Complex &other) const
 {
 	return (!*this->_power2 && !*this->_power1 && *this->_power0 == other);
 }
 
-bool		Variable::operator==(const Matrix &other) const
+bool		Polynomial::operator==(const Matrix &other) const
 {
 	return (!*this->_power2 && !*this->_power1 && *this->_power0 == other);
 }
 
-bool		Variable::operator==(const IType &other) const
+bool		Polynomial::operator==(const IType &other) const
 {
-	const Variable	*other_variable;
+	const Polynomial	*other_polynomial;
 	const Rational	*other_rational;
 	const Complex	*other_complex;
 	const Matrix	*other_matrix;
 
-	other_variable = dynamic_cast<const Variable*>(&other);
-	if (other_variable)
-		return (*this == *other_variable);
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	if (other_polynomial)
+		return (*this == *other_polynomial);
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
 		return (*this == *other_rational);
@@ -272,63 +280,63 @@ bool		Variable::operator==(const IType &other) const
 	return (false);
 }
 
-bool		Variable::operator!=(const IType &other) const
+bool		Polynomial::operator!=(const IType &other) const
 {
 	return (!(*this == other));
 }
 
-bool		Variable::operator<(const IType &other) const
+bool		Polynomial::operator<(const IType &other) const
 {
 	return (!*this->_power2 && !*this->_power1 && *this->_power0 < other);
 }
 
-bool		Variable::operator<=(const IType &other) const
+bool		Polynomial::operator<=(const IType &other) const
 {
 	return (!*this->_power2 && !*this->_power1 && *this->_power0 <= other);
 }
 
-bool		Variable::operator>(const IType &other) const
+bool		Polynomial::operator>(const IType &other) const
 {
 	return (!*this->_power2 && !*this->_power1 && *this->_power0 > other);
 }
 
-bool		Variable::operator>=(const IType &other) const
+bool		Polynomial::operator>=(const IType &other) const
 {
 	return (!*this->_power2 && !*this->_power1 && *this->_power0 >= other);
 }
 
-Variable*	Variable::operator+(const Variable &other) const
+Polynomial*	Polynomial::operator+(const Polynomial &other) const
 {
 	if (this->_name != other._name)
-		throw UNSUPPORTED_MULTI_VARIABLES;
-	return (new Variable(this->_name, *this->_power2 + *other._power2, *this->_power1 + *other._power1, *this->_power0 + *other._power0));
+		throw UNSUPPORTED_MULTI_POLYNOMIALS;
+	return (new Polynomial(this->_name, *this->_power2 + *other._power2, *this->_power1 + *other._power1, *this->_power0 + *other._power0));
 }
 
-Variable*	Variable::operator+(const Rational &other) const
+Polynomial*	Polynomial::operator+(const Rational &other) const
 {
-	return (new Variable(this->_name, this->_power2->clone(), this->_power1->clone(), *this->_power0 + other));
+	return (new Polynomial(this->_name, this->_power2->clone(), this->_power1->clone(), *this->_power0 + other));
 }
 
-Variable*	Variable::operator+(const Complex &other) const
+Polynomial*	Polynomial::operator+(const Complex &other) const
 {
-	return (new Variable(this->_name, this->_power2->clone(), this->_power1->clone(), *this->_power0 + other));
+	return (new Polynomial(this->_name, this->_power2->clone(), this->_power1->clone(), *this->_power0 + other));
 }
 
-Variable*	Variable::operator+(const Matrix &other) const
+Polynomial*	Polynomial::operator+(const Matrix &other) const
 {
-	return (new Variable(this->_name, this->_power2->clone(), this->_power1->clone(), *this->_power0 + other));
+	return (new Polynomial(this->_name, this->_power2->clone(), this->_power1->clone(), *this->_power0 + other));
 }
 
-IType*		Variable::operator+(const IType &other) const
+IType*		Polynomial::operator+(const IType &other) const
 {
-	const Variable	*other_variable;
+	const Polynomial	*other_polynomial;
 	const Rational	*other_rational;
 	const Complex	*other_complex;
 	const Matrix	*other_matrix;
 
-	other_variable = dynamic_cast<const Variable*>(&other);
-	if (other_variable)
-		return (*this + *other_variable);
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	if (other_polynomial)
+		return (*this + *other_polynomial);
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
 		return (*this + *other_rational);
@@ -342,38 +350,38 @@ IType*		Variable::operator+(const IType &other) const
 	return (nullptr);
 }
 
-Variable*	Variable::operator-(const Variable &other) const
+Polynomial*	Polynomial::operator-(const Polynomial &other) const
 {
 	if (this->_name != other._name)
-		throw UNSUPPORTED_MULTI_VARIABLES;
-	return (new Variable(this->_name, *this->_power2 - *other._power2, *this->_power1 - *other._power1, *this->_power0 - *other._power0));
+		throw UNSUPPORTED_MULTI_POLYNOMIALS;
+	return (new Polynomial(this->_name, *this->_power2 - *other._power2, *this->_power1 - *other._power1, *this->_power0 - *other._power0));
 }
 
-Variable*	Variable::operator-(const Rational &other) const
+Polynomial*	Polynomial::operator-(const Rational &other) const
 {
-	return (new Variable(this->_name, this->_power2->clone(), this->_power1->clone(), *this->_power0 - other));
+	return (new Polynomial(this->_name, this->_power2->clone(), this->_power1->clone(), *this->_power0 - other));
 }
 
-Variable*	Variable::operator-(const Complex &other) const
+Polynomial*	Polynomial::operator-(const Complex &other) const
 {
-	return (new Variable(this->_name, this->_power2->clone(), this->_power1->clone(), *this->_power0 - other));
+	return (new Polynomial(this->_name, this->_power2->clone(), this->_power1->clone(), *this->_power0 - other));
 }
 
-Variable*	Variable::operator-(const Matrix &other) const
+Polynomial*	Polynomial::operator-(const Matrix &other) const
 {
-	return (new Variable(this->_name, this->_power2->clone(), this->_power1->clone(), *this->_power0 - other));
+	return (new Polynomial(this->_name, this->_power2->clone(), this->_power1->clone(), *this->_power0 - other));
 }
 
-IType*		Variable::operator-(const IType &other) const
+IType*		Polynomial::operator-(const IType &other) const
 {
-	const Variable	*other_variable;
+	const Polynomial	*other_polynomial;
 	const Rational	*other_rational;
 	const Complex	*other_complex;
 	const Matrix	*other_matrix;
 
-	other_variable = dynamic_cast<const Variable*>(&other);
-	if (other_variable)
-		return (*this - *other_variable);
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	if (other_polynomial)
+		return (*this - *other_polynomial);
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
 		return (*this - *other_rational);
@@ -387,7 +395,7 @@ IType*		Variable::operator-(const IType &other) const
 	return (nullptr);
 }
 
-Variable*	Variable::operator*(const Variable &other) const
+Polynomial*	Polynomial::operator*(const Polynomial &other) const
 {
 	IType	*power2;
 	IType	*power1;
@@ -396,7 +404,7 @@ Variable*	Variable::operator*(const Variable &other) const
 	IType	*tmp3;
 
 	if (this->_name != other._name)
-		throw UNSUPPORTED_MULTI_VARIABLES;
+		throw UNSUPPORTED_MULTI_POLYNOMIALS;
 	if (!is_multiplication_supported(*this, other))
 		throw UnsupportedError("Powers higher than 2 are not supported in polynomial expressions");
 	tmp1 = *this->_power2 * *other._power0;
@@ -413,34 +421,34 @@ Variable*	Variable::operator*(const Variable &other) const
 	power1 = *tmp1 + *tmp2;
 	delete tmp1;
 	delete tmp2;
-	return (new Variable(this->_name, power2, power1, *this->_power0 * *other._power0));
+	return (new Polynomial(this->_name, power2, power1, *this->_power0 * *other._power0));
 }
 
-Variable*	Variable::operator*(const Rational &other) const
+Polynomial*	Polynomial::operator*(const Rational &other) const
 {
-	return (new Variable(this->_name, *this->_power2 * other, *this->_power1 * other, *this->_power0 * other));
+	return (new Polynomial(this->_name, *this->_power2 * other, *this->_power1 * other, *this->_power0 * other));
 }
 
-Variable*	Variable::operator*(const Complex &other) const
+Polynomial*	Polynomial::operator*(const Complex &other) const
 {
-	return (new Variable(this->_name, *this->_power2 * other, *this->_power1 * other, *this->_power0 * other));
+	return (new Polynomial(this->_name, *this->_power2 * other, *this->_power1 * other, *this->_power0 * other));
 }
 
-Variable*	Variable::operator*(const Matrix &other) const
+Polynomial*	Polynomial::operator*(const Matrix &other) const
 {
-	return (new Variable(this->_name, *this->_power2 * other, *this->_power1 * other, *this->_power0 * other));
+	return (new Polynomial(this->_name, *this->_power2 * other, *this->_power1 * other, *this->_power0 * other));
 }
 
-IType*		Variable::operator*(const IType &other) const
+IType*		Polynomial::operator*(const IType &other) const
 {
-	const Variable	*other_variable;
+	const Polynomial	*other_polynomial;
 	const Rational	*other_rational;
 	const Complex	*other_complex;
 	const Matrix	*other_matrix;
 
-	other_variable = dynamic_cast<const Variable*>(&other);
-	if (other_variable)
-		return (*this * *other_variable);
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	if (other_polynomial)
+		return (*this * *other_polynomial);
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
 		return (*this * *other_rational);
@@ -454,10 +462,10 @@ IType*		Variable::operator*(const IType &other) const
 	return (nullptr);
 }
 
-Variable*	Variable::operator/(const Variable &other) const
+Polynomial*	Polynomial::operator/(const Polynomial &other) const
 {
 	if (this->_name != other._name)
-		throw UNSUPPORTED_MULTI_VARIABLES;
+		throw UNSUPPORTED_MULTI_POLYNOMIALS;
 	if (is_division_supported(*this, other))
 		return (polynomial_divion(*this, other));
 	if (!other._power1 && !other._power0)
@@ -470,7 +478,7 @@ Variable*	Variable::operator/(const Variable &other) const
 	return (nullptr);
 }
 
-Variable*	Variable::operator/(const Rational &other) const
+Polynomial*	Polynomial::operator/(const Rational &other) const
 {
 	IType	*power2;
 	IType	*power1;
@@ -496,10 +504,10 @@ Variable*	Variable::operator/(const Rational &other) const
 		delete power1;
 		throw;
 	}
-	return (new Variable(this->_name, power2, power1, power0));
+	return (new Polynomial(this->_name, power2, power1, power0));
 }
 
-Variable*	Variable::operator/(const Complex &other) const
+Polynomial*	Polynomial::operator/(const Complex &other) const
 {
 	IType	*power2;
 	IType	*power1;
@@ -525,10 +533,10 @@ Variable*	Variable::operator/(const Complex &other) const
 		delete power1;
 		throw;
 	}
-	return (new Variable(this->_name, power2, power1, power0));
+	return (new Polynomial(this->_name, power2, power1, power0));
 }
 
-Variable*	Variable::operator/(const Matrix &other) const
+Polynomial*	Polynomial::operator/(const Matrix &other) const
 {
 	IType	*power2;
 	IType	*power1;
@@ -554,19 +562,19 @@ Variable*	Variable::operator/(const Matrix &other) const
 		delete power1;
 		throw;
 	}
-	return (new Variable(this->_name, power2, power1, power0));
+	return (new Polynomial(this->_name, power2, power1, power0));
 }
 
-IType*		Variable::operator/(const IType &other) const
+IType*		Polynomial::operator/(const IType &other) const
 {
-	const Variable	*other_variable;
+	const Polynomial	*other_polynomial;
 	const Rational	*other_rational;
 	const Complex	*other_complex;
 	const Matrix	*other_matrix;
 
-	other_variable = dynamic_cast<const Variable*>(&other);
-	if (other_variable)
-		return (*this / *other_variable);
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	if (other_polynomial)
+		return (*this / *other_polynomial);
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
 		return (*this / *other_rational);
@@ -580,12 +588,12 @@ IType*		Variable::operator/(const IType &other) const
 	return (nullptr);
 }
 
-Variable*	Variable::operator%(const Variable &other) const
+Polynomial*	Polynomial::operator%(const Polynomial &other) const
 {
-	Variable	*division;
+	Polynomial	*division;
 	Rational	*rational;
-	Variable	*tmp;
-	Variable	*result;
+	Polynomial	*tmp;
+	Polynomial	*result;
 
 	division = *this / other;
 	rational = dynamic_cast<Rational*>(division->getPower0());
@@ -601,31 +609,31 @@ Variable*	Variable::operator%(const Variable &other) const
 	return (result);
 }
 
-Variable*	Variable::operator%(const Rational &other) const
+Polynomial*	Polynomial::operator%(const Rational &other) const
 {
-	return (*this % Variable(this->_name, new Rational(0), new Rational(0), other.clone()));
+	return (*this % Polynomial(this->_name, new Rational(0), new Rational(0), other.clone()));
 }
 
-Variable*	Variable::operator%(const Complex &other) const
+Polynomial*	Polynomial::operator%(const Complex &other) const
 {
-	return (*this % Variable(this->_name, new Rational(0), new Rational(0), other.clone()));
+	return (*this % Polynomial(this->_name, new Rational(0), new Rational(0), other.clone()));
 }
 
-Variable*	Variable::operator%(const Matrix &other) const
+Polynomial*	Polynomial::operator%(const Matrix &other) const
 {
-	return (*this % Variable(this->_name, new Rational(0), new Rational(0), other.clone()));
+	return (*this % Polynomial(this->_name, new Rational(0), new Rational(0), other.clone()));
 }
 
-IType*		Variable::operator%(const IType &other) const
+IType*		Polynomial::operator%(const IType &other) const
 {
-	const Variable	*other_variable;
+	const Polynomial	*other_polynomial;
 	const Rational	*other_rational;
 	const Complex	*other_complex;
 	const Matrix	*other_matrix;
 
-	other_variable = dynamic_cast<const Variable*>(&other);
-	if (other_variable)
-		return (*this % *other_variable);
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	if (other_polynomial)
+		return (*this % *other_polynomial);
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
 		return (*this % *other_rational);
@@ -639,12 +647,12 @@ IType*		Variable::operator%(const IType &other) const
 	return (nullptr);
 }
 
-Variable*	Variable::operator^(const Variable &other) const
+Polynomial*	Polynomial::operator^(const Polynomial &other) const
 {
 	Rational	*power0;
 
 	if (this->_name != other._name)
-		throw UNSUPPORTED_MULTI_VARIABLES;
+		throw UNSUPPORTED_MULTI_POLYNOMIALS;
 	if (other._power2 || other._power1)
 		throw UnsupportedError("An unknown variable cannot be a power");
 	power0 = dynamic_cast<Rational*>(other.getPower0());
@@ -653,11 +661,11 @@ Variable*	Variable::operator^(const Variable &other) const
 	return (*this ^ *power0);
 }
 
-Variable*	Variable::operator^(const Rational &other) const
+Polynomial*	Polynomial::operator^(const Rational &other) const
 {
 	Rational	exponent;
-	Variable*	result;
-	Variable*	tmp;
+	Polynomial*	result;
+	Polynomial*	tmp;
 	int			numerator;
 
 	try
@@ -670,7 +678,7 @@ Variable*	Variable::operator^(const Rational &other) const
 	{
 		throw ERROR_EXPONENT_INTEGER;
 	}
-	result = new Variable(*this);
+	result = new Polynomial(*this);
 	numerator = exponent.getNumerator();
 	for (int i = 1; i < numerator; i++)
 	{
@@ -681,26 +689,26 @@ Variable*	Variable::operator^(const Rational &other) const
 	return (result);
 }
 
-Variable*	Variable::operator^(const Complex &other) const
+Polynomial*	Polynomial::operator^(const Complex &other) const
 {
-	return (*this ^ Variable(this->_name, new Rational(0), new Rational(0), other.clone()));
+	return (*this ^ Polynomial(this->_name, new Rational(0), new Rational(0), other.clone()));
 }
 
-Variable*	Variable::operator^(const Matrix &other) const
+Polynomial*	Polynomial::operator^(const Matrix &other) const
 {
-	return (*this ^ Variable(this->_name, new Rational(0), new Rational(0), other.clone()));
+	return (*this ^ Polynomial(this->_name, new Rational(0), new Rational(0), other.clone()));
 }
 
-IType*		Variable::operator^(const IType &other) const
+IType*		Polynomial::operator^(const IType &other) const
 {
-	const Variable	*other_variable;
+	const Polynomial	*other_polynomial;
 	const Rational	*other_rational;
 	const Complex	*other_complex;
 	const Matrix	*other_matrix;
 
-	other_variable = dynamic_cast<const Variable*>(&other);
-	if (other_variable)
-		return (*this ^ *other_variable);
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	if (other_polynomial)
+		return (*this ^ *other_polynomial);
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
 		return (*this ^ *other_rational);
@@ -716,29 +724,29 @@ IType*		Variable::operator^(const IType &other) const
 
 
 // Getters
-std::string	Variable::getName(void) const
+std::string	Polynomial::getName(void) const
 {
 	return (this->_name);
 }
 
-IType*		Variable::getPower2(void) const
+IType*		Polynomial::getPower2(void) const
 {
 	return (this->_power2);
 }
 
-IType*		Variable::getPower1(void) const
+IType*		Polynomial::getPower1(void) const
 {
 	return (this->_power1);
 }
 
-IType*		Variable::getPower0(void) const
+IType*		Polynomial::getPower0(void) const
 {
 	return (this->_power0);
 }
 
 
 // Methods
-IType*			Variable::matrix_operator(const Variable &other) const
+IType*			Polynomial::matrix_operator(const Polynomial &other) const
 {
 	if (!this->_power2 && !this->_power1)
 		return (this->matrix_operator(*other.getPower0()));
@@ -747,21 +755,21 @@ IType*			Variable::matrix_operator(const Variable &other) const
 	return (nullptr);
 }
 
-IType*			Variable::matrix_operator(const Matrix &other) const
+IType*			Polynomial::matrix_operator(const Matrix &other) const
 {
 	if (this->_power2 || this->_power1)
 		throw ERROR_MATRIX_OPERATOR;
 	return (this->_power0->matrix_operator(other));
 }
 
-IType*			Variable::matrix_operator(const IType &other) const
+IType*			Polynomial::matrix_operator(const IType &other) const
 {
-	const Variable	*other_variable;
+	const Polynomial	*other_polynomial;
 	const Matrix	*other_matrix;
 
-	other_variable = dynamic_cast<const Variable*>(&other);
-	if (other_variable)
-		return (this->matrix_operator(*other_variable));
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	if (other_polynomial)
+		return (this->matrix_operator(*other_polynomial));
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (this->matrix_operator(*other_matrix));
@@ -770,20 +778,23 @@ IType*			Variable::matrix_operator(const IType &other) const
 	return (nullptr);
 }
 
-IType*			Variable::clone(void) const
+IType*			Polynomial::clone(void) const
 {
-	return (new Variable(*this));
+	return (new Polynomial(*this));
 }
 
-std::ostream&	Variable::print(std::ostream &os) const
+std::ostream&	Polynomial::print(std::ostream &os) const
 {
 	print_power(os, true, this->_power2, this->_name + std::string("^2"));
 	print_power(os, !*this->_power2, this->_power1, this->_name);
 	print_power(os, !*this->_power2 && !*this->_power1, this->_power0, std::string());
+	if (!*this->_power2 && !*this->_power1 && !*this->_power0)
+		os << "0";
 	return (os);
 }
 
-std::ostream&	Variable::print_variable(std::ostream &os, const std::string &var) const
+std::ostream&	Polynomial::print_polynomial(std::ostream &os, 	\
+		const std::string &var) const
 {
 	throw ERROR_UNEXPECTED;
 	(void)var;
@@ -792,7 +803,7 @@ std::ostream&	Variable::print_variable(std::ostream &os, const std::string &var)
 
 
 // Output stream operator overload
-std::ostream	&operator<<(std::ostream &os, const Variable &var)
+std::ostream	&operator<<(std::ostream &os, const Polynomial &var)
 {
 	return (var.print(os));
 }

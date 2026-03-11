@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/11 12:13:38 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 20:09:41 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,8 @@ static std::string	new_operator(Token::t_token prev_token, Token::t_token curren
 {
 	if (prev_token == Token::E_MATRIX && current_token == Token::E_MATRIX)
 		return ("**");
-	if ((prev_token == Token::E_RIGHT_PARENTHESIS || prev_token == Token::E_VARIABLE || prev_token == Token::E_MATRIX) 	\
-			&& (current_token == Token::E_LEFT_PARENTHESIS || current_token == Token::E_VARIABLE || current_token == Token::E_MATRIX))
+	if ((prev_token == Token::E_RIGHT_PARENTHESIS || prev_token == Token::E_POLYNOMIAL || prev_token == Token::E_MATRIX) 	\
+			&& (current_token == Token::E_LEFT_PARENTHESIS || current_token == Token::E_POLYNOMIAL || current_token == Token::E_MATRIX))
 		return ("***");
 	return ("*");
 }
@@ -96,7 +96,7 @@ static bool			test_function(std::vector<Token> &tokens, size_t pos, 	\
 		const std::map<std::string, const IType*> &stored)
 {
 	// if (stored.find(tokens[pos - 1].getValue()) != stored.end() 	
-	// 		&& !dynamic_cast<const Variable*>(stored.at(tokens[pos - 1].getValue())))
+	// 		&& !dynamic_cast<const Polynomial*>(stored.at(tokens[pos - 1].getValue())))
 	// {
 	// 	tokens[pos - 1].setType(Token::E_FUNCTION);
 	// 	return (true);
@@ -119,7 +119,7 @@ static void			set_missing_operators(std::vector<Token> &tokens, 	\
 		current_token = tokens[i].getType();
 		if (prev_token != Token::E_OPERATOR && current_token != Token::E_OPERATOR && prev_token != Token::E_LEFT_PARENTHESIS && current_token != Token::E_RIGHT_PARENTHESIS)
 		{
-			if (prev_token == Token::E_VARIABLE && current_token == Token::E_LEFT_PARENTHESIS && test_function(tokens, i, stored))
+			if (prev_token == Token::E_POLYNOMIAL && current_token == Token::E_LEFT_PARENTHESIS && test_function(tokens, i, stored))
 				continue;
 			tokens.insert(tokens.begin() + static_cast<long int>(i), 	\
 					Token(new_operator(prev_token, current_token), 		\
@@ -142,7 +142,7 @@ static Token		create_token(std::string::const_iterator &start, 	\
 	return Token(*it, get_token_type(*it, data.tokens_types));
 }
 
-AST					*compute_expression(const std::string &line, t_data &data)
+AST					*compute_expression(const std::string &line, t_data &data, bool is_right_side)
 {
 	std::string::const_iterator	end(line.end());
 	std::vector<Token>			tokens;
@@ -161,6 +161,7 @@ AST					*compute_expression(const std::string &line, t_data &data)
 	ast = build_ast(tokens, data);
 	if (!ast)
 		throw ERROR_INVALID_EXPRESSION;
-	ast->reduce_expression();
+	if (is_right_side || !ast->end_of_tree())
+		ast->reduce_expression(data.stored);
 	return (ast);
 }

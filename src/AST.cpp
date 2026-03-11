@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/11 13:32:17 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 19:52:10 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "Rational.hpp"
 #include "Complex.hpp"
 #include "Matrix.hpp"
-#include "Variable.hpp"
+#include "Polynomial.hpp"
 
 // Utils
 static IType*	get_result(IType *left_entity, IType *right_entity, 	\
@@ -74,9 +74,9 @@ AST::AST(const Token &token, t_data &data): _left(nullptr), _right(nullptr)
 			_node = new Matrix(token, data);
 			break;
 		}
-		case Token::E_VARIABLE:
+		case Token::E_POLYNOMIAL:
 		{
-			_node = new Variable(token);
+			_node = new Polynomial(token);
 			break;
 		}
 		default:
@@ -167,16 +167,17 @@ bool			AST::end_of_tree(void) const
 	return (false);
 }
 
-void			AST::reduce_expression(void)
+void			AST::reduce_expression(std::map<std::string, const IType*> &stored)
 {
 	Operator*	op;
 	IType*		result;
 
-	// TODO remplacer les variables par leur valeur
+	// TODO remplacer les polynomials par leur valeur
+	this->replace_variables(stored);
 	if (this->end_of_tree())
 		return;
-	this->_left->reduce_expression();
-	this->_right->reduce_expression();
+	this->_left->reduce_expression(stored);
+	this->_right->reduce_expression(stored);
 	if (this->end_of_tree())
 		return;
 	op = dynamic_cast<Operator*>(this->_node);
@@ -195,6 +196,25 @@ void			AST::reduce_expression(void)
 	this->_node = result;
 	this->_left = nullptr;
 	this->_right = nullptr;
+}
+
+void			AST::replace_variables(std::map<std::string, const IType*> &stored)
+{
+	const Polynomial	*polynomial;
+	std::string			var_name;
+
+	if (this->end_of_tree())
+	{
+		polynomial = dynamic_cast<const Polynomial*>(this->_node);
+		if (!polynomial)
+			return;
+		var_name = polynomial->getName();
+		if (stored.find(var_name) != stored.end())
+			this->_node = stored[var_name]->clone();
+		return;
+	}
+	this->_left->replace_variables(stored);
+	this->_right->replace_variables(stored);
 }
 
 

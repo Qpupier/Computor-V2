@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/11 15:53:11 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 19:00:47 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 class	Complex;
 class	Matrix;
-class	Variable;
+class	Polynomial;
 
 class	Rational: public IType
 {
@@ -40,58 +40,58 @@ class	Rational: public IType
 		bool		operator==(const Rational &other) const;
 		bool		operator==(const Complex &other) const;
 		bool		operator==(const Matrix &other) const;
-		bool		operator==(const Variable &other) const;
+		bool		operator==(const Polynomial &other) const;
 		bool		operator!=(const IType&other) const;
 		bool		operator<(const IType &other) const;
 		bool		operator<(const Rational &other) const;
 		bool		operator<(const Complex &other) const;
 		bool		operator<(const Matrix &other) const;
-		bool		operator<(const Variable &other) const;
+		bool		operator<(const Polynomial &other) const;
 		bool		operator<=(const IType &other) const;
 		bool		operator<=(const Rational &other) const;
 		bool		operator<=(const Complex &other) const;
 		bool		operator<=(const Matrix &other) const;
-		bool		operator<=(const Variable &other) const;
+		bool		operator<=(const Polynomial &other) const;
 		bool		operator>(const IType &other) const;
 		bool		operator>(const Rational &other) const;
 		bool		operator>(const Complex &other) const;
 		bool		operator>(const Matrix &other) const;
-		bool		operator>(const Variable &other) const;
+		bool		operator>(const Polynomial &other) const;
 		bool		operator>=(const IType &other) const;
 		bool		operator>=(const Rational &other) const;
 		bool		operator>=(const Complex &other) const;
 		bool		operator>=(const Matrix &other) const;
-		bool		operator>=(const Variable &other) const;
+		bool		operator>=(const Polynomial &other) const;
 		IType*		operator+(const IType &other) const;
 		Rational*	operator+(const Rational &other) const;
 		Complex*	operator+(const Complex &other) const;
 		Matrix*		operator+(const Matrix &other) const;
-		Variable*	operator+(const Variable &other) const;
+		Polynomial*	operator+(const Polynomial &other) const;
 		IType*		operator-(const IType &other) const;
 		Rational*	operator-(const Rational &other) const;
 		Complex*	operator-(const Complex &other) const;
 		Matrix*		operator-(const Matrix &other) const;
-		Variable*	operator-(const Variable &other) const;
+		Polynomial*	operator-(const Polynomial &other) const;
 		IType*		operator*(const IType &other) const;
 		Rational*	operator*(const Rational &other) const;
 		Complex*	operator*(const Complex &other) const;
 		Matrix*		operator*(const Matrix &other) const;
-		Variable*	operator*(const Variable &other) const;
+		Polynomial*	operator*(const Polynomial &other) const;
 		IType*		operator/(const IType &other) const;
 		Rational*	operator/(const Rational &other) const;
 		Complex*	operator/(const Complex &other) const;
 		Matrix*		operator/(const Matrix &other) const;
-		Variable*	operator/(const Variable &other) const;
+		Polynomial*	operator/(const Polynomial &other) const;
 		IType*		operator%(const IType &other) const;
 		Rational*	operator%(const Rational &other) const;
 		Rational*	operator%(const Complex &other) const;
 		Matrix*		operator%(const Matrix &other) const;
-		Variable*	operator%(const Variable &other) const;
+		Polynomial*	operator%(const Polynomial &other) const;
 		IType*		operator^(const IType &other) const;
 		Rational*	operator^(const Rational &other) const;
 		Complex*	operator^(const Complex &other) const;
 		Matrix*		operator^(const Matrix &other) const;
-		Variable*	operator^(const Variable &other) const;
+		Polynomial*	operator^(const Polynomial &other) const;
 
 		// Getters
 		int		getNumerator(void) const;
@@ -101,7 +101,7 @@ class	Rational: public IType
 		IType*			matrix_operator(const IType &other) const;
 		IType*			clone(void) const;
 		std::ostream&	print(std::ostream &os) const;
-		std::ostream&	print_variable(std::ostream &os, 	\
+		std::ostream&	print_polynomial(std::ostream &os, 	\
 				const std::string &var) const;
 		void			reduce(void);
 		bool			is_integer(void) const;
@@ -118,6 +118,6 @@ std::ostream&	operator<<(std::ostream &os, const Rational &num);
 
 # include "Complex.hpp"
 # include "Matrix.hpp"
-# include "Variable.hpp"
+# include "Polynomial.hpp"
 
 #endif

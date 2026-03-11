@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:01:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/06 19:20:54 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 20:07:28 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ class	AST
 		// Methods
 		std::ostream&	print(std::ostream &os) const;
 		bool			end_of_tree(void) const;
-		void			reduce_expression(void);
+		void			reduce_expression(std::map<std::string, const IType*> &stored);
+		void			replace_variables(std::map<std::string, const IType*> &stored);
 
 	private:
 		// Members
@@ -54,7 +55,9 @@ class	AST
 std::ostream &operator<<(std::ostream &os, const AST &ast);
 
 // Functions
-AST*	compute_expression(const std::string &line, t_data &data);
-AST		*build_ast(std::vector<Token> &tokens, t_data &data);
+AST*	compute_expression(const std::string &line, t_data &data, bool is_right_side);
+AST*	build_ast(std::vector<Token> &tokens, t_data &data);
+void	equation(AST *left_ast, AST *right_ast, std::map<std::string, 	\
+		const IType*> &stored);
 
 #endif

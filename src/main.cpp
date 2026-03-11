@@ -6,37 +6,49 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/11 13:49:37 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 20:07:10 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
 
-static void	stored_variables(const std::map<std::string, const IType*> &stored)
+static void	free_stored(const std::map<std::string, const IType*> &stored)
 {
 	std::map<std::string, const IType*>::const_iterator	it(stored.begin());
 
-	std::cerr << "\033[33mListing stored variables\033[0m" << std::endl;
 	while (it != stored.end())
 	{
-		std::cerr << "\033[33m  " << it->first << "\033[0m" << std::endl;
+		delete it->second;
+		it++;
+	}
+}
+
+static void	stored_polynomials(const std::map<std::string, const IType*> &stored)
+{
+	std::map<std::string, const IType*>::const_iterator	it(stored.begin());
+
+	std::cerr << "\033[33mListing stored polynomials\033[0m" << std::endl;
+	while (it != stored.end())
+	{
+		std::cerr << "\033[33m  " << it->first << " = " << *it->second << "\033[0m" << std::endl;
 		it++;
 	}
 }
 
 static void	compute_equation(const std::string &line, t_data &data)
 {
-	AST			*left_ast;
-	AST			*right_ast;
+	AST*		left_ast;
+	AST*		right_ast;
 	std::size_t	pos;
 
 	pos = line.find('=');
-	left_ast = compute_expression(line.substr(0, pos), data);
-	right_ast = compute_expression(line.substr(pos + 1), data);
-	delete left_ast;
-	delete right_ast;
-	// stored["test"] = new Variable("test", nullptr);// Debug
-	// TODO
+	left_ast = compute_expression(line.substr(0, pos), data, false);
+	right_ast = compute_expression(line.substr(pos + 1), data, true);
+	equation(left_ast, right_ast, data.stored);
+	if (left_ast)
+		delete left_ast;
+	if (right_ast)
+		delete right_ast;
 }
 
 static void	parse_line(const std::string &line, t_data &data)
@@ -54,12 +66,13 @@ static void	parse_line(const std::string &line, t_data &data)
 	if (nb_equal)
 		compute_equation(line, data);
 	else if (line.find('?') != std::string::npos)
-		stored_variables(data.stored);
+		stored_polynomials(data.stored);
 	else
 	{
-		ast = compute_expression(line, data);
-		std::cout << *ast << std::endl;
-		delete ast;
+		ast = compute_expression(line, data, true);
+		std::cout << *ast << std::endl;//To adjust
+		if (ast)
+			delete ast;
 	}
 }
 
@@ -68,7 +81,7 @@ static void	compute_line(const std::string &line, t_data &data)
 	if (line.empty())
 		return;
 	if (std::regex_match(line, data.patterns.at(TOKEN_LIST)))
-		return stored_variables(data.stored);
+		return stored_polynomials(data.stored);
 	try
 	{
 		parse_line(line, data);
@@ -108,11 +121,14 @@ int			main(int argc, const char **argv)
 {
 	t_data		data;
 	std::string	line;
+	int			status;
 
 	if (argc > 1)
 		return (usage());
 	define_patterns(data.patterns);
 	define_token_types(data.tokens_types);
-	return (loop(line, data, isatty(STDIN_FILENO)));
+	status = loop(line, data, isatty(STDIN_FILENO));
+	free_stored(data.stored);
+	return (status);
 	(void)argv;
 }

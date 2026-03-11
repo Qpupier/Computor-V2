@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/03/11 12:43:29 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/03/11 18:55:09 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,13 +20,15 @@ LST_SRC		=	main.cpp			\
 				build_ast.cpp		\
 				AST.cpp				\
 				utils.cpp			\
+				errors.cpp			\
+				equation.cpp		\
+				Computor-V1.cpp		\
 				types/IType.cpp		\
 				types/Operator.cpp	\
 				types/Rational.cpp	\
 				types/Complex.cpp	\
 				types/Matrix.cpp	\
-				types/Variable.cpp	\
-				errors.cpp
+				types/Polynomial.cpp
 LST_OBJ		=	$(LST_SRC:.cpp=.o)
 LST_DEP		=	$(LST_OBJ:.o=.d)
 LST_INC		= 	$(DIR_INC)			\

@@ -15,7 +15,7 @@ echo "\n\033[30m==============================\033[0m\n"
 echo "\n\033[30m==============================\033[0m\n"
 ./unit_tests/matrices.sh "$1" ; status=$((status | $?))
 echo "\n\033[30m==============================\033[0m\n"
-./unit_tests/variables.sh "$1" ; status=$((status | $?))
+./unit_tests/polynomials.sh "$1" ; status=$((status | $?))
 
 if [ $status -eq 0 ]; then
 	echo "\n\033[32;1mAll tests passed! 🎉\033[0m"

@@ -6,14 +6,15 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/11 16:47:23 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 19:00:47 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Complex.hpp"
 
 // Utils
-static std::ostream&	print_value(std::ostream &os, Rational value, const std::string &i, bool is_first)
+static std::ostream&	print_value(std::ostream &os, Rational value, 	\
+		const std::string &i, bool is_first)
 {
 	Rational	copy(value);
 
@@ -76,7 +77,7 @@ bool		Complex::operator==(const Matrix &other) const
 	return (false);
 }
 
-bool		Complex::operator==(const Variable &other) const
+bool		Complex::operator==(const Polynomial &other) const
 {
 	return (!other.getPower2() && !other.getPower1() && *this == *other.getPower0());
 }
@@ -86,7 +87,7 @@ bool		Complex::operator==(const IType &other) const
 	const Complex	*other_complex;
 	const Rational	*other_rational;
 	const Matrix	*other_matrix;
-	const Variable	*other_variable;
+	const Polynomial	*other_polynomial;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -97,9 +98,9 @@ bool		Complex::operator==(const IType &other) const
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (*this == *other_matrix);
-	other_variable = dynamic_cast<const Variable*>(&other);
-	if (other_variable)
-		return (*this == *other_variable);
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	if (other_polynomial)
+		return (*this == *other_polynomial);
 	return (false);
 }
 
@@ -162,9 +163,9 @@ Matrix*		Complex::operator+(const Matrix &other) const
 	return (rational + other);
 }
 
-Variable*	Complex::operator+(const Variable &other) const
+Polynomial*	Complex::operator+(const Polynomial &other) const
 {
-	return (new Variable(other.getName(), other.getPower2()->clone(), other.getPower1()->clone(), *this + *other.getPower0()));
+	return (new Polynomial(other.getName(), other.getPower2()->clone(), other.getPower1()->clone(), *this + *other.getPower0()));
 }
 
 IType*		Complex::operator+(const IType &other) const
@@ -172,7 +173,7 @@ IType*		Complex::operator+(const IType &other) const
 	const Complex	*other_complex;
 	const Rational	*other_rational;
 	const Matrix	*other_matrix;
-	const Variable	*other_variable;
+	const Polynomial	*other_polynomial;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -183,9 +184,9 @@ IType*		Complex::operator+(const IType &other) const
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (*this + *other_matrix);
-	other_variable = dynamic_cast<const Variable*>(&other);
-	if (other_variable)
-		return (*this + *other_variable);
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	if (other_polynomial)
+		return (*this + *other_polynomial);
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
@@ -224,9 +225,9 @@ Matrix*		Complex::operator-(const Matrix &other) const
 	return (rational - other);
 }
 
-Variable*	Complex::operator-(const Variable &other) const
+Polynomial*	Complex::operator-(const Polynomial &other) const
 {
-	return (new Variable(other.getName(), other.getPower2()->clone(), other.getPower1()->clone(), *this - *other.getPower0()));
+	return (new Polynomial(other.getName(), other.getPower2()->clone(), other.getPower1()->clone(), *this - *other.getPower0()));
 }
 
 IType*		Complex::operator-(const IType &other) const
@@ -234,7 +235,7 @@ IType*		Complex::operator-(const IType &other) const
 	const Complex	*other_complex;
 	const Rational	*other_rational;
 	const Matrix	*other_matrix;
-	const Variable	*other_variable;
+	const Polynomial	*other_polynomial;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -245,9 +246,9 @@ IType*		Complex::operator-(const IType &other) const
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (*this - *other_matrix);
-	other_variable = dynamic_cast<const Variable*>(&other);
-	if (other_variable)
-		return (*this - *other_variable);
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	if (other_polynomial)
+		return (*this - *other_polynomial);
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
@@ -305,9 +306,9 @@ Matrix*		Complex::operator*(const Matrix &other) const
 	return (rational * other);
 }
 
-Variable*	Complex::operator*(const Variable &other) const
+Polynomial*	Complex::operator*(const Polynomial &other) const
 {
-	return (new Variable(other.getName(), *this * *other.getPower2(), *this * *other.getPower1(), *this * *other.getPower0()));
+	return (new Polynomial(other.getName(), *this * *other.getPower2(), *this * *other.getPower1(), *this * *other.getPower0()));
 }
 
 IType*		Complex::operator*(const IType &other) const
@@ -315,7 +316,7 @@ IType*		Complex::operator*(const IType &other) const
 	const Complex	*other_complex;
 	const Rational	*other_rational;
 	const Matrix	*other_matrix;
-	const Variable	*other_variable;
+	const Polynomial	*other_polynomial;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -326,9 +327,9 @@ IType*		Complex::operator*(const IType &other) const
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (*this * *other_matrix);
-	other_variable = dynamic_cast<const Variable*>(&other);
-	if (other_variable)
-		return (*this * *other_variable);
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	if (other_polynomial)
+		return (*this * *other_polynomial);
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
@@ -394,9 +395,9 @@ Matrix*		Complex::operator/(const Matrix &other) const
 	return (rational / other);
 }
 
-Variable*	Complex::operator/(const Variable &other) const
+Polynomial*	Complex::operator/(const Polynomial &other) const
 {
-	return (Variable(other.getName(), new Rational(0), new Rational(0), this->clone()) / other);
+	return (Polynomial(other.getName(), new Rational(0), new Rational(0), this->clone()) / other);
 }
 
 IType*		Complex::operator/(const IType &other) const
@@ -404,7 +405,7 @@ IType*		Complex::operator/(const IType &other) const
 	const Complex	*other_complex;
 	const Rational	*other_rational;
 	const Matrix	*other_matrix;
-	const Variable	*other_variable;
+	const Polynomial	*other_polynomial;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -415,9 +416,9 @@ IType*		Complex::operator/(const IType &other) const
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (*this / *other_matrix);
-	other_variable = dynamic_cast<const Variable*>(&other);
-	if (other_variable)
-		return (*this / *other_variable);
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	if (other_polynomial)
+		return (*this / *other_polynomial);
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
@@ -469,9 +470,9 @@ Matrix*		Complex::operator%(const Matrix &other) const
 	return (rational % other);
 }
 
-Variable*	Complex::operator%(const Variable &other) const
+Polynomial*	Complex::operator%(const Polynomial &other) const
 {
-	return (Variable(other.getName(), new Rational(0), new Rational(0), this->clone()) % other);
+	return (Polynomial(other.getName(), new Rational(0), new Rational(0), this->clone()) % other);
 }
 
 IType*		Complex::operator%(const IType &other) const
@@ -479,7 +480,7 @@ IType*		Complex::operator%(const IType &other) const
 	const Complex	*other_complex;
 	const Rational	*other_rational;
 	const Matrix	*other_matrix;
-	const Variable	*other_variable;
+	const Polynomial	*other_polynomial;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -490,9 +491,9 @@ IType*		Complex::operator%(const IType &other) const
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (*this % *other_matrix);
-	other_variable = dynamic_cast<const Variable*>(&other);
-	if (other_variable)
-		return (*this % *other_variable);
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	if (other_polynomial)
+		return (*this % *other_polynomial);
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
@@ -555,9 +556,9 @@ Matrix*		Complex::operator^(const Matrix &other) const
 	return (rational ^ other);
 }
 
-Variable*	Complex::operator^(const Variable &other) const
+Polynomial*	Complex::operator^(const Polynomial &other) const
 {
-	return (Variable(other.getName(), new Rational(0), new Rational(0), this->clone()) ^ other);
+	return (Polynomial(other.getName(), new Rational(0), new Rational(0), this->clone()) ^ other);
 }
 
 IType*		Complex::operator^(const IType &other) const
@@ -565,7 +566,7 @@ IType*		Complex::operator^(const IType &other) const
 	const Complex	*other_complex;
 	const Rational	*other_rational;
 	const Matrix	*other_matrix;
-	const Variable	*other_variable;
+	const Polynomial	*other_polynomial;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -576,9 +577,9 @@ IType*		Complex::operator^(const IType &other) const
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (*this ^ *other_matrix);
-	other_variable = dynamic_cast<const Variable*>(&other);
-	if (other_variable)
-		return (*this ^ *other_variable);
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	if (other_polynomial)
+		return (*this ^ *other_polynomial);
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
@@ -627,10 +628,10 @@ std::ostream&	Complex::print(std::ostream &os) const
 	return (os);
 }
 
-std::ostream&	Complex::print_variable(std::ostream &os, const std::string &var) const
+std::ostream&	Complex::print_polynomial(std::ostream &os, const std::string &var) const
 {
 	if (!this->_imaginary)
-		return (this->_real.print_variable(os, var));
+		return (this->_real.print_polynomial(os, var));
 	if (!this->_real)
 		return (os << *this << " * " << var);
 	return (os << "(" << *this << ")" << var);

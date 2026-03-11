@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:15:11 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/09 12:36:49 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/11 19:01:06 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void			define_token_types(std::map<const Token::t_token, 	\
 	tokens_types[Token::E_RIGHT_PARENTHESIS] = std::regex("^\\)$");
 	tokens_types[Token::E_NUMBER] = std::regex("^" TOKEN_NUMBER "$");
 	tokens_types[Token::E_IMAGINARY] = std::regex("^" TOKEN_IMAGINARY "$");
-	tokens_types[Token::E_VARIABLE] = std::regex("^" TOKEN_VARIABLE "$");
+	tokens_types[Token::E_POLYNOMIAL] = std::regex("^" TOKEN_POLYNOMIAL "$");
 	tokens_types[Token::E_OPERATOR] = std::regex("^" TOKEN_OPERATOR "$");
 	tokens_types[Token::E_MATRIX] = std::regex("^" TOKEN_MATRIX "$");
 	tokens_types[Token::E_WHITESPACE] = std::regex("^" TOKEN_WHITESPACE "$");
