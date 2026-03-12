@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/11 19:52:10 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/12 13:21:10 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,6 @@ void			AST::reduce_expression(std::map<std::string, const IType*> &stored)
 	Operator*	op;
 	IType*		result;
 
-	// TODO remplacer les polynomials par leur valeur
 	this->replace_variables(stored);
 	if (this->end_of_tree())
 		return;
@@ -208,9 +207,12 @@ void			AST::replace_variables(std::map<std::string, const IType*> &stored)
 		polynomial = dynamic_cast<const Polynomial*>(this->_node);
 		if (!polynomial)
 			return;
-		var_name = polynomial->getName();
+		var_name = to_lower(polynomial->getName());
 		if (stored.find(var_name) != stored.end())
+		{
+			delete this->_node;
 			this->_node = stored[var_name]->clone();
+		}
 		return;
 	}
 	this->_left->replace_variables(stored);

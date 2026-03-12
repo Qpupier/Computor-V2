@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/11 20:07:10 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/12 11:40:36 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,24 @@ static void	compute_equation(const std::string &line, t_data &data)
 		delete right_ast;
 }
 
+static void	print_expression(const std::string &line, t_data &data)
+{
+	AST*	ast;
+
+	ast = compute_expression(line, data, true);
+	if (!ast)
+		throw UnexpectedError("Unexpected error while computing the expression");
+	if (!ast->end_of_tree())
+	{
+		delete ast;
+		throw UnexpectedError("Unexpected error: the AST is not an expression");
+	}
+	std::cout << *ast->getNode() << std::endl;
+	delete ast;
+}
+
 static void	parse_line(const std::string &line, t_data &data)
 {
-	AST			*ast;
 	long int	nb_equal;
 
 	nb_equal = std::count(line.begin(), line.end(), '=');
@@ -68,12 +83,7 @@ static void	parse_line(const std::string &line, t_data &data)
 	else if (line.find('?') != std::string::npos)
 		stored_polynomials(data.stored);
 	else
-	{
-		ast = compute_expression(line, data, true);
-		std::cout << *ast << std::endl;//To adjust
-		if (ast)
-			delete ast;
-	}
+		print_expression(line, data);
 }
 
 static void	compute_line(const std::string &line, t_data &data)

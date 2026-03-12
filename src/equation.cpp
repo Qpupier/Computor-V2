@@ -6,14 +6,20 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/11 20:01:07 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/12 13:44:16 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
 #include "Polynomial.hpp"
 
-static void	equation_error(AST *left_ast, AST *right_ast, 	\
+std::string			to_lower(std::string s)
+{
+	std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c){return (static_cast<char>(std::tolower(c)));});
+	return (s);
+}
+
+static void			equation_error(AST *left_ast, AST *right_ast, 	\
 		const UnexpectedError &error)
 {
 	if (left_ast)
@@ -25,10 +31,10 @@ static void	equation_error(AST *left_ast, AST *right_ast, 	\
 
 static Polynomial	*get_polynomial(IType *left, IType *right)
 {
-	Polynomial	*left_var;
-	Polynomial	*right_var;
+	Polynomial*	left_var;
+	Polynomial*	right_var;
 	std::string	var;
-	Polynomial	*polynomial;
+	Polynomial*	polynomial;
 
 	left_var = dynamic_cast<Polynomial*>(left);
 	right_var = dynamic_cast<Polynomial*>(right);
@@ -48,25 +54,36 @@ static Polynomial	*get_polynomial(IType *left, IType *right)
 	return (polynomial);
 }
 
-static void	trinomial(Polynomial *polynomial)
+static void			assignation(std::string var, std::map<std::string, const IType*> &stored, IType *result)
+{
+	std::string	var_lower(to_lower(var));
+
+	std::cout << var << " = " << *result << std::endl;
+	if (stored.find(var_lower) != stored.end())
+		delete stored.at(var_lower);
+	stored[var_lower] = result;
+}
+
+static void			trinomial(Polynomial *polynomial)
 {
 	std::cout << *polynomial << " = 0" << std::endl;
 	solve_trinomial(polynomial);
 }
 
-static void	binomial(Polynomial *polynomial, std::map<std::string, const IType*> &stored)
+static void			binomial(Polynomial *polynomial, 	\
+		std::map<std::string, const IType*> &stored)
 {
-	IType	*tmp;
-	IType	*result;
+	IType*		tmp;
+	IType*		result;
 
 	tmp = *polynomial->getPower0() * Rational(-1);
 	result = *tmp / *polynomial->getPower1();
 	delete tmp;
-	std::cout << polynomial->getName() << " = " << *result << std::endl;
-	stored[polynomial->getName()] = result;
+	assignation(polynomial->getName(), stored, result);
 }
 
-void	equation(AST *left_ast, AST *right_ast, std::map<std::string, const IType*> &stored)
+void				equation(AST *left_ast, AST *right_ast, 	\
+		std::map<std::string, const IType*> &stored)
 {
 	IType		*left;
 	IType		*right;
@@ -86,8 +103,8 @@ void	equation(AST *left_ast, AST *right_ast, std::map<std::string, const IType*>
 	else if (*polynomial->getPower1())
 		binomial(polynomial, stored);
 	else if (*polynomial->getPower0())
-		std::cout << *polynomial << " = 0" << std::endl << "No solution" << std::endl;// To adjust
+		std::cout << "False" << std::endl;
 	else
-		std::cout << *polynomial << " = 0" << std::endl << "All real numbers are solutions" << std::endl;// To adjust
+		std::cout << "True" << std::endl;
 	delete polynomial;
 }
