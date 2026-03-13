@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/11 19:00:47 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/13 20:00:08 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ Operator::Operator(std::string op)
 		_op = E_POWER;
 	else if (op == "***")
 		_op = E_UNKNOWN;
+	else if (op == "<>")
+		_op = E_FUNCTION;
 	else
 		throw UnexpectedError("Invalid operator: " + op);
 }
@@ -138,6 +140,13 @@ Operator::t_operator	Operator::getOperator(void) const
 
 // Methods
 IType*			Operator::matrix_operator(const IType &other) const
+{
+	throw ERROR_UNEXPECTED;
+	(void)other;
+	return (nullptr);
+}
+
+IType*			Operator::function_operator(const IType &other) const
 {
 	throw ERROR_UNEXPECTED;
 	(void)other;

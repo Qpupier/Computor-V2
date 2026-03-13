@@ -6,11 +6,12 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/11 20:09:41 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/13 19:57:05 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
+#include "Polynomial.hpp"
 
 static void			semantic_verification(const std::vector<Token> &tokens)
 {
@@ -104,7 +105,41 @@ static bool			test_function(std::vector<Token> &tokens, size_t pos, 	\
 	(void)tokens;
 	(void)pos;
 	(void)stored;
+	return (true);
 	return (false);
+}
+
+static bool			set_function_left(std::vector<Token> &tokens, std::map<std::string, const IType*> &stored)
+{
+	if (tokens.size() == 4 && tokens[0].getType() == Token::E_POLYNOMIAL 	\
+			&& tokens[1].getType() == Token::E_LEFT_PARENTHESIS 			\
+			&& tokens[2].getType() == Token::E_POLYNOMIAL 					\
+			&& tokens[3].getType() == Token::E_RIGHT_PARENTHESIS)
+	{
+		stored[tokens[0].getValue()] = nullptr;
+		return (true);
+	}
+	return (false);
+}
+
+static void			set_function_right(std::map<std::string, const IType*> &stored, AST *ast)
+{
+	Polynomial*										polynomial;
+	std::map<std::string, const IType*>::iterator	it;
+
+	if (!ast->end_of_tree())
+		return ;
+	polynomial = dynamic_cast<Polynomial*>(ast->getNode());
+	if (!polynomial)
+		return ;
+	for (it = stored.begin(); it != stored.end(); it++)
+	{
+		if (!it->second)
+		{
+			it->second = polynomial;
+			break;
+		}
+	}
 }
 
 static void			set_missing_operators(std::vector<Token> &tokens, 	\
@@ -120,10 +155,12 @@ static void			set_missing_operators(std::vector<Token> &tokens, 	\
 		if (prev_token != Token::E_OPERATOR && current_token != Token::E_OPERATOR && prev_token != Token::E_LEFT_PARENTHESIS && current_token != Token::E_RIGHT_PARENTHESIS)
 		{
 			if (prev_token == Token::E_POLYNOMIAL && current_token == Token::E_LEFT_PARENTHESIS && test_function(tokens, i, stored))
-				continue;
-			tokens.insert(tokens.begin() + static_cast<long int>(i), 	\
-					Token(new_operator(prev_token, current_token), 		\
-					Token::E_OPERATOR));
+				tokens.insert(tokens.begin() + static_cast<long int>(i), 	\
+						Token("<>", Token::E_OPERATOR));
+			else
+				tokens.insert(tokens.begin() + static_cast<long int>(i), 	\
+						Token(new_operator(prev_token, current_token), 		\
+						Token::E_OPERATOR));
 		}
 	}
 }
@@ -157,11 +194,15 @@ AST					*compute_expression(const std::string &line, t_data &data, bool is_right
 	semantic_verification(tokens);
 	if (tokens.size() && tokens[tokens.size() - 1].getType() == Token::E_QUESTION)
 		tokens.pop_back();
+	if (!is_right_side && set_function_left(tokens, data.stored))
+		return (nullptr);
 	set_missing_operators(tokens, data.stored);
 	ast = build_ast(tokens, data);
 	if (!ast)
 		throw ERROR_INVALID_EXPRESSION;
 	if (is_right_side || !ast->end_of_tree())
 		ast->reduce_expression(data.stored);
+	if (is_right_side)
+		set_function_right(data.stored, ast);
 	return (ast);
 }

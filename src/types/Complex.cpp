@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/11 19:00:47 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/13 19:21:18 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -602,7 +602,13 @@ IType*			Complex::matrix_operator(const IType &other) const
 {
 	throw ERROR_MATRIX_OPERATOR;
 	(void)other;
+	return (nullptr);
+}
+
+IType*			Complex::function_operator(const IType &other) const
+{
 	throw ERROR_UNEXPECTED;
+	(void)other;
 	return (nullptr);
 }
 

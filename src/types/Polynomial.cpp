@@ -774,8 +774,27 @@ IType*			Polynomial::matrix_operator(const IType &other) const
 	if (other_matrix)
 		return (this->matrix_operator(*other_matrix));
 	throw ERROR_MATRIX_OPERATOR;
-	throw ERROR_UNEXPECTED;
 	return (nullptr);
+}
+
+IType*			Polynomial::function_operator(const IType &other) const
+{
+	IType*		square;
+	IType*		power2;
+	IType*		power1;
+	IType*		addition1;
+	IType*		addition2;
+
+	square = other * other;
+	power2 = *this->_power2 * *square;
+	delete square;
+	power1 = *this->_power1 * other;
+	addition1 = *power2 + *power1;
+	delete power2;
+	delete power1;
+	addition2 = *addition1 + *this->_power0;
+	delete addition1;
+	return (addition2);// Last code
 }
 
 IType*			Polynomial::clone(void) const

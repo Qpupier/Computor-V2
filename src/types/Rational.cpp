@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/11 19:00:47 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/13 19:22:17 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -662,14 +662,19 @@ IType*		Rational::operator^(const IType &other) const
 
 
 // Getters
-int	Rational::getNumerator(void) const
+int		Rational::getNumerator(void) const
 {
 	return (this->_numerator);
 }
 
-int	Rational::getDenominator(void) const
+int		Rational::getDenominator(void) const
 {
 	return (this->_denominator);
+}
+
+double	Rational::getValue(void) const
+{
+	return (static_cast<double>(this->_numerator) / this->_denominator);
 }
 
 
@@ -679,6 +684,13 @@ IType*			Rational::matrix_operator(const IType &other) const
 	throw ERROR_MATRIX_OPERATOR;
 	(void)other;
 	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Rational::function_operator(const IType &other) const
+{
+	throw ERROR_UNEXPECTED;
+	(void)other;
 	return (nullptr);
 }
 

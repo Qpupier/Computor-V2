@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/12 12:03:59 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/13 19:34:49 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ class	Polynomial: public IType
 		IType*			matrix_operator(const IType &other) const;
 		IType*			matrix_operator(const Polynomial &other) const;
 		IType*			matrix_operator(const Matrix &other) const;
+		IType*			function_operator(const IType &other) const;
 		IType*			clone(void) const;
 		std::ostream&	print(std::ostream &os) const;
 		std::ostream&	print_polynomial(std::ostream &os, 	\

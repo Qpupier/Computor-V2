@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/12 13:21:10 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/13 19:17:14 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ static IType*	get_result(IType *left_entity, IType *right_entity, 	\
 			return (left_entity->matrix_operator(*right_entity));
 		case Operator::E_POWER:
 			return (*left_entity ^ *right_entity);
+		case Operator::E_FUNCTION:
+			return (left_entity->function_operator(*right_entity));
 		case Operator::E_UNKNOWN:
 			if (dynamic_cast<Matrix*>(left_entity) && dynamic_cast<Matrix*>(right_entity))
 				return (left_entity->matrix_operator(*right_entity));

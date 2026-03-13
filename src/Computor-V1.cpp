@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:03:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/12 16:15:55 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/13 15:34:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,35 @@ static void	reduce_sqrt(int *factor, int *sqrt)
 	}
 }
 
-static void	solve_trinomial_complex(Polynomial *polynomial, Complex *discriminant_complex)
+static void	solve_trinomial_complex(Polynomial *polynomial, Complex *delta)
 {
+	double modulo;
 	double p;
 	double q;
+	double denominator;
+	double solution1_real;
+	double solution1_imaginary;
+	double solution2_real;
+	double solution2_imaginary;
+	Complex *a;
+	Complex *b;
 
-	p = std::sqrt((std::sqrt(std::pow(discriminant_complex->getReal().getNumerator() / discriminant_complex->getReal().getDenominator(), 2) + std::pow(discriminant_complex->getImaginary().getNumerator() / discriminant_complex->getImaginary().getDenominator(), 2)) + discriminant_complex->getReal().getNumerator() / discriminant_complex->getReal().getDenominator()) / 2);
-	q = std::sqrt((std::sqrt(std::pow(discriminant_complex->getReal().getNumerator() / discriminant_complex->getReal().getDenominator(), 2) + std::pow(discriminant_complex->getImaginary().getNumerator() / discriminant_complex->getImaginary().getDenominator(), 2)) - discriminant_complex->getReal().getNumerator() / discriminant_complex->getReal().getDenominator()) / 2);
+	a = dynamic_cast<Complex*>(polynomial->getPower2());
+	b = dynamic_cast<Complex*>(polynomial->getPower1());
+	if (!a || !b)
+		throw UnexpectedError("Invalid polynomial: non-rational coefficients");
+	modulo = std::sqrt(std::pow(delta->getReal().getValue(), 2) + std::pow(delta->getImaginary().getValue(), 2));
+	p = std::sqrt((modulo + delta->getReal().getValue()) / 2);
+	q = std::sqrt((modulo - delta->getReal().getValue()) / 2);
+	if (delta->getImaginary().getValue() < 0)
+		q = -q;
+	denominator = 2 * (std::pow(a->getReal().getValue(), 2) + std::pow(a->getImaginary().getValue(), 2));
+	solution1_real = (a->getReal().getValue() * (p - b->getReal().getValue()) + a->getImaginary().getValue() * (q - b->getImaginary().getValue())) / denominator;
+	solution1_imaginary = (a->getReal().getValue() * (q - b->getImaginary().getValue()) - a->getImaginary().getValue() * (p - b->getReal().getValue())) / denominator;
+	solution2_real = (a->getReal().getValue() * (-p - b->getReal().getValue()) + a->getImaginary().getValue() * (-q - b->getImaginary().getValue())) / denominator;
+	solution2_imaginary = (a->getReal().getValue() * (-q - b->getImaginary().getValue()) - a->getImaginary().getValue() * (-p - b->getReal().getValue())) / denominator;
+	std::cout << "S = {" << solution1_real << " + " << solution1_imaginary << "i, " << solution2_real << " + " << solution2_imaginary << "i} ∈ ℂ" << std::endl;
+	// TODO ameliorer le print
 }
 
 static void	find_complex_solutions(Polynomial *polynomial, Rational *discriminant)

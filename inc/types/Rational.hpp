@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/11 19:00:47 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/13 19:18:04 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,9 +96,11 @@ class	Rational: public IType
 		// Getters
 		int		getNumerator(void) const;
 		int		getDenominator(void) const;
+		double	getValue(void) const;
 
 		// Methods
 		IType*			matrix_operator(const IType &other) const;
+		IType*			function_operator(const IType &other) const;
 		IType*			clone(void) const;
 		std::ostream&	print(std::ostream &os) const;
 		std::ostream&	print_polynomial(std::ostream &os, 	\

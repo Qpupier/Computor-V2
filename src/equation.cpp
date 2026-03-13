@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/12 13:44:16 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/13 19:05:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ void				equation(AST *left_ast, AST *right_ast, 	\
 	IType		*right;
 	Polynomial	*polynomial;
 
-	if (!left_ast || !right_ast)
-		equation_error(left_ast, right_ast, UnexpectedError("Invalid AST: null pointer"));
+	if (!left_ast)
+		return ;
 	if (!left_ast->end_of_tree() || !right_ast->end_of_tree())
 		equation_error(left_ast, right_ast, UnexpectedError("Invalid AST: not an expression"));
 	left = left_ast->getNode()->clone();
