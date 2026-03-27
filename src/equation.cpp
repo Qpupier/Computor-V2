@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/13 19:05:07 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/27 19:10:42 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,24 @@ static Polynomial	*get_polynomial(IType *left, IType *right)
 	return (polynomial);
 }
 
-static void			assignation(std::string var, std::map<std::string, const IType*> &stored, IType *result)
+static void			assignation(std::string var, std::map<std::pair<std::string, std::string>, const IType*> &stored, IType *result)
 {
+	std::map<std::pair<std::string, std::string>, const IType*>::iterator	it;
 	std::string	var_lower(to_lower(var));
+	std::pair<std::string, std::string>	pair(var_lower, std::string());
 
 	std::cout << var << " = " << *result << std::endl;
-	if (stored.find(var_lower) != stored.end())
-		delete stored.at(var_lower);
-	stored[var_lower] = result;
+	for (it = stored.begin(); it != stored.end();)
+	{
+		if (it->first.first == var_lower)
+		{
+			delete it->second;
+			it = stored.erase(it);
+		}
+		else
+			it++;
+	}
+	stored[pair] = result;
 }
 
 static void			trinomial(Polynomial *polynomial)
@@ -71,7 +81,7 @@ static void			trinomial(Polynomial *polynomial)
 }
 
 static void			binomial(Polynomial *polynomial, 	\
-		std::map<std::string, const IType*> &stored)
+		std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
 	IType*		tmp;
 	IType*		result;
@@ -83,7 +93,7 @@ static void			binomial(Polynomial *polynomial, 	\
 }
 
 void				equation(AST *left_ast, AST *right_ast, 	\
-		std::map<std::string, const IType*> &stored)
+		std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
 	IType		*left;
 	IType		*right;

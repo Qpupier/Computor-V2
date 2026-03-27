@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/13 19:17:14 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/27 19:06:55 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,29 @@
 #include "Polynomial.hpp"
 
 // Utils
+static IType*	find_function(IType *node, std::map<std::pair<std::string, std::string>, const IType*> &stored)
+{
+	std::map<std::pair<std::string, std::string>, const IType*>::iterator	it;
+	const Polynomial	*polynomial;
+	std::string			var_name;
+	std::pair<std::string, std::string>	var_key;
+
+	polynomial = dynamic_cast<const Polynomial*>(node);
+	if (!polynomial)
+		throw UnexpectedError("Left side of function operator must be a polynomial");
+	var_name = to_lower(polynomial->getName());
+	var_key.first = var_name;
+	for (it = stored.begin(); it != stored.end(); it++)
+	{
+		if (to_lower(it->first.first) == to_lower(var_key.first) && !it->first.second.empty())
+			return (const_cast<IType*>(it->second));
+	}
+	throw UnexpectedError("Function not found: " + var_name);
+	return (nullptr);
+}
+
 static IType*	get_result(IType *left_entity, IType *right_entity, 	\
-		Operator::t_operator op)
+		Operator::t_operator op, std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
 	switch (op)
 	{
@@ -38,7 +59,7 @@ static IType*	get_result(IType *left_entity, IType *right_entity, 	\
 		case Operator::E_POWER:
 			return (*left_entity ^ *right_entity);
 		case Operator::E_FUNCTION:
-			return (left_entity->function_operator(*right_entity));
+			return (find_function(left_entity, stored)->function_operator(*right_entity));
 		case Operator::E_UNKNOWN:
 			if (dynamic_cast<Matrix*>(left_entity) && dynamic_cast<Matrix*>(right_entity))
 				return (left_entity->matrix_operator(*right_entity));
@@ -169,7 +190,7 @@ bool			AST::end_of_tree(void) const
 	return (false);
 }
 
-void			AST::reduce_expression(std::map<std::string, const IType*> &stored)
+void			AST::reduce_expression(std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
 	Operator*	op;
 	IType*		result;
@@ -186,7 +207,7 @@ void			AST::reduce_expression(std::map<std::string, const IType*> &stored)
 		throw ERROR_OPERATOR_EXPECTED;
 	try
 	{
-		result = get_result(this->_left->_node, this->_right->_node, op->getOperator());
+		result = get_result(this->_left->_node, this->_right->_node, op->getOperator(), stored);
 	}
 	catch(const std::exception& e)
 	{
@@ -199,21 +220,22 @@ void			AST::reduce_expression(std::map<std::string, const IType*> &stored)
 	this->_right = nullptr;
 }
 
-void			AST::replace_variables(std::map<std::string, const IType*> &stored)
+void			AST::replace_variables(std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
-	const Polynomial	*polynomial;
-	std::string			var_name;
+	const Polynomial					*polynomial;
+	std::pair<std::string, std::string>	var_key;
 
 	if (this->end_of_tree())
 	{
 		polynomial = dynamic_cast<const Polynomial*>(this->_node);
 		if (!polynomial)
 			return;
-		var_name = to_lower(polynomial->getName());
-		if (stored.find(var_name) != stored.end())
+		var_key.first = to_lower(polynomial->getName());
+		var_key.second = std::string();
+		if (stored.find(var_key) != stored.end())
 		{
 			delete this->_node;
-			this->_node = stored[var_name]->clone();
+			this->_node = stored[var_key]->clone();
 		}
 		return;
 	}

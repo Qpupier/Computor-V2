@@ -34,7 +34,7 @@ static bool			is_multiplication_supported(const Polynomial &var1, 	\
 	return (!result);
 }
 
-static bool			is_division_supported(const Polynomial &var1, 		\
+static bool			is_division_supported(const Polynomial &var1, 			\
 		const Polynomial &var2)
 {
 	IType	*test1;
@@ -59,7 +59,7 @@ static bool			is_division_supported(const Polynomial &var1, 		\
 	return (!result);
 }
 
-static Polynomial*	polynomial_divion(const Polynomial &var1, 			\
+static Polynomial*	polynomial_divion(const Polynomial &var1, 				\
 		const Polynomial &var2)
 {
 	IType	*power2;
@@ -167,7 +167,7 @@ static Polynomial*	division_with_power0(const Polynomial &var1, 			\
 	return (new Polynomial(var1.getName(), power2, power1, power0));
 }
 
-static void			print_first_power(std::ostream &os, 				\
+static void			print_first_power(std::ostream &os, 					\
 		const IType *power, const std::string &var, const char *exponent)
 {
 	Rational	minus_one(-1);
@@ -182,7 +182,7 @@ static void			print_first_power(std::ostream &os, 				\
 		os << var << exponent;
 }
 
-static void			print_power(std::ostream &os, bool first_power, 	\
+static void			print_power(std::ostream &os, bool first_power, 		\
 		const IType *power, const std::string &var)
 {
 	Rational	minus_one(-1);
@@ -779,11 +779,11 @@ IType*			Polynomial::matrix_operator(const IType &other) const
 
 IType*			Polynomial::function_operator(const IType &other) const
 {
-	IType*		square;
-	IType*		power2;
-	IType*		power1;
-	IType*		addition1;
-	IType*		addition2;
+	IType*	square;
+	IType*	power2;
+	IType*	power1;
+	IType*	addition1;
+	IType*	addition2;
 
 	square = other * other;
 	power2 = *this->_power2 * *square;
@@ -794,7 +794,7 @@ IType*			Polynomial::function_operator(const IType &other) const
 	delete power1;
 	addition2 = *addition1 + *this->_power0;
 	delete addition1;
-	return (addition2);// Last code
+	return (addition2);
 }
 
 IType*			Polynomial::clone(void) const

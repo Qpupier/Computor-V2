@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/11 19:01:06 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/27 18:10:01 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define COMPUTOR_V2_HPP
 
 # include <cmath>
+# include <utility>
 # include <unistd.h>
 
 # include "IType.hpp"
@@ -37,7 +38,7 @@ typedef struct	s_data
 {
 	std::map<std::string, std::regex>			patterns;
 	std::map<const Token::t_token, std::regex>	tokens_types;
-	std::map<std::string, const IType*>			stored;
+	std::map<std::pair<std::string, std::string>, const IType*>	stored;
 }				t_data;
 
 int		usage(void);

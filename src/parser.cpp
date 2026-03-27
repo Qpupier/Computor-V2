@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/13 19:57:05 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/27 19:02:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,57 +93,63 @@ static std::string	new_operator(Token::t_token prev_token, Token::t_token curren
 	return ("*");
 }
 
-static bool			test_function(std::vector<Token> &tokens, size_t pos, 	\
-		const std::map<std::string, const IType*> &stored)
+static bool			set_function_left(std::vector<Token> &tokens, std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
-	// if (stored.find(tokens[pos - 1].getValue()) != stored.end() 	
-	// 		&& !dynamic_cast<const Polynomial*>(stored.at(tokens[pos - 1].getValue())))
-	// {
-	// 	tokens[pos - 1].setType(Token::E_FUNCTION);
-	// 	return (true);
-	// }
-	(void)tokens;
-	(void)pos;
-	(void)stored;
-	return (true);
-	return (false);
-}
+	std::map<std::pair<std::string, std::string>, const IType*>::iterator	it;
+	std::pair<std::string, std::string>										pair;
 
-static bool			set_function_left(std::vector<Token> &tokens, std::map<std::string, const IType*> &stored)
-{
 	if (tokens.size() == 4 && tokens[0].getType() == Token::E_POLYNOMIAL 	\
 			&& tokens[1].getType() == Token::E_LEFT_PARENTHESIS 			\
 			&& tokens[2].getType() == Token::E_POLYNOMIAL 					\
 			&& tokens[3].getType() == Token::E_RIGHT_PARENTHESIS)
 	{
-		stored[tokens[0].getValue()] = nullptr;
+		pair.first = tokens[0].getValue();
+		pair.second = tokens[2].getValue();
+		for (it = stored.begin(); it != stored.end();)
+		{
+			if (to_lower(it->first.first) == to_lower(pair.first))
+			{
+				delete it->second;
+				it = stored.erase(it);
+			}
+			else
+				it++;
+		}
+		stored[pair] = nullptr;
 		return (true);
 	}
 	return (false);
 }
 
-static void			set_function_right(std::map<std::string, const IType*> &stored, AST *ast)
+static void			set_function_right(std::map<std::pair<std::string, std::string>, const IType*> &stored, AST *ast)
 {
-	Polynomial*										polynomial;
-	std::map<std::string, const IType*>::iterator	it;
+	Polynomial*																polynomial;
+	std::map<std::pair<std::string, std::string>, const IType*>::iterator	it;
+	std::pair<std::string, std::string>										key;
 
 	if (!ast->end_of_tree())
-		return ;
+		throw LogicError("The right side of the function definition must be a single expression");
 	polynomial = dynamic_cast<Polynomial*>(ast->getNode());
 	if (!polynomial)
-		return ;
+		throw LogicError("The right side of the equation must contain the variable of the function");
 	for (it = stored.begin(); it != stored.end(); it++)
 	{
 		if (!it->second)
 		{
-			it->second = polynomial;
+			key = it->first;
+			if (to_lower(key.second) != to_lower(polynomial->getName()))
+			{
+				stored.erase(key);
+				throw LogicError("Function parameter does not match the variable in the right side of the equation");
+			}
+			it->second = polynomial->clone();
+			std::cout << key.first << "(" << key.second << ") = " << *it->second << std::endl;
 			break;
 		}
 	}
 }
 
-static void			set_missing_operators(std::vector<Token> &tokens, 	\
-		const std::map<std::string, const IType*> &stored)
+static void			set_missing_operators(std::vector<Token> &tokens)
 {
 	for (unsigned long int i = 1; i < tokens.size(); i++)
 	{
@@ -154,7 +160,7 @@ static void			set_missing_operators(std::vector<Token> &tokens, 	\
 		current_token = tokens[i].getType();
 		if (prev_token != Token::E_OPERATOR && current_token != Token::E_OPERATOR && prev_token != Token::E_LEFT_PARENTHESIS && current_token != Token::E_RIGHT_PARENTHESIS)
 		{
-			if (prev_token == Token::E_POLYNOMIAL && current_token == Token::E_LEFT_PARENTHESIS && test_function(tokens, i, stored))
+			if (prev_token == Token::E_POLYNOMIAL && current_token == Token::E_LEFT_PARENTHESIS)
 				tokens.insert(tokens.begin() + static_cast<long int>(i), 	\
 						Token("<>", Token::E_OPERATOR));
 			else
@@ -179,7 +185,21 @@ static Token		create_token(std::string::const_iterator &start, 	\
 	return Token(*it, get_token_type(*it, data.tokens_types));
 }
 
-AST					*compute_expression(const std::string &line, t_data &data, bool is_right_side)
+static bool			waiting_function(const std::map<std::pair<std::string, std::string>, const IType*> &stored)
+{
+	std::map<std::pair<std::string, std::string>, const IType*>::const_iterator	it(stored.begin());
+
+	while (it != stored.end())
+	{
+		if (!it->second && !it->first.second.empty())
+			return (true);
+		it++;
+	}
+	return (false);
+}
+
+AST*				compute_expression(const std::string &line, 		\
+		t_data &data, bool is_right_side)
 {
 	std::string::const_iterator	end(line.end());
 	std::vector<Token>			tokens;
@@ -196,13 +216,13 @@ AST					*compute_expression(const std::string &line, t_data &data, bool is_right
 		tokens.pop_back();
 	if (!is_right_side && set_function_left(tokens, data.stored))
 		return (nullptr);
-	set_missing_operators(tokens, data.stored);
+	set_missing_operators(tokens);
 	ast = build_ast(tokens, data);
 	if (!ast)
 		throw ERROR_INVALID_EXPRESSION;
 	if (is_right_side || !ast->end_of_tree())
 		ast->reduce_expression(data.stored);
-	if (is_right_side)
+	if (is_right_side && waiting_function(data.stored))
 		set_function_right(data.stored, ast);
 	return (ast);
 }

@@ -6,15 +6,15 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/12 11:40:36 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/03/27 18:46:46 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
 
-static void	free_stored(const std::map<std::string, const IType*> &stored)
+static void	free_stored(const std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
-	std::map<std::string, const IType*>::const_iterator	it(stored.begin());
+	std::map<std::pair<std::string, std::string>, const IType*>::const_iterator	it(stored.begin());
 
 	while (it != stored.end())
 	{
@@ -23,14 +23,19 @@ static void	free_stored(const std::map<std::string, const IType*> &stored)
 	}
 }
 
-static void	stored_polynomials(const std::map<std::string, const IType*> &stored)
+static void	stored_varaiables(const std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
-	std::map<std::string, const IType*>::const_iterator	it(stored.begin());
+	std::map<std::pair<std::string, std::string>, const IType*>::const_iterator	it(stored.begin());
 
-	std::cerr << "\033[33mListing stored polynomials\033[0m" << std::endl;
+	std::cerr << "\033[33mListing stored variables and functions\033[0m" << std::endl;
 	while (it != stored.end())
 	{
-		std::cerr << "\033[33m  " << it->first << " = " << *it->second << "\033[0m" << std::endl;
+		std::cerr << "\033[33m  ";
+		if (!it->first.second.empty())
+			std::cout << it->first.first << "(" << it->first.second << ")";
+		else
+			std::cout << it->first.first;
+		std::cout << " = " << *it->second << "\033[0m" << std::endl;
 		it++;
 	}
 }
@@ -81,7 +86,7 @@ static void	parse_line(const std::string &line, t_data &data)
 	if (nb_equal)
 		compute_equation(line, data);
 	else if (line.find('?') != std::string::npos)
-		stored_polynomials(data.stored);
+		stored_varaiables(data.stored);
 	else
 		print_expression(line, data);
 }
@@ -91,7 +96,7 @@ static void	compute_line(const std::string &line, t_data &data)
 	if (line.empty())
 		return;
 	if (std::regex_match(line, data.patterns.at(TOKEN_LIST)))
-		return stored_polynomials(data.stored);
+		return stored_varaiables(data.stored);
 	try
 	{
 		parse_line(line, data);
