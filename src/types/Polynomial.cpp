@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/13 17:03:20 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/13 19:05:57 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static std::vector<Polynomial::t_term>	vector_term_coeff_multiplication(const IT
 
 	while (it != vector.end())
 	{
-		add_term_to_vector(*coefficient * *it->coefficient, it->power + power, result);
+		add_term_to_vector(*coefficient * *it->coefficient, power + it->power, result);
 		it++;
 	}
 	return (result);
@@ -122,6 +122,7 @@ static Polynomial*						polynomial_power_rational(const Polynomial *polynomial, 
 		result = *result * *polynomial;
 		delete tmp;
 	}
+	result->reduce();
 	return (result);
 }
 
@@ -145,21 +146,18 @@ static IType*							function_operator_term(const std::vector<Polynomial::t_term>
 	return (result);
 }
 
-static std::ostream&					print_terms(std::ostream &os, const std::vector<Polynomial::t_term> &terms, const std::string &name)
+static std::ostream&					print_terms(std::ostream &os, const std::vector<Polynomial::t_term> &terms, const std::string &name, bool alone = false)
 {
-	std::vector<Polynomial::t_term>::const_iterator	it(terms.begin());
-	bool											first_term;
+	bool	first_term;
 
 	//TODO: A ameliorer
+	if (!alone)
 	os << "(";
 	first_term = true;
-	while (it != terms.end())
+	for (std::vector<Polynomial::t_term>::const_reverse_iterator it(terms.rbegin()); it != terms.rend(); it++)
 	{
-		if (!it->coefficient)
-		{
-			it++;
+		if (!*it->coefficient)
 			continue ;
-		}
 		if (!first_term)
 			os << " + ";
 		os << "(" << *it->coefficient << ")";
@@ -170,13 +168,17 @@ static std::ostream&					print_terms(std::ostream &os, const std::vector<Polynom
 				os << "^" << it->power;
 		}
 		first_term = false;
-		it++;
 	}
 	if (first_term)
 		os << "0";
-	os << ")";
+	if (!alone)
+		os << ")";
 	return (os);
 }
+
+// static Polynomial::t_division_result	euclidean_division(const std::vector<Polynomial::t_term> &dividend, const std::vector<Polynomial::t_term> &divisor)
+// {
+// }
 
 
 // Constructors and destructor
@@ -387,6 +389,7 @@ Polynomial*	Polynomial::operator+(const Polynomial &other) const
 		add_terms_to_vector(vector_term_coeff_multiplication(it2->coefficient, it2->power, this->_dividers), result->_terms);
 		it2++;
 	}
+	result->reduce();
 	return (result);
 }
 
@@ -396,6 +399,7 @@ Polynomial*	Polynomial::operator+(const Rational &other) const
 
 	result = new Polynomial(*this);
 	add_terms_to_vector(vector_term_coeff_multiplication(other.clone(), 0, this->_dividers), result->_terms);
+	result->reduce();
 	return (result);
 }
 
@@ -405,6 +409,7 @@ Polynomial*	Polynomial::operator+(const Complex &other) const
 
 	result = new Polynomial(*this);
 	add_terms_to_vector(vector_term_coeff_multiplication(other.clone(), 0, this->_dividers), result->_terms);
+	result->reduce();
 	return (result);
 }
 
@@ -414,6 +419,7 @@ Polynomial*	Polynomial::operator+(const Matrix &other) const
 
 	result = new Polynomial(*this);
 	add_terms_to_vector(vector_term_coeff_multiplication(other.clone(), 0, this->_dividers), result->_terms);
+	result->reduce();
 	return (result);
 }
 
@@ -460,10 +466,11 @@ Polynomial*	Polynomial::operator-(const Polynomial &other) const
 	while (it2 != other._terms.end())
 	{
 		tmp = vector_term_coeff_multiplication(it2->coefficient, it2->power, this->_dividers);
-		add_terms_to_vector(vector_term_coeff_multiplication(new Rational(-1), 0, this->_dividers), result->_terms);
+		add_terms_to_vector(vector_term_coeff_multiplication(new Rational(-1), 0, tmp), result->_terms);
 		free_vector_terms(tmp);
 		it2++;
 	}
+	result->reduce();
 	return (result);
 }
 
@@ -473,6 +480,7 @@ Polynomial*	Polynomial::operator-(const Rational &other) const
 
 	result = new Polynomial(*this);
 	add_terms_to_vector(vector_term_coeff_multiplication(other * Rational(-1), 0, this->_dividers), result->_terms);
+	result->reduce();
 	return (result);
 }
 
@@ -482,6 +490,7 @@ Polynomial*	Polynomial::operator-(const Complex &other) const
 
 	result = new Polynomial(*this);
 	add_terms_to_vector(vector_term_coeff_multiplication(other * Rational(-1), 0, this->_dividers), result->_terms);
+	result->reduce();
 	return (result);
 }
 
@@ -491,6 +500,7 @@ Polynomial*	Polynomial::operator-(const Matrix &other) const
 
 	result = new Polynomial(*this);
 	add_terms_to_vector(vector_term_coeff_multiplication(other * Rational(-1), 0, this->_dividers), result->_terms);
+	result->reduce();
 	return (result);
 }
 
@@ -527,6 +537,7 @@ Polynomial*	Polynomial::operator*(const Polynomial &other) const
 	free_vector_terms(result->_dividers);
 	result->_terms = multiply_vectors(this->_terms, other._terms);
 	result->_dividers = multiply_vectors(this->_dividers, other._dividers);
+	result->reduce();
 	return (result);
 }
 
@@ -542,6 +553,7 @@ Polynomial*	Polynomial::operator*(const Rational &other) const
 		add_term_to_vector(*it->coefficient * other, it->power, result->_terms);
 		it++;
 	}
+	result->reduce();
 	return (result);
 }
 
@@ -557,6 +569,7 @@ Polynomial*	Polynomial::operator*(const Complex &other) const
 		add_term_to_vector(*it->coefficient * other, it->power, result->_terms);
 		it++;
 	}
+	result->reduce();
 	return (result);
 }
 
@@ -572,6 +585,7 @@ Polynomial*	Polynomial::operator*(const Matrix &other) const
 		add_term_to_vector(*it->coefficient * other, it->power, result->_terms);
 		it++;
 	}
+	result->reduce();
 	return (result);
 }
 
@@ -608,6 +622,7 @@ Polynomial*	Polynomial::operator/(const Polynomial &other) const
 	free_vector_terms(result->_dividers);
 	result->_terms = multiply_vectors(this->_terms, other._dividers);
 	result->_dividers = multiply_vectors(this->_dividers, other._terms);
+	result->reduce();
 	return (result);
 }
 
@@ -623,6 +638,7 @@ Polynomial*	Polynomial::operator/(const Rational &other) const
 		add_term_to_vector(*it->coefficient * other, it->power, result->_dividers);
 		it++;
 	}
+	result->reduce();
 	return (result);
 }
 
@@ -638,6 +654,7 @@ Polynomial*	Polynomial::operator/(const Complex &other) const
 		add_term_to_vector(*it->coefficient * other, it->power, result->_dividers);
 		it++;
 	}
+	result->reduce();
 	return (result);
 }
 
@@ -653,6 +670,7 @@ Polynomial*	Polynomial::operator/(const Matrix &other) const
 		add_term_to_vector(*it->coefficient * other, it->power, result->_dividers);
 		it++;
 	}
+	result->reduce();
 	return (result);
 }
 
@@ -808,9 +826,14 @@ IType*			Polynomial::clone(void) const
 
 std::ostream&	Polynomial::print(std::ostream &os) const
 {
-	print_terms(os, this->_terms, this->_name);// TODO: Pas sur que ca ca fonctionne
-	os << " / ";
-	print_terms(os, this->_dividers, this->_name);
+	if (this->_dividers.size() == 1 && *this->_dividers[0].coefficient == Rational(1) && !this->_dividers[0].power)
+		print_terms(os, this->_terms, this->_name, true);
+	else
+	{
+		print_terms(os, this->_terms, this->_name);
+		os << " / ";
+		print_terms(os, this->_dividers, this->_name);
+	}
 	return (os);
 }
 
@@ -843,8 +866,41 @@ unsigned int	Polynomial::get_degree(void) const
 	return (degree);
 }
 
+static void		add_blank_terms(std::vector<Polynomial::t_term> &terms)
+{
+	std::vector<Polynomial::t_term>::const_iterator	it(terms.begin());
+	unsigned int									max_power(0);
+
+	if (terms.empty())
+		return ;
+	while (it != terms.end())
+	{
+		if (it->power > max_power)
+			max_power = it->power;
+		it++;
+	}
+	for (unsigned int i = 0; i <= max_power; i++)
+		add_term_to_vector(new Rational(0), i, terms);
+}
+
+void			Polynomial::sort_terms(void)
+{
+	bool (*fct)(const Polynomial::t_term&, const Polynomial::t_term&);
+
+	fct = [](const Polynomial::t_term &a, const Polynomial::t_term &b)
+	{
+		return (a.power < b.power);
+	};
+	std::sort(this->_terms.begin(), this->_terms.end(), fct);
+	std::sort(this->_dividers.begin(), this->_dividers.end(), fct);
+}
+
 void			Polynomial::reduce(void)
 {
+	add_blank_terms(this->_terms);
+	add_blank_terms(this->_dividers);
+	this->sort_terms();
+	// euclidean_division(this->_terms, this->_dividers);
 }
 
 

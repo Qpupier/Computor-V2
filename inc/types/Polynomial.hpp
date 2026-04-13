@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/13 16:49:29 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/13 18:45:27 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,12 @@ class	Polynomial: public IType
 			IType*			coefficient;
 			unsigned int	power;
 		}				t_term;
+
+		typedef struct	s_division_result
+		{
+			std::vector<t_term>	quotient;
+			std::vector<t_term>	remainder;
+		}				t_division_result;
 
 		// Constructors and destructor
 		Polynomial(std::string name): _name(name), _terms() {};
@@ -95,6 +101,7 @@ class	Polynomial: public IType
 		std::ostream&	print_polynomial(std::ostream &os, 	\
 				const std::string &var) const;
 		unsigned int	get_degree(void) const;
+		void			sort_terms(void);
 		void			reduce(void);
 
 	private:
