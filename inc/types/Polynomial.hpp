@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/13 19:34:49 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/13 16:49:29 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,18 @@
 class	Polynomial: public IType
 {
 	public:
+		// Utils
+		typedef struct	s_term
+		{
+			IType*			coefficient;
+			unsigned int	power;
+		}				t_term;
+
 		// Constructors and destructor
-		Polynomial(std::string name, IType *power2, IType *power1, IType *power0): _name(name), _power2(power2), _power1(power1), _power0(power0) {};
-		Polynomial(std::string name): Polynomial(name, new Rational(0), new Rational(1), new Rational(0)) {};
-		Polynomial(const Token &token): Polynomial(token.getValue()) {};
-		Polynomial(const Polynomial &other): _name(other._name), _power2(other._power2->clone()), _power1(other._power1->clone()), _power0(other._power0->clone()) {};
+		Polynomial(std::string name): _name(name), _terms() {};
+		Polynomial(std::string name, t_term term);
+		Polynomial(const Token &token): Polynomial(token.getValue(), t_term{new Rational(1), 1}) {};
+		Polynomial(const Polynomial &other);
 		~Polynomial(void);
 
 		// Operator overloads
@@ -68,33 +75,33 @@ class	Polynomial: public IType
 		Polynomial*	operator%(const Complex &other) const;
 		Polynomial*	operator%(const Matrix &other) const;
 		IType*		operator^(const IType &other) const;
-		Polynomial*	operator^(const Polynomial &other) const;
-		Polynomial*	operator^(const Rational &other) const;
-		Polynomial*	operator^(const Complex &other) const;
-		Polynomial*	operator^(const Matrix &other) const;
+		// Polynomial*	operator^(const Polynomial &other) const;
+		// Polynomial*	operator^(const Rational &other) const;
+		// Polynomial*	operator^(const Complex &other) const;
+		// Polynomial*	operator^(const Matrix &other) const;
 
 		// Getters
-		std::string	getName(void) const;
-		IType*		getPower2(void) const;
-		IType*		getPower1(void) const;
-		IType*		getPower0(void) const;
+		std::string			getName(void) const;
+		std::vector<t_term>	getTerms(void) const;
+		std::vector<t_term>	getDividers(void) const;
 
 		// Methods
 		IType*			matrix_operator(const IType &other) const;
-		IType*			matrix_operator(const Polynomial &other) const;
-		IType*			matrix_operator(const Matrix &other) const;
+		// IType*			matrix_operator(const Polynomial &other) const;
+		// IType*			matrix_operator(const Matrix &other) const;
 		IType*			function_operator(const IType &other) const;
 		IType*			clone(void) const;
 		std::ostream&	print(std::ostream &os) const;
 		std::ostream&	print_polynomial(std::ostream &os, 	\
 				const std::string &var) const;
+		unsigned int	get_degree(void) const;
+		void			reduce(void);
 
 	private:
 		// Members
-		std::string	_name;
-		IType*		_power2;
-		IType*		_power1;
-		IType*		_power0;
+		std::string			_name;
+		std::vector<t_term>	_terms;
+		std::vector<t_term>	_dividers;
 };
 
 // Output stream operator overload

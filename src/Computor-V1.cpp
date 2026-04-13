@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:03:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/13 15:34:07 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/13 16:38:31 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	reduce_sqrt(int *factor, int *sqrt)
 	}
 }
 
-static void	solve_trinomial_complex(Polynomial *polynomial, Complex *delta)
+static void	solve_trinomial_complex(IType *a, IType *b, IType *c, Complex *delta)
 {
 	double modulo;
 	double p;
@@ -39,39 +39,43 @@ static void	solve_trinomial_complex(Polynomial *polynomial, Complex *delta)
 	double solution1_imaginary;
 	double solution2_real;
 	double solution2_imaginary;
-	Complex *a;
-	Complex *b;
+	Complex*	new_a;
+	Complex*	new_b;
+	Complex*	new_c;
 
-	a = dynamic_cast<Complex*>(polynomial->getPower2());
-	b = dynamic_cast<Complex*>(polynomial->getPower1());
-	if (!a || !b)
-		throw UnexpectedError("Invalid polynomial: non-rational coefficients");
+	try
+	{
+		new_a = new Complex(*a);
+		delete a;
+		new_b = new Complex(*b);
+		delete b;
+		new_c = new Complex(*c);
+		delete c;
+	}
+	catch (const UnexpectedError &e)
+	{
+		throw UnexpectedError("Invalid polynomial: non-complex coefficients");//review with complexes
+	}
 	modulo = std::sqrt(std::pow(delta->getReal().getValue(), 2) + std::pow(delta->getImaginary().getValue(), 2));
 	p = std::sqrt((modulo + delta->getReal().getValue()) / 2);
 	q = std::sqrt((modulo - delta->getReal().getValue()) / 2);
 	if (delta->getImaginary().getValue() < 0)
 		q = -q;
-	denominator = 2 * (std::pow(a->getReal().getValue(), 2) + std::pow(a->getImaginary().getValue(), 2));
-	solution1_real = (a->getReal().getValue() * (p - b->getReal().getValue()) + a->getImaginary().getValue() * (q - b->getImaginary().getValue())) / denominator;
-	solution1_imaginary = (a->getReal().getValue() * (q - b->getImaginary().getValue()) - a->getImaginary().getValue() * (p - b->getReal().getValue())) / denominator;
-	solution2_real = (a->getReal().getValue() * (-p - b->getReal().getValue()) + a->getImaginary().getValue() * (-q - b->getImaginary().getValue())) / denominator;
-	solution2_imaginary = (a->getReal().getValue() * (-q - b->getImaginary().getValue()) - a->getImaginary().getValue() * (-p - b->getReal().getValue())) / denominator;
+	denominator = 2 * (std::pow(new_a->getReal().getValue(), 2) + std::pow(new_a->getImaginary().getValue(), 2));
+	solution1_real = (new_a->getReal().getValue() * (p - new_b->getReal().getValue()) + new_a->getImaginary().getValue() * (q - new_b->getImaginary().getValue())) / denominator;
+	solution1_imaginary = (new_a->getReal().getValue() * (q - new_b->getImaginary().getValue()) - new_a->getImaginary().getValue() * (p - new_b->getReal().getValue())) / denominator;
+	solution2_real = (new_a->getReal().getValue() * (-p - new_b->getReal().getValue()) + new_a->getImaginary().getValue() * (-q - new_b->getImaginary().getValue())) / denominator;
+	solution2_imaginary = (new_a->getReal().getValue() * (-q - new_b->getImaginary().getValue()) - new_a->getImaginary().getValue() * (-p - new_b->getReal().getValue())) / denominator;
 	std::cout << "S = {" << solution1_real << " + " << solution1_imaginary << "i, " << solution2_real << " + " << solution2_imaginary << "i} ∈ ℂ" << std::endl;
 	// TODO ameliorer le print
 }
 
-static void	find_complex_solutions(Polynomial *polynomial, Rational *discriminant)
+static void	find_complex_solutions(Rational* a, Rational* b, Rational* discriminant)
 {
-	Rational	*a;
-	Rational	*b;
 	double		sqrt_discriminant;
 	double		solution1;
 	double		solution2;
 
-	a = dynamic_cast<Rational*>(polynomial->getPower2());
-	b = dynamic_cast<Rational*>(polynomial->getPower1());
-	if (!a || !b)
-		throw UnexpectedError("Invalid polynomial: non-rational coefficients");
 	sqrt_discriminant = std::sqrt(discriminant->getNumerator() / static_cast<double>(discriminant->getDenominator()));
 	solution1 = (-b->getNumerator() / static_cast<double>(b->getDenominator()) - sqrt_discriminant) / (2 * a->getNumerator() / static_cast<double>(a->getDenominator()));
 	solution2 = (-b->getNumerator() / static_cast<double>(b->getDenominator()) + sqrt_discriminant) / (2 * a->getNumerator() / static_cast<double>(a->getDenominator()));
@@ -79,14 +83,10 @@ static void	find_complex_solutions(Polynomial *polynomial, Rational *discriminan
 	// TODO
 }
 
-static void	find_one_solution(Polynomial *polynomial)
+static void	find_one_solution(Rational *a, Rational *b)
 {
-	Rational	*a;
-	Rational	*b;
 	double		solution1;
 
-	a = dynamic_cast<Rational*>(polynomial->getPower2());
-	b = dynamic_cast<Rational*>(polynomial->getPower1());
 	if (!a || !b)
 		throw UnexpectedError("Invalid polynomial: non-rational coefficients");
 	solution1 = -b->getNumerator() / static_cast<double>(b->getDenominator()) / (2 * a->getNumerator() / static_cast<double>(a->getDenominator()));
@@ -128,20 +128,8 @@ static void	print_result_roots(std::string var, const Rational &factor, int b, i
 	std::cout << "\033[30m" << var << "2 ≃ " << std::max(solution1, solution2) << "\033[0m" << std::endl;
 }
 
-static void	find_two_solutions(Polynomial *polynomial, Rational *discriminant)
+static void	find_two_solutions(std::string variable, Rational *a, Rational *b, Rational *discriminant)
 {
-	Rational	*a;
-	Rational	*b;
-
-	a = dynamic_cast<Rational*>(polynomial->getPower2());
-	b = dynamic_cast<Rational*>(polynomial->getPower1());
-	if (!a || !b)
-		throw UnexpectedError("Invalid polynomial: non-rational coefficients");//review with complexes
-
-
-
-
-
 	int factor_num = 1;
 	int factor_den = 1;
 	int sqrt_num = discriminant->getNumerator();
@@ -157,41 +145,85 @@ static void	find_two_solutions(Polynomial *polynomial, Rational *discriminant)
 	new_b = factorize.getNumerator();
 	new_fac = factorize.getDenominator();
 	Rational final(test * a->getDenominator(), 2 * a->getNumerator() * b->getDenominator() * factor.getDenominator());
-	print_result_roots(polynomial->getName(), final, new_b, new_fac, new_sqrt);
+	print_result_roots(variable, final, new_b, new_fac, new_sqrt);
 }
 
-static void	solve_trinomial_rational(Polynomial *polynomial, Rational *discriminant)
+static void	solve_trinomial_rational(std::string variable, IType *a, IType *b, IType *c, Rational *discriminant)
 {
+	Rational*	new_a;
+	Rational*	new_b;
+	Rational*	new_c;
+
+	try
+	{
+		new_a = new Rational(*a);
+		delete a;
+		new_b = new Rational(*b);
+		delete b;
+		new_c = new Rational(*c);
+		delete c;
+	}
+	catch (const UnexpectedError &e)
+	{
+		throw UnexpectedError("Invalid polynomial: non-rational coefficients");//review with complexes
+	}
 	if (*discriminant < Rational(0))
-		find_complex_solutions(polynomial, discriminant);
+		find_complex_solutions(new_a, new_b, discriminant);
 	else if (!*discriminant)
-		find_one_solution(polynomial);
+		find_one_solution(new_a, new_b);
 	else
-		find_two_solutions(polynomial, discriminant);
+		find_two_solutions(variable, new_a, new_b, discriminant);
 	delete discriminant;
 }
 
 void	solve_trinomial(Polynomial *polynomial)
 {
-	IType		*tmp_b2;
-	IType		*tmp_4a;
-	IType		*tmp_4ac;
-	IType		*tmp_b2_4ac;
-	Rational	*discriminant_rational;
-	Complex		*discriminant_complex;
+	std::vector<Polynomial::t_term>	terms;
+	IType*							a;
+	IType*							b;
+	IType*							c;
+	IType*							tmp_b2;
+	IType*							tmp_4a;
+	IType*							tmp_4ac;
+	IType*							tmp_b2_4ac;
+	Rational*						discriminant_rational;
+	Complex*						discriminant_complex;
 
-	tmp_b2 = *polynomial->getPower1() * *polynomial->getPower1();
-	tmp_4a = Rational(4) * *polynomial->getPower2();
-	tmp_4ac = *tmp_4a * *polynomial->getPower0();
+	a = nullptr;
+	b = nullptr;
+	c = nullptr;
+	for (std::vector<Polynomial::t_term>::const_iterator it = terms.begin(); it != terms.end(); it++)
+	{
+		if (it->power == 2)
+			a = it->coefficient;
+		else if (it->power == 1)
+			b = it->coefficient;
+		else if (it->power == 0)
+			c = it->coefficient;
+		else
+			throw ERROR_UNEXPECTED;
+	}
+	if (!a)
+		a = new Rational(0);
+	if (!b)
+		b = new Rational(0);
+	if (!c)
+		c = new Rational(0);
+	tmp_b2 = *b * *b;
+	delete b;
+	tmp_4a = Rational(4) * *a;
+	delete a;
+	tmp_4ac = *tmp_4a * *c;
+	delete c;
 	tmp_b2_4ac = *tmp_b2 - *tmp_4ac;
 	delete tmp_b2;
 	delete tmp_4a;
 	delete tmp_4ac;
 	discriminant_rational = dynamic_cast<Rational*>(tmp_b2_4ac);
 	if (discriminant_rational)
-		return solve_trinomial_rational(polynomial, discriminant_rational);
+		return solve_trinomial_rational(polynomial->getName(), a, b, c, discriminant_rational);
 	discriminant_complex = dynamic_cast<Complex*>(tmp_b2_4ac);
 	if (discriminant_complex)
-		return solve_trinomial_complex(polynomial, discriminant_complex);
+		return solve_trinomial_complex(a, b, c, discriminant_complex);
 	delete tmp_b2_4ac;
 }

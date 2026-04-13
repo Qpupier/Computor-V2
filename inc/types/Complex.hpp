@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:35:43 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/13 19:18:14 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/13 16:21:46 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ class	Complex: public IType
 		Complex(void): _real(Rational(0)), _imaginary(Rational(1)) {};
 		Complex(Rational real, Rational imaginary): _real(real), _imaginary(imaginary) {};
 		Complex(const Complex &other): _real(other._real), _imaginary(other._imaginary) {};
+		Complex(const IType &other);
 		~Complex(void) {};
 
 		// Operator overloads
@@ -69,7 +70,7 @@ class	Complex: public IType
 		Complex*	operator^(const Rational &other) const;
 		Complex*	operator^(const Complex &other) const;
 		Matrix*		operator^(const Matrix &other) const;
-		Polynomial*	operator^(const Polynomial &other) const;
+		IType*		operator^(const Polynomial &other) const;
 
 		// Getters
 		Rational	getReal(void) const;

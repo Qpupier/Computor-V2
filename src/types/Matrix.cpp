@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/13 19:21:45 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/13 16:26:17 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,33 @@ Matrix::Matrix(const Matrix &other): _width(other._width), _height(other._height
 	}
 }
 
+Matrix::Matrix(const IType &other)
+{
+	const Matrix		*other_matrix;
+	const Rational		*other_rational;
+	const Complex		*other_complex;
+	const Polynomial	*other_polynomial;
+
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	other_rational = dynamic_cast<const Rational*>(&other);
+	other_complex = dynamic_cast<const Complex*>(&other);
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	if (other_matrix)
+		*this = *other_matrix;
+	else if (other_rational)
+		throw ERROR_UNEXPECTED;
+	else if (other_complex)
+		throw ERROR_UNEXPECTED;
+	else if (other_polynomial)
+	{
+		if (other_polynomial->getDividers().size() != 1 || *other_polynomial->getDividers()[0].coefficient != Rational(1) || other_polynomial->getDividers()[0].power || other_polynomial->getTerms().size() != 1 || other_polynomial->getTerms()[0].power)
+			throw ERROR_UNEXPECTED;
+		*this = Matrix(*other_polynomial->getTerms()[0].coefficient);// TODO: Leaks?
+	}
+	else
+		throw ERROR_UNEXPECTED;
+}
+
 Matrix::~Matrix()
 {
 	for (unsigned int i = 0; i < this->_height; i++)
@@ -185,7 +212,14 @@ bool		Matrix::operator==(const Complex &other) const
 
 bool		Matrix::operator==(const Polynomial &other) const
 {
-	return (!other.getPower2() && !other.getPower1() && *this == *other.getPower0());
+	std::vector<Polynomial::t_term>	terms(other.getTerms());
+	std::vector<Polynomial::t_term>	dividers(other.getDividers());
+
+	return (terms.size() == 1 && dividers.size() == 1 	\
+			&& *terms[0].coefficient == *this 			\
+			&& !terms[0].power 							\
+			&& *dividers[0].coefficient == Rational(1) 	\
+			&& !dividers[0].power);
 }
 
 bool		Matrix::operator==(const IType &other) const
@@ -288,7 +322,7 @@ Matrix*		Matrix::operator+(const Complex &other) const
 
 Polynomial*	Matrix::operator+(const Polynomial &other) const
 {
-	return (new Polynomial(other.getName(), other.getPower2()->clone(), other.getPower1()->clone(), *this + *other.getPower0()));
+	return (other + *this);
 }
 
 IType*		Matrix::operator+(const IType &other) const
@@ -355,7 +389,7 @@ Matrix*		Matrix::operator-(const Complex &other) const
 
 Polynomial*	Matrix::operator-(const Polynomial &other) const
 {
-	return (new Polynomial(other.getName(), other.getPower2()->clone(), other.getPower1()->clone(), *this - *other.getPower0()));
+	return (other - *this);
 }
 
 IType*		Matrix::operator-(const IType &other) const
@@ -422,7 +456,7 @@ Matrix*		Matrix::operator*(const Complex &other) const
 
 Polynomial*	Matrix::operator*(const Polynomial &other) const
 {
-	return (new Polynomial(other.getName(), *this * *other.getPower2(), *this * *other.getPower1(), *this * *other.getPower0()));
+	return (other * *this);
 }
 
 IType*		Matrix::operator*(const IType &other) const
@@ -505,7 +539,13 @@ Matrix*		Matrix::operator/(const Complex &other) const
 
 Polynomial*	Matrix::operator/(const Polynomial &other) const
 {
-	return (Polynomial(other.getName(), new Rational(0), new Rational(0), this->clone()) / other);
+	Polynomial*	tmp;
+	Polynomial*	result;
+
+	tmp = new Polynomial(other.getName(), (Polynomial::t_term){this->clone(), 0});
+	result = *tmp / other;
+	delete tmp;
+	return (result);
 }
 
 IType*		Matrix::operator/(const IType &other) const
@@ -588,7 +628,13 @@ Matrix*		Matrix::operator%(const Complex &other) const
 
 Polynomial*	Matrix::operator%(const Polynomial &other) const
 {
-	return (Polynomial(other.getName(), new Rational(0), new Rational(0), this->clone()) % other);
+	Polynomial*	tmp;
+	Polynomial*	result;
+
+	tmp = new Polynomial(other.getName(), (Polynomial::t_term){this->clone(), 0});
+	result = *tmp % other;
+	delete tmp;
+	return (result);
 }
 
 IType*		Matrix::operator%(const IType &other) const
@@ -669,9 +715,15 @@ Matrix*		Matrix::operator^(const Complex &other) const
 	return (*this ^ rational);
 }
 
-Polynomial*	Matrix::operator^(const Polynomial &other) const
+IType*		Matrix::operator^(const Polynomial &other) const
 {
-	return (Polynomial(other.getName(), new Rational(0), new Rational(0), this->clone()) ^ other);
+	IType*	tmp;
+	IType*	result;
+
+	tmp = new Polynomial(other.getName(), (Polynomial::t_term){this->clone(), 0});
+	result = *tmp ^ other;
+	delete tmp;
+	return (result);
 }
 
 IType*		Matrix::operator^(const IType &other) const

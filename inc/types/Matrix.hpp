@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/13 19:18:34 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/13 15:26:00 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class	Matrix: public IType
 		Matrix(std::string str, t_data &data);
 		Matrix(const Token &token, t_data &data): Matrix(token.getValue(), data) {};
 		Matrix(const Matrix &other);
+		Matrix(const IType &other);
 		~Matrix(void);
 
 		// Operator overloads
@@ -72,7 +73,7 @@ class	Matrix: public IType
 		Matrix*		operator^(const Matrix &other) const;
 		Matrix*		operator^(const Rational &other) const;
 		Matrix*		operator^(const Complex &other) const;
-		Polynomial*	operator^(const Polynomial &other) const;
+		IType*		operator^(const Polynomial &other) const;
 
 		// Getters
 		unsigned long	getWidth(void) const;

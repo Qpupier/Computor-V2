@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/13 19:18:04 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/13 15:18:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ class	Rational: public IType
 		Rational(std::string str);
 		Rational(const Token &token): Rational(token.getValue()) {};
 		Rational(const Rational &other): _numerator(other._numerator), _denominator(other._denominator) {};
+		Rational(const IType &other);
 		~Rational(void) {};
 
 		// Operator overloads
@@ -91,7 +92,7 @@ class	Rational: public IType
 		Rational*	operator^(const Rational &other) const;
 		Complex*	operator^(const Complex &other) const;
 		Matrix*		operator^(const Matrix &other) const;
-		Polynomial*	operator^(const Polynomial &other) const;
+		IType*		operator^(const Polynomial &other) const;
 
 		// Getters
 		int		getNumerator(void) const;

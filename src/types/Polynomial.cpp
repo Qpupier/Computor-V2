@@ -1,268 +1,321 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Polynomial.cpp                                       :+:      :+:    :+:   */
+/*   Polynomial.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/11 17:18:55 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/13 17:03:20 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Polynomial.hpp"
+#include "Matrix.hpp"
 
 // Utils
-static bool			is_multiplication_supported(const Polynomial &var1, 	\
-		const Polynomial &var2)
+static std::vector<Polynomial::t_term>	vector_term_multiplication(const std::vector<Polynomial::t_term> &terms1, const std::vector<Polynomial::t_term> &terms2)
 {
-	IType	*power4;
-	IType	*power3;
-	IType	*tmp1;
-	IType	*tmp2;
-	bool	result;
+	std::vector<Polynomial::t_term>					result;
+	std::vector<Polynomial::t_term>::const_iterator	it1(terms1.begin());
+	std::vector<Polynomial::t_term>::const_iterator	it2;
 
-	power4 = *var1.getPower2() * *var2.getPower2();
-	tmp1 = *var1.getPower2() * *var2.getPower1();
-	tmp2 = *var1.getPower1() * *var2.getPower2();
-	power3 = *tmp1 + *tmp2;
-	delete tmp1;
-	delete tmp2;
-	result = *power3 || *power4;
-	delete power3;
-	delete power4;
-	return (!result);
-}
-
-static bool			is_division_supported(const Polynomial &var1, 			\
-		const Polynomial &var2)
-{
-	IType	*test1;
-	IType	*test2;
-	IType	*tmp1;
-	IType	*tmp2;
-	bool	result;
-
-	tmp1 = *var1.getPower1() * *var2.getPower2();
-	tmp2 = *var1.getPower2() * *var2.getPower1();
-	test1 = *tmp1 - *tmp2;
-	delete tmp1;
-	delete tmp2;
-	tmp1 = *var1.getPower0() * *var2.getPower2();
-	tmp2 = *var1.getPower2() * *var2.getPower0();
-	test2 = *tmp1 - *tmp2;
-	delete tmp1;
-	delete tmp2;
-	result = test1 || test2;
-	delete test1;
-	delete test2;
-	return (!result);
-}
-
-static Polynomial*	polynomial_divion(const Polynomial &var1, 				\
-		const Polynomial &var2)
-{
-	IType	*power2;
-	IType	*power1;
-	IType	*power0;
-
-	power2 = new Rational(0);
-	power1 = new Rational(0);
-	try
+	while (it1 != terms1.end())
 	{
-		power0 = *var1.getPower2() / *var2.getPower2();
-	}
-	catch (...)
-	{
-		delete power2;
-		delete power1;
-		throw;
-	}
-	return (new Polynomial(var1.getName(), power2, power1, power0));
-}
-
-static Polynomial*	division_with_power2(const Polynomial &var1, 			\
-		const Polynomial &var2)
-{
-	IType	*power2;
-	IType	*power1;
-	IType	*power0;
-
-	if (var1.getPower1() || var1.getPower0())
-		throw UNSUPPORTED_DIVISION;
-	power2 = new Rational(0);
-	power1 = new Rational(0);
-	try
-	{
-		power0 = *var1.getPower2() / *var2.getPower2();
-	}
-	catch (...)
-	{
-		delete power2;
-		delete power1;
-		throw;
-	}
-	return (new Polynomial(var1.getName(), power2, power1, power0));
-}
-
-static Polynomial*	division_with_power1(const Polynomial &var1, 			\
-		const Polynomial &var2)
-{
-	IType	*power2;
-	IType	*power1;
-	IType	*power0;
-
-	if (!var1.getPower0())
-		throw UNSUPPORTED_DIVISION;
-	power2 = new Rational(0);
-	try
-	{
-		power1 = *var1.getPower2() / *var2.getPower1();
-	}
-	catch (...)
-	{
-		delete power2;
-		throw;
-	}
-	try
-	{
-		power0 = *var1.getPower1() / *var2.getPower1();
-	}
-	catch (...)
-	{
-		delete power2;
-		delete power1;
-		throw;
-	}
-	return (new Polynomial(var1.getName(), power2, power1, power0));
-}
-
-static Polynomial*	division_with_power0(const Polynomial &var1, 			\
-		const Polynomial &var2)
-{
-	IType	*power2;
-	IType	*power1;
-	IType	*power0;
-
-	power2 = *var1.getPower2() / *var2.getPower0();
-	try
-	{
-		power1 = *var1.getPower1() / *var2.getPower0();
-	}
-	catch (...)
-	{
-		delete power2;
-		throw;
-	}
-	try
-	{
-		power0 = *var1.getPower0() / *var2.getPower0();
-	}
-	catch (...)
-	{
-		delete power2;
-		delete power1;
-		throw;
-	}
-	return (new Polynomial(var1.getName(), power2, power1, power0));
-}
-
-static void			print_first_power(std::ostream &os, 					\
-		const IType *power, const std::string &var, const char *exponent)
-{
-	Rational	minus_one(-1);
-
-	if (!*power)
-		return ;
-	if (*power == minus_one)
-		os << "-" << var << exponent;
-	else if (var == std::string() || *power != Rational(1))
-		power->print_polynomial(os, var + exponent);
-	else
-		os << var << exponent;
-}
-
-static void			print_power(std::ostream &os, bool first_power, 		\
-		const IType *power, const std::string &var)
-{
-	Rational	minus_one(-1);
-	IType		*copy;
-	IType		*tmp;
-
-	if (!*power)
-		return ;
-	copy = power->clone();
-	if (!first_power)
-	{
-		if (*power < Rational(0))
+		it2 = terms2.begin();
+		while (it2 != terms2.end())
 		{
-			os << " - ";
-			tmp = copy;
-			copy = *copy * minus_one;
-			delete tmp;
+			result.push_back((Polynomial::t_term){*it1->coefficient * *it2->coefficient, it1->power + it2->power});
+			it2++;
 		}
-		else
-			os << " + ";
+		it1++;
 	}
-	print_first_power(os, copy, var, "");
-	delete copy;
+	return (result);
+}
+
+static void								add_term_to_vector(IType *coefficient, unsigned int power, std::vector<Polynomial::t_term> &vector)
+{
+	std::vector<Polynomial::t_term>::iterator	it(vector.begin());
+	IType*										tmp;
+
+	while (it != vector.end())
+	{
+		if (it->power == power)
+		{
+			tmp = it->coefficient;
+			it->coefficient = *it->coefficient + *coefficient;
+			delete tmp;
+			delete coefficient;
+			return ;
+		}
+		it++;
+	}
+	vector.push_back((Polynomial::t_term){coefficient, power});
+}
+
+static void								add_terms_to_vector(const std::vector<Polynomial::t_term> &terms, std::vector<Polynomial::t_term> &vector)
+{
+	std::vector<Polynomial::t_term>::const_iterator	it(terms.begin());
+
+	while (it != terms.end())
+	{
+		add_term_to_vector(it->coefficient, it->power, vector);
+		it++;
+	}
+}
+
+static std::vector<Polynomial::t_term>	vector_term_coeff_multiplication(const IType *coefficient, const unsigned int power, const std::vector<Polynomial::t_term> &vector)
+{
+	std::vector<Polynomial::t_term>					result;
+	std::vector<Polynomial::t_term>::const_iterator	it(vector.begin());
+
+	while (it != vector.end())
+	{
+		add_term_to_vector(*coefficient * *it->coefficient, it->power + power, result);
+		it++;
+	}
+	return (result);
+}
+
+static void								free_vector_terms(std::vector<Polynomial::t_term> &vector)
+{
+	std::vector<Polynomial::t_term>::iterator	it(vector.begin());
+
+	while (it != vector.end())
+	{
+		delete it->coefficient;
+		it++;
+	}
+	vector.clear();
+}
+
+static std::vector<Polynomial::t_term>	multiply_vectors(const std::vector<Polynomial::t_term> &terms1, const std::vector<Polynomial::t_term> &terms2)
+{
+	std::vector<Polynomial::t_term>					result;
+	std::vector<Polynomial::t_term>::const_iterator	it1(terms1.begin());
+	std::vector<Polynomial::t_term>::const_iterator	it2;
+
+	while (it1 != terms1.end())
+	{
+		it2 = terms2.begin();
+		while (it2 != terms2.end())
+		{
+			add_term_to_vector(*it1->coefficient * *it2->coefficient, it1->power + it2->power, result);
+			it2++;
+		}
+		it1++;
+	}
+	return (result);
+}
+
+static Polynomial*						polynomial_power_rational(const Polynomial *polynomial, int power)
+{
+	Polynomial	*result;
+	Polynomial	*tmp;
+
+	if (!power)
+		return (new Polynomial(polynomial->getName(), (Polynomial::t_term){new Rational(1), 0}));
+	result = new Polynomial(*polynomial);
+	while (--power)
+	{
+		tmp = result;
+		result = *result * *polynomial;
+		delete tmp;
+	}
+	return (result);
+}
+
+static IType*							function_operator_term(const std::vector<Polynomial::t_term> &terms, const IType &other)
+{
+	std::vector<Polynomial::t_term>::const_iterator	it(terms.begin());
+	IType*	result;
+	IType*	power;
+	IType*	term;
+
+	result = new Rational(1);
+	while (it != terms.end())
+	{
+		power = other ^ Rational(static_cast<int>(it->power));
+		term = *it->coefficient * *power;
+		delete power;
+		result = *result + *term;
+		delete term;
+		it++;
+	}
+	return (result);
+}
+
+static std::ostream&					print_terms(std::ostream &os, const std::vector<Polynomial::t_term> &terms, const std::string &name)
+{
+	std::vector<Polynomial::t_term>::const_iterator	it(terms.begin());
+	bool											first_term;
+
+	//TODO: A ameliorer
+	os << "(";
+	first_term = true;
+	while (it != terms.end())
+	{
+		if (!it->coefficient)
+		{
+			it++;
+			continue ;
+		}
+		if (!first_term)
+			os << " + ";
+		os << "(" << *it->coefficient << ")";
+		if (it->power)
+		{
+			os << name;
+			if (it->power > 1)
+				os << "^" << it->power;
+		}
+		first_term = false;
+		it++;
+	}
+	if (first_term)
+		os << "0";
+	os << ")";
+	return (os);
 }
 
 
-// Destructor
+// Constructors and destructor
+Polynomial::Polynomial(std::string name, t_term term)
+{
+	this->_name = name;
+	this->_terms.push_back(term);
+	this->_dividers.push_back((t_term){new Rational(1), 0});
+}
+
+Polynomial::Polynomial(const Polynomial &other)
+{
+	std::vector<t_term>::const_iterator	it_terms(other._terms.begin());
+	std::vector<t_term>::const_iterator	it_dividers(other._dividers.begin());
+
+	this->_name = other._name;
+	while (it_terms != other._terms.end())
+	{
+		this->_terms.push_back((t_term){it_terms->coefficient->clone(), it_terms->power});
+		it_terms++;
+	}
+	while (it_dividers != other._dividers.end())
+	{
+		this->_dividers.push_back((t_term){it_dividers->coefficient->clone(), it_dividers->power});
+		it_dividers++;
+	}
+}
+
 Polynomial::~Polynomial(void)
 {
-	delete this->_power2;
-	delete this->_power1;
-	delete this->_power0;
+	std::vector<t_term>::const_iterator	it_terms(this->_terms.begin());
+	std::vector<t_term>::const_iterator	it_dividers(this->_dividers.begin());
+
+	while (it_terms != this->_terms.end())
+	{
+		delete it_terms->coefficient;
+		it_terms++;
+	}
+	this->_terms.clear();
+	while (it_dividers != this->_dividers.end())
+	{
+		delete it_dividers->coefficient;
+		it_dividers++;
+	}
+	this->_dividers.clear();
 }
 
 
 // Operator overloads
 Polynomial&	Polynomial::operator=(const Polynomial &other)
 {
+	std::vector<t_term>::const_iterator	it_terms(other._terms.begin());
+	std::vector<t_term>::const_iterator	it_dividers(other._dividers.begin());
+
 	if (this != &other)
 	{
 		this->~Polynomial();
 		this->_name = other._name;
-		this->_power2 = other._power2->clone();
-		this->_power1 = other._power1->clone();
-		this->_power0 = other._power0->clone();
+		while (it_terms != other._terms.end())
+		{
+			this->_terms.push_back((t_term){it_terms->coefficient->clone(), it_terms->power});
+			it_terms++;
+		}
+		while (it_dividers != other._dividers.end())
+		{
+			this->_dividers.push_back((t_term){it_dividers->coefficient->clone(), it_dividers->power});
+			it_dividers++;
+		}
 	}
 	return (*this);
 }
 
 Polynomial::operator bool() const
 {
-	return (!*this->_power2 && !*this->_power1 && !*this->_power0);
+	std::vector<t_term>::const_iterator	it(this->_terms.begin());
+
+	while (it != this->_terms.end())
+	{
+		if (*it->coefficient)
+			return (true);
+		it++;
+	}
+	return (false);
 }
 
 bool		Polynomial::operator==(const Polynomial &other) const
 {
-	return (this->_name == other._name && *this->_power2 == *other._power2 && *this->_power1 == *other._power1 && *this->_power0 == *other._power0);
+	std::vector<t_term>::const_iterator	it_terms(this->_terms.begin());
+	std::vector<t_term>::const_iterator	it_terms_other(other._terms.begin());
+	std::vector<t_term>::const_iterator	it_dividers(this->_dividers.begin());
+	std::vector<t_term>::const_iterator	it_dividers_other(other._dividers.begin());
+
+	// TODO: Simplify polynomials before comparing
+	if (this->_name != other._name || this->_terms.size() != other._terms.size())
+		return (false);
+	while (it_terms != this->_terms.end())
+	{
+		if (*it_terms->coefficient != *it_terms_other->coefficient || it_terms->power != it_terms_other->power)
+			return (false);
+		it_terms++;
+		it_terms_other++;
+	}
+	while (it_dividers != this->_dividers.end())
+	{
+		if (*it_dividers->coefficient != *it_dividers_other->coefficient || it_dividers->power != it_dividers_other->power)
+			return (false);
+		it_dividers++;
+		it_dividers_other++;
+	}
+	return (true);
 }
 
 bool		Polynomial::operator==(const Rational &other) const
 {
-	return (!*this->_power2 && !*this->_power1 && *this->_power0 == other);
+	if (this->_terms.size() != 1 || this->_dividers.size() != 1 || *this->_dividers[0].coefficient != Rational(1) || this->_dividers[0].power)
+		return (false);
+	return (*this->_terms[0].coefficient == other && !this->_terms[0].power);
 }
 
 bool		Polynomial::operator==(const Complex &other) const
 {
-	return (!*this->_power2 && !*this->_power1 && *this->_power0 == other);
+	if (this->_terms.size() != 1 || this->_dividers.size() != 1 || *this->_dividers[0].coefficient != Rational(1) || this->_dividers[0].power)
+		return (false);
+	return (*this->_terms[0].coefficient == other && !this->_terms[0].power);
 }
 
 bool		Polynomial::operator==(const Matrix &other) const
 {
-	return (!*this->_power2 && !*this->_power1 && *this->_power0 == other);
+	if (this->_terms.size() != 1 || this->_dividers.size() != 1 || *this->_dividers[0].coefficient != Rational(1) || this->_dividers[0].power)
+		return (false);
+	return (*this->_terms[0].coefficient == other && !this->_terms[0].power);
 }
 
 bool		Polynomial::operator==(const IType &other) const
 {
 	const Polynomial	*other_polynomial;
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Matrix	*other_matrix;
+	const Rational		*other_rational;
+	const Complex		*other_complex;
+	const Matrix		*other_matrix;
 
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
 	if (other_polynomial)
@@ -287,52 +340,89 @@ bool		Polynomial::operator!=(const IType &other) const
 
 bool		Polynomial::operator<(const IType &other) const
 {
-	return (!*this->_power2 && !*this->_power1 && *this->_power0 < other);
+	//TODO: A voir s'il faut l'implementer autrement
+	return (false);
+	(void)other;
 }
 
 bool		Polynomial::operator<=(const IType &other) const
 {
-	return (!*this->_power2 && !*this->_power1 && *this->_power0 <= other);
+	//TODO: A voir s'il faut l'implementer autrement
+	return (false);
+	(void)other;
 }
 
 bool		Polynomial::operator>(const IType &other) const
 {
-	return (!*this->_power2 && !*this->_power1 && *this->_power0 > other);
+	//TODO: A voir s'il faut l'implementer autrement
+	return (false);
+	(void)other;
 }
 
 bool		Polynomial::operator>=(const IType &other) const
 {
-	return (!*this->_power2 && !*this->_power1 && *this->_power0 >= other);
+	//TODO: A voir s'il faut l'implementer autrement
+	return (false);
+	(void)other;
 }
 
 Polynomial*	Polynomial::operator+(const Polynomial &other) const
 {
+	std::vector<t_term>::const_iterator	it1(this->_terms.begin());
+	std::vector<t_term>::const_iterator	it2(other._terms.begin());
+	Polynomial*							result;
+
 	if (this->_name != other._name)
 		throw UNSUPPORTED_MULTI_POLYNOMIALS;
-	return (new Polynomial(this->_name, *this->_power2 + *other._power2, *this->_power1 + *other._power1, *this->_power0 + *other._power0));
+	result = new Polynomial(this->_name);
+	free_vector_terms(result->_dividers);
+	result->_dividers = vector_term_multiplication(this->_dividers, other._dividers);
+	while (it1 != this->_terms.end())
+	{
+		add_terms_to_vector(vector_term_coeff_multiplication(it1->coefficient, it1->power, other._dividers), result->_terms);
+		it1++;
+	}
+	while (it2 != other._terms.end())
+	{
+		add_terms_to_vector(vector_term_coeff_multiplication(it2->coefficient, it2->power, this->_dividers), result->_terms);
+		it2++;
+	}
+	return (result);
 }
 
 Polynomial*	Polynomial::operator+(const Rational &other) const
 {
-	return (new Polynomial(this->_name, this->_power2->clone(), this->_power1->clone(), *this->_power0 + other));
+	Polynomial*	result;
+
+	result = new Polynomial(*this);
+	add_terms_to_vector(vector_term_coeff_multiplication(other.clone(), 0, this->_dividers), result->_terms);
+	return (result);
 }
 
 Polynomial*	Polynomial::operator+(const Complex &other) const
 {
-	return (new Polynomial(this->_name, this->_power2->clone(), this->_power1->clone(), *this->_power0 + other));
+	Polynomial*	result;
+
+	result = new Polynomial(*this);
+	add_terms_to_vector(vector_term_coeff_multiplication(other.clone(), 0, this->_dividers), result->_terms);
+	return (result);
 }
 
 Polynomial*	Polynomial::operator+(const Matrix &other) const
 {
-	return (new Polynomial(this->_name, this->_power2->clone(), this->_power1->clone(), *this->_power0 + other));
+	Polynomial*	result;
+
+	result = new Polynomial(*this);
+	add_terms_to_vector(vector_term_coeff_multiplication(other.clone(), 0, this->_dividers), result->_terms);
+	return (result);
 }
 
 IType*		Polynomial::operator+(const IType &other) const
 {
 	const Polynomial	*other_polynomial;
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Matrix	*other_matrix;
+	const Rational		*other_rational;
+	const Complex		*other_complex;
+	const Matrix		*other_matrix;
 
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
 	if (other_polynomial)
@@ -352,32 +442,64 @@ IType*		Polynomial::operator+(const IType &other) const
 
 Polynomial*	Polynomial::operator-(const Polynomial &other) const
 {
+	std::vector<t_term>::const_iterator	it1(this->_terms.begin());
+	std::vector<t_term>::const_iterator	it2(other._terms.begin());
+	std::vector<t_term>					tmp;
+	Polynomial*							result;
+
 	if (this->_name != other._name)
 		throw UNSUPPORTED_MULTI_POLYNOMIALS;
-	return (new Polynomial(this->_name, *this->_power2 - *other._power2, *this->_power1 - *other._power1, *this->_power0 - *other._power0));
+	result = new Polynomial(this->_name);
+	free_vector_terms(result->_dividers);
+	result->_dividers = vector_term_multiplication(this->_dividers, other._dividers);
+	while (it1 != this->_terms.end())
+	{
+		add_terms_to_vector(vector_term_coeff_multiplication(it1->coefficient, it1->power, other._dividers), result->_terms);
+		it1++;
+	}
+	while (it2 != other._terms.end())
+	{
+		tmp = vector_term_coeff_multiplication(it2->coefficient, it2->power, this->_dividers);
+		add_terms_to_vector(vector_term_coeff_multiplication(new Rational(-1), 0, this->_dividers), result->_terms);
+		free_vector_terms(tmp);
+		it2++;
+	}
+	return (result);
 }
 
 Polynomial*	Polynomial::operator-(const Rational &other) const
 {
-	return (new Polynomial(this->_name, this->_power2->clone(), this->_power1->clone(), *this->_power0 - other));
+	Polynomial*	result;
+
+	result = new Polynomial(*this);
+	add_terms_to_vector(vector_term_coeff_multiplication(other * Rational(-1), 0, this->_dividers), result->_terms);
+	return (result);
 }
 
 Polynomial*	Polynomial::operator-(const Complex &other) const
 {
-	return (new Polynomial(this->_name, this->_power2->clone(), this->_power1->clone(), *this->_power0 - other));
+	Polynomial*	result;
+
+	result = new Polynomial(*this);
+	add_terms_to_vector(vector_term_coeff_multiplication(other * Rational(-1), 0, this->_dividers), result->_terms);
+	return (result);
 }
 
 Polynomial*	Polynomial::operator-(const Matrix &other) const
 {
-	return (new Polynomial(this->_name, this->_power2->clone(), this->_power1->clone(), *this->_power0 - other));
+	Polynomial*	result;
+
+	result = new Polynomial(*this);
+	add_terms_to_vector(vector_term_coeff_multiplication(other * Rational(-1), 0, this->_dividers), result->_terms);
+	return (result);
 }
 
 IType*		Polynomial::operator-(const IType &other) const
 {
 	const Polynomial	*other_polynomial;
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Matrix	*other_matrix;
+	const Rational		*other_rational;
+	const Complex		*other_complex;
+	const Matrix		*other_matrix;
 
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
 	if (other_polynomial)
@@ -397,54 +519,68 @@ IType*		Polynomial::operator-(const IType &other) const
 
 Polynomial*	Polynomial::operator*(const Polynomial &other) const
 {
-	IType	*power2;
-	IType	*power1;
-	IType	*tmp1;
-	IType	*tmp2;
-	IType	*tmp3;
+	Polynomial*	result;
 
 	if (this->_name != other._name)
-		throw UNSUPPORTED_MULTI_POLYNOMIALS;
-	if (!is_multiplication_supported(*this, other))
-		throw UnsupportedError("Powers higher than 2 are not supported in polynomial expressions");
-	tmp1 = *this->_power2 * *other._power0;
-	tmp2 = *this->_power1 * *other._power1;
-	tmp3 = *tmp1 + *tmp2;
-	delete tmp1;
-	delete tmp2;
-	tmp1 = *this->_power0 * *other._power2;
-	power2 = *tmp3 + *tmp1;
-	delete tmp1;
-	delete tmp3;
-	tmp1 = *this->_power1 * *other._power0;
-	tmp2 = *this->_power0 * *other._power1;
-	power1 = *tmp1 + *tmp2;
-	delete tmp1;
-	delete tmp2;
-	return (new Polynomial(this->_name, power2, power1, *this->_power0 * *other._power0));
+		throw UNSUPPORTED_MULTI_POLYNOMIALS;// TODO: Ce n'est pas forcement le cas si il n'y a qu'une power 0 ou des coefficients nuls
+	result = new Polynomial(this->_name);
+	free_vector_terms(result->_dividers);
+	result->_terms = multiply_vectors(this->_terms, other._terms);
+	result->_dividers = multiply_vectors(this->_dividers, other._dividers);
+	return (result);
 }
 
 Polynomial*	Polynomial::operator*(const Rational &other) const
 {
-	return (new Polynomial(this->_name, *this->_power2 * other, *this->_power1 * other, *this->_power0 * other));
+	Polynomial*							result;
+	std::vector<t_term>::const_iterator	it(this->_terms.begin());
+
+	result = new Polynomial(*this);
+	free_vector_terms(result->_terms);
+	while (it != this->_terms.end())
+	{
+		add_term_to_vector(*it->coefficient * other, it->power, result->_terms);
+		it++;
+	}
+	return (result);
 }
 
 Polynomial*	Polynomial::operator*(const Complex &other) const
 {
-	return (new Polynomial(this->_name, *this->_power2 * other, *this->_power1 * other, *this->_power0 * other));
+	Polynomial*							result;
+	std::vector<t_term>::const_iterator	it(this->_terms.begin());
+
+	result = new Polynomial(*this);
+	free_vector_terms(result->_terms);
+	while (it != this->_terms.end())
+	{
+		add_term_to_vector(*it->coefficient * other, it->power, result->_terms);
+		it++;
+	}
+	return (result);
 }
 
 Polynomial*	Polynomial::operator*(const Matrix &other) const
 {
-	return (new Polynomial(this->_name, *this->_power2 * other, *this->_power1 * other, *this->_power0 * other));
+	Polynomial*							result;
+	std::vector<t_term>::const_iterator	it(this->_terms.begin());
+
+	result = new Polynomial(*this);
+	free_vector_terms(result->_terms);
+	while (it != this->_terms.end())
+	{
+		add_term_to_vector(*it->coefficient * other, it->power, result->_terms);
+		it++;
+	}
+	return (result);
 }
 
 IType*		Polynomial::operator*(const IType &other) const
 {
 	const Polynomial	*other_polynomial;
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Matrix	*other_matrix;
+	const Rational		*other_rational;
+	const Complex		*other_complex;
+	const Matrix		*other_matrix;
 
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
 	if (other_polynomial)
@@ -464,113 +600,68 @@ IType*		Polynomial::operator*(const IType &other) const
 
 Polynomial*	Polynomial::operator/(const Polynomial &other) const
 {
+	Polynomial*	result;
+
 	if (this->_name != other._name)
-		throw UNSUPPORTED_MULTI_POLYNOMIALS;
-	if (is_division_supported(*this, other))
-		return (polynomial_divion(*this, other));
-	if (!other._power1 && !other._power0)
-		return (division_with_power2(*this, other));
-	if (!other._power2 && !other._power0)
-		return (division_with_power1(*this, other));
-	if (!other._power2 && !other._power1)
-		return (division_with_power0(*this, other));
-	throw UNSUPPORTED_DIVISION;
-	return (nullptr);
+		throw UNSUPPORTED_MULTI_POLYNOMIALS;// TODO: Ce n'est pas forcement le cas si il n'y a qu'une power 0 ou des coefficients nuls
+	result = new Polynomial(this->_name);
+	free_vector_terms(result->_dividers);
+	result->_terms = multiply_vectors(this->_terms, other._dividers);
+	result->_dividers = multiply_vectors(this->_dividers, other._terms);
+	return (result);
 }
 
 Polynomial*	Polynomial::operator/(const Rational &other) const
 {
-	IType	*power2;
-	IType	*power1;
-	IType	*power0;
+	Polynomial*							result;
+	std::vector<t_term>::const_iterator	it(this->_dividers.begin());
 
-	power2 = *this->_power2 / other;
-	try
+	result = new Polynomial(*this);
+	free_vector_terms(result->_dividers);
+	while (it != this->_dividers.end())
 	{
-		power1 = *this->_power1 / other;
+		add_term_to_vector(*it->coefficient * other, it->power, result->_dividers);
+		it++;
 	}
-	catch (...)
-	{
-		delete power2;
-		throw;
-	}
-	try
-	{
-		power0 = *this->_power0 / other;
-	}
-	catch (...)
-	{
-		delete power2;
-		delete power1;
-		throw;
-	}
-	return (new Polynomial(this->_name, power2, power1, power0));
+	return (result);
 }
 
 Polynomial*	Polynomial::operator/(const Complex &other) const
 {
-	IType	*power2;
-	IType	*power1;
-	IType	*power0;
+	Polynomial*							result;
+	std::vector<t_term>::const_iterator	it(this->_dividers.begin());
 
-	power2 = *this->_power2 / other;
-	try
+	result = new Polynomial(*this);
+	free_vector_terms(result->_dividers);
+	while (it != this->_dividers.end())
 	{
-		power1 = *this->_power1 / other;
+		add_term_to_vector(*it->coefficient * other, it->power, result->_dividers);
+		it++;
 	}
-	catch (...)
-	{
-		delete power2;
-		throw;
-	}
-	try
-	{
-		power0 = *this->_power0 / other;
-	}
-	catch (...)
-	{
-		delete power2;
-		delete power1;
-		throw;
-	}
-	return (new Polynomial(this->_name, power2, power1, power0));
+	return (result);
 }
 
 Polynomial*	Polynomial::operator/(const Matrix &other) const
 {
-	IType	*power2;
-	IType	*power1;
-	IType	*power0;
+	Polynomial*							result;
+	std::vector<t_term>::const_iterator	it(this->_dividers.begin());
 
-	power2 = *this->_power2 / other;
-	try
+	result = new Polynomial(*this);
+	free_vector_terms(result->_dividers);
+	while (it != this->_dividers.end())
 	{
-		power1 = *this->_power1 / other;
+		add_term_to_vector(*it->coefficient * other, it->power, result->_dividers);
+		it++;
 	}
-	catch (...)
-	{
-		delete power2;
-		throw;
-	}
-	try
-	{
-		power0 = *this->_power0 / other;
-	}
-	catch (...)
-	{
-		delete power2;
-		delete power1;
-		throw;
-	}
-	return (new Polynomial(this->_name, power2, power1, power0));
+	return (result);
 }
 
 IType*		Polynomial::operator/(const IType &other) const
 {
 	const Polynomial	*other_polynomial;
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Matrix	*other_matrix;
+	const Rational		*other_rational;
+	const Complex		*other_complex;
+	const Matrix		*other_matrix;
 
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
 	if (other_polynomial)
@@ -590,46 +681,43 @@ IType*		Polynomial::operator/(const IType &other) const
 
 Polynomial*	Polynomial::operator%(const Polynomial &other) const
 {
-	Polynomial	*division;
-	Rational	*rational;
-	Polynomial	*tmp;
-	Polynomial	*result;
-
-	division = *this / other;
-	rational = dynamic_cast<Rational*>(division->getPower0());
-	if (division->getPower2() || division->getPower1() || !rational)
-	{
-		delete division;
-		throw LogicError("Only rational numbers can be used as modulo");
-	}
-	tmp = other * Rational(rational->integer_part());
-	delete division;
-	result = *this - *tmp;
-	delete tmp;
-	return (result);
+	// TODO: A voir s'il faut le gerer
+	// TODO: Oui, il faut le gerer, c'est le resultat de la division euclidienne
+	throw UNSUPPORTED_DIVISION;
+	return (nullptr);
+	(void)other;
 }
 
 Polynomial*	Polynomial::operator%(const Rational &other) const
 {
-	return (*this % Polynomial(this->_name, new Rational(0), new Rational(0), other.clone()));
+	// TODO: A voir s'il faut le gerer
+	throw UNSUPPORTED_DIVISION;
+	return (nullptr);
+	(void)other;
 }
 
 Polynomial*	Polynomial::operator%(const Complex &other) const
 {
-	return (*this % Polynomial(this->_name, new Rational(0), new Rational(0), other.clone()));
+	// TODO: A voir s'il faut le gerer
+	throw UNSUPPORTED_DIVISION;
+	return (nullptr);
+	(void)other;
 }
 
 Polynomial*	Polynomial::operator%(const Matrix &other) const
 {
-	return (*this % Polynomial(this->_name, new Rational(0), new Rational(0), other.clone()));
+	// TODO: A voir s'il faut le gerer
+	throw UNSUPPORTED_DIVISION;
+	return (nullptr);
+	(void)other;
 }
 
 IType*		Polynomial::operator%(const IType &other) const
 {
 	const Polynomial	*other_polynomial;
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Matrix	*other_matrix;
+	const Rational		*other_rational;
+	const Complex		*other_complex;
+	const Matrix		*other_matrix;
 
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
 	if (other_polynomial)
@@ -647,154 +735,70 @@ IType*		Polynomial::operator%(const IType &other) const
 	return (nullptr);
 }
 
-Polynomial*	Polynomial::operator^(const Polynomial &other) const
+IType*		Polynomial::operator^(const IType &other) const
 {
-	Rational	*power0;
-
-	if (this->_name != other._name)
-		throw UNSUPPORTED_MULTI_POLYNOMIALS;
-	if (other._power2 || other._power1)
-		throw UnsupportedError("An unknown variable cannot be a power");
-	power0 = dynamic_cast<Rational*>(other.getPower0());
-	if (!power0)
-		throw LogicError("Only rational numbers can be used as exponent");
-	return (*this ^ *power0);
-}
-
-Polynomial*	Polynomial::operator^(const Rational &other) const
-{
-	Rational	exponent;
-	Polynomial*	result;
-	Polynomial*	tmp;
-	int			numerator;
+	Rational	power;
 
 	try
 	{
-		exponent = other;
-		if (!exponent.is_integer())
-			throw ERROR_EXPONENT_INTEGER;
+		power = Rational(other);
 	}
-	catch (const LogicError &e)
+	catch(const LogicError &e)
 	{
-		throw ERROR_EXPONENT_INTEGER;
+		throw UNSUPPORTED_EXPONENT;
 	}
-	result = new Polynomial(*this);
-	numerator = exponent.getNumerator();
-	for (int i = 1; i < numerator; i++)
-	{
-		tmp = result;
-		result = *result * *this;
-		delete tmp;
-	}
-	return (result);
-}
-
-Polynomial*	Polynomial::operator^(const Complex &other) const
-{
-	return (*this ^ Polynomial(this->_name, new Rational(0), new Rational(0), other.clone()));
-}
-
-Polynomial*	Polynomial::operator^(const Matrix &other) const
-{
-	return (*this ^ Polynomial(this->_name, new Rational(0), new Rational(0), other.clone()));
-}
-
-IType*		Polynomial::operator^(const IType &other) const
-{
-	const Polynomial	*other_polynomial;
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Matrix	*other_matrix;
-
-	other_polynomial = dynamic_cast<const Polynomial*>(&other);
-	if (other_polynomial)
-		return (*this ^ *other_polynomial);
-	other_rational = dynamic_cast<const Rational*>(&other);
-	if (other_rational)
-		return (*this ^ *other_rational);
-	other_complex = dynamic_cast<const Complex*>(&other);
-	if (other_complex)
-		return (*this ^ *other_complex);
-	other_matrix = dynamic_cast<const Matrix*>(&other);
-	if (other_matrix)
-		return (*this ^ *other_matrix);
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
+	if (!power.is_integer() || power < Rational(0))
+		throw UNSUPPORTED_EXPONENT;
+	return (polynomial_power_rational(this, power.getNumerator()));
 }
 
 
 // Getters
-std::string	Polynomial::getName(void) const
+std::string						Polynomial::getName(void) const
 {
 	return (this->_name);
 }
 
-IType*		Polynomial::getPower2(void) const
+std::vector<Polynomial::t_term>	Polynomial::getTerms(void) const
 {
-	return (this->_power2);
+	return (this->_terms);
 }
 
-IType*		Polynomial::getPower1(void) const
+std::vector<Polynomial::t_term>	Polynomial::getDividers(void) const
 {
-	return (this->_power1);
-}
-
-IType*		Polynomial::getPower0(void) const
-{
-	return (this->_power0);
+	return (this->_dividers);
 }
 
 
 // Methods
-IType*			Polynomial::matrix_operator(const Polynomial &other) const
-{
-	if (!this->_power2 && !this->_power1)
-		return (this->matrix_operator(*other.getPower0()));
-	throw ERROR_MATRIX_OPERATOR;
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
-}
-
-IType*			Polynomial::matrix_operator(const Matrix &other) const
-{
-	if (this->_power2 || this->_power1)
-		throw ERROR_MATRIX_OPERATOR;
-	return (this->_power0->matrix_operator(other));
-}
-
 IType*			Polynomial::matrix_operator(const IType &other) const
 {
-	const Polynomial	*other_polynomial;
-	const Matrix	*other_matrix;
+	try
+	{
+		Matrix	matrix(*this);
+		Matrix	other_matrix(other);
 
-	other_polynomial = dynamic_cast<const Polynomial*>(&other);
-	if (other_polynomial)
-		return (this->matrix_operator(*other_polynomial));
-	other_matrix = dynamic_cast<const Matrix*>(&other);
-	if (other_matrix)
-		return (this->matrix_operator(*other_matrix));
-	throw ERROR_MATRIX_OPERATOR;
+		return (matrix.matrix_operator(other_matrix));
+	}
+	catch (const LogicError &e)
+	{
+		throw ERROR_MATRIX_OPERATOR;
+	}
 	return (nullptr);
 }
 
 IType*			Polynomial::function_operator(const IType &other) const
 {
-	IType*	square;
-	IType*	power2;
-	IType*	power1;
-	IType*	addition1;
-	IType*	addition2;
+	IType*	numerator;
+	IType*	denominator;
+	IType*	result;
 
-	square = other * other;
-	power2 = *this->_power2 * *square;
-	delete square;
-	power1 = *this->_power1 * other;
-	addition1 = *power2 + *power1;
-	delete power2;
-	delete power1;
-	addition2 = *addition1 + *this->_power0;
-	delete addition1;
-	return (addition2);
+	numerator = function_operator_term(this->_terms, other);
+	denominator = function_operator_term(this->_dividers, other);
+	result = *numerator / *denominator;
+	delete numerator;
+	delete denominator;
+	return (result);
 }
 
 IType*			Polynomial::clone(void) const
@@ -804,20 +808,43 @@ IType*			Polynomial::clone(void) const
 
 std::ostream&	Polynomial::print(std::ostream &os) const
 {
-	print_power(os, true, this->_power2, this->_name + std::string("^2"));
-	print_power(os, !*this->_power2, this->_power1, this->_name);
-	print_power(os, !*this->_power2 && !*this->_power1, this->_power0, std::string());
-	if (!*this->_power2 && !*this->_power1 && !*this->_power0)
-		os << "0";
+	print_terms(os, this->_terms, this->_name);// TODO: Pas sur que ca ca fonctionne
+	os << " / ";
+	print_terms(os, this->_dividers, this->_name);
 	return (os);
 }
 
-std::ostream&	Polynomial::print_polynomial(std::ostream &os, 	\
-		const std::string &var) const
+std::ostream&	Polynomial::print_polynomial(std::ostream &os, const std::string &var) const
 {
+	// TODO: Is this function still useful?
 	throw ERROR_UNEXPECTED;
 	(void)var;
 	return (os);
+}
+
+unsigned int	Polynomial::get_degree(void) const
+{
+	std::vector<t_term>::const_iterator	it_terms(this->_terms.begin());
+	std::vector<t_term>::const_iterator	it_dividers(this->_dividers.begin());
+	unsigned int						degree(0);
+
+	while (it_terms != this->_terms.end())
+	{
+		if (it_terms->power > degree)
+			degree = it_terms->power;
+		it_terms++;
+	}
+	while (it_dividers != this->_dividers.end())
+	{
+		if (it_dividers->power > degree)
+			degree = it_dividers->power;
+		it_dividers++;
+	}
+	return (degree);
+}
+
+void			Polynomial::reduce(void)
+{
 }
 
 
