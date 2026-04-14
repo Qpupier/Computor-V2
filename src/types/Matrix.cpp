@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/13 16:26:17 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/14 18:33:47 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -844,6 +844,51 @@ IType*			Matrix::function_operator(const IType &other) const
 IType*			Matrix::clone(void) const
 {
 	return (new Matrix(*this));
+}
+
+Rational*		Matrix::pgcd(const Rational &other) const
+{
+	return (other.pgcd(*this));
+}
+
+Rational*		Matrix::pgcd(const Complex &other) const
+{
+	return (this->pgcd(other.getReal())->pgcd(other.getImaginary()));
+}
+
+Rational*		Matrix::pgcd(const Matrix &other) const
+{
+	Rational*	gcd;
+	Rational*	tmp;
+
+	gcd = this->pgcd(other[0][0]);
+	for (unsigned int i = 0; i < other.getHeight(); i++)
+		for (unsigned int j = 0; j < other.getWidth(); j++)
+		{
+			tmp = gcd;
+			gcd = gcd->pgcd(other[i][j]);
+			delete tmp;
+		}
+	return (gcd);
+}
+
+Rational*		Matrix::pgcd(const IType &other) const
+{
+	const Rational	*other_rational;
+	const Complex	*other_complex;
+	const Matrix	*other_matrix;
+
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (this->pgcd(*other_rational));
+	other_complex = dynamic_cast<const Complex*>(&other);
+	if (other_complex)
+		return (this->pgcd(*other_complex));
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (this->pgcd(*other_matrix));
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
 }
 
 std::ostream&	Matrix::print(std::ostream &os) const

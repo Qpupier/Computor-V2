@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 17:42:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/13 19:17:31 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/14 17:47:46 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define IType_HPP
 
 # include <iostream>
+
+class	Rational;
 
 class	IType
 {
@@ -40,6 +42,7 @@ class	IType
 		virtual IType*			matrix_operator(const IType &other) const = 0;
 		virtual IType*			function_operator(const IType &other) const = 0;
 		virtual IType*			clone(void) const = 0;
+		virtual Rational*		pgcd(const IType &other) const = 0;
 		virtual std::ostream	&print(std::ostream &os) const = 0;
 		virtual std::ostream	&print_polynomial(std::ostream &os, 	\
 				const std::string &var) const = 0;

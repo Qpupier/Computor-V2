@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/13 18:45:27 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/14 18:18:37 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,11 +97,13 @@ class	Polynomial: public IType
 		// IType*			matrix_operator(const Matrix &other) const;
 		IType*			function_operator(const IType &other) const;
 		IType*			clone(void) const;
+		Rational*		pgcd(const IType &other) const;
 		std::ostream&	print(std::ostream &os) const;
 		std::ostream&	print_polynomial(std::ostream &os, 	\
 				const std::string &var) const;
 		unsigned int	get_degree(void) const;
-		void			sort_terms(void);
+		void			sort_powers(void);
+		void			factorize_constant_factor(void);
 		void			reduce(void);
 
 	private:

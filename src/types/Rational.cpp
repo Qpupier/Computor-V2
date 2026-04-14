@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/13 16:37:07 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/14 18:37:15 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -781,6 +781,60 @@ IType*			Rational::function_operator(const IType &other) const
 IType*			Rational::clone(void) const
 {
 	return (new Rational(*this));
+}
+
+Rational*		Rational::pgcd(const Rational &other) const
+{
+	int	gcd_numerator;
+	int	gcd_denominator;
+
+	if (!this->_numerator)
+		return (new Rational(other));
+	if (!other._numerator)
+		return (new Rational(*this));
+	gcd_numerator = compute_gcd(this->_numerator, other._numerator);
+	gcd_denominator = compute_gcd(this->_denominator, other._denominator);
+	return (new Rational(gcd_numerator, gcd_denominator));
+}
+
+Rational*		Rational::pgcd(const Complex &other) const
+{
+	return (this->pgcd(other.getReal())->pgcd(other.getImaginary()));
+}
+
+Rational*		Rational::pgcd(const Matrix &other) const
+{
+	Rational*	gcd;
+	Rational*	tmp;
+
+	gcd = new Rational(*this);
+	for (unsigned int i = 0; i < other.getHeight(); i++)
+		for (unsigned int j = 0; j < other.getWidth(); j++)
+		{
+			tmp = gcd;
+			gcd = gcd->pgcd(other[i][j]);
+			delete tmp;
+		}
+	return (gcd);
+}
+
+Rational*		Rational::pgcd(const IType &other) const
+{
+	const Rational	*other_rational;
+	const Complex	*other_complex;
+	const Matrix	*other_matrix;
+
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (this->pgcd(*other_rational));
+	other_complex = dynamic_cast<const Complex*>(&other);
+	if (other_complex)
+		return (this->pgcd(*other_complex));
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (this->pgcd(*other_matrix));
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
 }
 
 std::ostream&	Rational::print(std::ostream &os) const

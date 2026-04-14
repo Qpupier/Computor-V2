@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/13 20:00:08 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/14 17:48:50 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,13 @@ IType*			Operator::function_operator(const IType &other) const
 IType*			Operator::clone(void) const
 {
 	return (new Operator(*this));
+}
+
+Rational*		Operator::pgcd(const IType &other) const
+{
+	throw ERROR_UNEXPECTED;
+	(void)other;
+	return (nullptr);
 }
 
 std::ostream&	Operator::print(std::ostream &os) const

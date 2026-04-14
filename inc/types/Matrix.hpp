@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/13 15:26:00 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/14 17:48:25 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,10 @@ class	Matrix: public IType
 		Polynomial*		matrix_operator(const Polynomial &other) const;
 		IType*			function_operator(const IType &other) const;
 		IType*			clone(void) const;
+		Rational*		pgcd(const IType &ther) const;
+		Rational*		pgcd(const Matrix &other) const;
+		Rational*		pgcd(const Rational &other) const;
+		Rational*		pgcd(const Complex &other) const;
 		std::ostream&	print(std::ostream &os) const;
 		std::ostream&	print_polynomial(std::ostream &os, 	
 				const std::string &var) const;

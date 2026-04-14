@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/13 19:05:57 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/14 18:49:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,11 @@ static void								add_term_to_vector(IType *coefficient, unsigned int power, st
 			tmp = it->coefficient;
 			it->coefficient = *it->coefficient + *coefficient;
 			delete tmp;
-			delete coefficient;
 			return ;
 		}
 		it++;
 	}
-	vector.push_back((Polynomial::t_term){coefficient, power});
+	vector.push_back((Polynomial::t_term){coefficient->clone(), power});
 }
 
 static void								add_terms_to_vector(const std::vector<Polynomial::t_term> &terms, std::vector<Polynomial::t_term> &vector)
@@ -152,7 +151,7 @@ static std::ostream&					print_terms(std::ostream &os, const std::vector<Polynom
 
 	//TODO: A ameliorer
 	if (!alone)
-	os << "(";
+		os << "(";
 	first_term = true;
 	for (std::vector<Polynomial::t_term>::const_reverse_iterator it(terms.rbegin()); it != terms.rend(); it++)
 	{
@@ -176,9 +175,114 @@ static std::ostream&					print_terms(std::ostream &os, const std::vector<Polynom
 	return (os);
 }
 
-// static Polynomial::t_division_result	euclidean_division(const std::vector<Polynomial::t_term> &dividend, const std::vector<Polynomial::t_term> &divisor)
-// {
-// }
+static void								add_blank_terms(std::vector<Polynomial::t_term> &terms)
+{
+	std::vector<Polynomial::t_term>::const_iterator	it(terms.begin());
+	unsigned int									max_power(0);
+	bool											is_empty(true);
+
+	if (terms.empty())
+		return ;
+	while (it != terms.end())
+	{
+		if (!*it->coefficient)
+		{
+			delete it->coefficient;
+			terms.erase(it);
+			continue;
+		}
+		if (it->power >= max_power)
+		{
+			max_power = it->power;
+			is_empty = false;
+		}
+		it++;
+	}
+	if (is_empty)
+		return free_vector_terms(terms);
+	for (unsigned int i = 0; i <= max_power; i++)
+		add_term_to_vector(new Rational(0), i, terms);
+}
+
+static void		terms_sort_powers(std::vector<Polynomial::t_term> &terms)
+{
+	bool (*fct)(const Polynomial::t_term&, const Polynomial::t_term&);
+
+	fct = [](const Polynomial::t_term &a, const Polynomial::t_term &b)
+	{
+		return (a.power < b.power);
+	};
+	std::sort(terms.begin(), terms.end(), fct);
+}
+
+static std::vector<Polynomial::t_term>	euclidean_division_step(const std::vector<Polynomial::t_term> &dividend, const std::vector<Polynomial::t_term> &divisor, std::vector<Polynomial::t_term> &quotient)
+{
+	Polynomial::t_term				term_dividend;
+	Polynomial::t_term				term_divisor;
+	Polynomial::t_term				term_result;
+	IType*							sub;
+	std::vector<Polynomial::t_term>	result;
+	std::vector<Polynomial::t_term>	new_result;
+
+	if (dividend.size() < divisor.size())
+	{
+		add_terms_to_vector(dividend, result);
+		add_blank_terms(result);
+		terms_sort_powers(result);
+		return (result);
+	}
+	term_dividend = dividend[dividend.size() - 1];
+	term_divisor = divisor[divisor.size() - 1];
+	term_result.coefficient = *term_dividend.coefficient / *term_divisor.coefficient;
+	term_result.power = term_dividend.power - term_divisor.power;
+	quotient.push_back(term_result);
+	sub = *term_result.coefficient * Rational(-1);
+	add_terms_to_vector(dividend, result);
+	add_terms_to_vector(vector_term_coeff_multiplication(sub, term_result.power, divisor), result);
+	delete sub;
+	add_blank_terms(result);
+	terms_sort_powers(result);
+	new_result = euclidean_division_step(result, divisor, quotient);
+	free_vector_terms(result);
+	return (new_result);
+}
+
+static Polynomial::t_division_result	euclidean_division(const std::vector<Polynomial::t_term> &dividend, const std::vector<Polynomial::t_term> &divisor, bool is_recursive = false)
+{
+	std::vector<Polynomial::t_term>	quotient;
+	std::vector<Polynomial::t_term>	remainder;
+	Polynomial::t_division_result	result;
+
+	if (divisor.size() <= 1)
+		return ((Polynomial::t_division_result){dividend, divisor});
+	remainder = euclidean_division_step(dividend, divisor, quotient);
+	add_blank_terms(quotient);
+	terms_sort_powers(quotient);
+	if (!is_recursive)
+		return ((Polynomial::t_division_result){quotient, remainder});
+	result = euclidean_division(divisor, remainder, true);
+	// free_vector_terms(quotient);
+	// free_vector_terms(remainder);
+	return (result);
+}
+
+static void		divide_constant_factor(const Rational &factor, std::vector<Polynomial::t_term> &terms, std::vector<Polynomial::t_term> &dividers)
+{
+	IType	*tmp;
+
+	for (std::vector<Polynomial::t_term>::iterator it(terms.begin()); it != terms.end(); it++)
+	{
+		tmp = it->coefficient;
+		it->coefficient = *it->coefficient / factor;
+		delete tmp;
+	}
+	for (std::vector<Polynomial::t_term>::iterator it(dividers.begin()); it != dividers.end(); it++)
+	{
+		tmp = it->coefficient;
+		it->coefficient = *it->coefficient / factor;
+		delete tmp;
+	}
+}
 
 
 // Constructors and destructor
@@ -819,6 +923,13 @@ IType*			Polynomial::function_operator(const IType &other) const
 	return (result);
 }
 
+Rational*		Polynomial::pgcd(const IType &other) const
+{
+	throw ERROR_UNEXPECTED;
+	(void)other;
+	return (nullptr);
+}
+
 IType*			Polynomial::clone(void) const
 {
 	return (new Polynomial(*this));
@@ -866,41 +977,62 @@ unsigned int	Polynomial::get_degree(void) const
 	return (degree);
 }
 
-static void		add_blank_terms(std::vector<Polynomial::t_term> &terms)
+void			Polynomial::sort_powers(void)
 {
-	std::vector<Polynomial::t_term>::const_iterator	it(terms.begin());
-	unsigned int									max_power(0);
-
-	if (terms.empty())
-		return ;
-	while (it != terms.end())
-	{
-		if (it->power > max_power)
-			max_power = it->power;
-		it++;
-	}
-	for (unsigned int i = 0; i <= max_power; i++)
-		add_term_to_vector(new Rational(0), i, terms);
+	terms_sort_powers(this->_terms);
+	terms_sort_powers(this->_dividers);
 }
 
-void			Polynomial::sort_terms(void)
+void			Polynomial::factorize_constant_factor(void)
 {
-	bool (*fct)(const Polynomial::t_term&, const Polynomial::t_term&);
+	Rational	*pgcd_dividend;
+	Rational	*pgcd_divisor;
+	Rational	*pgcd;
+	IType		*tmp;
 
-	fct = [](const Polynomial::t_term &a, const Polynomial::t_term &b)
+	pgcd_dividend = new Rational(0);
+	pgcd_divisor = new Rational(0);
+	for (std::vector<Polynomial::t_term>::const_iterator it(this->_terms.begin()); it != this->_terms.end(); it++)
 	{
-		return (a.power < b.power);
-	};
-	std::sort(this->_terms.begin(), this->_terms.end(), fct);
-	std::sort(this->_dividers.begin(), this->_dividers.end(), fct);
+		tmp = pgcd_dividend;
+		pgcd_dividend = pgcd_dividend->pgcd(*it->coefficient);
+		delete tmp;
+	}
+	for (std::vector<Polynomial::t_term>::const_iterator it(this->_dividers.begin()); it != this->_dividers.end(); it++)
+	{
+		tmp = pgcd_divisor;
+		pgcd_divisor = pgcd_divisor->pgcd(*it->coefficient);
+		delete tmp;
+	}
+	pgcd = pgcd_dividend->pgcd(*pgcd_divisor);
+	divide_constant_factor(*pgcd, this->_terms, this->_dividers);
+	delete pgcd_dividend;
+	delete pgcd_divisor;
+	delete pgcd;
 }
 
 void			Polynomial::reduce(void)
 {
+	// TODO: Leaks?
+	Polynomial::t_division_result	division_result;
+	Polynomial::t_division_result	reduced;
+	std::vector<Polynomial::t_term>	factor;
+
 	add_blank_terms(this->_terms);
 	add_blank_terms(this->_dividers);
-	this->sort_terms();
-	// euclidean_division(this->_terms, this->_dividers);
+	this->sort_powers();
+	division_result = euclidean_division(this->_terms, this->_dividers, true);
+	if (division_result.remainder.empty())
+	{
+		factor = division_result.quotient;
+		reduced = euclidean_division(this->_terms, factor);
+		free_vector_terms(this->_terms);
+		add_terms_to_vector(reduced.quotient, this->_terms);
+		reduced = euclidean_division(this->_dividers, factor);
+		free_vector_terms(this->_dividers);
+		add_terms_to_vector(reduced.quotient, this->_dividers);
+	}
+	this->factorize_constant_factor();
 }
 
 
