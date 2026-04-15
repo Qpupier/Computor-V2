@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/15 17:08:15 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/15 18:59:35 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,22 +133,52 @@ static Polynomial*						polynomial_power_rational(const Polynomial *polynomial, 
 
 static IType*							function_operator_term(const std::vector<Polynomial::t_term> &terms, const IType &other)
 {
-	std::vector<Polynomial::t_term>::const_iterator	it(terms.begin());
 	IType*	result;
 	IType*	power;
 	IType*	term;
+	IType*	tmp;
 
-	result = new Rational(1);
-	while (it != terms.end())
+	result = new Rational();
+	for (std::vector<Polynomial::t_term>::const_iterator it(terms.begin()); it != terms.end(); it++)
 	{
-		power = other ^ Rational(static_cast<int>(it->power));
+		power = other ^ Rational(static_cast<int>(it->power));// TODO: Attention
 		term = *it->coefficient * *power;
 		delete power;
+		tmp = result;
 		result = *result + *term;
+		delete tmp;
 		delete term;
-		it++;
 	}
 	return (result);
+}
+
+static void								print_coefficient(std::ostream &os, IType *coefficient, unsigned int power, bool first_term)
+{
+	IType*	tmp;
+	bool	is_complex;
+
+	if (!first_term)
+	{
+		if (*coefficient > Rational(0))
+			os << " + ";
+		else
+		{
+			os << " - ";
+			tmp = coefficient;
+			coefficient = *coefficient * Rational(-1);
+			delete tmp;
+		}
+	}
+	is_complex = dynamic_cast<Complex*>(coefficient);
+	if (is_complex)
+		os << "(";
+	if (power && *coefficient == Rational(-1))
+		os << "-";
+	else if (!power || *coefficient != Rational(1))
+		os << *coefficient;
+	if (is_complex)
+		os << ")";
+	delete coefficient;
 }
 
 static std::ostream&					print_terms(std::ostream &os, const std::vector<Polynomial::t_term> &terms, const std::string &name, bool alone = false)
@@ -163,12 +193,7 @@ static std::ostream&					print_terms(std::ostream &os, const std::vector<Polynom
 	{
 		if (!*it->coefficient)
 			continue ;
-		if (!first_term)
-			os << " + ";
-		if (dynamic_cast<Complex*>(it->coefficient))
-			os << "(" << *it->coefficient << ")";
-		else
-			os << *it->coefficient;
+		print_coefficient(os, it->coefficient->clone(), it->power, first_term);
 		if (it->power)
 		{
 			os << name;
@@ -360,6 +385,7 @@ Polynomial::Polynomial(const IType &other)
 		*this = Polynomial("_", (t_term){other_matrix->clone(), 0});
 	else
 		throw ERROR_UNEXPECTED;
+	this->reduce();
 }
 
 Polynomial::~Polynomial(void)

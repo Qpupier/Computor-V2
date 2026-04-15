@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/15 17:16:26 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/15 18:26:47 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static void			trinomial(Polynomial *polynomial)
 	solve_trinomial(polynomial);
 }
 
-static void			binomial(Polynomial *polynomial, 	\
+static void			binomial(Polynomial *polynomial, 				\
 		std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
 	std::vector<Polynomial::t_term>	terms(polynomial->getTerms());
@@ -80,6 +80,7 @@ static void			display_result(Polynomial *polynomial, std::map<std::pair<std::str
 {
 	unsigned long int	degree;
 
+	std::cout << "Reduced form: " << *polynomial << " = 0" << std::endl;
 	degree = polynomial->getTerms().size() - 1;
 	if (polynomial->getTerms().empty() || degree == 0)
 		monomial(polynomial);
