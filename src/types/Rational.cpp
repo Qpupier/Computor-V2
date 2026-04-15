@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/14 18:37:15 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/15 13:40:32 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@ static int	compute_gcd(int a, int b)
 	return (compute_gcd(b, a % b));
 }
 
+static int	compute_lcm(int a, int b)
+{
+	return (a / compute_gcd(a, b) * b);
+}
 
 // Constructors
 Rational::Rational(int numerator, int denominator): _numerator(numerator), _denominator(denominator)
@@ -783,7 +787,7 @@ IType*			Rational::clone(void) const
 	return (new Rational(*this));
 }
 
-Rational*		Rational::pgcd(const Rational &other) const
+Rational*		Rational::gcd(const Rational &other) const
 {
 	int	gcd_numerator;
 	int	gcd_denominator;
@@ -793,16 +797,22 @@ Rational*		Rational::pgcd(const Rational &other) const
 	if (!other._numerator)
 		return (new Rational(*this));
 	gcd_numerator = compute_gcd(this->_numerator, other._numerator);
-	gcd_denominator = compute_gcd(this->_denominator, other._denominator);
+	gcd_denominator = compute_lcm(this->_denominator, other._denominator);
 	return (new Rational(gcd_numerator, gcd_denominator));
 }
 
-Rational*		Rational::pgcd(const Complex &other) const
+Rational*		Rational::gcd(const Complex &other) const
 {
-	return (this->pgcd(other.getReal())->pgcd(other.getImaginary()));
+	Rational*	first;
+	Rational*	second;
+
+	first = this->gcd(other.getReal());
+	second = first->gcd(other.getImaginary());
+	delete first;
+	return (second);
 }
 
-Rational*		Rational::pgcd(const Matrix &other) const
+Rational*		Rational::gcd(const Matrix &other) const
 {
 	Rational*	gcd;
 	Rational*	tmp;
@@ -812,13 +822,13 @@ Rational*		Rational::pgcd(const Matrix &other) const
 		for (unsigned int j = 0; j < other.getWidth(); j++)
 		{
 			tmp = gcd;
-			gcd = gcd->pgcd(other[i][j]);
+			gcd = gcd->gcd(other[i][j]);
 			delete tmp;
 		}
 	return (gcd);
 }
 
-Rational*		Rational::pgcd(const IType &other) const
+Rational*		Rational::gcd(const IType &other) const
 {
 	const Rational	*other_rational;
 	const Complex	*other_complex;
@@ -826,13 +836,13 @@ Rational*		Rational::pgcd(const IType &other) const
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
-		return (this->pgcd(*other_rational));
+		return (this->gcd(*other_rational));
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
-		return (this->pgcd(*other_complex));
+		return (this->gcd(*other_complex));
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
-		return (this->pgcd(*other_matrix));
+		return (this->gcd(*other_matrix));
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }

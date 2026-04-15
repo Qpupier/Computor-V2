@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/14 17:47:58 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/15 13:32:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,10 +103,10 @@ class	Rational: public IType
 		IType*			matrix_operator(const IType &other) const;
 		IType*			function_operator(const IType &other) const;
 		IType*			clone(void) const;
-		Rational*		pgcd(const IType &ther) const;
-		Rational*		pgcd(const Rational &other) const;
-		Rational*		pgcd(const Complex &other) const;
-		Rational*		pgcd(const Matrix &other) const;
+		Rational*		gcd(const IType &ther) const;
+		Rational*		gcd(const Rational &other) const;
+		Rational*		gcd(const Complex &other) const;
+		Rational*		gcd(const Matrix &other) const;
 		std::ostream&	print(std::ostream &os) const;
 		std::ostream&	print_polynomial(std::ostream &os, 	\
 				const std::string &var) const;

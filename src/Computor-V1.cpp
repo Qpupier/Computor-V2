@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:03:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/13 16:38:31 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/15 13:46:19 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	reduce_sqrt(int *factor, int *sqrt)
 	}
 }
 
-static void	solve_trinomial_complex(IType *a, IType *b, IType *c, Complex *delta)
+static void	solve_trinomial_complex(IType *a, IType *b, Complex *delta)
 {
 	double modulo;
 	double p;
@@ -41,7 +41,6 @@ static void	solve_trinomial_complex(IType *a, IType *b, IType *c, Complex *delta
 	double solution2_imaginary;
 	Complex*	new_a;
 	Complex*	new_b;
-	Complex*	new_c;
 
 	try
 	{
@@ -49,8 +48,6 @@ static void	solve_trinomial_complex(IType *a, IType *b, IType *c, Complex *delta
 		delete a;
 		new_b = new Complex(*b);
 		delete b;
-		new_c = new Complex(*c);
-		delete c;
 	}
 	catch (const UnexpectedError &e)
 	{
@@ -148,11 +145,10 @@ static void	find_two_solutions(std::string variable, Rational *a, Rational *b, R
 	print_result_roots(variable, final, new_b, new_fac, new_sqrt);
 }
 
-static void	solve_trinomial_rational(std::string variable, IType *a, IType *b, IType *c, Rational *discriminant)
+static void	solve_trinomial_rational(std::string variable, IType *a, IType *b, Rational *discriminant)
 {
 	Rational*	new_a;
 	Rational*	new_b;
-	Rational*	new_c;
 
 	try
 	{
@@ -160,8 +156,6 @@ static void	solve_trinomial_rational(std::string variable, IType *a, IType *b, I
 		delete a;
 		new_b = new Rational(*b);
 		delete b;
-		new_c = new Rational(*c);
-		delete c;
 	}
 	catch (const UnexpectedError &e)
 	{
@@ -221,9 +215,9 @@ void	solve_trinomial(Polynomial *polynomial)
 	delete tmp_4ac;
 	discriminant_rational = dynamic_cast<Rational*>(tmp_b2_4ac);
 	if (discriminant_rational)
-		return solve_trinomial_rational(polynomial->getName(), a, b, c, discriminant_rational);
+		return solve_trinomial_rational(polynomial->getName(), a, b, discriminant_rational);
 	discriminant_complex = dynamic_cast<Complex*>(tmp_b2_4ac);
 	if (discriminant_complex)
-		return solve_trinomial_complex(a, b, c, discriminant_complex);
+		return solve_trinomial_complex(a, b, discriminant_complex);
 	delete tmp_b2_4ac;
 }

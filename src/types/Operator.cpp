@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/14 17:48:50 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/15 13:32:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,7 @@ IType*			Operator::clone(void) const
 	return (new Operator(*this));
 }
 
-Rational*		Operator::pgcd(const IType &other) const
+Rational*		Operator::gcd(const IType &other) const
 {
 	throw ERROR_UNEXPECTED;
 	(void)other;
