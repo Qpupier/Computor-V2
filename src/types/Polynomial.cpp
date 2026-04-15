@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/15 15:48:21 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/15 17:08:15 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,15 +289,6 @@ static Polynomial::t_division_result	euclidean_division(const std::vector<Polyno
 	if (!is_recursive)
 		return ((Polynomial::t_division_result){quotient, remainder});
 	result = euclidean_division(divisor, remainder, true);
-	// std::cout << "Recursive division:" << std::endl;
-	// std::cout << "Dividend: ";
-	// print_terms(std::cout, divisor, "x", true) << std::endl;
-	// std::cout << "Divisor: ";
-	// print_terms(std::cout, remainder, "x", true) << std::endl;
-	// std::cout << "Quotient: ";
-	// print_terms(std::cout, result.quotient, "x", true) << std::endl;
-	// std::cout << "Remainder: ";
-	// print_terms(std::cout, result.remainder, "x", true) << std::endl << std::endl;
 	free_vector_terms(quotient);
 	free_vector_terms(remainder);
 	return (result);
@@ -346,6 +337,29 @@ Polynomial::Polynomial(const Polynomial &other)
 		this->_dividers.push_back((t_term){it_dividers->coefficient->clone(), it_dividers->power});
 		it_dividers++;
 	}
+}
+
+Polynomial::Polynomial(const IType &other)
+{
+	const Rational		*other_rational;
+	const Complex		*other_complex;
+	const Matrix		*other_matrix;
+	const Polynomial	*other_polynomial;
+
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	other_rational = dynamic_cast<const Rational*>(&other);
+	other_complex = dynamic_cast<const Complex*>(&other);
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_polynomial)
+		*this = *other_polynomial;
+	else if (other_rational)
+		*this = Polynomial("_", (t_term){other_rational->clone(), 0});
+	else if (other_complex)
+		*this = Polynomial("_", (t_term){other_complex->clone(), 0});
+	else if (other_matrix)
+		*this = Polynomial("_", (t_term){other_matrix->clone(), 0});
+	else
+		throw ERROR_UNEXPECTED;
 }
 
 Polynomial::~Polynomial(void)
@@ -1010,27 +1024,6 @@ std::ostream&	Polynomial::print_polynomial(std::ostream &os, const std::string &
 	return (os);
 }
 
-unsigned int	Polynomial::get_degree(void) const
-{
-	std::vector<t_term>::const_iterator	it_terms(this->_terms.begin());
-	std::vector<t_term>::const_iterator	it_dividers(this->_dividers.begin());
-	unsigned int						degree(0);
-
-	while (it_terms != this->_terms.end())
-	{
-		if (it_terms->power > degree)
-			degree = it_terms->power;
-		it_terms++;
-	}
-	while (it_dividers != this->_dividers.end())
-	{
-		if (it_dividers->power > degree)
-			degree = it_dividers->power;
-		it_dividers++;
-	}
-	return (degree);
-}
-
 void			Polynomial::sort_powers(void)
 {
 	terms_sort_powers(this->_terms);
@@ -1073,12 +1066,14 @@ void			Polynomial::reduce(void)
 	clean_terms(this->_terms);
 	clean_terms(this->_dividers);
 	this->sort_powers();
+	if (this->_dividers.empty())
+	{
+		delete this;
+		throw ERROR_DIVISION_BY_ZERO;
+	}
 	division_result = euclidean_division(this->_terms, this->_dividers, true);
-	// std::cout << "Remainder: " << std::endl;
-	// print_terms(std::cout, division_result.remainder, this->_name, true) << std::endl;
 	if (division_result.quotient.empty())
 	{
-		// std::cout << "Reduction" << std::endl;
 		reduced = euclidean_division(this->_terms, division_result.remainder);
 		free_vector_terms(this->_terms);
 		this->_terms = reduced.quotient;

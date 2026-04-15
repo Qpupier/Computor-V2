@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/15 13:32:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/15 17:08:09 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ class	Polynomial: public IType
 		Polynomial(std::string name, t_term term);
 		Polynomial(const Token &token): Polynomial(token.getValue(), t_term{new Rational(1), 1}) {};
 		Polynomial(const Polynomial &other);
+		Polynomial(const IType &other);
 		~Polynomial(void);
 
 		// Operator overloads
@@ -101,7 +102,6 @@ class	Polynomial: public IType
 		std::ostream&	print(std::ostream &os) const;
 		std::ostream&	print_polynomial(std::ostream &os, 	\
 				const std::string &var) const;
-		unsigned int	get_degree(void) const;
 		void			sort_powers(void);
 		void			factorize_constant_factor(void);
 		void			reduce(void);
