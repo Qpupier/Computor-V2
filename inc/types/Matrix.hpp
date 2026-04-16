@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/15 13:32:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/16 13:34:50 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,10 @@ class	Matrix: public IType
 		Matrix*		operator%(const Complex &other) const;
 		Polynomial*	operator%(const Polynomial &other) const;
 		IType*		operator^(const IType &other) const;
-		Matrix*		operator^(const Matrix &other) const;
-		Matrix*		operator^(const Rational &other) const;
-		Matrix*		operator^(const Complex &other) const;
-		IType*		operator^(const Polynomial &other) const;
+		// Matrix*		operator^(const Matrix &other) const;
+		// Matrix*		operator^(const Rational &other) const;
+		// Matrix*		operator^(const Complex &other) const;
+		// IType*		operator^(const Polynomial &other) const;
 
 		// Getters
 		unsigned long	getWidth(void) const;

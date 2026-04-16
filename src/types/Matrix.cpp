@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/15 13:38:24 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/16 14:26:54 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ Matrix::Matrix(unsigned long width, unsigned long height): _width(width), _heigh
 	{
 		this->_matrix[i] = new Rational[this->_width];
 		for (unsigned int j = 0; j < this->_width; j++)
-			this->_matrix[i][j] = Rational();
+			this->_matrix[i][j] = Rational(i == j);
 	}
 }
 
@@ -151,7 +151,7 @@ Matrix::Matrix(const IType &other)
 	else if (other_polynomial)
 	{
 		if (other_polynomial->getDividers().size() != 1 || *other_polynomial->getDividers()[0].coefficient != Rational(1) || other_polynomial->getDividers()[0].power || other_polynomial->getTerms().size() != 1 || other_polynomial->getTerms()[0].power)
-			throw ERROR_UNEXPECTED;
+			throw ERROR_UNEXPECTED;//TODO: Size = 0 si polynomial = 0
 		*this = Matrix(*other_polynomial->getTerms()[0].coefficient);// TODO: Leaks?
 	}
 	else
@@ -660,93 +660,30 @@ IType*		Matrix::operator%(const IType &other) const
 	return (nullptr);
 }
 
-Matrix*		Matrix::operator^(const Matrix &other) const
+IType*		Matrix::operator^(const IType &other) const
 {
-	Matrix		*result;
-
-	if (this->_width != other._width || this->_height != other._height)
-		throw ERROR_MATRIX_DIMENSIONS;
-	result = new Matrix(this->_width, this->_height);
-	for (unsigned int i = 0; i < this->_height; i++)
-		for (unsigned int j = 0; j < this->_width; j++)
-			try
-			{
-				result->_matrix[i][j] = this->_matrix[i][j] ^ other._matrix[i][j];
-			}
-			catch(const LogicError& e)
-			{
-				delete result;
-				throw;
-			}
-	return (result);
-}
-
-Matrix*		Matrix::operator^(const Rational &other) const
-{
-	Matrix	*result;
-
-	result = new Matrix(this->_width, this->_height);
-	for (unsigned int i = 0; i < this->_height; i++)
-		for (unsigned int j = 0; j < this->_width; j++)
-			try
-			{
-				result->_matrix[i][j] = this->_matrix[i][j] ^ other;
-			}
-			catch(const LogicError& e)
-			{
-				delete result;
-				throw;
-			}
-	return (result);
-}
-
-Matrix*		Matrix::operator^(const Complex &other) const
-{
-	Rational	rational;
+	Rational	power;
+	Matrix*		result;
+	Matrix*		tmp;
 
 	try
 	{
-		rational = other;
+		power = Rational(other);
 	}
-	catch (const LogicError &e)
+	catch(const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
+		throw UNSUPPORTED_EXPONENT;
 	}
-	return (*this ^ rational);
-}
-
-IType*		Matrix::operator^(const Polynomial &other) const
-{
-	IType*	tmp;
-	IType*	result;
-
-	tmp = new Polynomial(other.getName(), (Polynomial::t_term){this->clone(), 0});
-	result = *tmp ^ other;
-	delete tmp;
+	if (!power.is_integer() || power < Rational(0))
+		throw UNSUPPORTED_EXPONENT;
+	result = new Matrix(this->_width, this->_height);
+	for (int i = 0; i < power.getNumerator(); i++)
+	{
+		tmp = result;
+		result = result->matrix_operator(*this);
+		delete tmp;
+	}
 	return (result);
-}
-
-IType*		Matrix::operator^(const IType &other) const
-{
-	const Matrix	*other_matrix;
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Polynomial	*other_polynomial;
-
-	other_matrix = dynamic_cast<const Matrix*>(&other);
-	if (other_matrix)
-		return (*this ^ *other_matrix);
-	other_rational = dynamic_cast<const Rational*>(&other);
-	if (other_rational)
-		return (*this ^ *other_rational);
-	other_complex = dynamic_cast<const Complex*>(&other);
-	if (other_complex)
-		return (*this ^ *other_complex);
-	other_polynomial = dynamic_cast<const Polynomial*>(&other);
-	if (other_polynomial)
-		return (*this ^ *other_polynomial);
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
 }
 
 

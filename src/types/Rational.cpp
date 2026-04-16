@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/15 13:40:32 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/16 14:26:27 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ Rational::Rational(const IType &other)
 	else if (other_polynomial)
 	{
 		if (other_polynomial->getDividers().size() != 1 || *other_polynomial->getDividers()[0].coefficient != Rational(1) || other_polynomial->getDividers()[0].power || other_polynomial->getTerms().size() != 1 || other_polynomial->getTerms()[0].power)
-			throw ERROR_UNEXPECTED;
+			throw ERROR_UNEXPECTED;//TODO: Size = 0 si polynomial = 0
 		*this = Rational(*other_polynomial->getTerms()[0].coefficient);// TODO: Leaks?
 	}
 	else
@@ -676,76 +676,30 @@ IType*		Rational::operator%(const IType &other) const
 	return (nullptr);
 }
 
-Rational*	Rational::operator^(const Rational &other) const
-{
-	int	exponent;
-
-	exponent = other.getNumerator();
-	if (other.getDenominator() != 1)
-		throw ERROR_EXPONENT_INTEGER;
-	return (new Rational(static_cast<int>(std::pow(this->getNumerator(), exponent)), static_cast<int>(std::pow(this->getDenominator(), exponent))));
-}
-
-Complex*	Rational::operator^(const Complex &other) const
-{
-	return (Complex(*this, Rational()) ^ other);
-}
-
-Matrix*		Rational::operator^(const Matrix &other) const
-{
-	Matrix*				result;
-	unsigned long int	width;
-	unsigned long int	height;
-
-	width = other.getWidth();
-	height = other.getHeight();
-	result = new Matrix(width, height);
-	for (unsigned int i = 0; i < height; i++)
-		for (unsigned int j = 0; j < width; j++)
-			try
-			{
-				result->setValue(i, j, *this ^ other[i][j]);
-			}
-			catch (const std::exception &e)
-			{
-				delete result;
-				throw;
-			}
-	return (result);
-}
-
-IType*		Rational::operator^(const Polynomial &other) const
-{
-	IType*	tmp;
-	IType*	result;
-
-	tmp = new Polynomial(other.getName(), (Polynomial::t_term){this->clone(), 0});
-	result = *tmp ^ other;
-	delete tmp;
-	return (result);
-}
-
 IType*		Rational::operator^(const IType &other) const
 {
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Matrix	*other_matrix;
-	const Polynomial	*other_polynomial;
+	Rational	power;
+	Rational*	result;
+	Rational*	tmp;
 
-	other_rational = dynamic_cast<const Rational*>(&other);
-	if (other_rational)
-		return (*this ^ *other_rational);
-	other_complex = dynamic_cast<const Complex*>(&other);
-	if (other_complex)
-		return (*this ^ *other_complex);
-	other_matrix = dynamic_cast<const Matrix*>(&other);
-	if (other_matrix)
-		return (*this ^ *other_matrix);
-	other_polynomial = dynamic_cast<const Polynomial*>(&other);
-	if (other_polynomial)
-		return (*this ^ *other_polynomial);
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
+	try
+	{
+		power = Rational(other);
+	}
+	catch(const LogicError &e)
+	{
+		throw UNSUPPORTED_EXPONENT;
+	}
+	if (!power.is_integer() || power < Rational(0))
+		throw UNSUPPORTED_EXPONENT;
+	result = new Rational(1);
+	for (int i = 0; i < power.getNumerator(); i++)
+	{
+		tmp = result;
+		result = *result * *this;
+		delete tmp;
+	}
+	return (result);
 }
 
 

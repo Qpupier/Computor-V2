@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:03:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/16 13:09:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/16 14:25:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,6 @@ static void	solve_trinomial_rational(std::string variable, IType *a, IType *b, R
 		find_two_solutions(variable, new_a, new_b, discriminant);
 	delete new_a;
 	delete new_b;
-	delete discriminant;
 }
 
 static IType*	get_discriminant(IType *a, IType *b, IType *c)
@@ -201,12 +200,32 @@ void	solve_trinomial(Polynomial *polynomial)
 	b = terms[1].coefficient;
 	c = terms[0].coefficient;
 	discriminant = get_discriminant(a, b, c);
-	discriminant_rational = dynamic_cast<Rational*>(discriminant);
-	discriminant_complex = dynamic_cast<Complex*>(discriminant);
+	try
+	{
+		discriminant_rational = new Rational(*discriminant);
+	}
+	catch (const UnexpectedError &e)
+	{
+		discriminant_rational = nullptr;
+	}
+	try
+	{
+		discriminant_complex = new Complex(*discriminant);
+	}
+	catch (const UnexpectedError &e)
+	{
+		discriminant_complex = nullptr;
+	}
 	if (discriminant_rational)
+	{
 		solve_trinomial_rational(polynomial->getName(), a, b, discriminant_rational);
+		delete discriminant_rational;
+	}
 	else if (discriminant_complex)
+	{
 		solve_trinomial_complex(a, b, discriminant_complex);
+		delete discriminant_complex;
+	}
 	else
 	{
 		delete discriminant;

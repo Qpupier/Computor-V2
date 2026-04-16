@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/15 13:32:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/16 13:45:06 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,10 @@ class	Rational: public IType
 		Matrix*		operator%(const Matrix &other) const;
 		Polynomial*	operator%(const Polynomial &other) const;
 		IType*		operator^(const IType &other) const;
-		Rational*	operator^(const Rational &other) const;
-		Complex*	operator^(const Complex &other) const;
-		Matrix*		operator^(const Matrix &other) const;
-		IType*		operator^(const Polynomial &other) const;
+		// Rational*	operator^(const Rational &other) const;
+		// Complex*	operator^(const Complex &other) const;
+		// Matrix*		operator^(const Matrix &other) const;
+		// IType*		operator^(const Polynomial &other) const;
 
 		// Getters
 		int		getNumerator(void) const;

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/16 11:30:05 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/16 14:26:47 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ Complex::Complex(const IType &other)
 	else if (other_polynomial)
 	{
 		if (other_polynomial->getDividers().size() != 1 || *other_polynomial->getDividers()[0].coefficient != Rational(1) || other_polynomial->getDividers()[0].power || other_polynomial->getTerms().size() != 1 || other_polynomial->getTerms()[0].power)
-			throw ERROR_UNEXPECTED;
+			throw ERROR_UNEXPECTED;//TODO: Size = 0 si polynomial = 0
 		this->_real = Rational(*other_polynomial->getTerms()[0].coefficient);
 		this->_imaginary = Rational(0);
 	}
@@ -550,96 +550,30 @@ IType*		Complex::operator%(const IType &other) const
 	return (nullptr);
 }
 
-Complex*	Complex::operator^(const Rational &other) const
+IType*		Complex::operator^(const IType &other) const
 {
-	Rational	exponent;
+	Rational	power;
 	Complex*	result;
 	Complex*	tmp;
-	int			numerator;
 
 	try
 	{
-		exponent = other;
-		if (!exponent.is_integer())
-			throw ERROR_EXPONENT_INTEGER;
+		power = Rational(other);
 	}
-	catch (const LogicError &e)
+	catch(const LogicError &e)
 	{
-		throw ERROR_EXPONENT_INTEGER;
+		throw UNSUPPORTED_EXPONENT;
 	}
-	result = new Complex(*this);
-	numerator = exponent.getNumerator();
-	for (int i = 1; i < numerator; i++)
+	if (!power.is_integer() || power < Rational(0))
+		throw UNSUPPORTED_EXPONENT;
+	result = new Complex(Rational(1), Rational(0));
+	for (int i = 0; i < power.getNumerator(); i++)
 	{
 		tmp = result;
 		result = *result * *this;
 		delete tmp;
 	}
 	return (result);
-}
-
-Complex*	Complex::operator^(const Complex &other) const
-{
-	Rational	other_rational;
-
-	try
-	{
-		other_rational = other;
-	}
-	catch (const LogicError &e)
-	{
-		throw ERROR_EXPONENT_INTEGER;
-	}
-	return (*this ^ other_rational);
-}
-
-Matrix*		Complex::operator^(const Matrix &other) const
-{
-	Rational	rational;
-
-	try
-	{
-		rational = *this;
-	}
-	catch (const LogicError &e)
-	{
-		throw ERROR_EXPONENT_INTEGER;
-	}
-	return (rational ^ other);
-}
-
-IType*		Complex::operator^(const Polynomial &other) const
-{
-	IType*	tmp;
-	IType*	result;
-
-	tmp = new Polynomial(other.getName(), (Polynomial::t_term){this->clone(), 0});
-	result = *tmp ^ other;
-	delete tmp;
-	return (result);
-}
-
-IType*		Complex::operator^(const IType &other) const
-{
-	const Complex	*other_complex;
-	const Rational	*other_rational;
-	const Matrix	*other_matrix;
-	const Polynomial	*other_polynomial;
-
-	other_complex = dynamic_cast<const Complex*>(&other);
-	if (other_complex)
-		return (*this ^ *other_complex);
-	other_rational = dynamic_cast<const Rational*>(&other);
-	if (other_rational)
-		return (*this ^ *other_rational);
-	other_matrix = dynamic_cast<const Matrix*>(&other);
-	if (other_matrix)
-		return (*this ^ *other_matrix);
-	other_polynomial = dynamic_cast<const Polynomial*>(&other);
-	if (other_polynomial)
-		return (*this ^ *other_polynomial);
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
 }
 
 
