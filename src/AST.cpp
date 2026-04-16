@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/13 17:47:27 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/16 12:00:18 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static IType*	find_function(IType *node, std::map<std::pair<std::string, std::st
 
 	polynomial = dynamic_cast<const Polynomial*>(node);
 	if (!polynomial)
-		throw UnexpectedError("Left side of function operator must be a polynomial");
+		throw UnexpectedError("Left side of function operator must be a variable");
 	var_name = to_lower(polynomial->getName());
 	var_key.first = var_name;
 	for (it = stored.begin(); it != stored.end(); it++)
@@ -195,9 +195,8 @@ void			AST::reduce_expression(std::map<std::pair<std::string, std::string>, cons
 	Operator*	op;
 	IType*		result;
 
-	this->replace_variables(stored);
 	if (this->end_of_tree())
-		return;
+		return this->replace_variables(stored);
 	this->_left->reduce_expression(stored);
 	this->_right->reduce_expression(stored);
 	if (this->end_of_tree())
@@ -225,22 +224,17 @@ void			AST::replace_variables(std::map<std::pair<std::string, std::string>, cons
 	const Polynomial					*polynomial;
 	std::pair<std::string, std::string>	var_key;
 
-	if (this->end_of_tree())
-	{
-		polynomial = dynamic_cast<const Polynomial*>(this->_node);
-		if (!polynomial)
-			return;
-		var_key.first = to_lower(polynomial->getName());
-		var_key.second = std::string();
-		if (stored.find(var_key) != stored.end())
-		{
-			delete this->_node;
-			this->_node = stored[var_key]->clone();
-		}
+	polynomial = dynamic_cast<const Polynomial*>(this->_node);
+	if (!polynomial)
 		return;
+	var_key.first = to_lower(polynomial->getName());
+	var_key.second = std::string();
+	if (stored.find(var_key) != stored.end())
+	{
+		delete this->_node;
+		this->_node = stored[var_key]->clone();
 	}
-	this->_left->replace_variables(stored);
-	this->_right->replace_variables(stored);
+	return;
 }
 
 

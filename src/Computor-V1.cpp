@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:03:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/15 13:46:19 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/16 13:09:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,9 +153,7 @@ static void	solve_trinomial_rational(std::string variable, IType *a, IType *b, R
 	try
 	{
 		new_a = new Rational(*a);
-		delete a;
 		new_b = new Rational(*b);
-		delete b;
 	}
 	catch (const UnexpectedError &e)
 	{
@@ -167,57 +165,52 @@ static void	solve_trinomial_rational(std::string variable, IType *a, IType *b, R
 		find_one_solution(new_a, new_b);
 	else
 		find_two_solutions(variable, new_a, new_b, discriminant);
+	delete new_a;
+	delete new_b;
 	delete discriminant;
+}
+
+static IType*	get_discriminant(IType *a, IType *b, IType *c)
+{
+	IType*	tmp_b2;
+	IType*	tmp_4a;
+	IType*	tmp_4ac;
+	IType*	discriminant;
+
+	tmp_b2 = *b * *b;
+	tmp_4a = Rational(4) * *a;
+	tmp_4ac = *tmp_4a * *c;
+	delete tmp_4a;
+	discriminant = *tmp_b2 - *tmp_4ac;
+	delete tmp_b2;
+	delete tmp_4ac;
+	return (discriminant);
 }
 
 void	solve_trinomial(Polynomial *polynomial)
 {
-	std::vector<Polynomial::t_term>	terms;
+	std::vector<Polynomial::t_term>	terms(polynomial->getTerms());
 	IType*							a;
 	IType*							b;
 	IType*							c;
-	IType*							tmp_b2;
-	IType*							tmp_4a;
-	IType*							tmp_4ac;
-	IType*							tmp_b2_4ac;
+	IType*							discriminant;
 	Rational*						discriminant_rational;
 	Complex*						discriminant_complex;
 
-	a = nullptr;
-	b = nullptr;
-	c = nullptr;
-	for (std::vector<Polynomial::t_term>::const_iterator it = terms.begin(); it != terms.end(); it++)
-	{
-		if (it->power == 2)
-			a = it->coefficient;
-		else if (it->power == 1)
-			b = it->coefficient;
-		else if (it->power == 0)
-			c = it->coefficient;
-		else
-			throw ERROR_UNEXPECTED;
-	}
-	if (!a)
-		a = new Rational(0);
-	if (!b)
-		b = new Rational(0);
-	if (!c)
-		c = new Rational(0);
-	tmp_b2 = *b * *b;
-	delete b;
-	tmp_4a = Rational(4) * *a;
-	delete a;
-	tmp_4ac = *tmp_4a * *c;
-	delete c;
-	tmp_b2_4ac = *tmp_b2 - *tmp_4ac;
-	delete tmp_b2;
-	delete tmp_4a;
-	delete tmp_4ac;
-	discriminant_rational = dynamic_cast<Rational*>(tmp_b2_4ac);
+	a = terms[2].coefficient;
+	b = terms[1].coefficient;
+	c = terms[0].coefficient;
+	discriminant = get_discriminant(a, b, c);
+	discriminant_rational = dynamic_cast<Rational*>(discriminant);
+	discriminant_complex = dynamic_cast<Complex*>(discriminant);
 	if (discriminant_rational)
-		return solve_trinomial_rational(polynomial->getName(), a, b, discriminant_rational);
-	discriminant_complex = dynamic_cast<Complex*>(tmp_b2_4ac);
-	if (discriminant_complex)
-		return solve_trinomial_complex(a, b, discriminant_complex);
-	delete tmp_b2_4ac;
+		solve_trinomial_rational(polynomial->getName(), a, b, discriminant_rational);
+	else if (discriminant_complex)
+		solve_trinomial_complex(a, b, discriminant_complex);
+	else
+	{
+		delete discriminant;
+		throw UnsupportedError("Solutions can only be found in ℝ or ℂ");
+	}
+	delete discriminant;
 }

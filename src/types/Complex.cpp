@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/15 13:41:08 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/16 11:30:05 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -394,16 +394,16 @@ Complex*	Complex::operator/(const Complex &other) const
 		delete denominator;
 		throw ERROR_DIVISION_BY_ZERO;
 	}
-	part1 = this->_imaginary * other._real;
-	part2 = this->_real * other._imaginary;
-	numerator = *part1 - *part2;
+	part1 = this->_real * other._real;
+	part2 = this->_imaginary * other._imaginary;
+	numerator = *part1 + *part2;
 	delete part1;
 	delete part2;
 	real = *numerator / *denominator;
 	delete numerator;
-	part1 = this->_real * other._real;
-	part2 = this->_imaginary * other._imaginary;
-	numerator = *part1 + *part2;
+	part1 = this->_imaginary * other._real;
+	part2 = this->_real * other._imaginary;
+	numerator = *part1 - *part2;
 	delete part1;
 	delete part2;
 	imaginary = *numerator / *denominator;
