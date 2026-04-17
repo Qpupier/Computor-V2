@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/16 14:02:14 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/16 16:52:14 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static void			display_result(Polynomial *polynomial, std::map<std::pair<std::str
 {
 	unsigned long int	degree;
 
-	std::cout << "Reduced form: " << *polynomial << " = 0" << std::endl;
+	// std::cout << "Reduced form: " << *polynomial << " = 0" << std::endl; // TODO: To remove
 	degree = polynomial->getTerms().size() - 1;
 	if (polynomial->getTerms().empty() || degree == 0)
 		monomial(polynomial);

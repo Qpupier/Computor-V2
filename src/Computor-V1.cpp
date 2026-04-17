@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:03:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/16 14:25:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/17 18:12:15 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static void	solve_trinomial_complex(IType *a, IType *b, Complex *delta)
 	}
 	catch (const UnexpectedError &e)
 	{
-		throw UnexpectedError("Invalid polynomial: non-complex coefficients");//review with complexes
+		throw UnexpectedError("Invalid polynomial: non-complex coefficients");
 	}
 	modulo = std::sqrt(std::pow(delta->getReal().getValue(), 2) + std::pow(delta->getImaginary().getValue(), 2));
 	p = std::sqrt((modulo + delta->getReal().getValue()) / 2);
@@ -77,7 +77,7 @@ static void	find_complex_solutions(Rational* a, Rational* b, Rational* discrimin
 	solution1 = (-b->getNumerator() / static_cast<double>(b->getDenominator()) - sqrt_discriminant) / (2 * a->getNumerator() / static_cast<double>(a->getDenominator()));
 	solution2 = (-b->getNumerator() / static_cast<double>(b->getDenominator()) + sqrt_discriminant) / (2 * a->getNumerator() / static_cast<double>(a->getDenominator()));
 	std::cout << "S = {" << solution1 << ", " << solution2 << "} ∈ ℂ" << std::endl;
-	// TODO
+	// [ ] Partie manquante
 }
 
 static void	find_one_solution(Rational *a, Rational *b)
@@ -145,7 +145,7 @@ static void	find_two_solutions(std::string variable, Rational *a, Rational *b, R
 	print_result_roots(variable, final, new_b, new_fac, new_sqrt);
 }
 
-static void	solve_trinomial_rational(std::string variable, IType *a, IType *b, Rational *discriminant)
+static void	solve_trinomial_rational(std::string variable, IType *a, IType *b, Rational *delta)
 {
 	Rational*	new_a;
 	Rational*	new_b;
@@ -159,12 +159,12 @@ static void	solve_trinomial_rational(std::string variable, IType *a, IType *b, R
 	{
 		throw UnexpectedError("Invalid polynomial: non-rational coefficients");//review with complexes
 	}
-	if (*discriminant < Rational(0))
-		find_complex_solutions(new_a, new_b, discriminant);
-	else if (!*discriminant)
+	if (*delta < Rational(0))
+		find_complex_solutions(new_a, new_b, delta);
+	else if (!*delta)
 		find_one_solution(new_a, new_b);
 	else
-		find_two_solutions(variable, new_a, new_b, discriminant);
+		find_two_solutions(variable, new_a, new_b, delta);
 	delete new_a;
 	delete new_b;
 }
@@ -186,6 +186,138 @@ static IType*	get_discriminant(IType *a, IType *b, IType *c)
 	return (discriminant);
 }
 
+static void	print_solutions_resolved(int real_sqrt, int imaginary_sqrt, int real_term1, int real_term2, int real_term3, int real_denominator, int imaginary_term1, int imaginary_term2, int imaginary_term3, int imaginary_denominator)
+{
+	Complex* solution1;
+	Complex* solution2;
+	solution1 = new Complex(Rational(real_term1 - real_term2 * real_sqrt - real_term3 * imaginary_sqrt, real_denominator), Rational(imaginary_term1 + imaginary_term2 * real_sqrt - imaginary_term3 * imaginary_sqrt, imaginary_denominator));
+	solution2 = new Complex(Rational(real_term1 + real_term2 * real_sqrt + real_term3 * imaginary_sqrt, real_denominator), Rational(imaginary_term1 - imaginary_term2 * real_sqrt + imaginary_term3 * imaginary_sqrt, imaginary_denominator));
+	if (*solution1 == *solution2)
+		std::cout << "S = {" << *solution1 << "} ∈ ";
+	else
+		std::cout << "S = {" << *solution1 << ", " << *solution2 << "} ∈ ";
+	if (solution1->getImaginary() || solution2->getImaginary())
+		std::cout << "ℂ" << std::endl;
+	else
+		std::cout << "ℝ" << std::endl;
+	delete 	solution1;
+	delete solution2;
+}
+
+static void	print_solutions(int small_factor, int small_sqrt, int final_term2, int real_term1, int real_term2, int real_term3, int real_denominator, int imaginary_term1, int imaginary_term2, int imaginary_term3, int imaginary_denominator)
+{
+	if (small_sqrt <= 1)
+	{
+		int sqrt_real = small_factor * small_sqrt + final_term2;
+		int factor_real = 1;
+		int sqrt_imaginary = small_factor * small_sqrt - final_term2;
+		int factor_imaginary = 1;
+		reduce_sqrt(&factor_real, &sqrt_real);
+		reduce_sqrt(&factor_imaginary, &sqrt_imaginary);
+		if (sqrt_real <= 1 && sqrt_imaginary <= 1)
+		{
+			print_solutions_resolved(factor_real * sqrt_real, factor_imaginary * sqrt_imaginary, real_term1, real_term2, real_term3, real_denominator, imaginary_term1, imaginary_term2, imaginary_term3, imaginary_denominator);
+		}
+		else if (sqrt_real <= 1)
+		{
+			// print_solutions_real();
+		}
+		else if (sqrt_imaginary <= 1)
+		{
+			// print_solutions_imaginary();
+		}
+		else
+		{
+			// print_solutions_half();
+		}
+	}
+	else
+	{
+		// print_solutions_irreducible();
+	}
+	// print_rounded_solutions();
+}
+
+static void	test(IType *tmp_a, IType *tmp_b, IType *tmp_c, IType *tmp_delta)
+{
+	Complex*	a;
+	Complex*	b;
+	Complex*	c;
+	Complex*	delta;
+
+	a = new Complex(*tmp_a);
+	b = new Complex(*tmp_b);
+	c = new Complex(*tmp_c);
+	delta = new Complex(*tmp_delta);
+
+
+	std::cout << "delta = " << *delta << std::endl;
+	Rational* delta_real_square = delta->getReal() * delta->getReal();
+	Rational* delta_imaginary_square = delta->getImaginary() * delta->getImaginary();
+	Rational* module_square = *delta_real_square + *delta_imaginary_square;
+	std::cout << "Module² = " << *module_square << std::endl;
+
+	int small_factor = 2;
+	int small_sqrt = module_square->getNumerator() * module_square->getDenominator();
+	reduce_sqrt(&small_factor, &small_sqrt);
+
+	Rational* term_1 = new Rational(small_factor, module_square->getDenominator());
+	Rational* small_gcd = term_1->gcd(delta->getReal());
+	Rational* small_factor_reduced = *term_1 / *small_gcd;
+
+	Rational* tmp = delta->getReal() * Rational(2);
+	Rational* delta_real_reduced = *tmp / *small_gcd;
+	
+	int big_factor = 1;
+	int big_sqrt = small_gcd->getNumerator() * small_gcd->getDenominator();
+	reduce_sqrt(&big_factor, &big_sqrt);
+
+	Rational* final_factor = new Rational(big_factor, 2 * small_gcd->getDenominator());
+	int final_small_factor = big_sqrt * small_factor_reduced->getNumerator();
+	int final_term2 = big_sqrt * delta_real_reduced->getNumerator();
+
+	std::string big_sqrt_1 = "√(" + std::to_string(final_small_factor) + "√" + std::to_string(small_sqrt) + " + " + std::to_string(final_term2) + ")";
+	std::string big_sqrt_2 = "√(" + std::to_string(final_small_factor) + "√" + std::to_string(small_sqrt) + " - " + std::to_string(final_term2) + ")";
+	std::cout << "(" << *final_factor << ")" << big_sqrt_1 << std::endl;
+	Rational* final_factor2 = *final_factor * Rational(delta->getImaginary() < Rational(0) ? -1 : 1);
+	std::cout << "(" << *final_factor2 << ")" << big_sqrt_2 << std::endl;
+
+	tmp = a->getReal() * Rational(-1);
+	Rational* tmp1 = *tmp * b->getReal();
+	Rational* tmp2 = a->getImaginary() * b->getImaginary();
+	Rational* big_term_real = *tmp1 - *tmp2;
+
+	tmp1 = a->getImaginary() * b->getReal();
+	tmp2 = a->getReal() * b->getImaginary();
+	Rational* big_term_imaginary = *tmp1 - *tmp2;
+
+	Rational *a_real_square = a->getReal() * a->getReal();
+	Rational *a_imaginary_square = a->getImaginary() * a->getImaginary();
+	tmp1 = Rational(2) * *a_real_square;
+	tmp2 = Rational(2) * *a_imaginary_square;
+	Rational* denominator = *tmp1 + *tmp2;
+
+	Rational* term_2_real = a->getReal() * *final_factor;
+	Rational* term3_real = a->getImaginary() * *final_factor2;
+	Rational* gcd1 = big_term_real->gcd(*term_2_real)->gcd(*term3_real)->gcd(*denominator);
+	Rational* final_real_term_1 = *big_term_real / *gcd1;
+	Rational* final_real_term_2 = *term_2_real / *gcd1;
+	Rational* final_real_term_3 = *term3_real / *gcd1;
+	Rational* final_real_denominator = *denominator / *gcd1;
+
+	Rational* term_imaginary_2 = a->getImaginary() * *final_factor;
+	Rational* term_imaginary_3 = a->getReal() * *final_factor2;
+	Rational* gcd2 = big_term_imaginary->gcd(*term_imaginary_2)->gcd(*term_imaginary_3)->gcd(*denominator);
+	Rational* final_imaginary_term_1 = *big_term_imaginary / *gcd2;
+	Rational* final_imaginary_term_2 = *term_imaginary_2 / *gcd2;
+	Rational* final_imaginary_term_3 = *term_imaginary_3 / *gcd2;
+	Rational* final_imaginary_denominator = *denominator / *gcd2;
+
+	std::cout << "(" << *final_real_term_1 << " - " << *final_real_term_2 << big_sqrt_1 << " - " << *final_real_term_3 << big_sqrt_2 << ") / " << *final_real_denominator << " + i(" << *final_imaginary_term_1 << " + " << *final_imaginary_term_2 << big_sqrt_1 << " - " << *final_imaginary_term_3 << big_sqrt_2 << ") / " << *final_imaginary_denominator << std::endl;
+	std::cout << "(" << *final_real_term_1 << " + " << *final_real_term_2 << big_sqrt_1 << " + " << *final_real_term_3 << big_sqrt_2 << ") / " << *final_real_denominator << " + i(" << *final_imaginary_term_1 << " - " << *final_imaginary_term_2 << big_sqrt_1 << " + " << *final_imaginary_term_3 << big_sqrt_2 << ") / " << *final_imaginary_denominator<< std::endl;
+	print_solutions(final_small_factor, small_sqrt, final_term2, final_real_term_1->getNumerator(), final_real_term_2->getNumerator(), final_real_term_3->getNumerator(), final_real_denominator->getDenominator(), final_imaginary_term_1->getNumerator(), final_imaginary_term_2->getNumerator(), final_imaginary_term_3->getNumerator(), final_imaginary_denominator->getDenominator());
+}
+
 void	solve_trinomial(Polynomial *polynomial)
 {
 	std::vector<Polynomial::t_term>	terms(polynomial->getTerms());
@@ -200,6 +332,8 @@ void	solve_trinomial(Polynomial *polynomial)
 	b = terms[1].coefficient;
 	c = terms[0].coefficient;
 	discriminant = get_discriminant(a, b, c);
+	test(a, b, c, discriminant);
+	return ;
 	try
 	{
 		discriminant_rational = new Rational(*discriminant);

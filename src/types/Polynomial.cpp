@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/15 18:59:35 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/16 15:53:18 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ static IType*							function_operator_term(const std::vector<Polynomial::t_term>
 	result = new Rational();
 	for (std::vector<Polynomial::t_term>::const_iterator it(terms.begin()); it != terms.end(); it++)
 	{
-		power = other ^ Rational(static_cast<int>(it->power));// TODO: Attention
+		power = other ^ Rational(static_cast<int>(it->power));// HACK: Attention
 		term = *it->coefficient * *power;
 		delete power;
 		tmp = result;
@@ -724,7 +724,7 @@ Polynomial*	Polynomial::operator*(const Polynomial &other) const
 	Polynomial*	result;
 
 	if (this->_name != other._name)
-		throw UNSUPPORTED_MULTI_POLYNOMIALS;// TODO: Ce n'est pas forcement le cas si il n'y a qu'une power 0 ou des coefficients nuls
+		throw UNSUPPORTED_MULTI_POLYNOMIALS;// BUG: Ce n'est pas forcement le cas si il n'y a qu'une power 0 ou des coefficients nuls
 	result = new Polynomial(this->_name);
 	free_vector_terms(result->_dividers);
 	result->_terms = multiply_vectors(this->_terms, other._terms);
@@ -812,7 +812,7 @@ Polynomial*	Polynomial::operator/(const Polynomial &other) const
 	Polynomial*	result;
 
 	if (this->_name != other._name)
-		throw UNSUPPORTED_MULTI_POLYNOMIALS;// TODO: Ce n'est pas forcement le cas si il n'y a qu'une power 0 ou des coefficients nuls
+		throw UNSUPPORTED_MULTI_POLYNOMIALS;// BUG: Ce n'est pas forcement le cas si il n'y a qu'une power 0 ou des coefficients nuls
 	result = new Polynomial(this->_name);
 	free_vector_terms(result->_dividers);
 	result->_terms = multiply_vectors(this->_terms, other._dividers);
@@ -897,8 +897,7 @@ IType*		Polynomial::operator/(const IType &other) const
 
 Polynomial*	Polynomial::operator%(const Polynomial &other) const
 {
-	// TODO: A voir s'il faut le gerer
-	// TODO: Oui, il faut le gerer, c'est le resultat de la division euclidienne
+	// [ ] A gerer, c'est le resultat de la division euclidienne
 	throw UNSUPPORTED_DIVISION;
 	return (nullptr);
 	(void)other;
@@ -906,7 +905,7 @@ Polynomial*	Polynomial::operator%(const Polynomial &other) const
 
 Polynomial*	Polynomial::operator%(const Rational &other) const
 {
-	// TODO: A voir s'il faut le gerer
+	// [ ] A gerer, c'est le resultat de la division euclidienne
 	throw UNSUPPORTED_DIVISION;
 	return (nullptr);
 	(void)other;
@@ -914,7 +913,7 @@ Polynomial*	Polynomial::operator%(const Rational &other) const
 
 Polynomial*	Polynomial::operator%(const Complex &other) const
 {
-	// TODO: A voir s'il faut le gerer
+	// [ ] A gerer, c'est le resultat de la division euclidienne
 	throw UNSUPPORTED_DIVISION;
 	return (nullptr);
 	(void)other;
@@ -922,7 +921,7 @@ Polynomial*	Polynomial::operator%(const Complex &other) const
 
 Polynomial*	Polynomial::operator%(const Matrix &other) const
 {
-	// TODO: A voir s'il faut le gerer
+	// [ ] A gerer, c'est le resultat de la division euclidienne
 	throw UNSUPPORTED_DIVISION;
 	return (nullptr);
 	(void)other;
@@ -1044,7 +1043,7 @@ std::ostream&	Polynomial::print(std::ostream &os) const
 
 std::ostream&	Polynomial::print_polynomial(std::ostream &os, const std::string &var) const
 {
-	// TODO: Is this function still useful?
+	// XXX Is this function still useful?
 	throw ERROR_UNEXPECTED;
 	(void)var;
 	return (os);

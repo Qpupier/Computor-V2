@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/16 14:26:27 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/16 14:47:18 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ Rational::Rational(const IType &other)
 	else if (other_polynomial)
 	{
 		if (other_polynomial->getDividers().size() != 1 || *other_polynomial->getDividers()[0].coefficient != Rational(1) || other_polynomial->getDividers()[0].power || other_polynomial->getTerms().size() != 1 || other_polynomial->getTerms()[0].power)
-			throw ERROR_UNEXPECTED;//TODO: Size = 0 si polynomial = 0
-		*this = Rational(*other_polynomial->getTerms()[0].coefficient);// TODO: Leaks?
+			throw ERROR_UNEXPECTED;//BUG: Size = 0 si polynomial = 0
+		*this = Rational(*other_polynomial->getTerms()[0].coefficient);// FIXME: Leaks?
 	}
 	else
 		throw ERROR_UNEXPECTED;
