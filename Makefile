@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/04/14 18:19:55 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/04/21 17:48:08 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,32 +14,34 @@ NAME		=	computor-v2
 DIR_SRC		=	src
 DIR_OBJ		=	.obj
 DIR_INC		=	inc
-LST_SRC		=	main.cpp			\
-				parser.cpp			\
-				Token.cpp			\
-				build_ast.cpp		\
-				AST.cpp				\
-				utils.cpp			\
-				errors.cpp			\
-				equation.cpp		\
-				Computor-V1.cpp		\
-				types/IType.cpp		\
-				types/Operator.cpp	\
-				types/Rational.cpp	\
-				types/Complex.cpp	\
-				types/Matrix.cpp	\
-				types/Polynomial.cpp
+LST_SRC		=	main.cpp											\
+				parser.cpp											\
+				Token.cpp											\
+				build_ast.cpp										\
+				AST.cpp												\
+				utils.cpp											\
+				errors.cpp											\
+				equation.cpp										\
+				types/IType.cpp										\
+				types/Operator.cpp									\
+				types/Rational.cpp									\
+				types/Complex.cpp									\
+				types/Matrix.cpp									\
+				types/Polynomial.cpp								\
+				quadratic_equation_resolution/Computor-V1.cpp		\
+				quadratic_equation_resolution/real_part.cpp			\
+				quadratic_equation_resolution/imaginary_part.cpp	\
+				quadratic_equation_resolution/complex_solutions_structure.cpp
 LST_OBJ		=	$(LST_SRC:.cpp=.o)
 LST_DEP		=	$(LST_OBJ:.o=.d)
 LST_INC		= 	$(DIR_INC)			\
-				$(DIR_INC)/types	\
-				$(DIR_INC)/errors
+				$(DIR_INC)/types
 SRC			=	$(addprefix $(DIR_SRC)/, $(LST_SRC))
 OBJ			=	$(addprefix $(DIR_OBJ)/, $(LST_OBJ))
 DEP			=	$(addprefix $(DIR_OBJ)/, $(LST_DEP))
 INC			=	$(addprefix -I./, $(LST_INC))
 DIRS		=	$(DIR_OBJ)/types	\
-				$(DIR_OBJ)/errors
+				$(DIR_OBJ)/quadratic_equation_resolution
 CC			=	c++
 CXXFLAGS	=	-W -Wall -Wextra -Werror -Wshadow -Wold-style-cast -Wcast-qual -Wconversion -Wsign-conversion -Wstrict-aliasing -g3
 # CXXFLAGS	+=	-O2 # Optimization
