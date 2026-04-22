@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/16 16:52:14 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/22 17:21:58 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void			assignation(std::string var, std::map<std::pair<std::string, std::
 	std::string	var_lower(to_lower(var));
 	std::pair<std::string, std::string>	pair(var_lower, std::string());
 
-	std::cout << var << " = " << *result << std::endl;
+	std::cout << COLOR_BOLD << var << " = " << *result << COLOR_RESET << std::endl;
 	for (it = stored.begin(); it != stored.end();)
 	{
 		if (it->first.first == var_lower)
@@ -51,7 +51,7 @@ static void			assignation(std::string var, std::map<std::pair<std::string, std::
 
 static void			trinomial(Polynomial *polynomial)
 {
-	std::cout << *polynomial << " = 0" << std::endl;
+	std::cout << COLOR_BOLD << *polynomial << " = 0" << COLOR_RESET << std::endl;
 	solve_trinomial(polynomial);
 }
 
@@ -71,16 +71,15 @@ static void			binomial(Polynomial *polynomial, 				\
 static void			monomial(Polynomial *polynomial)
 {
 	if (polynomial->getTerms().empty())
-		std::cout << "True" << std::endl;
+		std::cout << COLOR_BOLD << "True" << COLOR_RESET << std::endl;
 	else
-		std::cout << "False" << std::endl;
+		std::cout << COLOR_BOLD << "False" << COLOR_RESET << std::endl;
 }
 
 static void			display_result(Polynomial *polynomial, std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
 	unsigned long int	degree;
 
-	// std::cout << "Reduced form: " << *polynomial << " = 0" << std::endl; // TODO: To remove
 	degree = polynomial->getTerms().size() - 1;
 	if (polynomial->getTerms().empty() || degree == 0)
 		monomial(polynomial);
@@ -89,7 +88,7 @@ static void			display_result(Polynomial *polynomial, std::map<std::pair<std::str
 	else if (degree == 2)
 		trinomial(polynomial);
 	else
-		std::cout << "The polynomial degree is stricly greater than 2, I can't solve." << std::endl;
+		std::cout << COLOR_BOLD << "The polynomial degree is stricly greater than 2, I can't solve." << COLOR_RESET << std::endl;
 }
 
 void				equation(AST *left_ast, AST *right_ast, 	\

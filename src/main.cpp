@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/27 18:46:46 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/22 17:18:47 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static void	print_expression(const std::string &line, t_data &data)
 		delete ast;
 		throw UnexpectedError("Unexpected error: the AST is not an expression");
 	}
-	std::cout << *ast->getNode() << std::endl;
+	std::cout << COLOR_BOLD << *ast->getNode() << COLOR_RESET << std::endl;
 	delete ast;
 }
 

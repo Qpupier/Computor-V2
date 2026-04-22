@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 15:46:39 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/21 17:45:37 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/22 16:54:54 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ static void			sqrt_reduce_terms(t_quadratic_solutions &solutions, 	\
 	solutions.sqrt_term1_factor = tmp->getNumerator();
 	delete tmp;
 	tmp = *term_2 / *small_gcd;
-	solutions.sqrt_term2 = tmp->getNumerator();
+	solutions.sqrt_term2_real = tmp->getNumerator();
+	solutions.sqrt_term2_imaginary = -tmp->getNumerator();
 	delete tmp;
 }
 
@@ -63,7 +64,8 @@ static Rational		factorize_sqrt(Complex* delta, 	\
 	big_sqrt = small_gcd->getNumerator() * small_gcd->getDenominator();
 	reduce_sqrt(&factor, &big_sqrt);
 	solutions.sqrt_term1_factor *= big_sqrt;
-	solutions.sqrt_term2 *= big_sqrt;
+	solutions.sqrt_term2_real *= big_sqrt;
+	solutions.sqrt_term2_imaginary *= big_sqrt;
 	final_factor = Rational(factor, 2 * small_gcd->getDenominator());
 	delete small_gcd;
 	return (final_factor);

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:43:37 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/21 17:44:55 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/04/22 15:50:29 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,20 @@
 
 typedef struct	s_quadratic_solutions
 {
-	int	real_term1;				// A
-	int	real_term2_factor;		// B
-	int	real_term3_factor;		// C
-	int	real_denominator;		// D
-	int	imaginary_term1;		// E
-	int	imaginary_term2_factor;	// F
-	int	imaginary_term3_factor;	// G
-	int	imaginary_denominator;	// H
-	int	sqrt_term1_factor;		// I
-	int	sqrt_term1_sqrt;		// J
-	int	sqrt_term2;				// K
-	int	sqrt_real;				// I√J + K
-	int	sqrt_imaginary;			// I√J - K
+	int	real_term1[2];				// A
+	int	real_term2_factor[2];		// B
+	int	real_term3_factor[2];		// C
+	int	real_denominator;			// D
+	int	imaginary_term1[2];			// E
+	int	imaginary_term2_factor[2];	// F
+	int	imaginary_term3_factor[2];	// G
+	int	imaginary_denominator;		// H
+	int	sqrt_term1_factor;			// I
+	int	sqrt_term1_sqrt;			// J
+	int	sqrt_term2_real;			// K
+	int	sqrt_term2_imaginary;		// -K
+	int	sqrt_real;					// I√J + K
+	int	sqrt_imaginary;				// I√J - K
 	// Representation:
 	//
 	//    (A - B√(I√J + K) - C√(I√J - K)) / D
