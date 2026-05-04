@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:24:12 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/22 18:00:46 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/04 15:13:29 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,31 +48,10 @@ static void			real_reduce_terms(t_quadratic_solutions &solutions, 	\
 	solutions.real_term3_factor[1] = tmp->getNumerator();
 	delete tmp;
 	tmp = *real_denominator / *real_gcd;
-	solutions.real_denominator = tmp->getNumerator();
+	solutions.real_denominator[0] = tmp->getNumerator();
+	solutions.real_denominator[1] = tmp->getNumerator();
 	delete tmp;
 }
-
-// static void			sum_if_possible(t_quadratic_solutions &solutions)
-// {
-// 	for (int i = 0; i < 2; i++)
-// 	{
-// 		if (!solutions.real_term2_factor[i] || solutions.sqrt_real <= 1)
-// 		{
-// 			solutions.real_term1[i] += solutions.real_term2_factor[i] * solutions.sqrt_real;
-// 			solutions.real_term2_factor[i] = 0;
-// 		}
-// 		if (!solutions.real_term3_factor[i] || solutions.sqrt_imaginary <= 1)
-// 		{
-// 			solutions.real_term1[i] += solutions.real_term3_factor[i] * solutions.sqrt_imaginary;
-// 			solutions.real_term3_factor[i] = 0;
-// 		}
-// 		if (solutions.sqrt_real == solutions.sqrt_imaginary)
-// 		{
-// 			solutions.real_term2_factor[i] += solutions.real_term3_factor[i];
-// 			solutions.real_term3_factor[i] = 0;
-// 		}
-// 	}
-// }
 
 void	set_real_terms(Complex* a, Complex* b, 							\
 		t_quadratic_solutions &solutions, Rational sqrt_real_factor, 	\
@@ -90,5 +69,4 @@ void	set_real_terms(Complex* a, Complex* b, 							\
 	real_denominator = denominator;
 	real_gcd = get_gcd_terms(real_term1, real_term2_factor, real_term3_factor, real_denominator);
 	real_reduce_terms(solutions, real_term1, real_term2_factor, real_term3_factor, real_denominator, real_gcd);
-	// sum_if_possible(solutions);
 }

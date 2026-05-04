@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/16 13:45:06 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/04 14:37:59 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,9 @@ class	Rational: public IType
 
 // Output stream operator overload
 std::ostream&	operator<<(std::ostream &os, const Rational &num);
+
+// Functions
+int	compute_gcd(int a, int b);
 
 # include "Complex.hpp"
 # include "Matrix.hpp"

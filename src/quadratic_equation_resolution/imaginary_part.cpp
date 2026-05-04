@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:24:35 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/22 18:00:52 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/04 15:13:19 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,31 +47,10 @@ static void			imaginary_reduce_terms(\
 	solutions.imaginary_term3_factor[1] = tmp->getNumerator();
 	delete tmp;
 	tmp = *imaginary_denominator / *imaginary_gcd;
-	solutions.imaginary_denominator = tmp->getNumerator();
+	solutions.imaginary_denominator[0] = tmp->getNumerator();
+	solutions.imaginary_denominator[1] = tmp->getNumerator();
 	delete tmp;
 }
-
-// static void			sum_if_possible(t_quadratic_solutions &solutions)
-// {
-// 	for (int i = 0; i < 2; i++)
-// 	{
-// 		if (!solutions.imaginary_term2_factor[i] || solutions.sqrt_real <= 1)
-// 		{
-// 			solutions.imaginary_term1[i] += solutions.imaginary_term2_factor[i] * solutions.sqrt_real;
-// 			solutions.imaginary_term2_factor[i] = 0;
-// 		}
-// 		if (!solutions.imaginary_term3_factor[i] || solutions.sqrt_imaginary <= 1)
-// 		{
-// 			solutions.imaginary_term1[i] += solutions.imaginary_term3_factor[i] * solutions.sqrt_imaginary;
-// 			solutions.imaginary_term3_factor[i] = 0;
-// 		}
-// 		if (solutions.sqrt_real == solutions.sqrt_imaginary)
-// 		{
-// 			solutions.imaginary_term2_factor[i] += solutions.imaginary_term3_factor[i];
-// 			solutions.imaginary_term3_factor[i] = 0;
-// 		}
-// 	}
-// }
 
 void	set_imaginary_terms(Complex* a, Complex* b, 		\
 		t_quadratic_solutions &solutions, Rational sqrt_real_factor, 	\
@@ -89,5 +68,4 @@ void	set_imaginary_terms(Complex* a, Complex* b, 		\
 	imaginary_denominator = denominator;
 	imaginary_gcd = get_gcd_terms(imaginary_term1, imaginary_term2_factor, imaginary_term3_factor, imaginary_denominator);
 	imaginary_reduce_terms(solutions, imaginary_term1, imaginary_term2_factor, imaginary_term3_factor, imaginary_denominator, imaginary_gcd);
-	// sum_if_possible(solutions);
 }

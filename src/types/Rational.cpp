@@ -6,20 +6,13 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/16 14:47:18 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/04 14:39:04 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Rational.hpp"
 
 // Utils
-static int	compute_gcd(int a, int b)
-{
-	if (!b)
-		return (std::abs(a));
-	return (compute_gcd(b, a % b));
-}
-
 static int	compute_lcm(int a, int b)
 {
 	return (a / compute_gcd(a, b) * b);
@@ -862,4 +855,13 @@ int				Rational::integer_part(void) const
 std::ostream&	operator<<(std::ostream &os, const Rational &num)
 {
 	return (num.print(os));
+}
+
+
+// Functions
+int	compute_gcd(int a, int b)
+{
+	if (!b)
+		return (std::abs(a));
+	return (compute_gcd(b, a % b));
 }
