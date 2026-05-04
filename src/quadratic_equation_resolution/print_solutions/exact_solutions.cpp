@@ -6,137 +6,11 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:19:13 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/04 17:52:22 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/04 18:32:51 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "quadratic.hpp"
-
-static void	print_real_part(t_quadratic_solutions &solutions, int index, bool reduce_sqrt)
-{
-	int	real_term2_factor;
-	int	real_term3_factor;
-
-	real_term2_factor = solutions.real_term2_factor[index];
-	real_term3_factor = solutions.real_term3_factor[index];
-	std::string sqrt_real = get_sqrt_real(solutions);
-	std::string sqrt_imaginary = get_sqrt_imaginary(solutions);
-	if (!solutions.real_term1[index] && !real_term2_factor && !real_term3_factor)
-	{
-		std::cout << "0";
-		return ;
-	}
-	if (solutions.real_denominator[index] > 1)// [ ] mais pas si 1 seul term
-			std::cout << "(";
-	if (solutions.real_term1[index])
-		std::cout << solutions.real_term1[index];
-	if (real_term2_factor)
-	{
-		if (solutions.real_term1[index])
-		{
-			if (real_term2_factor > 0)
-				std::cout << " + ";
-			else
-			{
-				std::cout << " - ";
-				real_term2_factor *= -1;
-			}
-		}
-		if (real_term2_factor == -1)
-			std::cout << "-";
-		else if (real_term2_factor != 1)
-			std::cout << real_term2_factor;
-		if (reduce_sqrt)
-			std::cout << "√" << solutions.sqrt_real;
-		else
-			std::cout << "√(" << sqrt_real << ")";
-	}
-	if (real_term3_factor)
-	{
-		if (solutions.real_term1[index] || real_term2_factor)
-		{
-			if (real_term3_factor > 0)
-				std::cout << " + ";
-			else
-			{
-				std::cout << " - ";
-				real_term3_factor *= -1;
-			}
-		}
-		if (real_term3_factor == -1)
-			std::cout << "-";
-		else if (real_term3_factor != 1)
-			std::cout << real_term3_factor;
-		if (reduce_sqrt)
-			std::cout << "√" << solutions.sqrt_imaginary;
-		else
-			std::cout << "√(" << sqrt_imaginary << ")";
-	}
-	if (solutions.real_denominator[index] > 1)
-		std::cout << ") / " << solutions.real_denominator[index];
-}
-
-static bool	print_imaginary_part(t_quadratic_solutions &solutions, int index, bool reduce_sqrt)
-{
-	int	imaginary_term2_factor;
-	int	imaginary_term3_factor;
-
-	imaginary_term2_factor = solutions.imaginary_term2_factor[index];
-	imaginary_term3_factor = solutions.imaginary_term3_factor[index];
-	if (!solutions.imaginary_term1[index] && !imaginary_term2_factor && !imaginary_term3_factor)
-		return false;
-	std::string sqrt_real = get_sqrt_real(solutions);
-	std::string sqrt_imaginary = get_sqrt_imaginary(solutions);
-	std::cout << " + i(";// [ ] si 1 term ou plus
-	if (solutions.imaginary_term1[index])
-		std::cout << solutions.imaginary_term1[index];
-	if (imaginary_term2_factor)
-	{
-		if (solutions.imaginary_term1[index])
-		{
-			if (imaginary_term2_factor > 0)
-				std::cout << " + ";
-			else
-			{
-				std::cout << " - ";
-				imaginary_term2_factor *= -1;
-			}
-		}
-		if (imaginary_term2_factor == -1)
-			std::cout << "-";
-		else if (imaginary_term2_factor != 1)
-			std::cout << imaginary_term2_factor;
-		if (reduce_sqrt)
-			std::cout << "√" << solutions.sqrt_real;
-		else
-			std::cout << "√(" << sqrt_real << ")";
-	}
-	if (imaginary_term3_factor)
-	{
-		if (solutions.imaginary_term1[index] || imaginary_term2_factor)
-		{
-			if (imaginary_term3_factor > 0)
-				std::cout << " + ";
-			else
-			{
-				std::cout << " - ";
-				imaginary_term3_factor *= -1;
-			}
-		}
-		if (imaginary_term3_factor == -1)
-			std::cout << "-";
-		else if (imaginary_term3_factor != 1)
-			std::cout << imaginary_term3_factor;
-		if (reduce_sqrt)
-			std::cout << "√" << solutions.sqrt_imaginary;
-		else
-			std::cout << "√(" << sqrt_imaginary << ")";
-	}
-	std::cout << ")";
-	if (solutions.imaginary_denominator[index] > 1)
-		std::cout << " / " << solutions.imaginary_denominator[index];
-	return true;
-}
 
 static void	print_exact_solutions(t_quadratic_solutions &solutions, 	\
 		std::string set, bool reduce_sqrt = false)
@@ -154,6 +28,30 @@ static void	print_exact_solutions(t_quadratic_solutions &solutions, 	\
 		std::cout << "ℂ" << std::endl;
 	else
 		std::cout << set << std::endl;
+}
+
+bool		parentheses_needed(const int term1, const int term2, const int term3)
+{
+	int	count_terms;
+	int	term;
+
+	count_terms = 0;
+	if (term1)
+	{
+		count_terms++;
+		term = term1;
+	}
+	if (term2)
+	{
+		count_terms++;
+		term = term2;
+	}
+	if (term3)
+	{
+		count_terms++;
+		term = term3;
+	}
+	return (count_terms > 1 || (count_terms == 1 && term < 0));
 }
 
 void		print_solutions(t_quadratic_solutions& solutions, 	\
