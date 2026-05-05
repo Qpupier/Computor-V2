@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 18:42:24 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 20:11:24 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -405,7 +405,13 @@ Matrix*		Matrix::operator-(const Complex &other) const
 
 Polynomial*	Matrix::operator-(const Polynomial &other) const
 {
-	return (other - *this);
+	Polynomial*	tmp;
+	Polynomial*	result;
+
+	tmp = other - *this;
+	result = *tmp * Rational(-1);
+	delete tmp;
+	return (result);
 }
 
 IType*		Matrix::operator-(const IType &other) const
