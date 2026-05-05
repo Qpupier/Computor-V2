@@ -15,6 +15,7 @@ run_test "2*b+b" "3b" $1 ; status=$((status | $?))
 run_test "2* y + 4 -2 * 4+1/3" "2y - 11/3" $1 ; status=$((status | $?))
 run_test "-x^2 +i * x" "-x^2 + i * x" $1 ; status=$((status | $?))
 run_test "-1 * x^2 + i*x -3x +1" "-x^2 + (i - 3)x + 1" $1 ; status=$((status | $?))
+
 run_error "43 * y / (4 % 2 * y)" "Unsupported: Division not supported between polynomials with these powers" $1 ; status=$((status | $?))
 
 return $status

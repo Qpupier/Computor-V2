@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 14:41:46 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 15:12:25 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,7 @@ static std::ostream&					print_terms(std::ostream &os, const std::vector<Polynom
 	bool	first_term;
 
 	//TODO: A ameliorer
-	if (!alone)
+	if (!alone && terms.size() > 1)
 		os << "(";
 	first_term = true;
 	for (std::vector<Polynomial::t_term>::const_reverse_iterator it(terms.rbegin()); it != terms.rend(); it++)
@@ -204,7 +204,7 @@ static std::ostream&					print_terms(std::ostream &os, const std::vector<Polynom
 	}
 	if (first_term)
 		os << "0";
-	if (!alone)
+	if (!alone && terms.size() > 1)
 		os << ")";
 	return (os);
 }
