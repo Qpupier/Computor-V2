@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 11:15:41 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 15:40:17 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,8 @@ bool		Complex::operator!=(const IType &other) const
 
 bool		Complex::operator<(const IType &other) const
 {
+	if (other == Rational(0))
+		return (this->_imaginary < Rational(0) && this->_real < Rational(0));
 	return (!this->_imaginary && this->_real < other);
 }
 

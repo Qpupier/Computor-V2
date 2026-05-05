@@ -15,6 +15,7 @@ run_test "2*b+b" "3b" $1 ; status=$((status | $?))
 run_test "2* y + 4 -2 * 4+1/3" "(6y - 11) / 3" $1 ; status=$((status | $?))
 run_test "-x^2 +i * x" "-x^2 + i * x" $1 ; status=$((status | $?))
 run_test "-1 * x^2 + i*x -3x +1" "-x^2 + (i - 3)x + 1" $1 ; status=$((status | $?))
+run_test "x^2 +i * x -3x +1 -x2i" "x^2 - (3 + i)x + 1" $1 ; status=$((status | $?))
 
 run_error "43 * y / (4 % 2 * y)" "Division by zero is impossible" $1 ; status=$((status | $?))
 
