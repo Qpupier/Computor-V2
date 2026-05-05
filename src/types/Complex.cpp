@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 15:52:14 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 18:55:20 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,24 @@ Complex::Complex(const IType &other)
 		throw ERROR_UNEXPECTED;
 	else if (other_polynomial)
 	{
-		if (other_polynomial->getDividers().size() != 1 || *other_polynomial->getDividers()[0].coefficient != Rational(1) || other_polynomial->getDividers()[0].power || other_polynomial->getTerms().size() != 1 || other_polynomial->getTerms()[0].power)
-			throw ERROR_UNEXPECTED;//TODO: Size = 0 si polynomial = 0
-		this->_real = Rational(*other_polynomial->getTerms()[0].coefficient);
-		this->_imaginary = Rational(0);
+		if (other_polynomial->getTerms().empty())
+		{
+			this->_real = Rational(0);
+			this->_imaginary = Rational(0);
+		}
+		else
+		{
+			if (other_polynomial->getDividers().size() != 1 			\
+					|| *other_polynomial->getDividers()[0].coefficient 	\
+						!= Rational(1) 									\
+					|| other_polynomial->getDividers()[0].power 		\
+					|| other_polynomial->getTerms().size() != 1 		\
+					|| other_polynomial->getTerms()[0].power)
+				throw ERROR_UNEXPECTED;
+			this->_real 												\
+					= Rational(*other_polynomial->getTerms()[0].coefficient);
+			this->_imaginary = Rational(0);
+		}
 	}
 	else
 		throw ERROR_UNEXPECTED;
