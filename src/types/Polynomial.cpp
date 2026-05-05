@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 15:21:03 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 15:36:24 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,12 +154,13 @@ static IType*							function_operator_term(const std::vector<Polynomial::t_term>
 
 static void								print_coefficient(std::ostream &os, IType *coefficient, unsigned int power, bool first_term)
 {
-	IType*	tmp;
-	bool	is_complex;
+	IType*		tmp;
+	Complex*	complex;
+	bool		need_parenthesis;
 
 	if (!first_term)
 	{
-		if (*coefficient < Rational(0))
+		if (*coefficient < Rational(0))// TODO: changer complex - et -
 		{
 			os << " - ";
 			tmp = coefficient;
@@ -169,15 +170,18 @@ static void								print_coefficient(std::ostream &os, IType *coefficient, unsig
 		else
 			os << " + ";
 	}
-	is_complex = dynamic_cast<Complex*>(coefficient);
-	if (is_complex)
+	complex = dynamic_cast<Complex*>(coefficient);
+	need_parenthesis = complex && complex->getReal() && complex->getImaginary();
+	if (need_parenthesis)
 		os << "(";
 	if (power && *coefficient == Rational(-1))
 		os << "-";
 	else if (!power || *coefficient != Rational(1))
 		os << *coefficient;
-	if (is_complex)
+	if (need_parenthesis)
 		os << ")";
+	else if (complex && complex->getImaginary())
+		os << " * ";
 	delete coefficient;
 }
 
