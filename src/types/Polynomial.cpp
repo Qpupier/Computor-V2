@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 15:36:24 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 15:56:10 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,24 +113,6 @@ static std::vector<Polynomial::t_term>	multiply_vectors(const std::vector<Polyno
 	return (result);
 }
 
-static Polynomial*						polynomial_power_rational(const Polynomial *polynomial, int power)
-{
-	Polynomial	*result;
-	Polynomial	*tmp;
-
-	if (!power)
-		return (new Polynomial(polynomial->getName(), (Polynomial::t_term){new Rational(1), 0}));
-	result = new Polynomial(*polynomial);
-	while (--power)
-	{
-		tmp = result;
-		result = *result * *polynomial;
-		delete tmp;
-	}
-	result->reduce();
-	return (result);
-}
-
 static IType*							function_operator_term(const std::vector<Polynomial::t_term> &terms, const IType &other)
 {
 	IType*	result;
@@ -160,7 +142,7 @@ static void								print_coefficient(std::ostream &os, IType *coefficient, unsig
 
 	if (!first_term)
 	{
-		if (*coefficient < Rational(0))// TODO: changer complex - et -
+		if (*coefficient < Rational(0))
 		{
 			os << " - ";
 			tmp = coefficient;
@@ -526,28 +508,24 @@ bool		Polynomial::operator!=(const IType &other) const
 
 bool		Polynomial::operator<(const IType &other) const
 {
-	//TODO: A voir s'il faut l'implementer autrement
 	return (false);
 	(void)other;
 }
 
 bool		Polynomial::operator<=(const IType &other) const
 {
-	//TODO: A voir s'il faut l'implementer autrement
 	return (false);
 	(void)other;
 }
 
 bool		Polynomial::operator>(const IType &other) const
 {
-	//TODO: A voir s'il faut l'implementer autrement
 	return (false);
 	(void)other;
 }
 
 bool		Polynomial::operator>=(const IType &other) const
 {
-	//TODO: A voir s'il faut l'implementer autrement
 	return (false);
 	(void)other;
 }
@@ -953,6 +931,26 @@ IType*		Polynomial::operator%(const IType &other) const
 	return (nullptr);
 }
 
+Polynomial*	Polynomial::operator^(const Rational &other) const
+{
+	Polynomial	*result;
+	Polynomial	*tmp;
+	int			power;
+
+	power = other.getNumerator();
+	if (!power)
+		return (new Polynomial(this->getName(), (Polynomial::t_term){new Rational(1), 0}));
+	result = new Polynomial(*this);
+	while (--power)
+	{
+		tmp = result;
+		result = *result * *this;
+		delete tmp;
+	}
+	result->reduce();
+	return (result);
+}
+
 IType*		Polynomial::operator^(const IType &other) const
 {
 	Rational	power;
@@ -967,7 +965,7 @@ IType*		Polynomial::operator^(const IType &other) const
 	}
 	if (!power.is_integer() || power < Rational(0))
 		throw UNSUPPORTED_EXPONENT;
-	return (polynomial_power_rational(this, power.getNumerator()));
+	return (*this ^ power);
 }
 
 
@@ -1041,14 +1039,6 @@ std::ostream&	Polynomial::print(std::ostream &os) const
 		os << " / ";
 		print_terms(os, this->_dividers, this->_name);
 	}
-	return (os);
-}
-
-std::ostream&	Polynomial::print_polynomial(std::ostream &os, const std::string &var) const
-{
-	// XXX Is this function still useful?
-	throw ERROR_UNEXPECTED;
-	(void)var;
 	return (os);
 }
 

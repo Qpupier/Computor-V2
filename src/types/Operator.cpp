@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/15 13:32:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 15:53:03 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,12 +209,5 @@ std::ostream&	Operator::print(std::ostream &os) const
 			break;
 	}
 	os << " ";
-	return (os);
-}
-
-std::ostream&	Operator::print_polynomial(std::ostream &os, 	\
-		const std::string &var) const
-{
-	(void)var;
 	return (os);
 }

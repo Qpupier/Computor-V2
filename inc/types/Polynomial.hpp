@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 14:42:14 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 15:52:38 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,7 @@ class	Polynomial: public IType
 		Polynomial*	operator%(const Complex &other) const;
 		Polynomial*	operator%(const Matrix &other) const;
 		IType*		operator^(const IType &other) const;
-		// Polynomial*	operator^(const Polynomial &other) const;
-		// Polynomial*	operator^(const Rational &other) const;
-		// Polynomial*	operator^(const Complex &other) const;
-		// Polynomial*	operator^(const Matrix &other) const;
+		Polynomial*	operator^(const Rational &other) const;
 
 		// Getters
 		std::string			getName(void) const;
@@ -95,14 +92,10 @@ class	Polynomial: public IType
 
 		// Methods
 		IType*			matrix_operator(const IType &other) const;
-		// IType*			matrix_operator(const Polynomial &other) const;
-		// IType*			matrix_operator(const Matrix &other) const;
 		IType*			function_operator(const IType &other) const;
 		IType*			clone(void) const;
 		Rational*		gcd(const IType &other) const;
 		std::ostream&	print(std::ostream &os) const;
-		std::ostream&	print_polynomial(std::ostream &os, 	\
-				const std::string &var) const;
 		void			sort_powers(void);
 		void			factorize_constant_factor(void);
 		void			reduce(void);

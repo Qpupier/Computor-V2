@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/04 14:37:59 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 15:52:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,6 @@ class	Rational: public IType
 		Matrix*		operator%(const Matrix &other) const;
 		Polynomial*	operator%(const Polynomial &other) const;
 		IType*		operator^(const IType &other) const;
-		// Rational*	operator^(const Rational &other) const;
-		// Complex*	operator^(const Complex &other) const;
-		// Matrix*		operator^(const Matrix &other) const;
-		// IType*		operator^(const Polynomial &other) const;
 
 		// Getters
 		int		getNumerator(void) const;
@@ -108,8 +104,6 @@ class	Rational: public IType
 		Rational*		gcd(const Complex &other) const;
 		Rational*		gcd(const Matrix &other) const;
 		std::ostream&	print(std::ostream &os) const;
-		std::ostream&	print_polynomial(std::ostream &os, 	\
-				const std::string &var) const;
 		void			reduce(void);
 		bool			is_integer(void) const;
 		int				integer_part(void) const;

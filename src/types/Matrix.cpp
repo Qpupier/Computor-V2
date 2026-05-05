@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 14:43:31 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 15:52:59 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -864,12 +864,6 @@ std::ostream&	Matrix::print(std::ostream &os) const
 			os << std::endl;
 	}
 	return (os);
-}
-
-std::ostream&	Matrix::print_polynomial(std::ostream &os, 	\
-		const std::string &var) const
-{
-	return (os << *this << var);
 }
 
 void			Matrix::error(const LogicError &e) const

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 15:40:17 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 15:52:14 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -672,15 +672,6 @@ std::ostream&	Complex::print(std::ostream &os) const
 		print_value(os, this->_imaginary, "i", !this->_real);
 	}
 	return (os);
-}
-
-std::ostream&	Complex::print_polynomial(std::ostream &os, const std::string &var) const
-{
-	if (!this->_imaginary)
-		return (this->_real.print_polynomial(os, var));
-	if (!this->_real)
-		return (os << *this << " * " << var);
-	return (os << "(" << *this << ")" << var);
 }
 
 

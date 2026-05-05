@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 11:14:57 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 15:53:12 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -671,9 +671,9 @@ IType*		Rational::operator%(const IType &other) const
 
 IType*		Rational::operator^(const IType &other) const
 {
-	Rational	power;
 	Rational*	result;
 	Rational*	tmp;
+	Rational	power;
 
 	try
 	{
@@ -803,18 +803,6 @@ std::ostream&	Rational::print(std::ostream &os) const
 	if (copy.is_integer())
 		return (os << numerator);
 	return (os << numerator << "/" << copy.getDenominator());
-}
-
-std::ostream&	Rational::print_polynomial(std::ostream &os, 	\
-		const std::string &var) const
-{
-	Rational	copy(*this);
-	int			numerator;
-
-	numerator = copy.getNumerator();
-	if (copy.is_integer())
-		return (os << numerator << var);
-	return (os << numerator << var << "/" << copy.getDenominator());
 }
 
 void			Rational::reduce(void)
