@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 15:46:39 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/22 16:54:54 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 11:01:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,20 @@ t_quadratic_solutions	get_solutions_structure(Complex* a, Complex* b, 	\
 	t_quadratic_solutions	solutions;
 
 	solutions = {
+		.real_term1 = {0, 0},
+		.real_term2_factor = {0, 0},
+		.real_term3_factor = {0, 0},
+		.real_denominator = {0, 0},
+		.imaginary_term1 = {0, 0},
+		.imaginary_term2_factor = {0, 0},
+		.imaginary_term3_factor = {0, 0},
+		.imaginary_denominator = {0, 0},
+		.sqrt_term1_factor = 0,
+		.sqrt_term1_sqrt = 0,
+		.sqrt_term2_real = 0,
+		.sqrt_term2_imaginary = 0,
 		.sqrt_real = 0,
-		.sqrt_imaginary = 0
+		.sqrt_imaginary = 0,
 	};
 	sqrt_real_factor = factorize_sqrt(delta, solutions);
 	sqrt_imaginary_factor = sqrt_real_factor * Rational(delta->getImaginary() < Rational(0) ? -1 : 1);
