@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 15:12:25 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 15:21:03 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,15 +159,15 @@ static void								print_coefficient(std::ostream &os, IType *coefficient, unsig
 
 	if (!first_term)
 	{
-		if (*coefficient > Rational(0))
-			os << " + ";
-		else
+		if (*coefficient < Rational(0))
 		{
 			os << " - ";
 			tmp = coefficient;
 			coefficient = *coefficient * Rational(-1);
 			delete tmp;
 		}
+		else
+			os << " + ";
 	}
 	is_complex = dynamic_cast<Complex*>(coefficient);
 	if (is_complex)
@@ -185,7 +185,6 @@ static std::ostream&					print_terms(std::ostream &os, const std::vector<Polynom
 {
 	bool	first_term;
 
-	//TODO: A ameliorer
 	if (!alone && terms.size() > 1)
 		os << "(";
 	first_term = true;
