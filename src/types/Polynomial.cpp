@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 11:14:37 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 14:41:46 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -364,7 +364,7 @@ Polynomial::Polynomial(const Polynomial &other)
 	}
 }
 
-Polynomial::Polynomial(const IType &other)
+Polynomial::Polynomial(const IType &other): Polynomial()
 {
 	const Rational		*other_rational;
 	const Complex		*other_complex;

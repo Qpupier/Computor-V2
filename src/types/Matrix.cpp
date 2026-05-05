@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 11:15:52 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 14:43:31 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,13 @@ static std::vector<std::vector<std::string>>	parse_matrix(std::string &matrix, u
 // Constructors and destructor
 Matrix::Matrix(unsigned long width, unsigned long height): _width(width), _height(height)
 {
+	if (!width || !height)
+	{
+		this->_width = 0;
+		this->_height = 0;
+		this->_matrix = nullptr;
+		return ;
+	}
 	this->_matrix = new Rational*[this->_height];
 	for (unsigned int i = 0; i < this->_height; i++)
 	{
@@ -131,7 +138,7 @@ Matrix::Matrix(const Matrix &other): _width(other._width), _height(other._height
 	}
 }
 
-Matrix::Matrix(const IType &other)
+Matrix::Matrix(const IType &other): Matrix()
 {
 	const Matrix		*other_matrix;
 	const Rational		*other_rational;
@@ -158,8 +165,10 @@ Matrix::Matrix(const IType &other)
 		throw ERROR_UNEXPECTED;
 }
 
-Matrix::~Matrix()
+Matrix::~Matrix(void)
 {
+	if (!this->_matrix || !this->_width || !this->_height)
+		return ;
 	for (unsigned int i = 0; i < this->_height; i++)
 		delete[] this->_matrix[i];
 	delete[] this->_matrix;
@@ -169,12 +178,18 @@ Matrix::~Matrix()
 // Operator overloads
 Matrix&		Matrix::operator=(const Matrix &other)
 {
-	Matrix	new_matrix(other);
-
 	if (this == &other)
 		return (*this);
 	this->~Matrix();
-	*this = new_matrix;
+	this->_width = other._width;
+	this->_height = other._height;
+	this->_matrix = new Rational*[other._height];
+	for (unsigned int i = 0; i < other._height; i++)
+	{
+		this->_matrix[i] = new Rational[other._width];
+		for (unsigned int j = 0; j < other._width; j++)
+			this->_matrix[i][j] = other._matrix[i][j];
+	}
 	return (*this);
 }
 
@@ -660,11 +675,32 @@ IType*		Matrix::operator%(const IType &other) const
 	return (nullptr);
 }
 
+Matrix*		Matrix::operator^(const Rational &other) const
+{
+	Matrix*	result;
+	Matrix*	tmp;
+
+	result = new Matrix(this->_width, this->_height);
+	for (int i = 0; i < other.getNumerator(); i++)
+	{
+		tmp = result;
+		try
+		{
+			result = result->matrix_operator(*this);
+		}
+		catch(const LogicError &e)
+		{
+			delete result;
+			throw;
+		}
+		delete tmp;
+	}
+	return (result);
+}
+
 IType*		Matrix::operator^(const IType &other) const
 {
 	Rational	power;
-	Matrix*		result;
-	Matrix*		tmp;
 
 	try
 	{
@@ -676,14 +712,7 @@ IType*		Matrix::operator^(const IType &other) const
 	}
 	if (!power.is_integer() || power < Rational(0))
 		throw UNSUPPORTED_EXPONENT;
-	result = new Matrix(this->_width, this->_height);
-	for (int i = 0; i < power.getNumerator(); i++)
-	{
-		tmp = result;
-		result = result->matrix_operator(*this);
-		delete tmp;
-	}
-	return (result);
+	return (*this ^ power);
 }
 
 
@@ -736,39 +765,19 @@ Matrix*			Matrix::matrix_operator(const Matrix &other) const
 	return (result);
 }
 
-Matrix*			Matrix::matrix_operator(const Rational &other) const
-{
-	throw ERROR_MATRIX_OPERATOR;
-	(void)other;
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
-}
-
-Matrix*			Matrix::matrix_operator(const Complex &other) const
-{
-	throw ERROR_MATRIX_OPERATOR;
-	(void)other;
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
-}
-
 IType*			Matrix::matrix_operator(const IType &other) const
 {
-	const Matrix	*other_matrix;
-	const Rational	*other_rational;
-	const Complex	*other_complex;
+	Matrix	other_matrix;
 
-	other_matrix = dynamic_cast<const Matrix*>(&other);
-	if (other_matrix)
-		return (this->matrix_operator(*other_matrix));
-	other_rational = dynamic_cast<const Rational*>(&other);
-	if (other_rational)
-		return (this->matrix_operator(*other_rational));
-	other_complex = dynamic_cast<const Complex*>(&other);
-	if (other_complex)
-		return (this->matrix_operator(*other_complex));
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
+	try
+	{
+		other_matrix = Matrix(other);
+	}
+	catch (const UnexpectedError &e)
+	{
+		throw ERROR_MATRIX_OPERATOR;
+	}
+	return (this->matrix_operator(other_matrix));
 }
 
 IType*			Matrix::function_operator(const IType &other) const
@@ -874,4 +883,20 @@ void			Matrix::error(const LogicError &e) const
 std::ostream&	operator<<(std::ostream &os, const Matrix &matrix)
 {
 	return (matrix.print(os));
+}
+
+// Functions
+bool	is_matrix(const IType& type)
+{
+	Matrix	matrix;
+
+	try
+	{
+		matrix = Matrix(type);
+	}
+	catch (const UnexpectedError &e)
+	{
+		return (false);
+	}
+	return (true);
 }

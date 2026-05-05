@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/16 13:34:50 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 14:02:03 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ class	Matrix: public IType
 	public:
 		// Constructors and destructor
 		Matrix(unsigned long width, unsigned long height);
+		Matrix(void): Matrix(0, 0) {};
 		Matrix(std::string str, t_data &data);
 		Matrix(const Token &token, t_data &data): Matrix(token.getValue(), data) {};
 		Matrix(const Matrix &other);
@@ -70,10 +71,7 @@ class	Matrix: public IType
 		Matrix*		operator%(const Complex &other) const;
 		Polynomial*	operator%(const Polynomial &other) const;
 		IType*		operator^(const IType &other) const;
-		// Matrix*		operator^(const Matrix &other) const;
-		// Matrix*		operator^(const Rational &other) const;
-		// Matrix*		operator^(const Complex &other) const;
-		// IType*		operator^(const Polynomial &other) const;
+		Matrix*		operator^(const Rational &other) const;
 
 		// Getters
 		unsigned long	getWidth(void) const;
@@ -85,9 +83,6 @@ class	Matrix: public IType
 		// Methods
 		IType*			matrix_operator(const IType &other) const;
 		Matrix*			matrix_operator(const Matrix &other) const;
-		Matrix*			matrix_operator(const Rational &other) const;
-		Matrix*			matrix_operator(const Complex &other) const;
-		Polynomial*		matrix_operator(const Polynomial &other) const;
 		IType*			function_operator(const IType &other) const;
 		IType*			clone(void) const;
 		Rational*		gcd(const IType &ther) const;
@@ -108,5 +103,8 @@ class	Matrix: public IType
 
 // Output stream operator overload
 std::ostream&	operator<<(std::ostream &os, const Matrix &matrix);
+
+// Functions
+bool	is_matrix(const IType& type);
 
 #endif

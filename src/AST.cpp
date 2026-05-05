@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/16 12:00:18 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 14:43:50 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "Complex.hpp"
 #include "Matrix.hpp"
 #include "Polynomial.hpp"
+#include "Matrix.hpp"
 
 // Utils
 static IType*	find_function(IType *node, std::map<std::pair<std::string, std::string>, const IType*> &stored)
@@ -61,7 +62,7 @@ static IType*	get_result(IType *left_entity, IType *right_entity, 	\
 		case Operator::E_FUNCTION:
 			return (find_function(left_entity, stored)->function_operator(*right_entity));
 		case Operator::E_UNKNOWN:
-			if (dynamic_cast<Matrix*>(left_entity) && dynamic_cast<Matrix*>(right_entity))
+			if (is_matrix(*left_entity) && is_matrix(*right_entity))
 				return (left_entity->matrix_operator(*right_entity));
 			else
 				return (*left_entity * *right_entity);
