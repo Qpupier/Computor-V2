@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 15:56:10 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 19:10:48 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -320,6 +320,13 @@ static void								divide_constant_factor(const Rational &factor, std::vector<Po
 		it->coefficient = *it->coefficient / factor;
 		delete tmp;
 	}
+}
+
+static bool								is_it_different_variables(const Polynomial& p1, const Polynomial& p2)
+{
+	if (p1.getTerms().size() <= 1 || p2.getTerms().size() <= 1)
+		return (false);
+	return (p1.getName() != p2.getName());
 }
 
 
@@ -704,8 +711,8 @@ Polynomial*	Polynomial::operator*(const Polynomial &other) const
 {
 	Polynomial*	result;
 
-	if (this->_name != other._name)
-		throw UNSUPPORTED_MULTI_POLYNOMIALS;// BUG: Ce n'est pas forcement le cas si il n'y a qu'une power 0 ou des coefficients nuls
+	if (is_it_different_variables(*this, other))
+		throw UNSUPPORTED_MULTI_POLYNOMIALS;
 	result = new Polynomial(this->_name);
 	free_vector_terms(result->_dividers);
 	result->_terms = multiply_vectors(this->_terms, other._terms);
@@ -792,8 +799,8 @@ Polynomial*	Polynomial::operator/(const Polynomial &other) const
 {
 	Polynomial*	result;
 
-	if (this->_name != other._name)
-		throw UNSUPPORTED_MULTI_POLYNOMIALS;// BUG: Ce n'est pas forcement le cas si il n'y a qu'une power 0 ou des coefficients nuls
+	if (is_it_different_variables(*this, other))
+		throw UNSUPPORTED_MULTI_POLYNOMIALS;
 	result = new Polynomial(this->_name);
 	free_vector_terms(result->_dividers);
 	result->_terms = multiply_vectors(this->_terms, other._dividers);
