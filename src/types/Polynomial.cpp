@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 20:24:40 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 20:28:59 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -898,26 +898,23 @@ Polynomial*	Polynomial::operator%(const Polynomial &other) const
 
 Polynomial*	Polynomial::operator%(const Rational &other) const
 {
-	// [ ] A gerer, c'est le resultat de la division euclidienne
-	throw UNSUPPORTED_DIVISION;
-	return (nullptr);
-	(void)other;
+	return (*this 							\
+			% Polynomial(this->getName(), 	\
+				(Polynomial::t_term){other.clone(), 0}));
 }
 
 Polynomial*	Polynomial::operator%(const Complex &other) const
 {
-	// [ ] A gerer, c'est le resultat de la division euclidienne
-	throw UNSUPPORTED_DIVISION;
-	return (nullptr);
-	(void)other;
+	return (*this 							\
+			% Polynomial(this->getName(), 	\
+				(Polynomial::t_term){other.clone(), 0}));
 }
 
 Polynomial*	Polynomial::operator%(const Matrix &other) const
 {
-	// [ ] A gerer, c'est le resultat de la division euclidienne
-	throw UNSUPPORTED_DIVISION;
-	return (nullptr);
-	(void)other;
+	return (*this 							\
+			% Polynomial(this->getName(), 	\
+				(Polynomial::t_term){other.clone(), 0}));
 }
 
 IType*		Polynomial::operator%(const IType &other) const
