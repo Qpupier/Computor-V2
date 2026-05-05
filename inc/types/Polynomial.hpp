@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 15:52:38 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 20:17:14 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ class	Polynomial: public IType
 		// Utils
 		typedef struct	s_term
 		{
-			IType*			coefficient;
-			unsigned int	power;
+			IType*				coefficient;
+			unsigned short int	power;
 		}				t_term;
 
 		typedef struct	s_division_result
