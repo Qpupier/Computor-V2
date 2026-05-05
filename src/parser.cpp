@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 12:08:03 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 16:12:14 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,21 @@ static bool			set_function_left(std::vector<Token> &tokens, std::map<std::pair<s
 	return (false);
 }
 
+static void			delete_empty_function_stored(std::map<std::pair<std::string, std::string>, const IType*> &stored)
+{
+	std::map<std::pair<std::string, std::string>, const IType*>::iterator	it;
+
+	for (it = stored.begin(); it != stored.end();)
+		if (!it->second)
+		{
+			it = stored.erase(it);
+			break;
+		}
+		else
+			it++;
+	throw LogicError("The right side of the function definition must be a single expression");
+}
+
 static void			set_function_right(std::map<std::pair<std::string, std::string>, const IType*> &stored, AST *ast)
 {
 	Polynomial*																polynomial;
@@ -128,10 +143,10 @@ static void			set_function_right(std::map<std::pair<std::string, std::string>, c
 	std::pair<std::string, std::string>										key;
 
 	if (!ast->end_of_tree())
-		throw LogicError("The right side of the function definition must be a single expression");
+		delete_empty_function_stored(stored);
 	polynomial = dynamic_cast<Polynomial*>(ast->getNode());
 	if (!polynomial)
-		throw LogicError("The right side of the equation must contain the variable of the function");
+		delete_empty_function_stored(stored);
 	for (it = stored.begin(); it != stored.end(); it++)
 	{
 		if (!it->second)
