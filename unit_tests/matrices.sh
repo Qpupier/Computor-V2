@@ -16,8 +16,6 @@ run_test "[[1, 2];[3, 4]] - [[5, 6];[7, 8]]" "[ -4 , -4 ]
 [ -4 , -4 ]" $1 ; status=$((status | $?))
 run_test "[[1, 2];[3, 4]] * [[5, 6];[7, 8]]" "[ 5 , 12 ]
 [ 21 , 32 ]" $1 ; status=$((status | $?))
-run_test "[[1, 2];[3, 4]] ^ [[5, 6];[7, 8]]" "[ 1 , 64 ]
-[ 2187 , 65536 ]" $1 ; status=$((status | $?))
 run_test "[[42]] / [[3]]" "[ 14 ]" $1 ; status=$((status | $?))
 run_test "[[5, 2]] % [[3, 3]]" "[ 2 , 2 ]" $1 ; status=$((status | $?))
 run_test "[[0, 1, 2];[3, 4, 5]] ** [[6];[7];[8]]" "[ 23 ]
@@ -37,6 +35,7 @@ run_test "[[0, 1, 2]] / 2" "[ 0 , 1/2 , 1 ]" $1 ; status=$((status | $?))
 run_test "[[0, 1, 2]] % 2" "[ 0 , 1 , 0 ]" $1 ; status=$((status | $?))
 run_test "[[0, 1, 2]] ^ 3" "[ 0 , 1 , 8 ]" $1 ; status=$((status | $?))
 
+run_error "[[1, 2];[3, 4]] ^ [[5, 6];[7, 8]]" "Unsupported: Exponentiation can only be positive integers" $1 ; status=$((status | $?))
 run_error "[[1,2];[3]]" "Invalid matrix format: inconsistent row sizes" $1 ; status=$((status | $?))
 run_error "[[42*]]" "Invalid matrix format: Operator cannot be at the beginning or end of an expression" $1 ; status=$((status | $?))
 run_error "[[6];[7];[8]] ** [[0, 1, 2];[3, 4, 5]]" "Matrix operation: incompatible dimensions" $1 ; status=$((status | $?))

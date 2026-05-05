@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/04/16 14:36:46 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 11:15:52 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -670,7 +670,7 @@ IType*		Matrix::operator^(const IType &other) const
 	{
 		power = Rational(other);
 	}
-	catch(const LogicError &e)
+	catch(const UnexpectedError &e)
 	{
 		throw UNSUPPORTED_EXPONENT;
 	}

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/04 14:39:04 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/05 11:14:57 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -679,7 +679,7 @@ IType*		Rational::operator^(const IType &other) const
 	{
 		power = Rational(other);
 	}
-	catch(const LogicError &e)
+	catch(const UnexpectedError &e)
 	{
 		throw UNSUPPORTED_EXPONENT;
 	}
