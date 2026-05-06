@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/06 16:41:50 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/06 18:11:20 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,7 +217,7 @@ static void								clean_terms(std::vector<Polynomial::t_term> &terms)
 		return ;
 	while (it != terms.end())
 	{
-		if (!*it->coefficient)
+		if (!(*(it->coefficient)))
 		{
 			delete it->coefficient;
 			terms.erase(it);
@@ -362,7 +362,7 @@ Polynomial::Polynomial(const Polynomial &other)
 	}
 }
 
-Polynomial::Polynomial(const IType &other): Polynomial()
+Polynomial::Polynomial(const IType &other)
 {
 	const Rational		*other_rational;
 	const Complex		*other_complex;
@@ -376,11 +376,11 @@ Polynomial::Polynomial(const IType &other): Polynomial()
 	if (other_polynomial)
 		*this = *other_polynomial;
 	else if (other_rational)
-		*this = Polynomial("_", (t_term){other_rational->clone(), 0});
+		*this = Polynomial("", (t_term){other_rational->clone(), 0});
 	else if (other_complex)
-		*this = Polynomial("_", (t_term){other_complex->clone(), 0});
+		*this = Polynomial("", (t_term){other_complex->clone(), 0});
 	else if (other_matrix)
-		*this = Polynomial("_", (t_term){other_matrix->clone(), 0});
+		*this = Polynomial("", (t_term){other_matrix->clone(), 0});
 	else
 		throw ERROR_UNEXPECTED;
 	this->reduce();
@@ -897,7 +897,8 @@ Polynomial*	Polynomial::operator%(const Polynomial &other) const
 	division = *this / other;
 	division_result = euclidean_division(division->_terms, other._terms);
 	result = new Polynomial(division->_name);
-	result->_terms.insert(result->_terms.end(), division_result.remainder.begin(), division_result.remainder.end());
+	result->_terms.insert(result->_terms.end(), 	\
+			division_result.remainder.begin(), division_result.remainder.end());
 	delete division;
 	return (result);
 }
