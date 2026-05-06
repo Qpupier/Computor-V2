@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 20:17:14 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/06 16:00:19 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ class	Polynomial: public IType
 		}				t_division_result;
 
 		// Constructors and destructor
-		Polynomial(std::string name): _name(name), _terms() {};
+		Polynomial(std::string name): _name(name), _terms(), _dividers({t_term{new Rational(1), 0}}) {};
 		Polynomial(void): Polynomial("") {};
 		Polynomial(std::string name, t_term term);
 		Polynomial(const Token &token): Polynomial(token.getValue(), t_term{new Rational(1), 1}) {};

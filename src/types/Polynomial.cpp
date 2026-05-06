@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 20:28:59 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/06 16:41:50 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -890,10 +890,16 @@ IType*		Polynomial::operator/(const IType &other) const
 
 Polynomial*	Polynomial::operator%(const Polynomial &other) const
 {
-	// [ ] A gerer, c'est le resultat de la division euclidienne
-	throw UNSUPPORTED_DIVISION;
-	return (nullptr);
-	(void)other;
+	Polynomial*			division;
+	Polynomial*			result;
+	t_division_result	division_result;
+
+	division = *this / other;
+	division_result = euclidean_division(division->_terms, other._terms);
+	result = new Polynomial(division->_name);
+	result->_terms.insert(result->_terms.end(), division_result.remainder.begin(), division_result.remainder.end());
+	delete division;
+	return (result);
 }
 
 Polynomial*	Polynomial::operator%(const Rational &other) const
