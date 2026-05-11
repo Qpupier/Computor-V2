@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 20:11:24 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 14:00:53 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -855,8 +855,8 @@ std::ostream&	Matrix::print(std::ostream &os) const
 	unsigned long	width;
 	unsigned long	height;
 
-	width = this->getWidth();
-	height = this->getHeight();
+	width = this->_width;
+	height = this->_height;
 	for (unsigned int i = 0; i < height; i++)
 	{
 		os << "[ ";
@@ -873,10 +873,45 @@ std::ostream&	Matrix::print(std::ostream &os) const
 	return (os);
 }
 
+void			Matrix::print_variable(const std::string var) const
+{
+	unsigned long	width;
+	unsigned long	height;
+
+	width = this->_width;
+	height = this->_height;
+	std::cout << COLOR_DIM;
+	if (!var.empty())
+		std::cout << var << (this->finite_decimals() ? " = " : " ≈ ");
+	for (unsigned int i = 0; i < height; i++)
+	{
+		std::cout << "[ ";
+		for (unsigned int j = 0; j < width; j++)
+		{
+			std::cout << this->_matrix[i][j].getValue();
+			if (j < width - 1)
+				std::cout << " , ";
+		}
+		std::cout << " ]";
+		if (i < height - 1)
+			std::cout << std::endl;
+	}
+	std::cout << COLOR_RESET;
+}
+
 void			Matrix::error(const LogicError &e) const
 {
 	this->~Matrix();
 	throw e;
+}
+
+bool			Matrix::finite_decimals(void) const
+{
+	for (unsigned int i = 0; i < this->_height; i++)
+		for (unsigned int j = 0; j < this->_width; j++)
+			if (!this->_matrix[i][j].finite_decimals())
+				return (false);
+	return (true);
 }
 
 

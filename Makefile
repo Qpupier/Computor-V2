@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/05/04 18:26:54 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/05/11 13:47:05 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -79,8 +79,8 @@ $(NAME): $(OBJ)
 
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.cpp Makefile
 	mkdir -p $(DIR_OBJ) $(DIRS)
+	@printf "$(ERASE)$(BLUE)> Compilation:$(END) $<	"
 	$(CC) $(CXXFLAGS) $(CDEP) $(INC) -c $< -o $@
-	@printf "$(ERASE)$(BLUE)> Compilation:$(END) $<"
 
 clean:
 	@rm -rf $(DIR_OBJ)

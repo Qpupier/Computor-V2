@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 20:11:24 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 14:00:45 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -692,6 +692,51 @@ std::ostream&	Complex::print(std::ostream &os) const
 		print_value(os, this->_imaginary, "i", !this->_real);
 	}
 	return (os);
+}
+
+void			Complex::print_variable(const std::string var) const
+{
+	Rational*	tmp;
+
+	std::cout << COLOR_DIM;
+	if (!var.empty())
+		std::cout << var << (this->finite_decimals() ? " = " : " ≈ ");
+	if (!this->_real && !this->_imaginary)
+		std::cout << "0";
+	else if (!this->_real)
+		std::cout << this->_imaginary.getValue() << "i";
+	else if (!this->_imaginary)
+		std::cout << this->_real.getValue();
+	else if (this->_real < Rational(0) && this->_imaginary > Rational(0))
+	{
+		std::cout << this->_imaginary.getValue() << "i - ";
+		tmp = this->_real * Rational(-1);
+		std::cout << tmp->getValue();
+		delete tmp;
+	}
+	else
+	{
+		std::cout << this->_real.getValue();
+		if (this->_imaginary < Rational(0))
+		{
+			std::cout << " - ";
+			tmp = this->_imaginary * Rational(-1);
+		}
+		else
+		{
+			std::cout << " + ";
+			tmp = new Rational(this->_imaginary);
+		}
+		std::cout << tmp->getValue() << "i";
+		delete tmp;
+	}
+	std::cout << COLOR_RESET << std::endl;
+}
+
+bool			Complex::finite_decimals(void) const
+{
+	return (this->_real.finite_decimals() 	\
+			&& this->_imaginary.finite_decimals());
 }
 
 

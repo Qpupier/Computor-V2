@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 20:11:10 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 14:00:17 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -821,6 +821,14 @@ std::ostream&	Rational::print(std::ostream &os) const
 	return (os << numerator << "/" << copy.getDenominator());
 }
 
+void			Rational::print_variable(const std::string var) const
+{
+	std::cout << COLOR_DIM;
+	if (!var.empty())
+		std::cout << var << (this->finite_decimals() ? " = " : " ≈ ");
+	std::cout << this->getValue() << COLOR_RESET << std::endl;
+}
+
 void			Rational::reduce(void)
 {
 	int	gcd;
@@ -839,6 +847,44 @@ void			Rational::reduce(void)
 		this->_numerator = -this->_numerator;
 		this->_denominator = -this->_denominator;
 	}
+}
+
+static int	count_digits(int n)
+{
+	int	count;
+
+	count = 0;
+	if (!n)
+		return (1);
+	while (n)
+	{
+		n /= 10;
+		count++;
+	}
+	return (count);
+}
+
+bool			Rational::finite_decimals(void) const
+{
+	int	denominator;
+	int	m;
+	int	n;
+
+	denominator = this->_denominator;
+	m = 0;
+	n = 0;
+	while (denominator % 2 == 0)
+	{
+		denominator /= 2;
+		m++;
+	}
+	while (denominator % 5 == 0)
+	{
+		denominator /= 5;
+		n++;
+	}
+	return (denominator == 1 	\
+			&& 6 - count_digits(static_cast<int>(this->getValue())) - std::max(m, n) > 0);
 }
 
 bool			Rational::is_integer(void) const

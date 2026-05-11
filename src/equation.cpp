@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/06 18:12:29 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 12:30:26 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,11 @@ static void			equation_error(AST *left_ast, AST *right_ast, 	\
 static void			assignation(std::string var, std::map<std::pair<std::string, std::string>, const IType*> &stored, IType *result)
 {
 	std::map<std::pair<std::string, std::string>, const IType*>::iterator	it;
-	std::string	var_lower(to_lower(var));
-	std::pair<std::string, std::string>	pair(var_lower, std::string());
+	std::string																var_lower(to_lower(var));
+	std::pair<std::string, std::string>										pair(var_lower, std::string());
 
 	std::cout << COLOR_BOLD << var << " = " << *result << COLOR_RESET << std::endl;
+	result->print_variable(var);
 	for (it = stored.begin(); it != stored.end();)
 	{
 		if (it->first.first == var_lower)

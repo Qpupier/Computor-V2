@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 12:15:47 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 14:03:46 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1067,6 +1067,11 @@ std::ostream&	Polynomial::print(std::ostream &os) const
 	return (os);
 }
 
+void			Polynomial::print_variable(const std::string var) const
+{
+	(void)var;
+}
+
 void			Polynomial::sort_powers(void)
 {
 	terms_sort_powers(this->_terms);
@@ -1129,6 +1134,19 @@ void			Polynomial::reduce(void)
 	free_vector_terms(division_result.quotient);
 	free_vector_terms(division_result.remainder);
 	this->factorize_constant_factor();
+}
+
+bool			Polynomial::finite_decimals(void) const
+{
+	for (std::vector<t_term>::const_iterator it(this->_terms.begin()); 		\
+			it != this->_terms.end(); it++)
+		if (!it->coefficient->finite_decimals())
+			return (false);
+	for (std::vector<t_term>::const_iterator it(this->_dividers.begin()); 	\
+			it != this->_dividers.end(); it++)
+		if (!it->coefficient->finite_decimals())
+			return (false);
+	return (true);
 }
 
 
