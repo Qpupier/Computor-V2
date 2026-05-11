@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 14:53:15 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 15:25:13 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,14 +108,7 @@ static void	compute_line(const std::string &line, t_data &data)
 	}
 	catch(const std::exception& e)
 	{
-		try
-		{
-			delete_empty_function_stored(data.stored, e.what());
-		}
-		catch (const std::exception &e)
-		{
-			std::cerr << e.what() << std::endl;
-		}
+		delete_empty_function_stored(data.stored, e.what());
 	}
 }
 

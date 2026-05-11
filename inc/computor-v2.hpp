@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 14:51:27 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 15:25:05 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,6 @@ void	define_patterns(std::map<std::string, std::regex> &patterns);
 void	delete_empty_function_stored(	\
 		std::map<std::pair<std::string, std::string>, 	\
 			const IType*> &stored, 						\
-		const std::string error_msg);
+		const std::string error_msg, const bool throw_error = false);
 
 #endif

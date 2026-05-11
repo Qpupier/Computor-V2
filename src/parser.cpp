@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 14:50:22 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 15:25:06 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,11 +131,11 @@ static void			set_function_right(std::map<std::pair<std::string, std::string>, c
 
 	if (!ast->end_of_tree())
 		delete_empty_function_stored(stored, 			\
-				"The right side of the function definition must be a single expression");
+				"The right side of the function definition must be a single expression", true);
 	polynomial = dynamic_cast<Polynomial*>(ast->getNode());
 	if (!polynomial)
 		delete_empty_function_stored(stored, 			\
-				"The right side of the function definition must be a single expression");
+				"The right side of the function definition must be a single expression", true);
 	for (it = stored.begin(); it != stored.end(); it++)
 		if (!it->second)
 		{
@@ -143,7 +143,7 @@ static void			set_function_right(std::map<std::pair<std::string, std::string>, c
 			stored.erase(key);
 			if (to_lower(key.second) != to_lower(polynomial->getName()))
 				delete_empty_function_stored(stored, 	\
-						"Function parameter does not match the variable in the right side of the equation");
+						"Function parameter does not match the variable in the right side of the equation", true);
 			polynomial->setName("χ");
 			key.second = polynomial->getName();
 			stored[key] = polynomial->clone();
@@ -204,7 +204,7 @@ static bool			waiting_function(const std::map<std::pair<std::string, std::string
 void				delete_empty_function_stored(		\
 		std::map<std::pair<std::string, std::string>, 	\
 			const IType*> &stored, 						\
-		const std::string error_msg)
+		const std::string error_msg, const bool throw_error)
 {
 	std::map<std::pair<std::string, std::string>, const IType*>::iterator	it;
 
@@ -212,10 +212,12 @@ void				delete_empty_function_stored(		\
 		if (!it->second)
 		{
 			it = stored.erase(it);
-			throw LogicError(error_msg);
+			if (throw_error)
+				throw LogicError(error_msg);
 		}
 		else
 			it++;
+	std::cout << error_msg << std::endl;
 }
 
 AST*				compute_expression(const std::string &line, 		\
