@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:24:12 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/04 15:13:29 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 16:01:06 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,8 @@ void	set_real_terms(Complex* a, Complex* b, 							\
 	real_denominator = denominator;
 	real_gcd = get_gcd_terms(real_term1, real_term2_factor, real_term3_factor, real_denominator);
 	real_reduce_terms(solutions, real_term1, real_term2_factor, real_term3_factor, real_denominator, real_gcd);
+	delete real_term1;
+	delete real_term2_factor;
+	delete real_term3_factor;
+	delete real_gcd;
 }

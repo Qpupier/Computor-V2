@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:03:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/04 18:32:54 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 15:59:25 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,9 @@ static void		find_solutions(IType *tmp_a, IType *tmp_b, 	\
 	}
 	solutions_structure = get_solutions_structure(a, b, delta);
 	set = delta->getReal() > Rational(0) && !delta->getImaginary() ? "ℝ" : "ℂ";
+	delete a;
+	delete b;
+	delete delta;
 	print_solutions(solutions_structure, set, var);
 }
 

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 15:46:39 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 11:01:44 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 15:58:40 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ static Rational		factorize_sqrt(Complex* delta, 	\
 	term_2 = Rational(2) * delta->getReal();
 	small_gcd = term_1_factor.gcd(*term_2);
 	sqrt_reduce_terms(solutions, term_1_factor, term_2, small_gcd);
+	delete term_2;
 	factor = 1;
 	big_sqrt = small_gcd->getNumerator() * small_gcd->getDenominator();
 	reduce_sqrt(&factor, &big_sqrt);
