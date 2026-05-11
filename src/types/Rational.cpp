@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 14:24:45 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 14:33:57 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -886,7 +886,7 @@ bool			Rational::finite_decimals(void) const
 		n++;
 	}
 	return (denominator == 1 	\
-			&& 6 - count_digits(static_cast<int>(this->getValue())) - std::max(m, n) > 0);
+			&& 6 - count_digits(static_cast<int>(this->getValue())) - std::max(m, n) >= 0);
 }
 
 bool			Rational::in_Z(void) const

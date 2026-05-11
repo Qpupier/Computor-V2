@@ -33,7 +33,8 @@ run_test "[[0, 1];[2, 3]] ^ 3" "[ 6 , 11 ]
 
 run_test "[[0, 1, 2]] + 3" "[ 3 , 4 , 5 ]" $1 ; status=$((status | $?))
 run_test "[[0, 1, 2]] * 3" "[ 0 , 3 , 6 ]" $1 ; status=$((status | $?))
-run_test "[[0, 1, 2]] / 2" "[ 0 , 1/2 , 1 ]" $1 ; status=$((status | $?))
+run_test "[[0, 1, 2]] / 2" "[ 0 , 1/2 , 1 ]
+[ 0 , 0.5 , 1 ]" $1 ; status=$((status | $?))
 run_test "[[0, 1, 2]] % 2" "[ 0 , 1 , 0 ]" $1 ; status=$((status | $?))
 
 run_error "[[0, 1, 2]] ^ 3" "Matrix operation: incompatible dimensions" $1 ; status=$((status | $?))
