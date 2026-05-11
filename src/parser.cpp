@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 15:25:06 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 15:41:52 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,21 +132,21 @@ static void			set_function_right(std::map<std::pair<std::string, std::string>, c
 	if (!ast->end_of_tree())
 		delete_empty_function_stored(stored, 			\
 				"The right side of the function definition must be a single expression", true);
-	polynomial = dynamic_cast<Polynomial*>(ast->getNode());
-	if (!polynomial)
-		delete_empty_function_stored(stored, 			\
-				"The right side of the function definition must be a single expression", true);
+	polynomial = new Polynomial(*ast->getNode());
 	for (it = stored.begin(); it != stored.end(); it++)
 		if (!it->second)
 		{
 			key = it->first;
 			stored.erase(key);
-			if (to_lower(key.second) != to_lower(polynomial->getName()))
+			if (!polynomial->getName().empty() && to_lower(key.second) != to_lower(polynomial->getName()))
+			{
+				delete polynomial;
 				delete_empty_function_stored(stored, 	\
 						"Function parameter does not match the variable in the right side of the equation", true);
+			}
 			polynomial->setName("χ");
 			key.second = polynomial->getName();
-			stored[key] = polynomial->clone();
+			stored[key] = polynomial;
 			std::cout << COLOR_BOLD << key.first << "(" << key.second << ") = " << *polynomial << COLOR_RESET << std::endl;
 			break;
 		}
