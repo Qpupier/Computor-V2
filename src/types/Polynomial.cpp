@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 11:16:47 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 12:01:13 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -719,6 +719,7 @@ Polynomial*	Polynomial::operator*(const Polynomial &other) const
 	if (is_it_different_variables(*this, other))
 		throw UNSUPPORTED_MULTI_POLYNOMIALS;
 	result = new Polynomial(this->_name);
+	free_vector_terms(result->_terms);
 	free_vector_terms(result->_dividers);
 	result->_terms = multiply_vectors(this->_terms, other._terms);
 	result->_dividers = multiply_vectors(this->_dividers, other._dividers);
