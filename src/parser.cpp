@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 16:12:14 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 11:43:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,8 @@ static bool			set_function_left(std::vector<Token> &tokens, std::map<std::pair<s
 		pair.second = tokens[2].getValue();
 		for (it = stored.begin(); it != stored.end();)
 		{
+			if (to_lower(it->first.first) == to_lower(pair.second))
+				throw LogicError("Function parameter is already defined");
 			if (to_lower(it->first.first) == to_lower(pair.first))
 			{
 				delete it->second;
@@ -152,13 +154,13 @@ static void			set_function_right(std::map<std::pair<std::string, std::string>, c
 		if (!it->second)
 		{
 			key = it->first;
+			stored.erase(key);
 			if (to_lower(key.second) != to_lower(polynomial->getName()))
-			{
-				stored.erase(key);
 				throw LogicError("Function parameter does not match the variable in the right side of the equation");
-			}
-			it->second = polynomial->clone();
-			std::cout << key.first << "(" << key.second << ") = " << *it->second << std::endl;
+			polynomial->setName("χ");
+			key.second = polynomial->getName();
+			stored[key] = polynomial->clone();
+			std::cout << COLOR_BOLD << key.first << "(" << key.second << ") = " << *polynomial << COLOR_RESET << std::endl;
 			break;
 		}
 	}

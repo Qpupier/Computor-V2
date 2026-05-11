@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/06 18:11:35 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 11:18:51 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,9 @@ class	Polynomial: public IType
 		std::string			getName(void) const;
 		std::vector<t_term>	getTerms(void) const;
 		std::vector<t_term>	getDividers(void) const;
+
+		// Setters
+		void				setName(const std::string& name);
 
 		// Methods
 		IType*			matrix_operator(const IType &other) const;

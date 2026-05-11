@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/06 18:11:20 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 11:16:47 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -999,6 +999,13 @@ std::vector<Polynomial::t_term>	Polynomial::getTerms(void) const
 std::vector<Polynomial::t_term>	Polynomial::getDividers(void) const
 {
 	return (this->_dividers);
+}
+
+
+// Setters
+void	Polynomial::setName(const std::string& name)
+{
+	this->_name = name;
 }
 
 
