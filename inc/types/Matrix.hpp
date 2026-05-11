@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 13:34:32 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 14:23:15 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ class	Matrix: public IType
 		void			print_variable(const std::string var) const;
 		void			error(const LogicError &e) const;
 		bool			finite_decimals(void) const;
+		bool			in_Z(void) const;
 
 	private:
 		// Members

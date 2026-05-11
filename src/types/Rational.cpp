@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 14:00:17 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 14:24:45 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -823,6 +823,8 @@ std::ostream&	Rational::print(std::ostream &os) const
 
 void			Rational::print_variable(const std::string var) const
 {
+	if (this->in_Z())
+		return ;
 	std::cout << COLOR_DIM;
 	if (!var.empty())
 		std::cout << var << (this->finite_decimals() ? " = " : " ≈ ");
@@ -885,6 +887,11 @@ bool			Rational::finite_decimals(void) const
 	}
 	return (denominator == 1 	\
 			&& 6 - count_digits(static_cast<int>(this->getValue())) - std::max(m, n) > 0);
+}
+
+bool			Rational::in_Z(void) const
+{
+	return (this->is_integer());
 }
 
 bool			Rational::is_integer(void) const

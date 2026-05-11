@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 12:28:49 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 14:23:01 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ class	Rational: public IType
 		void			print_variable(const std::string var) const;
 		void			reduce(void);
 		bool			finite_decimals(void) const;
+		bool			in_Z(void) const;
 		bool			is_integer(void) const;
 		int				integer_part(void) const;
 

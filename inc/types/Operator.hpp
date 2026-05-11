@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 14:55:07 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 13:37:15 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 14:23:19 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ class	Operator: public IType
 		std::ostream&	print(std::ostream &os) const;
 		void			print_variable(const std::string var) const;
 		bool			finite_decimals(void) const;
+		bool			in_Z(void) const;
 
 	private:
 		// Members

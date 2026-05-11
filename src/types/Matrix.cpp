@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 14:00:53 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 14:30:51 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -878,6 +878,8 @@ void			Matrix::print_variable(const std::string var) const
 	unsigned long	width;
 	unsigned long	height;
 
+	if (this->in_Z())
+		return ;
 	width = this->_width;
 	height = this->_height;
 	std::cout << COLOR_DIM;
@@ -896,7 +898,7 @@ void			Matrix::print_variable(const std::string var) const
 		if (i < height - 1)
 			std::cout << std::endl;
 	}
-	std::cout << COLOR_RESET;
+	std::cout << COLOR_RESET << std::endl;
 }
 
 void			Matrix::error(const LogicError &e) const
@@ -910,6 +912,15 @@ bool			Matrix::finite_decimals(void) const
 	for (unsigned int i = 0; i < this->_height; i++)
 		for (unsigned int j = 0; j < this->_width; j++)
 			if (!this->_matrix[i][j].finite_decimals())
+				return (false);
+	return (true);
+}
+
+bool			Matrix::in_Z(void) const
+{
+	for (unsigned int i = 0; i < this->_height; i++)
+		for (unsigned int j = 0; j < this->_width; j++)
+			if (!this->_matrix[i][j].in_Z())
 				return (false);
 	return (true);
 }

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 14:00:45 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 14:24:59 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -698,6 +698,8 @@ void			Complex::print_variable(const std::string var) const
 {
 	Rational*	tmp;
 
+	if (this->in_Z())
+		return ;
 	std::cout << COLOR_DIM;
 	if (!var.empty())
 		std::cout << var << (this->finite_decimals() ? " = " : " ≈ ");
@@ -737,6 +739,11 @@ bool			Complex::finite_decimals(void) const
 {
 	return (this->_real.finite_decimals() 	\
 			&& this->_imaginary.finite_decimals());
+}
+
+bool			Complex::in_Z(void) const
+{
+	return (this->_real.in_Z() && this->_imaginary.in_Z());
 }
 
 
