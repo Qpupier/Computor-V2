@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 11:43:44 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 14:50:22 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,21 +123,6 @@ static bool			set_function_left(std::vector<Token> &tokens, std::map<std::pair<s
 	return (false);
 }
 
-static void			delete_empty_function_stored(std::map<std::pair<std::string, std::string>, const IType*> &stored)
-{
-	std::map<std::pair<std::string, std::string>, const IType*>::iterator	it;
-
-	for (it = stored.begin(); it != stored.end();)
-		if (!it->second)
-		{
-			it = stored.erase(it);
-			break;
-		}
-		else
-			it++;
-	throw LogicError("The right side of the function definition must be a single expression");
-}
-
 static void			set_function_right(std::map<std::pair<std::string, std::string>, const IType*> &stored, AST *ast)
 {
 	Polynomial*																polynomial;
@@ -145,25 +130,26 @@ static void			set_function_right(std::map<std::pair<std::string, std::string>, c
 	std::pair<std::string, std::string>										key;
 
 	if (!ast->end_of_tree())
-		delete_empty_function_stored(stored);
+		delete_empty_function_stored(stored, 			\
+				"The right side of the function definition must be a single expression");
 	polynomial = dynamic_cast<Polynomial*>(ast->getNode());
 	if (!polynomial)
-		delete_empty_function_stored(stored);
+		delete_empty_function_stored(stored, 			\
+				"The right side of the function definition must be a single expression");
 	for (it = stored.begin(); it != stored.end(); it++)
-	{
 		if (!it->second)
 		{
 			key = it->first;
 			stored.erase(key);
 			if (to_lower(key.second) != to_lower(polynomial->getName()))
-				throw LogicError("Function parameter does not match the variable in the right side of the equation");
+				delete_empty_function_stored(stored, 	\
+						"Function parameter does not match the variable in the right side of the equation");
 			polynomial->setName("χ");
 			key.second = polynomial->getName();
 			stored[key] = polynomial->clone();
 			std::cout << COLOR_BOLD << key.first << "(" << key.second << ") = " << *polynomial << COLOR_RESET << std::endl;
 			break;
 		}
-	}
 }
 
 static void			set_missing_operators(std::vector<Token> &tokens)
@@ -213,6 +199,23 @@ static bool			waiting_function(const std::map<std::pair<std::string, std::string
 		it++;
 	}
 	return (false);
+}
+
+void				delete_empty_function_stored(		\
+		std::map<std::pair<std::string, std::string>, 	\
+			const IType*> &stored, 						\
+		const std::string error_msg)
+{
+	std::map<std::pair<std::string, std::string>, const IType*>::iterator	it;
+
+	for (it = stored.begin(); it != stored.end();)
+		if (!it->second)
+		{
+			it = stored.erase(it);
+			throw LogicError(error_msg);
+		}
+		else
+			it++;
 }
 
 AST*				compute_expression(const std::string &line, 		\
