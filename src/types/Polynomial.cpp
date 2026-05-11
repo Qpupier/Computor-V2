@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 14:03:46 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 14:05:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1056,7 +1056,9 @@ IType*			Polynomial::clone(void) const
 
 std::ostream&	Polynomial::print(std::ostream &os) const
 {
-	if (this->_dividers.size() == 1 && *this->_dividers[0].coefficient == Rational(1) && !this->_dividers[0].power)
+	if (this->_dividers.size() == 1 							\
+			&& *this->_dividers[0].coefficient == Rational(1) 	\
+			&& !this->_dividers[0].power)
 		print_terms(os, this->_terms, this->_name, true);
 	else
 	{
@@ -1138,14 +1140,6 @@ void			Polynomial::reduce(void)
 
 bool			Polynomial::finite_decimals(void) const
 {
-	for (std::vector<t_term>::const_iterator it(this->_terms.begin()); 		\
-			it != this->_terms.end(); it++)
-		if (!it->coefficient->finite_decimals())
-			return (false);
-	for (std::vector<t_term>::const_iterator it(this->_dividers.begin()); 	\
-			it != this->_dividers.end(); it++)
-		if (!it->coefficient->finite_decimals())
-			return (false);
 	return (true);
 }
 
