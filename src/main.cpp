@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 15:25:13 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 17:10:01 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,22 +38,6 @@ static void	stored_varaiables(const std::map<std::pair<std::string, std::string>
 		std::cout << " = " << *it->second << "\033[0m" << std::endl;
 		it++;
 	}
-}
-
-static void	compute_equation(const std::string &line, t_data &data)
-{
-	AST*		left_ast;
-	AST*		right_ast;
-	std::size_t	pos;
-
-	pos = line.find('=');
-	left_ast = compute_expression(line.substr(0, pos), data, false);
-	right_ast = compute_expression(line.substr(pos + 1), data, true);
-	equation(left_ast, right_ast, data.stored);
-	if (left_ast)
-		delete left_ast;
-	if (right_ast)
-		delete right_ast;
 }
 
 static void	print_expression(const std::string &line, t_data &data)

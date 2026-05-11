@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:01:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 14:50:58 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 17:09:49 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ std::ostream &operator<<(std::ostream &os, const AST &ast);
 // Functions
 AST*	compute_expression(const std::string &line, t_data &data, bool is_right_side);
 AST*	build_ast(std::vector<Token> &tokens, t_data &data);
-void	equation(AST *left_ast, AST *right_ast, std::map<std::pair<std::string, std::string>, 	\
-		const IType*> &stored);
+void	compute_equation(const std::string &line, t_data &data);
 
 #endif

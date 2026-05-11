@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 12:30:26 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 17:31:26 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ static void			display_result(Polynomial *polynomial, std::map<std::pair<std::str
 		std::cout << COLOR_BOLD << "The polynomial degree is stricly greater than 2, I can't solve." << COLOR_RESET << std::endl;
 }
 
-void				equation(AST *left_ast, AST *right_ast, 	\
+static void				equation(AST *left_ast, AST *right_ast, 	\
 		std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
 	IType*		left;
@@ -115,4 +115,36 @@ void				equation(AST *left_ast, AST *right_ast, 	\
 	delete all_left;
 	display_result(polynomial, stored);
 	delete polynomial;
+}
+
+void	compute_equation(const std::string &line, t_data &data)
+{
+	AST*		left_ast;
+	AST*		right_ast;
+	std::size_t	pos;
+
+	pos = line.find('=');
+	left_ast = nullptr;
+	right_ast = nullptr;
+	left_ast = compute_expression(line.substr(0, pos), data, false);
+	try
+	{
+		right_ast = compute_expression(line.substr(pos + 1), data, true);
+	}
+	catch (const LogicError &e)
+	{
+		if (left_ast)
+			delete left_ast;
+		throw LogicError(e.what());
+	}
+	catch (const std::exception &e)
+	{
+		equation_error(left_ast, right_ast, UnexpectedError(e.what()));
+	}
+	right_ast = compute_expression(line.substr(pos + 1), data, true);
+	equation(left_ast, right_ast, data.stored);
+	if (left_ast)
+		delete left_ast;
+	if (right_ast)
+		delete right_ast;
 }

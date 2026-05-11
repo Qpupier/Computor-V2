@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 15:41:52 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 17:31:00 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,16 +208,15 @@ void				delete_empty_function_stored(		\
 {
 	std::map<std::pair<std::string, std::string>, const IType*>::iterator	it;
 
-	for (it = stored.begin(); it != stored.end();)
+	for (it = stored.begin(); it != stored.end(); it++)
 		if (!it->second)
 		{
 			it = stored.erase(it);
-			if (throw_error)
-				throw LogicError(error_msg);
+			break;
 		}
-		else
-			it++;
-	std::cout << error_msg << std::endl;
+	if (throw_error)
+		throw LogicError(error_msg);
+	std::cerr << error_msg << std::endl;
 }
 
 AST*				compute_expression(const std::string &line, 		\
@@ -245,6 +244,14 @@ AST*				compute_expression(const std::string &line, 		\
 	if (is_right_side || !ast->end_of_tree())
 		ast->reduce_expression(data.stored);
 	if (is_right_side && waiting_function(data.stored))
-		set_function_right(data.stored, ast);
+		try
+		{
+			set_function_right(data.stored, ast);
+		}
+		catch (const LogicError &e)
+		{
+			delete ast;
+			throw;
+		}
 	return (ast);
 }
