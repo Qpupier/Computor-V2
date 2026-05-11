@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 17:31:26 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 17:44:20 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,6 @@ void	compute_equation(const std::string &line, t_data &data)
 	{
 		equation_error(left_ast, right_ast, UnexpectedError(e.what()));
 	}
-	right_ast = compute_expression(line.substr(pos + 1), data, true);
 	equation(left_ast, right_ast, data.stored);
 	if (left_ast)
 		delete left_ast;
