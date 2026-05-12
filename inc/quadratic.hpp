@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:43:37 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/04 18:30:39 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/12 18:30:11 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ bool					print_imaginary_part(								\
 void					print_real_part(									\
 		t_quadratic_solutions &solutions, int index, bool reduce_sqrt);
 void					print_rounded_solutions(							\
-		t_quadratic_solutions &solutions, bool reduce_sqrt, std::string var);
+		t_quadratic_solutions &solutions, bool reduce_sqrt, 				\
+		std::string var, int nb_solutions);
 void					print_solutions(t_quadratic_solutions& solutions, 	\
 		std::string set, std::string var);
 void					reduce_sqrt(int *factor, int *sqrt);

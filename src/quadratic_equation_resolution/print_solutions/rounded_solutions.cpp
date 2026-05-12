@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:27:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/04 17:49:46 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/12 18:32:09 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,11 @@ static void	rounded_calculations(t_quadratic_solutions &solutions, 	\
 }
 
 static void	print_solution(std::string var, double x_real[2], 	\
-		double x_imaginary[2], int i)
+		double x_imaginary[2], int i, bool print_solution_number)
 {
-	std::cout << var << (i + 1);
+	std::cout << var;
+	if (print_solution_number)
+		std::cout << i + 1;
 	if (x_real[i] == int(x_real[i]) && x_imaginary[i] == int(x_imaginary[i]))
 		std::cout << " = ";
 	else
@@ -74,7 +76,7 @@ static void	print_solution(std::string var, double x_real[2], 	\
 }
 
 void		print_rounded_solutions(t_quadratic_solutions &solutions, 	\
-		bool reduce_sqrt, std::string var)
+		bool reduce_sqrt, std::string var, int nb_solutions)
 {
 	double	sqrt_real;
 	double	sqrt_imaginary;
@@ -84,8 +86,11 @@ void		print_rounded_solutions(t_quadratic_solutions &solutions, 	\
 	sqrt_calculations(reduce_sqrt, solutions, sqrt_real, sqrt_imaginary);
 	rounded_calculations(solutions, sqrt_real, sqrt_imaginary, 	\
 			x_real, x_imaginary);
-	std::cout << COLOR_DIM;
-	for (int i = 0; i < 2; i++)
-		print_solution(var, x_real, x_imaginary, i);
+	if (nb_solutions == 2)
+		std::cout << COLOR_DIM;
+	else
+		std::cout << COLOR_BOLD;
+	for (int i = 0; i < nb_solutions; i++)
+		print_solution(var, x_real, x_imaginary, i, nb_solutions == 2);
 	std::cout << COLOR_RESET;
 }

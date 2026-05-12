@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:03:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 15:59:25 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/12 18:36:13 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void		find_solutions(IType *tmp_a, IType *tmp_b, 	\
 		throw UnsupportedError("Solutions can only be found in ℝ or ℂ");
 	}
 	solutions_structure = get_solutions_structure(a, b, delta);
-	set = delta->getReal() > Rational(0) && !delta->getImaginary() ? "ℝ" : "ℂ";
+	set = delta->getImaginary() ? "ℂ" : "ℝ";
 	delete a;
 	delete b;
 	delete delta;
