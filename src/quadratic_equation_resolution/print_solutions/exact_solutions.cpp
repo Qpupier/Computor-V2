@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:19:13 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/12 19:10:33 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/12 19:28:01 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,13 @@ static void			print_exact_solutions(t_quadratic_solutions& 	\
 		std::cout << "Two solutions in ";
 	std::cout << set << ":" << std::endl << "S = {";
 	print_real_part(solutions, 0, reduce_sqrt);
+	std::cout << " + ";// TODO: Ameliorer le print
 	print_imaginary_part(solutions, 0, reduce_sqrt);
 	if (nb_solutions == 2)
 	{
 		std::cout << ", ";
 		print_real_part(solutions, 1, reduce_sqrt);
+		std::cout << " + ";
 		print_imaginary_part(solutions, 1, reduce_sqrt);
 	}
 	std::cout << "} ∈ " << set << COLOR_RESET << std::endl;

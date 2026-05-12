@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/12 17:02:37 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/12 19:30:15 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ static int	loop(std::string &line, t_data &data, bool is_interactive)
 			std::cerr << "\033[31mError reading input\033[0m" << std::endl;
 			return (EXIT_FAILURE);
 		}
-		if (line == "quit")// TODO: Ameliorer avec les whitespaces
+		if (std::regex_match(line, data.patterns.at(TOKEN_QUIT)))
 			return (EXIT_SUCCESS);
 		compute_line(line, data);
 		if (std::cin.eof())
