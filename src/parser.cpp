@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 17:31:00 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/12 16:37:24 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,24 @@ static std::string	new_operator(Token::t_token prev_token, Token::t_token curren
 	return ("*");
 }
 
+static void			store_new_variable(std::map<std::pair<std::string, std::string>, const IType*> &stored, std::pair<std::string, std::string> key)
+{
+	for (std::map<std::pair<std::string, std::string>, const IType*>::iterator it(stored.begin()); it != stored.end();)
+	{
+		if (to_lower(key.second) == to_lower(it->first.first))
+			throw LogicError("Function parameter is already defined");
+		if (to_lower(key.first) == to_lower(it->first.first))
+		{
+			delete it->second;
+			it = stored.erase(it);
+		}
+		else
+			it++;
+	}
+}
+
 static bool			set_function_left(std::vector<Token> &tokens, std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
-	std::map<std::pair<std::string, std::string>, const IType*>::iterator	it;
 	std::pair<std::string, std::string>										pair;
 
 	if (tokens.size() == 4 && tokens[0].getType() == Token::E_POLYNOMIAL 	\
@@ -103,20 +118,8 @@ static bool			set_function_left(std::vector<Token> &tokens, std::map<std::pair<s
 			&& tokens[2].getType() == Token::E_POLYNOMIAL 					\
 			&& tokens[3].getType() == Token::E_RIGHT_PARENTHESIS)
 	{
-		pair.first = tokens[0].getValue();
+		pair.first = "_" + tokens[0].getValue();
 		pair.second = tokens[2].getValue();
-		for (it = stored.begin(); it != stored.end();)
-		{
-			if (to_lower(it->first.first) == to_lower(pair.second))
-				throw LogicError("Function parameter is already defined");
-			if (to_lower(it->first.first) == to_lower(pair.first))
-			{
-				delete it->second;
-				it = stored.erase(it);
-			}
-			else
-				it++;
-		}
 		stored[pair] = nullptr;
 		return (true);
 	}
@@ -143,6 +146,16 @@ static void			set_function_right(std::map<std::pair<std::string, std::string>, c
 				delete polynomial;
 				delete_empty_function_stored(stored, 	\
 						"Function parameter does not match the variable in the right side of the equation", true);
+			}
+			key.first.erase(0, 1);
+			try
+			{
+				store_new_variable(stored, key);
+			}
+			catch (const LogicError &e)
+			{
+				delete polynomial;
+				throw;
 			}
 			polynomial->setName("χ");
 			key.second = polynomial->getName();
@@ -220,7 +233,7 @@ void				delete_empty_function_stored(		\
 }
 
 AST*				compute_expression(const std::string &line, 		\
-		t_data &data, bool is_right_side)
+		t_data &data, bool is_right_side, const bool eval)
 {
 	std::string::const_iterator	end(line.end());
 	std::vector<Token>			tokens;
@@ -233,9 +246,9 @@ AST*				compute_expression(const std::string &line, 		\
 	whitespaces_format_error(tokens);
 	remove_whitespaces(tokens);
 	semantic_verification(tokens);
-	if (tokens.size() && tokens[tokens.size() - 1].getType() == Token::E_QUESTION)
+	if (!tokens.empty() && tokens[tokens.size() - 1].getType() == Token::E_QUESTION)
 		tokens.pop_back();
-	if (!is_right_side && set_function_left(tokens, data.stored))
+	if (!is_right_side && !eval && set_function_left(tokens, data.stored))
 		return (nullptr);
 	set_missing_operators(tokens);
 	ast = build_ast(tokens, data);
@@ -243,15 +256,7 @@ AST*				compute_expression(const std::string &line, 		\
 		throw ERROR_INVALID_EXPRESSION;
 	if (is_right_side || !ast->end_of_tree())
 		ast->reduce_expression(data.stored);
-	if (is_right_side && waiting_function(data.stored))
-		try
-		{
-			set_function_right(data.stored, ast);
-		}
-		catch (const LogicError &e)
-		{
-			delete ast;
-			throw;
-		}
+	if (is_right_side && !eval && waiting_function(data.stored))
+		set_function_right(data.stored, ast);
 	return (ast);
 }

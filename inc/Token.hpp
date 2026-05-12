@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:10:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/11 19:01:06 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/12 16:23:35 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,11 @@
 # define TOKEN_QUESTION			TOKEN_WHITESPACE "\\?" TOKEN_WHITESPACE
 # define TOKEN_LIST				"^" TOKEN_QUESTION "$"
 # define TOKEN_EXPRESSION		"[^=\\?]+"
-# define TOKEN_SIDE				"(?:" TOKEN_EXPRESSION "|" TOKEN_QUESTION ")"
-# define TOKEN_EQUATION			TOKEN_EXPRESSION "=" TOKEN_SIDE "(?:" TOKEN_QUESTION ")?"
-# define TOKEN_FULL				"^(?:" TOKEN_SIDE "|" TOKEN_EQUATION ")$"
-# define TOKEN_POLYNOMIAL			"(?:[a-zA-Z]{2,}|[a-hj-zA-HJ-Z])"
+# define TOKEN_EQUATION			TOKEN_EXPRESSION "(?:=(?:" TOKEN_EXPRESSION ")?(?:" TOKEN_QUESTION ")?)?"
+# define TOKEN_EXPRESSION_EVAL	TOKEN_EXPRESSION "=" TOKEN_QUESTION
+# define TOKEN_EQUATION_EVAL	TOKEN_EXPRESSION "=" TOKEN_EXPRESSION TOKEN_QUESTION
+# define TOKEN_FULL				"^(?:" TOKEN_EXPRESSION "|" TOKEN_EQUATION ")$"
+# define TOKEN_POLYNOMIAL		"(?:[a-zA-Z]{2,}|[a-hj-zA-HJ-Z])"
 # define TOKEN_NUMBER			"\\d+(?:\\.\\d+)?"
 # define TOKEN_IMAGINARY		"i"
 # define TOKEN_OPERATOR			"(?:\\*\\*|[\\+\\-\\*\\/\\^%])"

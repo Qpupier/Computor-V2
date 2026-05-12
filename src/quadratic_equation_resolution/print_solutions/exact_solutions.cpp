@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:19:13 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/04 18:32:51 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/11 17:58:23 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	print_exact_solutions(t_quadratic_solutions &solutions, 	\
 {
 	bool	has_imaginary_part;
 
-	std::cout << "S = {";
+	std::cout << "S = {";// TODO: Fusionner les 2 solutions si elles sont égales
 	print_real_part(solutions, 0, reduce_sqrt);
 	has_imaginary_part = print_imaginary_part(solutions, 0, reduce_sqrt);
 	std::cout << ", ";

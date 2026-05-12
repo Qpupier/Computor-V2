@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 17:44:20 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/12 16:46:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,7 @@ static void				equation(AST *left_ast, AST *right_ast, 	\
 	IType*		all_left;
 	Polynomial*	polynomial;
 
-	if (!left_ast)
-		return ;
-	if (!left_ast->end_of_tree() || !right_ast->end_of_tree())
+	if (!left_ast || !left_ast->end_of_tree() || !right_ast || !right_ast->end_of_tree())
 		equation_error(left_ast, right_ast, UnexpectedError("Invalid AST: not an expression"));
 	left = left_ast->getNode()->clone();
 	right = right_ast->getNode()->clone();
@@ -117,19 +115,17 @@ static void				equation(AST *left_ast, AST *right_ast, 	\
 	delete polynomial;
 }
 
-void	compute_equation(const std::string &line, t_data &data)
+void	compute_equation(const std::string &line, t_data &data, const bool eval)
 {
 	AST*		left_ast;
 	AST*		right_ast;
 	std::size_t	pos;
 
 	pos = line.find('=');
-	left_ast = nullptr;
-	right_ast = nullptr;
-	left_ast = compute_expression(line.substr(0, pos), data, false);
+	left_ast = compute_expression(line.substr(0, pos), data, false, eval);
 	try
 	{
-		right_ast = compute_expression(line.substr(pos + 1), data, true);
+		right_ast = compute_expression(line.substr(pos + 1), data, true, eval);
 	}
 	catch (const LogicError &e)
 	{
@@ -141,7 +137,8 @@ void	compute_equation(const std::string &line, t_data &data)
 	{
 		equation_error(left_ast, right_ast, UnexpectedError(e.what()));
 	}
-	equation(left_ast, right_ast, data.stored);
+	if (left_ast)
+		equation(left_ast, right_ast, data.stored);
 	if (left_ast)
 		delete left_ast;
 	if (right_ast)

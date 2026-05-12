@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 17:10:01 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/12 17:02:37 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	free_stored(const std::map<std::pair<std::string, std::string>, cons
 	}
 }
 
-static void	stored_varaiables(const std::map<std::pair<std::string, std::string>, const IType*> &stored)
+static void	stored_variables(const std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
 	std::map<std::pair<std::string, std::string>, const IType*>::const_iterator	it(stored.begin());
 
@@ -40,7 +40,7 @@ static void	stored_varaiables(const std::map<std::pair<std::string, std::string>
 	}
 }
 
-static void	print_expression(const std::string &line, t_data &data)
+void	print_expression(const std::string &line, t_data &data)
 {
 	AST*	ast;
 
@@ -57,9 +57,26 @@ static void	print_expression(const std::string &line, t_data &data)
 	delete ast;
 }
 
-static void	parse_line(const std::string &line, t_data &data)
+static bool	is_eval(std::string &line, t_data &data, long int *nb_equal)
+{
+	if (std::regex_match(line, data.patterns.at(TOKEN_EXPRESSION_EVAL)))
+	{
+		*nb_equal = 0;
+		line.erase(line.find('='), line.size());
+		return (true);
+	}
+	if (std::regex_match(line, data.patterns.at(TOKEN_EQUATION_EVAL)))
+	{
+		line.erase(line.find('?'), line.size());
+		return (true);
+	}
+	return (false);
+}
+
+static void	parse_line(std::string &line, t_data &data)
 {
 	long int	nb_equal;
+	bool		eval(false);
 
 	nb_equal = std::count(line.begin(), line.end(), '=');
 	if (nb_equal > 1)
@@ -68,20 +85,22 @@ static void	parse_line(const std::string &line, t_data &data)
 		throw LogicError("Too many '?' in the expression");
 	if (!std::regex_match(line, data.patterns.at(TOKEN_FULL)))
 		throw ERROR_INVALID_EXPRESSION;
+	if (nb_equal && is_eval(line, data, &nb_equal))
+		eval = true;
 	if (nb_equal)
-		compute_equation(line, data);
+		compute_equation(line, data, eval);
 	else if (line.find('?') != std::string::npos)
-		stored_varaiables(data.stored);
+		stored_variables(data.stored);
 	else
 		print_expression(line, data);
 }
 
-static void	compute_line(const std::string &line, t_data &data)
+static void	compute_line(std::string &line, t_data &data)
 {
 	if (line.empty())
 		return;
 	if (std::regex_match(line, data.patterns.at(TOKEN_LIST)))
-		return stored_varaiables(data.stored);
+		return stored_variables(data.stored);
 	try
 	{
 		parse_line(line, data);
@@ -108,7 +127,7 @@ static int	loop(std::string &line, t_data &data, bool is_interactive)
 			std::cerr << "\033[31mError reading input\033[0m" << std::endl;
 			return (EXIT_FAILURE);
 		}
-		if (line == "quit")
+		if (line == "quit")// TODO: Ameliorer avec les whitespaces
 			return (EXIT_SUCCESS);
 		compute_line(line, data);
 		if (std::cin.eof())

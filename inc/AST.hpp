@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:01:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 17:09:49 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/12 16:32:08 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,9 @@ class	AST
 std::ostream &operator<<(std::ostream &os, const AST &ast);
 
 // Functions
-AST*	compute_expression(const std::string &line, t_data &data, bool is_right_side);
+AST*	compute_expression(const std::string &line, t_data &data, bool is_right_side, const bool eval = true);
 AST*	build_ast(std::vector<Token> &tokens, t_data &data);
-void	compute_equation(const std::string &line, t_data &data);
+void	compute_equation(const std::string &line, t_data &data, const bool eval);
+void	print_expression(const std::string &line, t_data &data);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 20:00:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/27 18:08:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/12 16:24:15 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,7 @@ void	define_patterns(std::map<std::string, std::regex> &patterns)
 	patterns[TOKEN_LIST] = std::regex(TOKEN_LIST);
 	patterns[TOKEN_NEXT] = std::regex(TOKEN_NEXT);
 	patterns[TOKEN_FULL_EXPRESSION] = std::regex(TOKEN_FULL_EXPRESSION);
+	patterns[TOKEN_QUESTION] = std::regex(TOKEN_QUESTION);
+	patterns[TOKEN_EXPRESSION_EVAL] = std::regex(TOKEN_EXPRESSION_EVAL);
+	patterns[TOKEN_EQUATION_EVAL] = std::regex(TOKEN_EQUATION_EVAL);
 }
