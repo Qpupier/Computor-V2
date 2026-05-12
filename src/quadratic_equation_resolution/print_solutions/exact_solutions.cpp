@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:19:13 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/12 18:45:03 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/12 19:10:33 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,29 +35,21 @@ static inline bool	solutions_equal(t_quadratic_solutions& 	\
 static void			print_exact_solutions(t_quadratic_solutions& 	\
 	solutions, std::string set, bool reduce_sqrt, int nb_solutions)
 {
-	bool	has_imaginary_part;
-
 	std::cout << COLOR_GREEN;
 	if (nb_solutions == 1)
 		std::cout << "One solution in ";
 	else
 		std::cout << "Two solutions in ";
-	std::cout << set << ":" << std::endl;// [ ]: Prendre en compte les resultats
-	std::cout << "S = {";
+	std::cout << set << ":" << std::endl << "S = {";
 	print_real_part(solutions, 0, reduce_sqrt);
-	has_imaginary_part = print_imaginary_part(solutions, 0, reduce_sqrt);
+	print_imaginary_part(solutions, 0, reduce_sqrt);
 	if (nb_solutions == 2)
 	{
 		std::cout << ", ";
 		print_real_part(solutions, 1, reduce_sqrt);
-		has_imaginary_part |= print_imaginary_part(solutions, 1, reduce_sqrt);
+		print_imaginary_part(solutions, 1, reduce_sqrt);
 	}
-	std::cout << "} ∈ ";
-	if (has_imaginary_part)
-		std::cout << "ℂ";
-	else
-		std::cout << set;
-	std::cout << COLOR_RESET << std::endl;
+	std::cout << "} ∈ " << set << COLOR_RESET << std::endl;
 }
 
 bool				parentheses_needed(const int term1, const int term2, 	\

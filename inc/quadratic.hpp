@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:43:37 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/12 18:30:11 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/12 19:09:59 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ std::string				get_sqrt_imaginary(t_quadratic_solutions &solutions);
 std::string				get_sqrt_real(t_quadratic_solutions &solutions);
 bool					parentheses_needed(const int term1, 				\
 		const int term2, const int term3);
-bool					print_imaginary_part(								\
+void					print_imaginary_part(								\
 		t_quadratic_solutions &solutions, int index, bool reduce_sqrt);
 void					print_real_part(									\
 		t_quadratic_solutions &solutions, int index, bool reduce_sqrt);

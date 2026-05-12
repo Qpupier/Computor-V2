@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:03:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/12 18:36:13 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/12 19:08:32 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,21 +32,24 @@ static IType*	get_discriminant(IType *a, IType *b, IType *c)
 	return (discriminant);
 }
 
-static void		find_solutions(IType *tmp_a, IType *tmp_b, 	\
+static void		find_solutions(IType *tmp_a, IType *tmp_b, IType *tmp_c, 	\
 		IType *tmp_delta, std::string var)
 {
 	Complex*				a;
 	Complex*				b;
+	Complex*				c;
 	Complex*				delta;
 	t_quadratic_solutions	solutions_structure;
 	std::string				set;
 
 	a = nullptr;
 	b = nullptr;
+	c = nullptr;
 	try
 	{
 		a = new Complex(*tmp_a);
 		b = new Complex(*tmp_b);
+		c = new Complex(*tmp_c);
 		delta = new Complex(*tmp_delta);
 	}
 	catch (const UnexpectedError &e)
@@ -55,12 +58,16 @@ static void		find_solutions(IType *tmp_a, IType *tmp_b, 	\
 			delete a;
 		if (b)
 			delete b;
+		if (c)
+			delete c;
 		throw UnsupportedError("Solutions can only be found in ℝ or ℂ");
 	}
 	solutions_structure = get_solutions_structure(a, b, delta);
-	set = delta->getImaginary() ? "ℂ" : "ℝ";
+	set = a->getImaginary() || b->getImaginary() || c->getImaginary() 	\
+			|| delta->getImaginary() ? "ℂ" : "ℝ";
 	delete a;
 	delete b;
+	delete c;
 	delete delta;
 	print_solutions(solutions_structure, set, var);
 }
@@ -94,6 +101,6 @@ void			solve_trinomial(Polynomial *polynomial)
 	b = terms[1].coefficient;
 	c = terms[0].coefficient;
 	discriminant = get_discriminant(a, b, c);
-	find_solutions(a, b, discriminant, polynomial->getName());
+	find_solutions(a, b, c, discriminant, polynomial->getName());
 	delete discriminant;
 }
