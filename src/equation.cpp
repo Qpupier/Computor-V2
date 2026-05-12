@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/12 16:46:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/12 17:09:41 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ void	compute_equation(const std::string &line, t_data &data, const bool eval)
 
 	pos = line.find('=');
 	left_ast = compute_expression(line.substr(0, pos), data, false, eval);
+	right_ast = nullptr;
 	try
 	{
 		right_ast = compute_expression(line.substr(pos + 1), data, true, eval);
