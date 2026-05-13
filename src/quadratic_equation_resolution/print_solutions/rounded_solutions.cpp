@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:27:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/13 12:33:55 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/13 17:24:19 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ static void	print_solution(std::string var, double x_real[2], 	\
 			std::cout << "-";
 		std::cout << -x_imaginary[i] << "i";
 	}
-	std::cout << std::endl;
 }
 
 void		print_rounded_solutions(								\
@@ -103,7 +102,11 @@ void		print_rounded_solutions(								\
 		std::cout << COLOR_DIM;
 	else
 		std::cout << COLOR_BOLD;
-	for (int i = 0; i < nb_solutions; i++)
-		print_solution(var, x_real, x_imaginary, i, nb_solutions == 2);
-	std::cout << COLOR_RESET;
+	print_solution(var, x_real, x_imaginary, 0, nb_solutions == 2);
+	if (nb_solutions == 2)
+	{
+		std::cout << std::endl;
+		print_solution(var, x_real, x_imaginary, 1, nb_solutions == 2);
+	}
+	std::cout << COLOR_RESET << std::endl;
 }
