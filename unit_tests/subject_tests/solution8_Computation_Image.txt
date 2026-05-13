@@ -1,0 +1,9 @@
+funA(χ) = χ + 8
+funB(χ) = χ^2 + 4χ - 1
+funC(χ) = 4χ + 3
+41
+15
+Listing stored variables and functions
+  funA(χ) = χ + 8
+  funB(χ) = χ^2 + 4χ - 1
+  funC(χ) = 4χ + 3

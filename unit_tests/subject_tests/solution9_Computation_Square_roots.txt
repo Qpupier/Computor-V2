@@ -1,0 +1,10 @@
+funA(χ) = χ^2 + 2χ + 1
+y = 0
+x^2 + 2x + 1 = 0
+Δ = 0
+One solution in ℝ:
+S = {-1} ∈ ℝ
+x = -1
+Listing stored variables and functions
+  funA(χ) = χ^2 + 2χ + 1
+  y = 0

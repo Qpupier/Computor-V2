@@ -13,6 +13,14 @@ run()
 	sed -i 's/\x1b\[[0-9;]*m//g' output error
 }
 
+run_output()
+{
+	echo -n "\033[35;3mTesting:\033[0m \"$1\"\n$2 "
+	echo "$1" | ./computor-v2 > output 2>&1
+	truncate -s -1 output error
+	sed -i 's/\x1b\[[0-9;]*m//g' output error
+}
+
 print_error()
 {
 	echo "\033[30mStandard output:\033[0m"
@@ -78,6 +86,25 @@ run_error()
 		diff -u expected error | grep -v "\ No newline at end of file"
 		echo "\033[0m"
 		print_error
+	fi
+	test_leaks_and_errors "$1" "$3"
+}
+
+run_batch()
+{
+	run_output "$1" "$2" "$3"
+	printf '%s' "$2" > expected
+	if ! diff -u expected output > /dev/null; then
+		echo "❌"
+		if [ "$3" != "debug" ]; then
+			return 1
+		fi
+		echo "\n\033[30mOutput differs from expected:\033[0m"
+		echo -n "\033[31m"
+		diff -u expected output | grep -v "\ No newline at end of file"
+		echo "\033[0m"
+		delete_files
+		exit 1
 	fi
 	test_leaks_and_errors "$1" "$3"
 }

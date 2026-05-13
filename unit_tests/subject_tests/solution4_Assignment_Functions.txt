@@ -1,0 +1,6 @@
+funA(χ) = 2χ^5 + 4χ^2 - 5χ + 4
+Division by zero is impossible
+funC(χ) = -2χ - 5
+Listing stored variables and functions
+  funA(χ) = 2χ^5 + 4χ^2 - 5χ + 4
+  funC(χ) = -2χ - 5

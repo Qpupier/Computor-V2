@@ -1,0 +1,9 @@
+funA(χ) = 3χ
+funB(χ) = 2χ
+funC(χ) = (6χ - 11) / 3
+funD(χ) = 2χ
+Listing stored variables and functions
+  funA(χ) = 3χ
+  funB(χ) = 2χ
+  funC(χ) = (6χ - 11) / 3
+  funD(χ) = 2χ

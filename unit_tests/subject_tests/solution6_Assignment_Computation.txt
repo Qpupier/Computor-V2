@@ -1,0 +1,12 @@
+varA = 27
+varB = 53
+funA(χ) = (2χ + 477) / 2
+varC = 1
+varD = 479/2
+varD = 239.5
+Listing stored variables and functions
+  funA(χ) = (2χ + 477) / 2
+  vara = 27
+  varb = 53
+  varc = 1
+  vard = 479/2

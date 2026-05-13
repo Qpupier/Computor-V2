@@ -1,0 +1,6 @@
+funA(χ) = 2χ + 1
+funB(χ) = 2χ + 1
+4x + 3
+Listing stored variables and functions
+  funA(χ) = 2χ + 1
+  funB(χ) = 2χ + 1

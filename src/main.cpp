@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/12 19:30:15 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/13 16:29:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ static void	stored_variables(const std::map<std::pair<std::string, std::string>,
 {
 	std::map<std::pair<std::string, std::string>, const IType*>::const_iterator	it(stored.begin());
 
-	std::cerr << "\033[33mListing stored variables and functions\033[0m" << std::endl;
+	std::cout << "\033[33mListing stored variables and functions\033[0m" << std::endl;
 	while (it != stored.end())
 	{
-		std::cerr << "\033[33m  ";
+		std::cout << "\033[33m  ";
 		if (!it->first.second.empty())
 			std::cout << it->first.first << "(" << it->first.second << ")";
 		else

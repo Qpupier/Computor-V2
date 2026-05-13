@@ -1,0 +1,9 @@
+matA = [ 1 , 2 ]
+[ 3 , 2 ]
+[ 3 , 4 ]
+matB = [ 1 , 2 ]
+Listing stored variables and functions
+  mata = [ 1 , 2 ]
+[ 3 , 2 ]
+[ 3 , 4 ]
+  matb = [ 1 , 2 ]

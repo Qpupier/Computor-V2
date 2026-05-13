@@ -1,0 +1,7 @@
+varA = [ 2 , 3 ]
+[ 4 , 3 ]
+varB = [ 3 , 4 ]
+Listing stored variables and functions
+  vara = [ 2 , 3 ]
+[ 4 , 3 ]
+  varb = [ 3 , 4 ]

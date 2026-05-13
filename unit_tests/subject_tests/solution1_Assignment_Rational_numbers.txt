@@ -1,0 +1,9 @@
+varA = 2
+varB = 2121/500
+varB = 4.242
+varC = -43/10
+varC = -4.3
+Listing stored variables and functions
+  vara = 2
+  varb = 2121/500
+  varc = -43/10
