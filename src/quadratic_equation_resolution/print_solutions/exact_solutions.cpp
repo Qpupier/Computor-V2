@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:19:13 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/12 19:28:01 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/13 12:23:53 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,23 +35,34 @@ static inline bool	solutions_equal(t_quadratic_solutions& 	\
 static void			print_exact_solutions(t_quadratic_solutions& 	\
 	solutions, std::string set, bool reduce_sqrt, int nb_solutions)
 {
+	bool	has_real_part;
+	bool	has_imaginary_part;
+
 	std::cout << COLOR_GREEN;
 	if (nb_solutions == 1)
 		std::cout << "One solution in ";
 	else
 		std::cout << "Two solutions in ";
 	std::cout << set << ":" << std::endl << "S = {";
-	print_real_part(solutions, 0, reduce_sqrt);
-	std::cout << " + ";// TODO: Ameliorer le print
-	print_imaginary_part(solutions, 0, reduce_sqrt);
-	if (nb_solutions == 2)
+	for (int i = 0; i < nb_solutions; i++)
 	{
-		std::cout << ", ";
-		print_real_part(solutions, 1, reduce_sqrt);
-		std::cout << " + ";
-		print_imaginary_part(solutions, 1, reduce_sqrt);
+		if (i)
+			std::cout << ", ";
+		has_real_part = solutions.real_term1[i] || solutions.real_term2_factor[i] || solutions.real_term3_factor[i];
+		has_imaginary_part = solutions.imaginary_term1[i] || solutions.imaginary_term2_factor[i] || solutions.imaginary_term3_factor[i];
+		if (has_real_part || !has_imaginary_part)
+			print_real_part(solutions, i, reduce_sqrt);
+		if (has_imaginary_part)
+		{
+			if (has_real_part)
+				std::cout << " + ";
+			print_imaginary_part(solutions, i, reduce_sqrt);
+		}
+		if (nb_solutions == 1)
+			break;
 	}
 	std::cout << "} ∈ " << set << COLOR_RESET << std::endl;
+	// TODO: Assignation si nb_solutions == 1
 }
 
 bool				parentheses_needed(const int term1, const int term2, 	\

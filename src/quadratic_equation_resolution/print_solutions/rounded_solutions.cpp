@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:27:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/12 18:32:09 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/13 12:20:53 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,14 @@ static void	rounded_calculations(t_quadratic_solutions &solutions, 	\
 {
 	for (int i = 0; i < 2; i++)
 	{
-		x_real[i] = solutions.real_term1[i] 						\
+		x_real[i] = (solutions.real_term1[i] 						\
 				+ solutions.real_term2_factor[i] * sqrt_real 		\
-				+ solutions.real_term3_factor[i] * sqrt_imaginary;
-		x_imaginary[i] = solutions.imaginary_term1[i] 				\
+				+ solutions.real_term3_factor[i] * sqrt_imaginary) 	\
+				/ solutions.real_denominator[i];
+		x_imaginary[i] = (solutions.imaginary_term1[i] 				\
 				+ solutions.imaginary_term2_factor[i] * sqrt_real 	\
-				+ solutions.imaginary_term3_factor[i] * sqrt_imaginary;
+				+ solutions.imaginary_term3_factor[i] * sqrt_imaginary) \
+				/ solutions.imaginary_denominator[i];
 	}
 	if ((x_imaginary[0] == 0 && x_imaginary[1] == 0 						\
 				&& x_real[0] > x_real[1]) 									\
@@ -69,9 +71,19 @@ static void	print_solution(std::string var, double x_real[2], 	\
 	if (x_real[i] != 0 || x_imaginary[i] == 0)
 		std::cout << x_real[i];
 	if (x_imaginary[i] > 0)
-		std::cout << " + " << x_imaginary[i] << "i";
+	{
+		if (x_real[i] != 0)
+			std::cout << " + ";
+		std::cout << x_imaginary[i] << "i";
+	}
 	else if (x_imaginary[i] < 0)
-		std::cout << " - " << -x_imaginary[i] << "i";
+	{
+		if (x_real[i] != 0)
+			std::cout << " - ";
+		else
+			std::cout << "-";
+		std::cout << -x_imaginary[i] << "i";
+	}
 	std::cout << std::endl;
 }
 

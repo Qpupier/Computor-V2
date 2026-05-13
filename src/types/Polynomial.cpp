@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 14:24:01 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/13 12:16:45 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ static void								print_coefficient(std::ostream &os, IType *coefficient, unsig
 		os << *coefficient;
 	if (need_parenthesis)
 		os << ")";
-	else if (complex && complex->getImaginary())
+	else if (complex && complex->getImaginary() && power)
 		os << " * ";
 	delete coefficient;
 }
