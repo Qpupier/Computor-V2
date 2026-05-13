@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:01:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/12 16:32:08 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/13 19:07:23 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ class	AST
 		// Methods
 		std::ostream&	print(std::ostream &os) const;
 		bool			end_of_tree(void) const;
+		void			free(void);
 		void			reduce_expression(std::map<std::pair<std::string, std::string>, const IType*> &stored);
 		void			replace_variables(std::map<std::pair<std::string, std::string>, const IType*> &stored);
 

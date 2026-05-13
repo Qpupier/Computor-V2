@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/12 17:09:41 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/13 19:05:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,13 @@ static void			assignation(std::string var, std::map<std::pair<std::string, std::
 	stored[pair] = result;
 }
 
-static void			trinomial(Polynomial *polynomial)
+static void			trinomial(const Polynomial *polynomial)
 {
 	std::cout << COLOR_BOLD << *polynomial << " = 0" << COLOR_RESET << std::endl;
 	solve_trinomial(polynomial);
 }
 
-static void			binomial(Polynomial *polynomial, 				\
+static void			binomial(const Polynomial *polynomial, 				\
 		std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
 	std::vector<Polynomial::t_term>	terms(polynomial->getTerms());
@@ -69,7 +69,7 @@ static void			binomial(Polynomial *polynomial, 				\
 	assignation(polynomial->getName(), stored, result);
 }
 
-static void			monomial(Polynomial *polynomial)
+static void			monomial(const Polynomial *polynomial)
 {
 	if (polynomial->getTerms().empty())
 		std::cout << COLOR_BOLD << "True" << COLOR_RESET << std::endl;
@@ -77,7 +77,7 @@ static void			monomial(Polynomial *polynomial)
 		std::cout << COLOR_BOLD << "False" << COLOR_RESET << std::endl;
 }
 
-static void			display_result(Polynomial *polynomial, std::map<std::pair<std::string, std::string>, const IType*> &stored)
+static void			display_result(const Polynomial *polynomial, std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
 	unsigned long int	degree;
 

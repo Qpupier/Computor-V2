@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/13 12:16:45 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/13 19:24:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -388,21 +388,7 @@ Polynomial::Polynomial(const IType &other)
 
 Polynomial::~Polynomial(void)
 {
-	std::vector<t_term>::const_iterator	it_terms(this->_terms.begin());
-	std::vector<t_term>::const_iterator	it_dividers(this->_dividers.begin());
-
-	while (it_terms != this->_terms.end())
-	{
-		delete it_terms->coefficient;
-		it_terms++;
-	}
-	this->_terms.clear();
-	while (it_dividers != this->_dividers.end())
-	{
-		delete it_dividers->coefficient;
-		it_dividers++;
-	}
-	this->_dividers.clear();
+	this->free();
 }
 
 
@@ -414,7 +400,7 @@ Polynomial&	Polynomial::operator=(const Polynomial &other)
 
 	if (this != &other)
 	{
-		this->~Polynomial();
+		this->free();
 		this->_name = other._name;
 		while (it_terms != other._terms.end())
 		{
@@ -808,8 +794,7 @@ Polynomial*	Polynomial::operator/(const Polynomial &other) const
 	if (is_it_different_variables(*this, other))
 		throw UNSUPPORTED_MULTI_POLYNOMIALS;
 	result = new Polynomial(this->_name);
-	free_vector_terms(result->_terms);
-	free_vector_terms(result->_dividers);
+	result->free();
 	result->_terms = multiply_vectors(this->_terms, other._dividers);
 	result->_dividers = multiply_vectors(this->_dividers, other._terms);
 	result->reduce();
@@ -1069,6 +1054,12 @@ std::ostream&	Polynomial::print(std::ostream &os) const
 	return (os);
 }
 
+void			Polynomial::free(void)
+{
+	free_vector_terms(this->_terms);
+	free_vector_terms(this->_dividers);
+}
+
 void			Polynomial::print_variable(const std::string var) const
 {
 	(void)var;
@@ -1118,7 +1109,7 @@ void			Polynomial::reduce(void)
 	this->sort_powers();
 	if (this->_dividers.empty())
 	{
-		delete this;
+		this->free();
 		throw ERROR_DIVISION_BY_ZERO;
 	}
 	division_result = euclidean_division(this->_terms, this->_dividers, true);

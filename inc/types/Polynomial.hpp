@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 14:23:24 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/13 19:06:31 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ class	Polynomial: public IType
 		IType*			clone(void) const;
 		Rational*		gcd(const IType &other) const;
 		std::ostream&	print(std::ostream &os) const;
+		void			free(void);
 		void			print_variable(const std::string var) const;
 		void			sort_powers(void);
 		void			factorize_constant_factor(void);
@@ -117,6 +118,6 @@ std::ostream	&operator<<(std::ostream &os, const Polynomial &num);
 
 // Functions
 std::string	to_lower(std::string s);
-void		solve_trinomial(Polynomial *polynomial);
+void		solve_trinomial(const Polynomial *polynomial);
 
 #endif

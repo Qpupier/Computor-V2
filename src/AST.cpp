@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/05 14:43:50 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/13 19:14:49 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,12 +116,7 @@ AST::AST(const Token &token, AST *left, AST *right, t_data &data): AST(token, da
 
 AST::~AST(void)
 {
-	if (this->_left)
-		delete this->_left;
-	if (this->_right)
-		delete this->_right;
-	if (this->_node)
-		delete this->_node;
+	this->free();
 }
 
 
@@ -130,10 +125,10 @@ AST&	AST::operator=(const AST &other)
 {
 	if (this != &other)
 	{
-		delete this;
-		_node = other._node->clone();
-		_left = other._left;
-		_right = other._right;
+		this->free();
+		this->_node = other._node->clone();
+		this->_left = other._left;
+		this->_right = other._right;
 	}
 	return (*this);
 }
@@ -191,6 +186,19 @@ bool			AST::end_of_tree(void) const
 	return (false);
 }
 
+void			AST::free(void)
+{
+	if (this->_left)
+		delete this->_left;
+	this->_left = nullptr;
+	if (this->_right)
+		delete this->_right;
+	this->_right = nullptr;
+	if (this->_node)
+		delete this->_node;
+	this->_node = nullptr;
+}
+
 void			AST::reduce_expression(std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
 	Operator*	op;
@@ -211,10 +219,10 @@ void			AST::reduce_expression(std::map<std::pair<std::string, std::string>, cons
 	}
 	catch(const std::exception& e)
 	{
-		delete this;
+		this->free();
 		throw;
 	}
-	this->~AST();
+	this->free();
 	this->_node = result;
 	this->_left = nullptr;
 	this->_right = nullptr;

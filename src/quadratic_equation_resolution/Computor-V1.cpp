@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:03:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/12 19:08:32 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/13 18:02:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void			reduce_sqrt(int *factor, int *sqrt)
 	}
 }
 
-void			solve_trinomial(Polynomial *polynomial)
+void			solve_trinomial(const Polynomial *polynomial)
 {
 	std::vector<Polynomial::t_term>	terms(polynomial->getTerms());
 	IType*							a;

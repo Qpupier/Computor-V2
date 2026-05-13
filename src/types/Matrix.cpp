@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/12 16:32:22 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/13 19:12:10 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,11 +172,7 @@ Matrix::Matrix(const IType &other): Matrix()
 
 Matrix::~Matrix(void)
 {
-	if (!this->_matrix || !this->_width || !this->_height)
-		return ;
-	for (unsigned int i = 0; i < this->_height; i++)
-		delete[] this->_matrix[i];
-	delete[] this->_matrix;
+	this->free();
 }
 
 
@@ -185,7 +181,7 @@ Matrix&		Matrix::operator=(const Matrix &other)
 {
 	if (this == &other)
 		return (*this);
-	this->~Matrix();
+	this->free();
 	this->_width = other._width;
 	this->_height = other._height;
 	this->_matrix = new Rational*[other._height];
@@ -873,6 +869,24 @@ std::ostream&	Matrix::print(std::ostream &os) const
 	return (os);
 }
 
+void			Matrix::error(const LogicError &e)
+{
+	this->free();
+	throw e;
+}
+
+void			Matrix::free(void)
+{
+	if (!this->_matrix || !this->_width || !this->_height)
+		return ;
+	for (unsigned int i = 0; i < this->_height; i++)
+		delete[] this->_matrix[i];
+	delete[] this->_matrix;
+	this->_width = 0;
+	this->_height = 0;
+	this->_matrix = nullptr;
+}
+
 void			Matrix::print_variable(const std::string var) const
 {
 	unsigned long	width;
@@ -899,12 +913,6 @@ void			Matrix::print_variable(const std::string var) const
 			std::cout << std::endl;
 	}
 	std::cout << COLOR_RESET << std::endl;
-}
-
-void			Matrix::error(const LogicError &e) const
-{
-	this->~Matrix();
-	throw e;
 }
 
 bool			Matrix::finite_decimals(void) const

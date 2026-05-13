@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 16:48:49 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/12 12:25:28 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/13 19:21:49 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,8 @@ static AST					*build_node(std::vector<Token> &tokens, 	\
 		std::vector<Token>::const_iterator tokens_end, long int pos, 	\
 		t_data &data)
 {
-	AST									*left_child;
-	AST									*right_child;
+	AST*								left_child;
+	AST*								right_child;
 	std::vector<Token>::const_iterator	tokens_operator;
 	std::vector<Token>					left_tokens;
 	std::vector<Token>					right_tokens;
@@ -129,8 +129,10 @@ static AST					*build_node(std::vector<Token> &tokens, 	\
 	right_child = build_ast(right_tokens, data);
 	if (!left_child || !right_child)
 	{
-		if (!right_child)
+		if (left_child)
 			delete left_child;
+		if (right_child)
+			delete right_child;
 		throw LogicError("Invalid expression: empty parenthesis");
 	}
 	return (new AST(tokens[static_cast<unsigned long int>(pos)], left_child, right_child, data));
