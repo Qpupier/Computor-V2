@@ -2,7 +2,7 @@
 
 . ./unit_tests/utils.sh
 
-echo "\033[34;1mTesting matrices in 1 expression\033[0m\n"
+echo "\033[34;1mTesting matrices in a single expression\033[0m\n"
 
 status=0
 

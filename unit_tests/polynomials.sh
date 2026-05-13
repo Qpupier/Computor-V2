@@ -2,7 +2,7 @@
 
 . ./unit_tests/utils.sh
 
-echo "\033[34;1mTesting polynomials in 1 expression\033[0m\n"
+echo "\033[34;1mTesting polynomials in a single expression\033[0m\n"
 
 status=0
 
@@ -18,5 +18,16 @@ run_test "-1 * x^2 + i*x -3x +1" "-x^2 + (i - 3)x + 1" $1 ; status=$((status | $
 run_test "x^2 +i * x -3x +1 -x2i" "x^2 - (3 + i)x + 1" $1 ; status=$((status | $?))
 
 run_error "43 * y / (4 % 2 * y)" "Division by zero is impossible" $1 ; status=$((status | $?))
+
+echo "\n\033[34;1mTesting polynomials in equations\033[0m\n"
+
+run_test "2 * varA - 5 %4 = 0" "varA = 1/2
+varA = 0.5" $1 ; status=$((status | $?))
+run_test "4 -5 + (x + 2)^2 - 4 = 0" "x^2 + 4x - 1 = 0
+Δ = 20
+Two solutions in ℝ:
+S = {-2 - √5, -2 + √5} ∈ ℝ
+x1 ≈ -4.23607
+x2 ≈ 0.236068" $1 ; status=$((status | $?))
 
 return $status

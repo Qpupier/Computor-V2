@@ -47,8 +47,6 @@
 *.out
 .obj
 computor-v2
-out
 output
-err
 error
 expected
