@@ -6,14 +6,14 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:27:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/13 12:20:53 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/13 12:33:55 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "quadratic.hpp"
 
-static void	sqrt_calculations(bool reduce_sqrt, 				\
-		t_quadratic_solutions &solutions, double &sqrt_real, 	\
+static void	sqrt_calculations(bool reduce_sqrt, 					\
+		const t_quadratic_solutions &solutions, double &sqrt_real, 	\
 		double &sqrt_imaginary)
 {
 	double	term1;
@@ -32,8 +32,8 @@ static void	sqrt_calculations(bool reduce_sqrt, 				\
 	}
 }
 
-static void	rounded_calculations(t_quadratic_solutions &solutions, 	\
-		double sqrt_real, double sqrt_imaginary, double x_real[2], 	\
+static void	rounded_calculations(const t_quadratic_solutions &solutions, 	\
+		double sqrt_real, double sqrt_imaginary, double x_real[2], 			\
 		double x_imaginary[2])
 {
 	for (int i = 0; i < 2; i++)
@@ -87,8 +87,9 @@ static void	print_solution(std::string var, double x_real[2], 	\
 	std::cout << std::endl;
 }
 
-void		print_rounded_solutions(t_quadratic_solutions &solutions, 	\
-		bool reduce_sqrt, std::string var, int nb_solutions)
+void		print_rounded_solutions(								\
+		const t_quadratic_solutions &solutions, bool reduce_sqrt, 	\
+		std::string var, int nb_solutions)
 {
 	double	sqrt_real;
 	double	sqrt_imaginary;

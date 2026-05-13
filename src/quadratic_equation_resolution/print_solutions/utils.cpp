@@ -6,13 +6,13 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:22:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/04 17:26:57 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/13 12:31:41 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "quadratic.hpp"
 
-std::string	get_sqrt_real(t_quadratic_solutions &solutions)
+std::string	get_sqrt_real(const t_quadratic_solutions &solutions)
 {
 	std::string	small_sqrt;
 	int 		sqrt_term2_real;
@@ -37,7 +37,7 @@ std::string	get_sqrt_real(t_quadratic_solutions &solutions)
 	return (small_sqrt);
 }
 
-std::string	get_sqrt_imaginary(t_quadratic_solutions &solutions)
+std::string	get_sqrt_imaginary(const t_quadratic_solutions &solutions)
 {
 	std::string	small_sqrt;
 	int			sqrt_term2_imaginary;

@@ -6,19 +6,19 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 18:20:41 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/04 18:32:41 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/13 12:31:12 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "quadratic.hpp"
 
-static void	print_real_term1(t_quadratic_solutions &solutions, int index)
+static void	print_real_term1(const t_quadratic_solutions &solutions, int index)
 {
 	if (solutions.real_term1[index])
 		std::cout << solutions.real_term1[index];
 }
 
-static void	print_real_term2(t_quadratic_solutions &solutions, 	\
+static void	print_real_term2(const t_quadratic_solutions &solutions, 	\
 		int &real_term2_factor, int index, bool reduce_sqrt)
 {
 	if (real_term2_factor)
@@ -44,7 +44,7 @@ static void	print_real_term2(t_quadratic_solutions &solutions, 	\
 	}
 }
 
-static void	print_real_term3(t_quadratic_solutions &solutions, 	\
+static void	print_real_term3(const t_quadratic_solutions &solutions, 	\
 		int &real_term3_factor, int index, bool reduce_sqrt)
 {
 	if (real_term3_factor)
@@ -70,7 +70,7 @@ static void	print_real_term3(t_quadratic_solutions &solutions, 	\
 	}
 }
 
-void		print_real_part(t_quadratic_solutions &solutions, int index, \
+void		print_real_part(const t_quadratic_solutions &solutions, int index, \
 		bool reduce_sqrt)
 {
 	int		real_term2_factor;
