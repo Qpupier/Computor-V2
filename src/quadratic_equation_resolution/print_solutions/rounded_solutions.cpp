@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:27:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/13 17:24:19 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/15 14:12:59 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,15 +98,11 @@ void		print_rounded_solutions(								\
 	sqrt_calculations(reduce_sqrt, solutions, sqrt_real, sqrt_imaginary);
 	rounded_calculations(solutions, sqrt_real, sqrt_imaginary, 	\
 			x_real, x_imaginary);
-	if (nb_solutions == 2)
-		std::cout << COLOR_DIM;
-	else
-		std::cout << COLOR_BOLD;
+	if (nb_solutions == 1)
+		return ;
+	std::cout << COLOR_DIM;
 	print_solution(var, x_real, x_imaginary, 0, nb_solutions == 2);
-	if (nb_solutions == 2)
-	{
-		std::cout << std::endl;
-		print_solution(var, x_real, x_imaginary, 1, nb_solutions == 2);
-	}
+	std::cout << std::endl;
+	print_solution(var, x_real, x_imaginary, 1, nb_solutions == 2);
 	std::cout << COLOR_RESET << std::endl;
 }

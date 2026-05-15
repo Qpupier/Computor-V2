@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/13 19:06:31 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/15 12:20:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,6 @@ std::ostream	&operator<<(std::ostream &os, const Polynomial &num);
 
 // Functions
 std::string	to_lower(std::string s);
-void		solve_trinomial(const Polynomial *polynomial);
+void		solve_trinomial(const Polynomial *polynomial, std::map<std::pair<std::string, std::string>, const IType*> &stored);
 
 #endif

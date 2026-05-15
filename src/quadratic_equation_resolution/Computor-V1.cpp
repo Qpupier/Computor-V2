@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:03:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/13 18:02:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/15 12:20:38 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static IType*	get_discriminant(IType *a, IType *b, IType *c)
 }
 
 static void		find_solutions(IType *tmp_a, IType *tmp_b, IType *tmp_c, 	\
-		IType *tmp_delta, std::string var)
+		IType *tmp_delta, std::string var, std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
 	Complex*				a;
 	Complex*				b;
@@ -69,7 +69,7 @@ static void		find_solutions(IType *tmp_a, IType *tmp_b, IType *tmp_c, 	\
 	delete b;
 	delete c;
 	delete delta;
-	print_solutions(solutions_structure, set, var);
+	print_solutions(solutions_structure, set, var, stored);
 }
 
 void			reduce_sqrt(int *factor, int *sqrt)
@@ -89,7 +89,7 @@ void			reduce_sqrt(int *factor, int *sqrt)
 	}
 }
 
-void			solve_trinomial(const Polynomial *polynomial)
+void			solve_trinomial(const Polynomial *polynomial, std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
 	std::vector<Polynomial::t_term>	terms(polynomial->getTerms());
 	IType*							a;
@@ -101,6 +101,6 @@ void			solve_trinomial(const Polynomial *polynomial)
 	b = terms[1].coefficient;
 	c = terms[0].coefficient;
 	discriminant = get_discriminant(a, b, c);
-	find_solutions(a, b, c, discriminant, polynomial->getName());
+	find_solutions(a, b, c, discriminant, polynomial->getName(), stored);
 	delete discriminant;
 }

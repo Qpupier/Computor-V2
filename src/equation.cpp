@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/13 19:05:44 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/15 12:21:16 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void			equation_error(AST *left_ast, AST *right_ast, 	\
 	throw error;
 }
 
-static void			assignation(std::string var, std::map<std::pair<std::string, std::string>, const IType*> &stored, IType *result)
+void			assignation(std::string var, std::map<std::pair<std::string, std::string>, const IType*> &stored, IType *result)
 {
 	std::map<std::pair<std::string, std::string>, const IType*>::iterator	it;
 	std::string																var_lower(to_lower(var));
@@ -50,10 +50,10 @@ static void			assignation(std::string var, std::map<std::pair<std::string, std::
 	stored[pair] = result;
 }
 
-static void			trinomial(const Polynomial *polynomial)
+static void			trinomial(const Polynomial *polynomial, std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
 	std::cout << COLOR_BOLD << *polynomial << " = 0" << COLOR_RESET << std::endl;
-	solve_trinomial(polynomial);
+	solve_trinomial(polynomial, stored);
 }
 
 static void			binomial(const Polynomial *polynomial, 				\
@@ -87,7 +87,7 @@ static void			display_result(const Polynomial *polynomial, std::map<std::pair<st
 	else if (degree == 1)
 		binomial(polynomial, stored);
 	else if (degree == 2)
-		trinomial(polynomial);
+		trinomial(polynomial, stored);
 	else
 		std::cout << COLOR_BOLD << "The polynomial degree is stricly greater than 2, I can't solve." << COLOR_RESET << std::endl;
 }

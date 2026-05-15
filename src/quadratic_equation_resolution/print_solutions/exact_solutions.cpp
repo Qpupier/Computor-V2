@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:19:13 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/13 12:32:43 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/15 14:19:49 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ static void			print_exact_solutions(t_quadratic_solutions& 	\
 	for (int i = 0; i < nb_solutions; i++)
 	{
 		print_exact_solution(solutions, i, reduce_sqrt);
-		
 		if (nb_solutions == 1)
 			break;
 	}
@@ -102,7 +101,7 @@ bool				parentheses_needed(const int term1, const int term2, 	\
 }
 
 void				print_solutions(t_quadratic_solutions& solutions, 	\
-		std::string set, std::string var)
+		std::string set, std::string var, std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
 	bool	reduce_sqrt;
 	int		nb_solutions;
@@ -120,5 +119,11 @@ void				print_solutions(t_quadratic_solutions& solutions, 	\
 	}
 	nb_solutions = solutions_equal(solutions) ? 1 : 2;
 	print_exact_solutions(solutions, set, reduce_sqrt, nb_solutions);
+	if (nb_solutions == 1)
+		assignation(var, stored, new Complex(			\
+				Rational(solutions.real_term1[0], 		\
+					solutions.real_denominator[0]), 	\
+				Rational(solutions.imaginary_term1[0], 	\
+					solutions.imaginary_denominator[0])));
 	print_rounded_solutions(solutions, reduce_sqrt, var, nb_solutions);
 }

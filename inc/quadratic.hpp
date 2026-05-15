@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:43:37 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/13 12:32:50 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/15 12:20:02 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void					print_rounded_solutions(							\
 		const t_quadratic_solutions &solutions, bool reduce_sqrt, 				\
 		std::string var, int nb_solutions);
 void					print_solutions(t_quadratic_solutions& solutions, 	\
-		std::string set, std::string var);
+		std::string set, std::string var, std::map<std::pair<std::string, std::string>, const IType*> &stored);
 void					reduce_sqrt(int *factor, int *sqrt);
 void					set_imaginary_terms(Complex* a, Complex* b, 		\
 		t_quadratic_solutions &solutions, Rational sqrt_real_factor, 		\
@@ -70,5 +70,6 @@ void					set_real_terms(Complex* a, Complex* b, 				\
 void					simplify_deepest_sqrt(t_quadratic_solutions &solutions);
 void					simplify_factors(t_quadratic_solutions &s);
 void					simplify_factors2(t_quadratic_solutions &solutions);
+void	assignation(std::string var, std::map<std::pair<std::string, std::string>, const IType*> &stored, IType *result);
 
 #endif
