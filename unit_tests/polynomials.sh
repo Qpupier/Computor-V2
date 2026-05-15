@@ -32,7 +32,7 @@ x2 ≈ 0.236068" $1 ; status=$((status | $?))
 run_test "x^2 + (-2 - 2i)x + 2i = 0" "x^2 - (2 + 2i)x + 2i = 0
 Δ = 0
 One solution in ℂ:
-S = {1 + 1i} ∈ ℂ
+S = {1 + i} ∈ ℂ
 x = 1 + i" $1 ; status=$((status | $?))
 run_test "x^2 - (1 + 3i / 2)x - 5 / 16 + 3i / 4 = 0" "(16x^2 - (16 + 24i)x + (12i - 5)) / 16 = 0
 Δ = 0
