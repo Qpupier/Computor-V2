@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 18:20:41 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/15 14:21:34 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/15 14:32:29 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@ static void	print_imaginary_term1(const t_quadratic_solutions &solutions, 	\
 		int index)
 {
 	if (solutions.imaginary_term1[index] 			\
-			&& solutions.imaginary_term1[index] 	\
-				!= solutions.imaginary_denominator[index])
+			&& solutions.imaginary_term1[index] != 1)
 		std::cout << solutions.imaginary_term1[index];
 }
 
