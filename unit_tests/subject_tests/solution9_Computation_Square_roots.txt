@@ -7,4 +7,5 @@ S = {-1} ∈ ℝ
 x = -1
 Listing stored variables and functions
   funA(χ) = χ^2 + 2χ + 1
+  x = -1
   y = 0
