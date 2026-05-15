@@ -23,6 +23,11 @@ echo "\n\033[34;1mTesting polynomials in equations\033[0m\n"
 
 run_test "2 * varA - 5 %4 = 0" "varA = 1/2
 varA = 0.5" $1 ; status=$((status | $?))
+run_test "x^2 + 2x + 1 = 0" "x^2 + 2x + 1 = 0
+Δ = 0
+One solution in ℝ:
+S = {-1} ∈ ℝ
+x = -1" $1 ; status=$((status | $?))
 run_test "4 -5 + (x + 2)^2 - 4 = 0" "x^2 + 4x - 1 = 0
 Δ = 20
 Two solutions in ℝ:
@@ -40,5 +45,11 @@ One solution in ℂ:
 S = {1 / 2 + 3i / 4} ∈ ℂ
 x = 1/2 + 3i/4
 x = 0.5 + 0.75i" $1 ; status=$((status | $?))
+run_test "x^2 + x + i = 0" "x^2 + x + i = 0
+Δ = 1 - 4i
+Two solutions in ℂ:
+S = {(-2 - √(2√17 + 2)) / 4 + √(2√17 - 2)i / 4, (-2 + √(2√17 + 2)) / 4 + (-√(2√17 - 2))i / 4} ∈ ℂ
+x1 ≈ 0.300243 - 0.624811i
+x2 ≈ -1.30024 + 0.624811i" $1 ; status=$((status | $?))
 
 return $status
