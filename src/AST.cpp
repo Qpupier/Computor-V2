@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/13 19:14:49 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/15 11:17:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,15 +213,7 @@ void			AST::reduce_expression(std::map<std::pair<std::string, std::string>, cons
 	op = dynamic_cast<Operator*>(this->_node);
 	if (!op)
 		throw ERROR_OPERATOR_EXPECTED;
-	try
-	{
-		result = get_result(this->_left->_node, this->_right->_node, op->getOperator(), stored);
-	}
-	catch(const std::exception& e)
-	{
-		this->free();
-		throw;
-	}
+	result = get_result(this->_left->_node, this->_right->_node, op->getOperator(), stored);
 	this->free();
 	this->_node = result;
 	this->_left = nullptr;

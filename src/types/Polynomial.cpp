@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/13 19:24:07 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/15 12:02:40 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -797,7 +797,15 @@ Polynomial*	Polynomial::operator/(const Polynomial &other) const
 	result->free();
 	result->_terms = multiply_vectors(this->_terms, other._dividers);
 	result->_dividers = multiply_vectors(this->_dividers, other._terms);
-	result->reduce();
+	try
+	{
+		result->reduce();
+	}
+	catch (...)
+	{
+		delete result;
+		throw;
+	}
 	return (result);
 }
 
@@ -814,7 +822,15 @@ Polynomial*	Polynomial::operator/(const Rational &other) const
 		add_term_to_vector(new_coefficient, it->power, result->_dividers);
 		delete new_coefficient;
 	}
-	result->reduce();
+	try
+	{
+		result->reduce();
+	}
+	catch (...)
+	{
+		delete result;
+		throw;
+	}
 	return (result);
 }
 
@@ -831,7 +847,15 @@ Polynomial*	Polynomial::operator/(const Complex &other) const
 		add_term_to_vector(new_coefficient, it->power, result->_dividers);
 		delete new_coefficient;
 	}
-	result->reduce();
+	try
+	{
+		result->reduce();
+	}
+	catch (...)
+	{
+		delete result;
+		throw;
+	}
 	return (result);
 }
 
@@ -842,13 +866,22 @@ Polynomial*	Polynomial::operator/(const Matrix &other) const
 
 	result = new Polynomial(*this);
 	free_vector_terms(result->_dividers);
-	for (std::vector<t_term>::const_iterator it(this->_dividers.begin()); it != this->_dividers.end(); it++)
+	for (std::vector<t_term>::const_iterator it(this->_dividers.begin()); 	\
+			it != this->_dividers.end(); it++)
 	{
 		new_coefficient = *it->coefficient * other;
 		add_term_to_vector(new_coefficient, it->power, result->_dividers);
 		delete new_coefficient;
 	}
-	result->reduce();
+	try
+	{
+		result->reduce();
+	}
+	catch (...)
+	{
+		delete result;
+		throw;
+	}
 	return (result);
 }
 

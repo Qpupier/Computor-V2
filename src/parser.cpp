@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/12 16:37:24 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/15 11:51:01 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,9 +254,17 @@ AST*				compute_expression(const std::string &line, 		\
 	ast = build_ast(tokens, data);
 	if (!ast)
 		throw ERROR_INVALID_EXPRESSION;
-	if (is_right_side || !ast->end_of_tree())
-		ast->reduce_expression(data.stored);
-	if (is_right_side && !eval && waiting_function(data.stored))
-		set_function_right(data.stored, ast);
+	try
+	{
+		if (is_right_side || !ast->end_of_tree())
+			ast->reduce_expression(data.stored);
+		if (is_right_side && !eval && waiting_function(data.stored))
+			set_function_right(data.stored, ast);
+	}
+	catch (...)
+	{
+		delete ast;
+		throw;
+	}
 	return (ast);
 }
