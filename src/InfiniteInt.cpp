@@ -6,135 +6,85 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:39:10 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/15 19:39:43 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/18 17:10:14 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "InfiniteInt.hpp"
 
 // Utils
-static std::vector<unsigned short int>	add_infinite_int(	\
+static std::vector<unsigned char>	add_infinite_int(	\
 		const InfiniteInt &a, const InfiniteInt &b)
 {
-	std::vector<unsigned short int>	rev_a(a.getDigits());
-	std::vector<unsigned short int>	rev_b(b.getDigits());
-	std::vector<unsigned short int>	result;
-	unsigned short int				digit_a;
-	unsigned short int				digit_b;
-	unsigned short int				sum;
+	std::vector<unsigned char>	rev_a(a.getDigits());
+	std::vector<unsigned char>	rev_b(b.getDigits());
+	std::vector<unsigned char>	result;
+	unsigned char				digit_a;
+	unsigned char				digit_b;
+	unsigned char				sum;
 	bool							hold(false);
 
-	for (std::vector<unsigned short int>::size_type i = 0; 	\
+	std::reverse(rev_a.begin(), rev_a.end());
+	std::reverse(rev_b.begin(), rev_b.end());
+	for (std::vector<unsigned char>::size_type i = 0; 	\
 			i < rev_a.size() || i < rev_b.size() || hold; i++)
 	{
-		digit_a = (i < rev_a.size()) ? rev_a[i] - '0' : 0;
-		digit_b = (i < rev_b.size()) ? rev_b[i] - '0' : 0;
+		digit_a = (i < rev_a.size()) ? rev_a[i] : 0;
+		digit_b = (i < rev_b.size()) ? rev_b[i] : 0;
 		sum = digit_a + digit_b + hold;
 		hold = sum >= 10;
-		result.push_back((sum % 10) + '0');
+		result.push_back((sum % 10));
 	}
 	std::reverse(result.begin(), result.end());
 	return (result);
 }
 
-static InfiniteInt*						sub_operator_different_signs(	\
+static std::vector<unsigned char>	sub_infinite_int(	\
 		const InfiniteInt &a, const InfiniteInt &b)
 {
-	InfiniteInt*	negative;
-	InfiniteInt*	result;
-
-	if (a.getIsNegative() && !b.getIsNegative())
-	{
-		negative = -b;
-		result = a + *negative;
-		delete negative;
-		return (result);
-	}
-	if (!a.getIsNegative() && b.getIsNegative())
-	{
-		negative = -b;
-		result = a + *negative;
-		delete negative;
-		return (result);
-	}
-	return (nullptr);
-}
-
-static InfiniteInt*						sub_operator_edge_cases(	\
-		const InfiniteInt &a, const InfiniteInt &b)
-{
-	InfiniteInt*	negative_this;
-	InfiniteInt*	negative_other;
-	InfiniteInt*	result;
-
-	result = sub_operator_different_signs(a, b);
-	if (result)
-		return (result);
-	if (a.getIsNegative())
-	{
-		negative_this = -a;
-		negative_other = -b;
-		result = *negative_other - *negative_this;
-		delete negative_this;
-		delete negative_other;
-		return (result);
-	}
-	if (a < b)
-	{
-		negative_this = b - a;
-		result = -*negative_this;
-		delete negative_this;
-		return (result);
-	}
-	return (nullptr);
-}
-
-static std::vector<unsigned short int>	sub_infinite_int(	\
-		const InfiniteInt &a, const InfiniteInt &b)
-{
-	std::vector<unsigned short int>	rev_a(a.getDigits());
-	std::vector<unsigned short int>	rev_b(b.getDigits());
-	std::vector<unsigned short int>	result;
-	unsigned short int				digit_a;
-	unsigned short int				digit_b;
-	short int						diff;
+	std::vector<unsigned char>	rev_a(a.getDigits());
+	std::vector<unsigned char>	rev_b(b.getDigits());
+	std::vector<unsigned char>	result;
 	bool							hold(false);
 
-	for (std::vector<unsigned short int>::size_type i = 0; 	\
+	std::reverse(rev_a.begin(), rev_a.end());
+	std::reverse(rev_b.begin(), rev_b.end());
+	for (std::vector<unsigned char>::size_type i = 0; 	\
 			i < rev_a.size() || i < rev_b.size() || hold; i++)
 	{
-		digit_a = (i < rev_a.size()) ? rev_a[i] - '0' : 0;
-		digit_b = (i < rev_b.size()) ? rev_b[i] - '0' : 0;
-		diff = digit_a - digit_b - hold;
-		hold = diff < 0;
-		if (hold)
+		unsigned char	digit_a((i < rev_a.size()) ? rev_a[i] : 0);
+		unsigned char	digit_b((i < rev_b.size()) ? rev_b[i] : 0);
+		short int			diff(digit_a - digit_b - hold);
+
+		if (digit_a < digit_b + hold)
+		{
 			diff += 10;
-		result.push_back(diff + '0');
+			hold = true;
+		}
+		else
+			hold = false;
+		result.push_back(diff);
 	}
-	while (result.size() > 1 && result.back() == '0')
-		result.pop_back();
 	std::reverse(result.begin(), result.end());
 	return (result);
 }
 
-static std::vector<InfiniteInt>			multiplication_part(	\
-		const std::vector<unsigned short int> &a, 		\
-		const std::vector<unsigned short int> &b)
+static std::vector<InfiniteInt>		multiplication_part(	\
+		const std::vector<unsigned char> &a, 				\
+		const std::vector<unsigned char> &b)
 {
 	std::vector<InfiniteInt>	result;
-	unsigned long long int		offset(0);
 
-	for (std::vector<unsigned short int>::reverse_iterator it_b 		\
+	for (std::vector<unsigned char>::const_reverse_iterator it_b 		\
 			= b.rbegin(); it_b != b.rend(); it_b++)
 	{
-		std::vector<unsigned short int>	offset_digits(offset);
-		InfiniteInt						intermediate_result(offset_digits);
-		unsigned short int				hold(0);
+		InfiniteInt						intermediate_result;
+		unsigned char				hold(0);
 
-		for (std::vector<unsigned short int>::reverse_iterator it_a 	\
+		for (std::vector<unsigned char>::const_reverse_iterator it_a 	\
 				= a.rbegin(); it_a != a.rend(); it_a++)
 		{
-			unsigned short int	product(*it_b * *it_a + hold);
+			unsigned char	product(*it_b * *it_a + hold);
 
 			hold = product / 10;
 			intermediate_result.push_back(product % 10);
@@ -143,14 +93,80 @@ static std::vector<InfiniteInt>			multiplication_part(	\
 			intermediate_result.push_back(hold);
 		intermediate_result.reverse();
 		result.push_back(intermediate_result);
-		offset++;
 	}
 	return (result);
 }
 
+static void							division_sub(			\
+		InfiniteInt tmp_remainder, InfiniteInt &dividend, 	\
+		std::size_t nb, InfiniteInt &result)
+{
+	for (std::size_t i = nb; i < dividend.getDigits().size(); i++)
+		if (!tmp_remainder && !dividend.getDigits()[i])
+			result.push_back(0);
+		else
+			tmp_remainder.push_back(dividend.getDigits()[i]);
+	dividend = tmp_remainder;
+}
+
+static bool							division(InfiniteInt &dividend, 	\
+		const InfiniteInt &divisor, InfiniteInt &result)
+{
+	InfiniteInt		tmp_dividend;
+	InfiniteInt		factor;
+	InfiniteInt		last_good_quotient;
+	std::size_t		nb(0);
+	unsigned char	result_digit(0);
+	unsigned char	last_good_factor(0);
+
+	while (tmp_dividend < divisor && nb < dividend.getDigits().size())
+	{
+		tmp_dividend.push_back(dividend.getDigits()[nb]);
+		nb++;
+	}
+	if (tmp_dividend < divisor)
+		return (false);
+	factor = InfiniteInt();
+	while (factor <= tmp_dividend)
+	{
+		last_good_factor = result_digit;
+		last_good_quotient = factor;
+		factor += divisor;
+		result_digit++;
+	}
+	result.push_back(last_good_factor);
+	division_sub(tmp_dividend - last_good_quotient, dividend, nb, result);
+	return (true);
+}
+
+
+// Constructors
+InfiniteInt::InfiniteInt(const std::vector<unsigned char> &digits, \
+		bool is_negative): _digits(digits), _is_negative(is_negative)
+{
+	this->reduce();
+}
+
+InfiniteInt::InfiniteInt(const std::string &str, bool is_negative)
+{
+	if (str.empty())
+		return ;
+	this->_is_negative = is_negative;
+	for (std::string::size_type i = 0; i < str.size(); i++)
+		this->_digits.push_back(str[i] - '0');
+	while (!this->_digits.empty() && this->_digits[0] == 0)
+		this->_digits.erase(this->_digits.begin());
+	this->reduce();
+}
+
 
 // Operator overloads
-InfiniteInt&	InfiniteInt::operator=(const InfiniteInt &other)
+InfiniteInt::operator bool() const
+{
+	return (!this->_digits.empty());
+}
+
+InfiniteInt&		InfiniteInt::operator=(const InfiniteInt &other)
 {
 	if (this != &other)
 	{
@@ -160,23 +176,34 @@ InfiniteInt&	InfiniteInt::operator=(const InfiniteInt &other)
 	return (*this);
 }
 
-explicit		InfiniteInt::operator bool() const
+const unsigned char	InfiniteInt::operator[](	\
+		std::vector<unsigned char>::size_type index) const
 {
-	return (this->_digits != std::vector<unsigned short int>(1));
+	if (index >= this->_digits.size())
+		throw std::out_of_range("Index out of range");
+	return (this->_digits[index]);
 }
 
-bool			InfiniteInt::operator==(const InfiniteInt &other) const
+unsigned char		InfiniteInt::operator[](	\
+		std::vector<unsigned char>::size_type index)
+{
+	if (index >= this->_digits.size())
+		throw std::out_of_range("Index out of range");
+	return (this->_digits[index]);
+}
+
+bool				InfiniteInt::operator==(const InfiniteInt &other) const
 {
 	return ((!*this && !other) || (this->_digits == other._digits 	\
 			&& this->_is_negative == other._is_negative));
 }
 
-bool			InfiniteInt::operator!=(const InfiniteInt&other) const
+bool				InfiniteInt::operator!=(const InfiniteInt&other) const
 {
 	return (!(*this == other));
 }
 
-bool			InfiniteInt::operator<(const InfiniteInt &other) const
+bool				InfiniteInt::operator<(const InfiniteInt &other) const
 {
 	bool	result;
 
@@ -193,84 +220,196 @@ bool			InfiniteInt::operator<(const InfiniteInt &other) const
 	return (result);
 }
 
-bool			InfiniteInt::operator<=(const InfiniteInt &other) const
+bool				InfiniteInt::operator<=(const InfiniteInt &other) const
 {
 	return (*this < other || *this == other);
 }
 
-bool			InfiniteInt::operator>(const InfiniteInt &other) const
+bool				InfiniteInt::operator>(const InfiniteInt &other) const
 {
 	return (!(*this <= other));
 }
 
-bool			InfiniteInt::operator>=(const InfiniteInt &other) const
+bool				InfiniteInt::operator>=(const InfiniteInt &other) const
 {
 	return (!(*this < other));
 }
 
-InfiniteInt*	InfiniteInt::operator+(const InfiniteInt &other) const
+InfiniteInt			InfiniteInt::operator+(const InfiniteInt &other) const
 {
-	InfiniteInt*	negative;
-	InfiniteInt*	result;
+	InfiniteInt	result;
 
 	if (this->_is_negative && !other._is_negative)
-	{
-		negative = -*this;
-		result = other - *negative;
-		delete negative;
-		return (result);
-	}
+		return (other - (-*this));
 	if (!this->_is_negative && other._is_negative)
-	{
-		negative = -other;
-		result = *this - *negative;
-		delete negative;
-		return (result);
-	}
+		return (*this - (-other));
 	result = this->clone();
-	result->_digits = add_infinite_int(*result, other);
+	result._digits = add_infinite_int(result, other);
 	return (result);
 }
 
-InfiniteInt*	InfiniteInt::operator-(void) const
+void				InfiniteInt::operator+=(const InfiniteInt &other)
 {
-	InfiniteInt*	result;
-
-	result = new InfiniteInt(*this);
-	if (*result)
-		result->_is_negative = !this->_is_negative;
-	return (result);
+	*this = *this + other;
 }
 
-InfiniteInt*	InfiniteInt::operator-(const InfiniteInt &other) const
+InfiniteInt			InfiniteInt::operator-(void) const
 {
-	InfiniteInt*	result;
+	InfiniteInt	result;
 
-	result = sub_operator_edge_cases(*this, other);
+	result = this->clone();
 	if (result)
-		return (result);
+		result._is_negative = !this->_is_negative;
+	return (result);
+}
+
+InfiniteInt			InfiniteInt::operator-(const InfiniteInt &other) const
+{
+	InfiniteInt	result;
+
+	if (this->_is_negative != other._is_negative)
+		return (*this + (-other));
+	if (this->_is_negative)
+		return (-(*this) - (-other));
+	if (*this < other)
+		return (-(other - *this));
 	result = this->clone();
-	result->_digits = sub_infinite_int(*this, other);
+	result._digits = sub_infinite_int(*this, other);
+	result.reduce();
 	return (result);
 }
 
-InfiniteInt*	InfiniteInt::operator*(const InfiniteInt &other) const
+void				InfiniteInt::operator-=(const InfiniteInt &other)
 {
-	InfiniteInt*				result;
-	std::vector<InfiniteInt>	intermediate_results(multiplication_part(this->_digits, other._digits));
+	*this = *this - other;
+}
 
-	result = new InfiniteInt(std::vector<unsigned short int>(1, 1));
-	for (std::vector<InfiniteInt>::iterator it = intermediate_results.begin(); it != intermediate_results.end(); it++)
+InfiniteInt			InfiniteInt::operator*(const InfiniteInt &other) const
+{
+	InfiniteInt					result;
+	std::vector<InfiniteInt>	intermediate_results(	\
+			multiplication_part(this->_digits, other._digits));
+	std::size_t					offset(0);
+
+	for (std::vector<InfiniteInt>::iterator it 	\
+				= intermediate_results.begin(); 	\
+			it != intermediate_results.end(); it++)
 	{
-		InfiniteInt*	sum(*result + *it);
-
-		delete result;
-		result = sum;
+		for (std::size_t i = 0; i < offset; i++)
+			it->push_back(0);
+		result += *it;
+		offset++;
 	}
-	result->_is_negative = this->_is_negative != other._is_negative;
+	result._is_negative = this->_is_negative != other._is_negative;
+	result.reduce();
 	return (result);
 }
 
-InfiniteInt*	InfiniteInt::operator/(const InfiniteInt &other) const
+void				InfiniteInt::operator*=(const InfiniteInt &other)
 {
+	*this = *this * other;
+}
+
+InfiniteInt			InfiniteInt::operator/(const InfiniteInt &other) const
+{
+	InfiniteInt	dividend(*this);
+	InfiniteInt	result;
+
+	while (!dividend.getDigits().empty())
+		if (!division(dividend, other, result))
+			break ;
+	result.setIsNegative(this->_is_negative != other._is_negative);
+	result.reduce();
+	return (result);
+}
+
+void				InfiniteInt::operator/=(const InfiniteInt &other)
+{
+	*this = *this / other;
+}
+
+InfiniteInt			InfiniteInt::operator%(const InfiniteInt &other) const
+{
+	return (*this - *this / other * other);
+}
+
+void				InfiniteInt::operator%=(const InfiniteInt &other)
+{
+	*this = *this % other;
+}
+
+InfiniteInt			InfiniteInt::operator^(const InfiniteInt &other) const
+{
+	InfiniteInt	result(std::vector<unsigned char>(1, 1));
+	InfiniteInt	exp(other);
+
+	while (exp > InfiniteInt())
+	{
+		result *= *this;
+		exp -= InfiniteInt(std::vector<unsigned char>(1, 1));
+	}
+	return (result);
+}
+
+void				InfiniteInt::operator^=(const InfiniteInt &other)
+{
+	*this = *this ^ other;
+}
+
+
+// Getters
+std::vector<unsigned char>	InfiniteInt::getDigits(void) const
+{
+	return (this->_digits);
+}
+
+bool						InfiniteInt::getIsNegative(void) const
+{
+	return (this->_is_negative);
+}
+
+
+// Setters
+void	InfiniteInt::setIsNegative(bool is_negative)
+{
+	this->_is_negative = is_negative;
+}
+
+
+// Methods
+InfiniteInt	InfiniteInt::clone(void) const
+{
+	return (InfiniteInt(this->_digits, this->_is_negative));
+}
+
+void		InfiniteInt::reduce(void)
+{
+	while (!this->_digits.empty() && this->_digits[0] == 0)
+		this->_digits.erase(this->_digits.begin());
+	if (this->_digits.empty())
+		this->_is_negative = false;
+}
+
+void		InfiniteInt::reverse(void)
+{
+	std::reverse(this->_digits.begin(), this->_digits.end());
+}
+
+void		InfiniteInt::push_back(unsigned char digit)
+{
+	this->_digits.push_back(digit);
+}
+
+
+// Output stream operator overload
+std::ostream&	operator<<(std::ostream &os, const InfiniteInt &num)
+{
+	if (num.getDigits().empty())
+		os << '0';
+	else if (num.getIsNegative())
+		os << '-';
+	for (std::vector<unsigned char>::size_type i = 0; 	\
+			i < num.getDigits().size(); i++)
+		os << static_cast<unsigned char>(num.getDigits()[i] + '0');
+	return (os);
 }
