@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/13 19:12:18 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/18 17:42:53 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ class	Matrix: public IType
 		Matrix*		operator^(const Rational &other) const;
 
 		// Getters
-		unsigned long	getWidth(void) const;
-		unsigned long	getHeight(void) const;
+		unsigned long long int	getWidth(void) const;
+		unsigned long long int	getHeight(void) const;
 
 		// Setters
 		void			setValue(unsigned int i, unsigned int j, Rational *value);
@@ -98,9 +98,9 @@ class	Matrix: public IType
 
 	private:
 		// Members
-		unsigned long	_width;
-		unsigned long	_height;
-		Rational		**_matrix;
+		unsigned long long int	_width;
+		unsigned long long int	_height;
+		Rational				**_matrix;
 };
 
 // Output stream operator overload

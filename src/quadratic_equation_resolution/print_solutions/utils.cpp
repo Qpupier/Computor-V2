@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:22:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/13 12:31:41 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/18 21:04:13 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 std::string	get_sqrt_real(const t_quadratic_solutions &solutions)
 {
 	std::string	small_sqrt;
-	int 		sqrt_term2_real;
-	
+	InfiniteInt	sqrt_term2_real;
+
 	sqrt_term2_real = solutions.sqrt_term2_real;
 	if (solutions.sqrt_term1_factor == -1)
 		small_sqrt += "-";
 	else if (solutions.sqrt_term1_factor != 1)
-		small_sqrt += std::to_string(solutions.sqrt_term1_factor);
-	small_sqrt += "√" + std::to_string(solutions.sqrt_term1_sqrt);
+		small_sqrt += solutions.sqrt_term1_factor.to_string();
+	small_sqrt += "√" + solutions.sqrt_term1_sqrt.to_string();
 	if (sqrt_term2_real)
 	{
 		if (sqrt_term2_real > 0)
@@ -32,7 +32,7 @@ std::string	get_sqrt_real(const t_quadratic_solutions &solutions)
 			small_sqrt += " - ";
 			sqrt_term2_real *= -1;
 		}
-		small_sqrt += std::to_string(sqrt_term2_real);
+		small_sqrt += sqrt_term2_real.to_string();
 	}
 	return (small_sqrt);
 }
@@ -40,14 +40,14 @@ std::string	get_sqrt_real(const t_quadratic_solutions &solutions)
 std::string	get_sqrt_imaginary(const t_quadratic_solutions &solutions)
 {
 	std::string	small_sqrt;
-	int			sqrt_term2_imaginary;
+	InfiniteInt	sqrt_term2_imaginary;
 	
 	sqrt_term2_imaginary = solutions.sqrt_term2_imaginary;
 	if (solutions.sqrt_term1_factor == -1)
 		small_sqrt += "-";
 	else if (solutions.sqrt_term1_factor != 1)
-		small_sqrt += std::to_string(solutions.sqrt_term1_factor);
-	small_sqrt += "√" + std::to_string(solutions.sqrt_term1_sqrt);
+		small_sqrt += solutions.sqrt_term1_factor.to_string();
+	small_sqrt += "√" + solutions.sqrt_term1_sqrt.to_string();
 	if (sqrt_term2_imaginary)
 	{
 		if (sqrt_term2_imaginary > 0)
@@ -57,15 +57,15 @@ std::string	get_sqrt_imaginary(const t_quadratic_solutions &solutions)
 			small_sqrt += " - ";
 			sqrt_term2_imaginary *= -1;
 		}
-		small_sqrt += std::to_string(sqrt_term2_imaginary);
+		small_sqrt += sqrt_term2_imaginary.to_string();
 	}
 	return (small_sqrt);
 }
 
 void		simplify_deepest_sqrt(t_quadratic_solutions &solutions)
 {
-	int	sqrt_term1;
-	int	tmp;
+	InfiniteInt	sqrt_term1;
+	InfiniteInt	tmp;
 
 	sqrt_term1 = solutions.sqrt_term1_factor * solutions.sqrt_term1_sqrt;
 	solutions.sqrt_real = sqrt_term1 + solutions.sqrt_term2_real;

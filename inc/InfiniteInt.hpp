@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:39:49 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/18 16:51:27 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/18 21:01:09 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,7 @@
 #ifndef INFINITEINT_HPP
 # define INFINITEINT_HPP
 
-// # include "computor-v2.hpp"
-# include <iostream>
-# include <string>
-# include <algorithm>
-# include <vector>
+# include "computor-v2.hpp"
 
 class	InfiniteInt
 {
@@ -27,15 +23,17 @@ class	InfiniteInt
 		InfiniteInt(const std::vector<unsigned char> &digits, 	\
 				bool is_negative = false);
 		InfiniteInt(void): InfiniteInt(std::vector<unsigned char>()) {};
-		InfiniteInt(const InfiniteInt &other): 						\
+		InfiniteInt(const InfiniteInt &other): 					\
 				InfiniteInt(other.getDigits(), other.getIsNegative()) {};
 		InfiniteInt(const std::string &str, bool is_negative = false);
+		InfiniteInt(const long long int value): 				\
+				InfiniteInt(std::to_string(std::llabs(value)), value < 0) {};
 		~InfiniteInt(void) {};
 
 		// Operator overloads
 		explicit			operator bool(void) const;
 		InfiniteInt&		operator=(const InfiniteInt &other);
-		const unsigned char	operator[](	\
+		unsigned char		operator[](	\
 				std::vector<unsigned char>::size_type index) const;
 		unsigned char		operator[](	\
 				std::vector<unsigned char>::size_type index);
@@ -47,9 +45,13 @@ class	InfiniteInt
 		bool				operator>=(const InfiniteInt &other) const;
 		InfiniteInt			operator+(const InfiniteInt &other) const;
 		void				operator+=(const InfiniteInt &other);
+		InfiniteInt&		operator++(void);
+		InfiniteInt			operator++(int);
 		InfiniteInt			operator-(void) const;
 		InfiniteInt			operator-(const InfiniteInt &other) const;
 		void				operator-=(const InfiniteInt &other);
+		InfiniteInt&		operator--(void);
+		InfiniteInt			operator--(int);
 		InfiniteInt			operator*(const InfiniteInt &other) const;
 		void				operator*=(const InfiniteInt &other);
 		InfiniteInt			operator/(const InfiniteInt &other) const;
@@ -68,14 +70,15 @@ class	InfiniteInt
 
 		// Methods
 		InfiniteInt	clone(void) const;
+		void		push_back(unsigned char digit);
 		void		reverse(void);
 		void		reduce(void);
-		void		push_back(unsigned char digit);
+		std::string	to_string(void) const;
 
 	private:
 		// Members
 		std::vector<unsigned char>	_digits;
-		bool						_is_negative;
+		bool						_isNegative;
 };
 
 // Output stream operator overload

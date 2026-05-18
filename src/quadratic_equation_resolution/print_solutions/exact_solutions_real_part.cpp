@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 18:20:41 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/13 12:31:12 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/18 20:34:55 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	print_real_term1(const t_quadratic_solutions &solutions, int index)
 }
 
 static void	print_real_term2(const t_quadratic_solutions &solutions, 	\
-		int &real_term2_factor, int index, bool reduce_sqrt)
+		InfiniteInt &real_term2_factor, int index, bool reduce_sqrt)
 {
 	if (real_term2_factor)
 	{
@@ -45,7 +45,7 @@ static void	print_real_term2(const t_quadratic_solutions &solutions, 	\
 }
 
 static void	print_real_term3(const t_quadratic_solutions &solutions, 	\
-		int &real_term3_factor, int index, bool reduce_sqrt)
+		InfiniteInt &real_term3_factor, int index, bool reduce_sqrt)
 {
 	if (real_term3_factor)
 	{
@@ -73,9 +73,9 @@ static void	print_real_term3(const t_quadratic_solutions &solutions, 	\
 void		print_real_part(const t_quadratic_solutions &solutions, int index, \
 		bool reduce_sqrt)
 {
-	int		real_term2_factor;
-	int		real_term3_factor;
-	bool	parentheses;
+	InfiniteInt	real_term2_factor;
+	InfiniteInt	real_term3_factor;
+	bool		parentheses;
 
 	real_term2_factor = solutions.real_term2_factor[index];
 	real_term3_factor = solutions.real_term3_factor[index];

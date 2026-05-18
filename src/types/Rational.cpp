@@ -6,20 +6,21 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 14:33:57 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/18 20:56:41 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Rational.hpp"
 
 // Utils
-static int	compute_lcm(int a, int b)
+static InfiniteInt	compute_lcm(InfiniteInt a, InfiniteInt b)
 {
 	return (a / compute_gcd(a, b) * b);
 }
 
 // Constructors
-Rational::Rational(int numerator, int denominator): _numerator(numerator), _denominator(denominator)
+Rational::Rational(InfiniteInt numerator, InfiniteInt denominator): 	\
+		_numerator(numerator), _denominator(denominator)
 {
 	if (!denominator)
 		throw ERROR_DIVISION_BY_ZERO;
@@ -33,23 +34,24 @@ Rational::Rational(std::string str)
 	slash_pos = str.find('.');
 	if (slash_pos == std::string::npos)
 	{
-		_numerator = std::stoi(str);
-		_denominator = 1;
+		_numerator = InfiniteInt(str);
+		_denominator = InfiniteInt(1);
 	}
 	else
 	{
-		_numerator = std::stoi(str.erase(slash_pos, 1));
-		_denominator = static_cast<int>(std::pow(10, str.size() - slash_pos));
+		_numerator = InfiniteInt(str.erase(slash_pos, 1));
+		_denominator = InfiniteInt(std::to_string(	\
+				static_cast<int>(std::pow(10, str.size() - slash_pos))));
 	}
 	this->reduce();
 }
 
 Rational::Rational(const IType &other)
 {
-	const Rational		*other_rational;
-	const Complex		*other_complex;
-	const Matrix		*other_matrix;
-	const Polynomial	*other_polynomial;
+	const Rational*		other_rational;
+	const Complex*		other_complex;
+	const Matrix*		other_matrix;
+	const Polynomial*	other_polynomial;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	other_complex = dynamic_cast<const Complex*>(&other);
@@ -117,7 +119,7 @@ Rational	Rational::operator=(const Complex &other)
 
 Rational::operator bool() const
 {
-	return (this->_numerator);
+	return ((bool)(this->_numerator));
 }
 
 bool		Rational::operator==(const Rational &other) const
@@ -206,10 +208,10 @@ bool		Rational::operator<(const Polynomial &other) const
 
 bool		Rational::operator<(const IType &other) const
 {
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Matrix	*other_matrix;
-	const Polynomial	*other_polynomial;
+	const Rational*		other_rational;
+	const Complex*		other_complex;
+	const Matrix*		other_matrix;
+	const Polynomial*	other_polynomial;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
@@ -228,7 +230,8 @@ bool		Rational::operator<(const IType &other) const
 
 bool		Rational::operator<=(const Rational &other) const
 {
-	return (this->_numerator * other._denominator <= other._numerator * this->_denominator);
+	return (this->_numerator * other._denominator 	\
+			<= other._numerator * this->_denominator);
 }
 
 bool		Rational::operator<=(const Complex &other) const
@@ -256,10 +259,10 @@ bool		Rational::operator<=(const Polynomial &other) const
 
 bool		Rational::operator<=(const IType &other) const
 {
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Matrix	*other_matrix;
-	const Polynomial	*other_polynomial;
+	const Rational*		other_rational;
+	const Complex*		other_complex;
+	const Matrix*		other_matrix;
+	const Polynomial*	other_polynomial;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
@@ -278,7 +281,8 @@ bool		Rational::operator<=(const IType &other) const
 
 bool		Rational::operator>(const Rational &other) const
 {
-	return (this->_numerator * other._denominator > other._numerator * this->_denominator);
+	return (this->_numerator * other._denominator 	\
+			> other._numerator * this->_denominator);
 }
 
 bool		Rational::operator>(const Complex &other) const
@@ -306,10 +310,10 @@ bool		Rational::operator>(const Polynomial &other) const
 
 bool		Rational::operator>(const IType &other) const
 {
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Matrix	*other_matrix;
-	const Polynomial	*other_polynomial;
+	const Rational*		other_rational;
+	const Complex*		other_complex;
+	const Matrix*		other_matrix;
+	const Polynomial*	other_polynomial;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
@@ -328,7 +332,8 @@ bool		Rational::operator>(const IType &other) const
 
 bool		Rational::operator>=(const Rational &other) const
 {
-	return (this->_numerator * other._denominator >= other._numerator * this->_denominator);
+	return (this->_numerator * other._denominator 	\
+			>= other._numerator * this->_denominator);
 }
 
 bool		Rational::operator>=(const Complex &other) const
@@ -356,10 +361,10 @@ bool		Rational::operator>=(const Polynomial &other) const
 
 bool		Rational::operator>=(const IType &other) const
 {
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Matrix	*other_matrix;
-	const Polynomial	*other_polynomial;
+	const Rational*		other_rational;
+	const Complex*		other_complex;
+	const Matrix*		other_matrix;
+	const Polynomial*	other_polynomial;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
@@ -378,7 +383,9 @@ bool		Rational::operator>=(const IType &other) const
 
 Rational*	Rational::operator+(const Rational &other) const
 {
-	return (new Rational(this->_numerator * other._denominator + other._numerator * this->_denominator, this->_denominator * other._denominator));
+	return (new Rational(this->_numerator * other._denominator 	\
+				+ other._numerator * this->_denominator, 		\
+			this->_denominator * other._denominator));
 }
 
 Complex*	Rational::operator+(const Complex &other) const
@@ -388,15 +395,15 @@ Complex*	Rational::operator+(const Complex &other) const
 
 Matrix*		Rational::operator+(const Matrix &other) const
 {
-	Matrix				*result;
-	unsigned long int	width;
-	unsigned long int	height;
+	Matrix*					result;
+	unsigned long long int	width;
+	unsigned long long int	height;
 
 	width = other.getWidth();
 	height = other.getHeight();
 	result = new Matrix(width, height);
-	for (unsigned int i = 0; i < height; i++)
-		for (unsigned int j = 0; j < width; j++)
+	for (unsigned long long int i = 0; i < height; i++)
+		for (unsigned long long int j = 0; j < width; j++)
 			result->setValue(i, j, *this + other[i][j]);
 	return (result);
 }
@@ -408,10 +415,10 @@ Polynomial*	Rational::operator+(const Polynomial &other) const
 
 IType*		Rational::operator+(const IType &other) const
 {
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Matrix	*other_matrix;
-	const Polynomial	*other_polynomial;
+	const Rational*		other_rational;
+	const Complex*		other_complex;
+	const Matrix*		other_matrix;
+	const Polynomial*	other_polynomial;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
@@ -431,7 +438,9 @@ IType*		Rational::operator+(const IType &other) const
 
 Rational*	Rational::operator-(const Rational &other) const
 {
-	return (new Rational(this->_numerator * other._denominator - other._numerator * this->_denominator, this->_denominator * other._denominator));
+	return (new Rational(this->_numerator * other._denominator 	\
+				- other._numerator * this->_denominator, 		\
+			this->_denominator * other._denominator));
 }
 
 Complex*	Rational::operator-(const Complex &other) const
@@ -441,15 +450,15 @@ Complex*	Rational::operator-(const Complex &other) const
 
 Matrix*		Rational::operator-(const Matrix &other) const
 {
-	Matrix				*result;
-	unsigned long int	width;
-	unsigned long int	height;
+	Matrix*					result;
+	unsigned long long int	width;
+	unsigned long long int	height;
 
 	width = other.getWidth();
 	height = other.getHeight();
 	result = new Matrix(width, height);
-	for (unsigned int i = 0; i < height; i++)
-		for (unsigned int j = 0; j < width; j++)
+	for (unsigned long long int i = 0; i < height; i++)
+		for (unsigned long long int j = 0; j < width; j++)
 			result->setValue(i, j, *this - other[i][j]);
 	return (result);
 }
@@ -460,17 +469,17 @@ Polynomial*	Rational::operator-(const Polynomial &other) const
 	Polynomial*	result;
 
 	tmp = other - *this;
-	result = *tmp * Rational(-1);
+	result = *tmp * Rational(-InfiniteInt(1));
 	delete tmp;
 	return (result);
 }
 
 IType*		Rational::operator-(const IType &other) const
 {
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Matrix	*other_matrix;
-	const Polynomial	*other_polynomial;
+	const Rational*		other_rational;
+	const Complex*		other_complex;
+	const Matrix*		other_matrix;
+	const Polynomial*	other_polynomial;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
@@ -490,7 +499,8 @@ IType*		Rational::operator-(const IType &other) const
 
 Rational*	Rational::operator*(const Rational &other) const
 {
-	return (new Rational(this->_numerator * other._numerator, this->_denominator * other._denominator));
+	return (new Rational(this->_numerator * other._numerator, 	\
+			this->_denominator * other._denominator));
 }
 
 Complex*	Rational::operator*(const Complex &other) const
@@ -500,15 +510,15 @@ Complex*	Rational::operator*(const Complex &other) const
 
 Matrix*		Rational::operator*(const Matrix &other) const
 {
-	Matrix				*result;
-	unsigned long int	width;
-	unsigned long int	height;
+	Matrix*					result;
+	unsigned long long int	width;
+	unsigned long long int	height;
 
 	width = other.getWidth();
 	height = other.getHeight();
 	result = new Matrix(width, height);
-	for (unsigned int i = 0; i < height; i++)
-		for (unsigned int j = 0; j < width; j++)
+	for (unsigned long long int i = 0; i < height; i++)
+		for (unsigned long long int j = 0; j < width; j++)
 			result->setValue(i, j, *this * other[i][j]);
 	return (result);
 }
@@ -520,10 +530,10 @@ Polynomial*	Rational::operator*(const Polynomial &other) const
 
 IType*		Rational::operator*(const IType &other) const
 {
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Matrix	*other_matrix;
-	const Polynomial	*other_polynomial;
+	const Rational*		other_rational;
+	const Complex*		other_complex;
+	const Matrix*		other_matrix;
+	const Polynomial*	other_polynomial;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
@@ -553,15 +563,15 @@ Complex*	Rational::operator/(const Complex &other) const
 
 Matrix*		Rational::operator/(const Matrix &other) const
 {
-	Matrix				*result;
-	unsigned long int	width;
-	unsigned long int	height;
+	Matrix*					result;
+	unsigned long long int	width;
+	unsigned long long int	height;
 
 	width = other.getWidth();
 	height = other.getHeight();
 	result = new Matrix(width, height);
-	for (unsigned int i = 0; i < height; i++)
-		for (unsigned int j = 0; j < width; j++)
+	for (unsigned long long int i = 0; i < height; i++)
+		for (unsigned long long int j = 0; j < width; j++)
 			try
 			{
 				result->setValue(i, j, *this / other[i][j]);
@@ -587,10 +597,10 @@ Polynomial*	Rational::operator/(const Polynomial &other) const
 
 IType*		Rational::operator/(const IType &other) const
 {
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Matrix	*other_matrix;
-	const Polynomial	*other_polynomial;
+	const Rational*		other_rational;
+	const Complex*		other_complex;
+	const Matrix*		other_matrix;
+	const Polynomial*	other_polynomial;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
@@ -610,8 +620,8 @@ IType*		Rational::operator/(const IType &other) const
 
 Rational*	Rational::operator%(const Rational &other) const
 {
-	Rational	*result;
-	Rational	*tmp;
+	Rational*	result;
+	Rational*	tmp;
 
 	result = *this / other;
 	tmp = result;
@@ -630,15 +640,15 @@ Rational*	Rational::operator%(const Complex &other) const
 
 Matrix*		Rational::operator%(const Matrix &other) const
 {
-	Matrix				*result;
-	unsigned long int	width;
-	unsigned long int	height;
+	Matrix*					result;
+	unsigned long long int	width;
+	unsigned long long int	height;
 
 	width = other.getWidth();
 	height = other.getHeight();
 	result = new Matrix(width, height);
-	for (unsigned int i = 0; i < height; i++)
-		for (unsigned int j = 0; j < width; j++)
+	for (unsigned long long int i = 0; i < height; i++)
+		for (unsigned long long int j = 0; j < width; j++)
 			try
 			{
 				result->setValue(i, j, *this % other[i][j]);
@@ -664,10 +674,10 @@ Polynomial*	Rational::operator%(const Polynomial &other) const
 
 IType*		Rational::operator%(const IType &other) const
 {
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Matrix	*other_matrix;
-	const Polynomial	*other_polynomial;
+	const Rational*		other_rational;
+	const Complex*		other_complex;
+	const Matrix*		other_matrix;
+	const Polynomial*	other_polynomial;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
@@ -702,7 +712,7 @@ IType*		Rational::operator^(const IType &other) const
 	if (!power.is_integer() || power < Rational(0))
 		throw UNSUPPORTED_EXPONENT;
 	result = new Rational(1);
-	for (int i = 0; i < power.getNumerator(); i++)
+	for (InfiniteInt i(0); i < power.getNumerator(); i++)
 	{
 		tmp = result;
 		result = *result * *this;
@@ -713,19 +723,20 @@ IType*		Rational::operator^(const IType &other) const
 
 
 // Getters
-int		Rational::getNumerator(void) const
+InfiniteInt	Rational::getNumerator(void) const
 {
 	return (this->_numerator);
 }
 
-int		Rational::getDenominator(void) const
+InfiniteInt	Rational::getDenominator(void) const
 {
 	return (this->_denominator);
 }
 
 double	Rational::getValue(void) const
 {
-	return (static_cast<double>(this->_numerator) / this->_denominator);
+	return (0);
+	// return (static_cast<double>(this->_numerator) / this->_denominator);
 }
 
 
@@ -752,8 +763,8 @@ IType*			Rational::clone(void) const
 
 Rational*		Rational::gcd(const Rational &other) const
 {
-	int	gcd_numerator;
-	int	gcd_denominator;
+	InfiniteInt	gcd_numerator;
+	InfiniteInt	gcd_denominator;
 
 	if (!this->_numerator)
 		return (new Rational(other));
@@ -781,8 +792,8 @@ Rational*		Rational::gcd(const Matrix &other) const
 	Rational*	tmp;
 
 	gcd = new Rational(*this);
-	for (unsigned int i = 0; i < other.getHeight(); i++)
-		for (unsigned int j = 0; j < other.getWidth(); j++)
+	for (unsigned long long int i = 0; i < other.getHeight(); i++)
+		for (unsigned long long int j = 0; j < other.getWidth(); j++)
 		{
 			tmp = gcd;
 			gcd = gcd->gcd(other[i][j]);
@@ -813,7 +824,7 @@ Rational*		Rational::gcd(const IType &other) const
 std::ostream&	Rational::print(std::ostream &os) const
 {
 	Rational	copy(*this);
-	int			numerator;
+	InfiniteInt	numerator;
 
 	numerator = copy.getNumerator();
 	if (copy.is_integer())
@@ -828,18 +839,18 @@ void			Rational::print_variable(const std::string var) const
 	std::cout << COLOR_DIM;
 	if (!var.empty())
 		std::cout << var << (this->finite_decimals() ? " = " : " ≈ ");
-	std::cout << this->getValue() << COLOR_RESET << std::endl;
+	// std::cout << this->getValue() << COLOR_RESET << std::endl;// TODO: Useless?
 }
 
 void			Rational::reduce(void)
 {
-	int	gcd;
+	InfiniteInt	gcd;
 
 	gcd = compute_gcd(this->_numerator, this->_denominator);
 	if (!gcd)
 	{
-		this->_numerator = 0;
-		this->_denominator = 1;
+		this->_numerator = InfiniteInt();
+		this->_denominator = InfiniteInt(1);
 		return ;
 	}
 	this->_numerator /= gcd;
@@ -851,9 +862,9 @@ void			Rational::reduce(void)
 	}
 }
 
-static int	count_digits(int n)
+static InfiniteInt	count_digits(InfiniteInt n)// TODO: Refaire
 {
-	int	count;
+	std::size_t	count;
 
 	count = 0;
 	if (!n)
@@ -868,13 +879,11 @@ static int	count_digits(int n)
 
 bool			Rational::finite_decimals(void) const
 {
-	int	denominator;
-	int	m;
-	int	n;
+	InfiniteInt	denominator;
+	InfiniteInt	m;
+	InfiniteInt	n;
 
 	denominator = this->_denominator;
-	m = 0;
-	n = 0;
 	while (denominator % 2 == 0)
 	{
 		denominator /= 2;
@@ -885,8 +894,9 @@ bool			Rational::finite_decimals(void) const
 		denominator /= 5;
 		n++;
 	}
-	return (denominator == 1 	\
-			&& 6 - count_digits(static_cast<int>(this->getValue())) - std::max(m, n) >= 0);
+	return (denominator == 1);// BUG: A corriger
+	// return (denominator == 1 	\
+	// 		&& 6 - count_digits(static_cast<int>(this->getValue())) - std::max(m, n) >= 0);// TODO
 }
 
 bool			Rational::in_Z(void) const
@@ -899,10 +909,10 @@ bool			Rational::is_integer(void) const
 	Rational	copy(*this);
 
 	copy.reduce();
-	return (copy.getDenominator() == 1);
+	return (copy.getDenominator() == InfiniteInt(1));
 }
 
-int				Rational::integer_part(void) const
+InfiniteInt		Rational::integer_part(void) const
 {
 	return (this->_numerator / this->_denominator);
 }
@@ -916,9 +926,9 @@ std::ostream&	operator<<(std::ostream &os, const Rational &num)
 
 
 // Functions
-int	compute_gcd(int a, int b)
+InfiniteInt	compute_gcd(InfiniteInt a, InfiniteInt b)
 {
 	if (!b)
-		return (std::abs(a));
+		return (a >= InfiniteInt(0) ? a : -a);
 	return (compute_gcd(b, a % b));
 }

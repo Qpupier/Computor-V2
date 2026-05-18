@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 14:48:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/04 15:07:12 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/18 20:37:42 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	factorize(t_quadratic_solutions &solutions, int index)
 {
-	int	factor;
+	InfiniteInt	factor;
 
 	factor = compute_gcd(compute_gcd(compute_gcd(	\
 			solutions.real_term1[index], 			\

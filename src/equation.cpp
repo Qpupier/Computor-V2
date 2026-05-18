@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/15 16:00:37 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/18 19:58:42 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void			assignation(std::string var, std::map<std::pair<std::string, std::string>
 	std::pair<std::string, std::string>										pair(var_lower, std::string());
 
 	std::cout << COLOR_BOLD << var << " = " << *result << COLOR_RESET << std::endl;
-	result->print_variable(var);
+	// result->print_variable(var);// TODO: Replace
 	for (it = stored.begin(); it != stored.end();)
 	{
 		if (it->first.first == var_lower)
@@ -63,7 +63,7 @@ static void			binomial(const Polynomial *polynomial, 				\
 	IType*							tmp;
 	IType*							result;
 
-	tmp = *terms[0].coefficient * Rational(-1);// TODO: Changer tous les " * Rational(-1) " en " - " une fois que l'opérateur unaire "-" sera implémenté
+	tmp = *terms[0].coefficient * Rational(-InfiniteInt(1));// TODO: Changer tous les " * Rational(-InfiniteInt(1)) " en " - " une fois que l'opérateur unaire "-" sera implémenté
 	result = *tmp / *terms[1].coefficient;
 	delete tmp;
 	assignation(polynomial->getName(), stored, result);

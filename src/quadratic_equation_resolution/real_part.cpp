@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:24:12 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 16:01:06 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/18 19:58:42 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static Rational*	get_initial_real_term1(Complex* a, Complex* b)
 	Rational*	a_imaginary_b_imaginary;
 	Rational*	result;
 
-	a_real_negative = Rational(-1) * a->getReal();
+	a_real_negative = Rational(-InfiniteInt(1)) * a->getReal();
 	minus_a_real_b_real = *a_real_negative * b->getReal();
 	delete a_real_negative;
 	a_imaginary_b_imaginary = a->getImaginary() * b->getImaginary();

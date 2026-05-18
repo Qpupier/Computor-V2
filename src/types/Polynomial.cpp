@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/15 12:02:40 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/18 20:42:18 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,7 +274,7 @@ static std::vector<Polynomial::t_term>	euclidean_division_step(const std::vector
 	term_result = get_term_result(dividend[dividend.size() - 1], divisor[divisor.size() - 1]);
 	quotient.push_back(term_result);
 	add_terms_to_vector(dividend, result);
-	sub = *term_result.coefficient * Rational(-1);
+	sub = *term_result.coefficient * Rational(-InfiniteInt(1));
 	distributivity = vector_term_coeff_multiplication(sub, term_result.power, divisor);
 	add_terms_to_vector(distributivity, result);
 	free_vector_terms(distributivity);
@@ -621,7 +621,7 @@ Polynomial*	Polynomial::operator-(const Polynomial &other) const
 	Polynomial*	sub;
 	Polynomial*	result;
 
-	sub = other * Rational(-1);
+	sub = other * Rational(-InfiniteInt(1));
 	result = *this + *sub;
 	delete sub;
 	return (result);
@@ -634,7 +634,7 @@ Polynomial*	Polynomial::operator-(const Rational &other) const
 	std::vector<t_term>	distributivity;
 
 	result = new Polynomial(*this);
-	sub = other * Rational(-1);
+	sub = other * Rational(-InfiniteInt(1));
 	distributivity = vector_term_coeff_multiplication(sub, 0, this->_dividers);
 	delete sub;
 	add_terms_to_vector(distributivity, result->_terms);
@@ -650,7 +650,7 @@ Polynomial*	Polynomial::operator-(const Complex &other) const
 	std::vector<t_term>	distributivity;
 
 	result = new Polynomial(*this);
-	sub = other * Rational(-1);
+	sub = other * Rational(-InfiniteInt(1));
 	distributivity = vector_term_coeff_multiplication(sub, 0, this->_dividers);
 	delete sub;
 	add_terms_to_vector(distributivity, result->_terms);
@@ -666,7 +666,7 @@ Polynomial*	Polynomial::operator-(const Matrix &other) const
 	std::vector<t_term>	distributivity;
 
 	result = new Polynomial(*this);
-	sub = other * Rational(-1);
+	sub = other * Rational(-InfiniteInt(1));
 	distributivity = vector_term_coeff_multiplication(sub, 0, this->_dividers);
 	delete sub;
 	add_terms_to_vector(distributivity, result->_terms);
@@ -969,9 +969,9 @@ IType*		Polynomial::operator%(const IType &other) const
 
 Polynomial*	Polynomial::operator^(const Rational &other) const
 {
-	Polynomial	*result;
-	Polynomial	*tmp;
-	int			power;
+	Polynomial*	result;
+	Polynomial*	tmp;
+	InfiniteInt	power;
 
 	power = other.getNumerator();
 	if (!power)

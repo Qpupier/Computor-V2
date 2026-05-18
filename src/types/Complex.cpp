@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 14:24:59 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/18 20:38:11 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static std::ostream&	print_value(std::ostream &os, Rational value, 	\
 		if (value < Rational(0))
 		{
 			os << " - ";
-			copy = value * Rational(-1);
+			copy = value * Rational(-InfiniteInt(1));
 		}
 		else
 			os << " + ";
@@ -33,7 +33,7 @@ static std::ostream&	print_value(std::ostream &os, Rational value, 	\
 	else if (value < Rational(0) && i != std::string())
 	{
 		os << "-";
-		copy = value * Rational(-1);
+		copy = value * Rational(-InfiniteInt(1));
 	}
 	if (i == std::string() || copy != Rational(1))
 		os << copy.getNumerator();
@@ -287,7 +287,7 @@ Polynomial*	Complex::operator-(const Polynomial &other) const
 	Polynomial*	result;
 
 	tmp = other - *this;
-	result = *tmp * Rational(-1);
+	result = *tmp * Rational(-InfiniteInt(1));
 	delete tmp;
 	return (result);
 }
@@ -589,7 +589,7 @@ IType*		Complex::operator^(const IType &other) const
 	if (!power.is_integer() || power < Rational(0))
 		throw UNSUPPORTED_EXPONENT;
 	result = new Complex(Rational(1), Rational(0));
-	for (int i = 0; i < power.getNumerator(); i++)
+	for (InfiniteInt i(0); i < power.getNumerator(); i++)
 	{
 		tmp = result;
 		result = *result * *this;
@@ -712,7 +712,7 @@ void			Complex::print_variable(const std::string var) const
 	else if (this->_real < Rational(0) && this->_imaginary > Rational(0))
 	{
 		std::cout << this->_imaginary.getValue() << "i - ";
-		tmp = this->_real * Rational(-1);
+		tmp = this->_real * Rational(-InfiniteInt(1));
 		std::cout << tmp->getValue();
 		delete tmp;
 	}
@@ -722,7 +722,7 @@ void			Complex::print_variable(const std::string var) const
 		if (this->_imaginary < Rational(0))
 		{
 			std::cout << " - ";
-			tmp = this->_imaginary * Rational(-1);
+			tmp = this->_imaginary * Rational(-InfiniteInt(1));
 		}
 		else
 		{

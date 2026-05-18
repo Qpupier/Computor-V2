@@ -6,14 +6,14 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 14:23:01 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/18 20:11:38 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RATIONAL_HPP
 # define RATIONAL_HPP
 
-# include "computor-v2.hpp"
+# include "InfiniteInt.hpp"
 
 class	Complex;
 class	Matrix;
@@ -23,9 +23,10 @@ class	Rational: public IType
 {
 	public:
 		// Constructors and destructor
-		Rational(void): _numerator(0), _denominator(1) {};
-		Rational(int numerator): _numerator(numerator), _denominator(1) {};
-		Rational(int numerator, int denominator);
+		Rational(void): _numerator(InfiniteInt()), _denominator(InfiniteInt(1)) {};
+		Rational(InfiniteInt numerator): _numerator(numerator), _denominator(InfiniteInt(1)) {};
+		Rational(const long long int numerator): Rational(InfiniteInt(numerator)) {};
+		Rational(InfiniteInt numerator, InfiniteInt denominator);
 		Rational(std::string str);
 		Rational(const Token &token): Rational(token.getValue()) {};
 		Rational(const Rational &other): _numerator(other._numerator), _denominator(other._denominator) {};
@@ -91,9 +92,9 @@ class	Rational: public IType
 		IType*		operator^(const IType &other) const;
 
 		// Getters
-		int		getNumerator(void) const;
-		int		getDenominator(void) const;
-		double	getValue(void) const;
+		InfiniteInt	getNumerator(void) const;
+		InfiniteInt	getDenominator(void) const;
+		double		getValue(void) const;// TODO: Verifier avec la nouvelle classe
 
 		// Methods
 		IType*			matrix_operator(const IType &other) const;
@@ -109,19 +110,19 @@ class	Rational: public IType
 		bool			finite_decimals(void) const;
 		bool			in_Z(void) const;
 		bool			is_integer(void) const;
-		int				integer_part(void) const;
+		InfiniteInt		integer_part(void) const;
 
 	private:
 		// Members
-		int	_numerator;
-		int	_denominator;
+		InfiniteInt	_numerator;
+		InfiniteInt	_denominator;
 };
 
 // Output stream operator overload
 std::ostream&	operator<<(std::ostream &os, const Rational &num);
 
 // Functions
-int	compute_gcd(int a, int b);
+InfiniteInt	compute_gcd(InfiniteInt a, InfiniteInt b);
 
 # include "Complex.hpp"
 # include "Matrix.hpp"

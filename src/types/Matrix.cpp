@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/13 19:12:10 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/18 20:40:01 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "AST.hpp"
 
 // Utils
-static std::vector<std::string>					parse_line(std::string &line, unsigned long *width)
+static std::vector<std::string>					parse_line(std::string &line, unsigned long long int * width)
 {
 	std::vector<std::string>	row;
 	std::size_t					pos;
@@ -41,7 +41,7 @@ static std::vector<std::string>					parse_line(std::string &line, unsigned long 
 	return (row);
 }
 
-static std::vector<std::vector<std::string>>	parse_matrix(std::string &matrix, unsigned long *width)
+static std::vector<std::vector<std::string>>	parse_matrix(std::string &matrix, unsigned long long int * width)
 {
 	std::vector<std::vector<std::string>>	rows;
 	std::string								line;
@@ -89,9 +89,9 @@ Matrix::Matrix(unsigned long width, unsigned long height): _width(width), _heigh
 Matrix::Matrix(std::string str, t_data &data): _width(0), _height(0)
 {
 	std::vector<std::vector<std::string>>	rows;
-	AST										*cell;
-	Rational								*rational;
-	unsigned long int						height;
+	AST*									cell;
+	Rational*								rational;
+	unsigned long long int					height;
 
 	rows = parse_matrix(str, &this->_width);
 	height = rows.size();
@@ -339,10 +339,10 @@ Polynomial*	Matrix::operator+(const Polynomial &other) const
 
 IType*		Matrix::operator+(const IType &other) const
 {
-	const Matrix	*other_matrix;
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Polynomial	*other_polynomial;
+	const Matrix*		other_matrix;
+	const Rational*		other_rational;
+	const Complex*		other_complex;
+	const Polynomial*	other_polynomial;
 
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
@@ -362,7 +362,7 @@ IType*		Matrix::operator+(const IType &other) const
 
 Matrix*		Matrix::operator-(const Matrix &other) const
 {
-	Matrix	*result;
+	Matrix*	result;
 
 	if (this->_width != other._width || this->_height != other._height)
 		throw ERROR_MATRIX_DIMENSIONS;
@@ -375,7 +375,7 @@ Matrix*		Matrix::operator-(const Matrix &other) const
 
 Matrix*		Matrix::operator-(const Rational &other) const
 {
-	Matrix	*result;
+	Matrix*	result;
 
 	result = new Matrix(this->_width, this->_height);
 	for (unsigned int i = 0; i < this->_height; i++)
@@ -405,7 +405,7 @@ Polynomial*	Matrix::operator-(const Polynomial &other) const
 	Polynomial*	result;
 
 	tmp = other - *this;
-	result = *tmp * Rational(-1);
+	result = *tmp * Rational(-InfiniteInt(1));
 	delete tmp;
 	return (result);
 }
@@ -479,10 +479,10 @@ Polynomial*	Matrix::operator*(const Polynomial &other) const
 
 IType*		Matrix::operator*(const IType &other) const
 {
-	const Matrix	*other_matrix;
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Polynomial	*other_polynomial;
+	const Matrix*		other_matrix;
+	const Rational*		other_rational;
+	const Complex*		other_complex;
+	const Polynomial*	other_polynomial;
 
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
@@ -502,7 +502,7 @@ IType*		Matrix::operator*(const IType &other) const
 
 Matrix*		Matrix::operator/(const Matrix &other) const
 {
-	Matrix	*result;
+	Matrix*	result;
 
 	if (this->_width != other._width || this->_height != other._height)
 		throw ERROR_MATRIX_DIMENSIONS;
@@ -523,7 +523,7 @@ Matrix*		Matrix::operator/(const Matrix &other) const
 
 Matrix*		Matrix::operator/(const Rational &other) const
 {
-	Matrix	*result;
+	Matrix*	result;
 
 	result = new Matrix(this->_width, this->_height);
 	for (unsigned int i = 0; i < this->_height; i++)
@@ -568,10 +568,10 @@ Polynomial*	Matrix::operator/(const Polynomial &other) const
 
 IType*		Matrix::operator/(const IType &other) const
 {
-	const Matrix	*other_matrix;
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Polynomial	*other_polynomial;
+	const Matrix*		other_matrix;
+	const Rational*		other_rational;
+	const Complex*		other_complex;
+	const Polynomial*	other_polynomial;
 
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
@@ -612,7 +612,7 @@ Matrix*		Matrix::operator%(const Matrix &other) const
 
 Matrix*		Matrix::operator%(const Rational &other) const
 {
-	Matrix	*result;
+	Matrix*	result;
 
 	result = new Matrix(this->_width, this->_height);
 	for (unsigned int i = 0; i < this->_height; i++)
@@ -657,10 +657,10 @@ Polynomial*	Matrix::operator%(const Polynomial &other) const
 
 IType*		Matrix::operator%(const IType &other) const
 {
-	const Matrix	*other_matrix;
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Polynomial	*other_polynomial;
+	const Matrix*		other_matrix;
+	const Rational*		other_rational;
+	const Complex*		other_complex;
+	const Polynomial*	other_polynomial;
 
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
@@ -684,7 +684,7 @@ Matrix*		Matrix::operator^(const Rational &other) const
 	Matrix*	tmp;
 
 	result = new Matrix(this->_width, this->_height);
-	for (int i = 0; i < other.getNumerator(); i++)
+	for (InfiniteInt i(0); i < other.getNumerator(); i++)
 	{
 		tmp = result;
 		try
@@ -720,12 +720,12 @@ IType*		Matrix::operator^(const IType &other) const
 
 
 // Getters
-unsigned long	Matrix::getWidth(void) const
+unsigned long long int	Matrix::getWidth(void) const
 {
 	return (this->_width);
 }
 
-unsigned long	Matrix::getHeight(void) const
+unsigned long long int	Matrix::getHeight(void) const
 {
 	return (this->_height);
 }
@@ -743,10 +743,10 @@ void	Matrix::setValue(unsigned int i, unsigned int j, Rational *value)
 // Methods
 Matrix*			Matrix::matrix_operator(const Matrix &other) const
 {
-	Matrix		*result;
-	Rational	*cell;
-	Rational	*mul;
-	Rational	*tmp;
+	Matrix*		result;
+	Rational*	cell;
+	Rational*	mul;
+	Rational*	tmp;
 
 	if (this->_width != other._height)
 		throw ERROR_MATRIX_DIMENSIONS;

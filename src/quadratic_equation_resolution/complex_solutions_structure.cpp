@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 15:46:39 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 15:58:40 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/18 20:58:36 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ static Rational		factorize_sqrt(Complex* delta, 	\
 	Rational*	term_2;
 	Rational	term_1_factor;
 	Rational	final_factor;
-	int			factor;
-	int			big_sqrt;
+	InfiniteInt	factor;
+	InfiniteInt	big_sqrt;
 
 	module_square = get_module_square(delta);
 	solutions.sqrt_term1_factor = 2;
@@ -67,7 +67,7 @@ static Rational		factorize_sqrt(Complex* delta, 	\
 	solutions.sqrt_term1_factor *= big_sqrt;
 	solutions.sqrt_term2_real *= big_sqrt;
 	solutions.sqrt_term2_imaginary *= big_sqrt;
-	final_factor = Rational(factor, 2 * small_gcd->getDenominator());
+	final_factor = Rational(factor, InfiniteInt(2) * small_gcd->getDenominator());
 	delete small_gcd;
 	return (final_factor);
 }
