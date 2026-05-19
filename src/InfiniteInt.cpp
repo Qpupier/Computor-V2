@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:39:10 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/18 21:03:36 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/19 17:22:21 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static std::vector<unsigned char>	add_infinite_int(	\
 	unsigned char				digit_a;
 	unsigned char				digit_b;
 	unsigned char				sum;
-	bool							hold(false);
+	bool						hold(false);
 
 	std::reverse(rev_a.begin(), rev_a.end());
 	std::reverse(rev_b.begin(), rev_b.end());
@@ -142,20 +142,19 @@ static bool							division(InfiniteInt &dividend, 	\
 
 // Constructors
 InfiniteInt::InfiniteInt(const std::vector<unsigned char> &digits, \
-		bool is_negative): _digits(digits), _isNegative(is_negative)
+		bool is_negative, bool is_integer_part): _digits(digits), _isIntegerPart(is_integer_part), _isNegative(is_negative)
 {
 	this->reduce();
 }
 
-InfiniteInt::InfiniteInt(const std::string &str, bool is_negative)
+InfiniteInt::InfiniteInt(const std::string &str, bool is_negative, bool is_integer_part)
 {
 	if (str.empty())
 		return ;
+	this->_isIntegerPart = is_integer_part;
 	this->_isNegative = is_negative;
 	for (std::string::size_type i = 0; i < str.size(); i++)
 		this->_digits.push_back(str[i] - '0');
-	while (!this->_digits.empty() && this->_digits[0] == 0)
-		this->_digits.erase(this->_digits.begin());
 	this->reduce();
 }
 
@@ -243,8 +242,10 @@ InfiniteInt			InfiniteInt::operator+(const InfiniteInt &other) const
 		return (other - (-*this));
 	if (!this->_isNegative && other._isNegative)
 		return (*this - (-other));
-	result = this->clone();
-	result._digits = add_infinite_int(result, other);
+	result._digits = add_infinite_int(*this, other);
+	result._isIntegerPart = this->_isIntegerPart;
+	result._isNegative = this->_isNegative;
+	result.reduce();
 	return (result);
 }
 
@@ -281,14 +282,15 @@ InfiniteInt			InfiniteInt::operator-(const InfiniteInt &other) const
 {
 	InfiniteInt	result;
 
+	if (this->_isNegative && other._isNegative)
+		return (-other - (-*this));
 	if (this->_isNegative != other._isNegative)
 		return (*this + (-other));
-	if (this->_isNegative)
-		return (-(*this) - (-other));
 	if (*this < other)
 		return (-(other - *this));
-	result = this->clone();
 	result._digits = sub_infinite_int(*this, other);
+	result._isIntegerPart = this->_isIntegerPart;
+	result._isNegative = false;
 	result.reduce();
 	return (result);
 }
@@ -391,6 +393,11 @@ std::vector<unsigned char>	InfiniteInt::getDigits(void) const
 	return (this->_digits);
 }
 
+bool						InfiniteInt::getIsIntegerPart(void) const
+{
+	return (this->_isIntegerPart);
+}
+
 bool						InfiniteInt::getIsNegative(void) const
 {
 	return (this->_isNegative);
@@ -398,6 +405,17 @@ bool						InfiniteInt::getIsNegative(void) const
 
 
 // Setters
+void	InfiniteInt::setDigits(const std::vector<unsigned char> &digits)
+{
+	this->_digits = digits;
+	this->reduce();
+}
+
+void	InfiniteInt::setIsIntegerPart(bool is_integer_part)
+{
+	this->_isIntegerPart = is_integer_part;
+}
+
 void	InfiniteInt::setIsNegative(bool is_negative)
 {
 	this->_isNegative = is_negative;
@@ -415,19 +433,6 @@ void		InfiniteInt::push_back(unsigned char digit)
 	this->_digits.push_back(digit);
 }
 
-void		InfiniteInt::reduce(void)
-{
-	while (!this->_digits.empty() && this->_digits[0] == 0)
-		this->_digits.erase(this->_digits.begin());
-	if (this->_digits.empty())
-		this->_isNegative = false;
-}
-
-void		InfiniteInt::reverse(void)
-{
-	std::reverse(this->_digits.begin(), this->_digits.end());
-}
-
 std::string	InfiniteInt::to_string(void) const
 {
 	std::string	str;
@@ -440,16 +445,40 @@ std::string	InfiniteInt::to_string(void) const
 	return (str);
 }
 
+std::size_t	InfiniteInt::size(void)
+{
+	return (this->_digits.size());
+}
+
+void		InfiniteInt::reverse(void)
+{
+	std::reverse(this->_digits.begin(), this->_digits.end());
+}
+
+void		InfiniteInt::reduce(void)
+{
+	if (!this->_isIntegerPart)
+		this->reverse();
+	while (!this->_digits.empty() && this->_digits[0] == 0)
+		this->_digits.erase(this->_digits.begin());
+	if (this->_digits.empty())
+		this->_isNegative = false;
+	else if (!this->_isIntegerPart)
+		this->reverse();
+}
+
 
 // Output stream operator overload
 std::ostream&	operator<<(std::ostream &os, const InfiniteInt &num)
 {
+	std::vector<unsigned char>	digits(num.getDigits());
+
 	if (num.getDigits().empty())
 		os << '0';
 	else if (num.getIsNegative())
 		os << '-';
-	for (std::vector<unsigned char>::const_iterator it 	\
-			= num.getDigits().begin(); it != num.getDigits().end(); it++)
+	for (std::vector<unsigned char>::const_iterator it = digits.begin(); 	\
+			it != digits.end(); it++)
 		os << static_cast<char>(*it + '0');
 	return (os);
 }
