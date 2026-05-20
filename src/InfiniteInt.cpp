@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:39:10 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/19 17:22:21 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/20 20:39:01 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,10 +119,12 @@ static bool							division(InfiniteInt &dividend, 	\
 	unsigned char	result_digit(0);
 	unsigned char	last_good_factor(0);
 
+	// std::cout << "dividend: " << dividend << " divisor: " << divisor << std::endl;
 	while (tmp_dividend < divisor && nb < dividend.getDigits().size())
 	{
 		tmp_dividend.push_back(dividend.getDigits()[nb]);
 		nb++;
+		// std::cout << "tmp_dividend: " << tmp_dividend << std::endl;
 	}
 	if (tmp_dividend < divisor)
 		return (false);
@@ -133,6 +135,7 @@ static bool							division(InfiniteInt &dividend, 	\
 		last_good_quotient = factor;
 		factor += divisor;
 		result_digit++;
+		// std::cout << "factor: " << factor << " tmp_dividend: " << tmp_dividend << std::endl;
 	}
 	result.push_back(last_good_factor);
 	division_sub(tmp_dividend - last_good_quotient, dividend, nb, result);
@@ -445,7 +448,7 @@ std::string	InfiniteInt::to_string(void) const
 	return (str);
 }
 
-std::size_t	InfiniteInt::size(void)
+std::size_t	InfiniteInt::size(void) const
 {
 	return (this->_digits.size());
 }

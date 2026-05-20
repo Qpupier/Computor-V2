@@ -6,16 +6,91 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:46:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/19 17:26:34 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/20 22:21:08 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "InfiniteDouble.hpp"
 
+// Utils
+static void	remove_decimal_part_in_divisor(InfiniteDouble & dividend, 	\
+		InfiniteDouble & divisor)
+{
+	while (divisor.getDecimalPart())
+	{
+		dividend *= InfiniteDouble(10);
+		divisor *= InfiniteDouble(10);
+	}
+}
+
+static bool	is_division_infinite(const InfiniteInt & divisor)
+{
+	InfiniteInt	divisor_copy(divisor);
+
+	while (divisor_copy % 2 == 0)
+		divisor_copy /= InfiniteInt(2);
+	while (divisor_copy % 5 == 0)
+		divisor_copy /= InfiniteInt(5);
+	return (divisor_copy == InfiniteInt(1));
+}
+
+static bool	division_next_digit(const InfiniteDouble & dividend, 	\
+		InfiniteInt & tmp_dividend, 								\
+		std::vector<unsigned char>::size_type & nb_integer, 		\
+		std::vector<unsigned char>::size_type & nb_decimal)
+{
+	if (nb_integer < dividend.getIntegerPart().size())
+	{
+		tmp_dividend.push_back(	\
+				dividend.getIntegerPart().getDigits()[nb_integer]);
+		return (true);
+	}
+	if (nb_decimal < dividend.getDecimalPart().size())
+	{
+		tmp_dividend.push_back(	\
+				dividend.getDecimalPart().getDigits()[nb_decimal]);
+		if (!nb_decimal++)
+			return (true);
+	}
+	else
+		tmp_dividend.push_back(0);
+	return (false);
+}
+
+static void	division_loop(const InfiniteDouble & dividend, 	\
+		const InfiniteInt & divisor, 						\
+		std::vector<unsigned char> & result_integer, 		\
+		std::vector<unsigned char> & result_decimal)
+{
+	InfiniteInt								tmp_dividend;
+	InfiniteInt								tmp_result;
+	std::vector<unsigned char>::size_type	nb_integer(0);
+	std::vector<unsigned char>::size_type	nb_decimal(0);
+	unsigned char							result_digit;
+
+	while (result_decimal.size() < InfiniteDouble::MAX_PRECISION)
+	{
+		tmp_result = tmp_dividend / divisor;
+		result_digit = tmp_result.getDigits().empty() 	\
+				? 0 : tmp_result.getDigits()[0];
+		tmp_dividend -= tmp_result * divisor;
+		if (division_next_digit(dividend, tmp_dividend, nb_integer, nb_decimal))
+			result_integer.push_back(result_digit);
+		else
+			result_decimal.push_back(result_digit);
+		if (!tmp_dividend)
+			break ;
+		nb_integer++;
+	}
+}
+
+
 // Constructors
 InfiniteDouble::InfiniteDouble(const InfiniteInt &integer_part, 		\
-		const InfiniteInt &decimal_part, bool is_negative):				\
+		const InfiniteInt &decimal_part, bool is_negative, 				\
+		bool is_decimal_infinite):										\
 			_integer_part(integer_part), _decimal_part(decimal_part), 	\
+			_isDecimalInfinite(is_decimal_infinite), 					\
 			_isNegative(is_negative)
 {
 	this->_integer_part.setIsIntegerPart(true);
@@ -41,6 +116,8 @@ InfiniteDouble&	InfiniteDouble::operator=(const InfiniteDouble &other)
 	{
 		this->_integer_part = other._integer_part;
 		this->_decimal_part = other._decimal_part;
+		this->_isDecimalInfinite = other._isDecimalInfinite;
+		this->_isNegative = other._isNegative;
 	}
 	return (*this);
 }
@@ -241,51 +318,55 @@ void			InfiniteDouble::operator*=(const InfiniteDouble &other)
 	*this = *this * other;
 }
 
-// InfiniteDouble	InfiniteDouble::operator/(const InfiniteDouble &other) const
-// {
-// 	InfiniteDouble	dividend(*this);
-// 	InfiniteDouble	result;
+InfiniteDouble	InfiniteDouble::operator/(const InfiniteDouble &other) const
+{
+	InfiniteDouble				dividend(*this);
+	InfiniteDouble				divisor(other);
+	std::vector<unsigned char>	result_integer;
+	std::vector<unsigned char>	result_decimal;
+	bool						infinite;
 
-// 	while (!dividend.getDigits().empty())
-// 		if (!division(dividend, other, result))
-// 			break ;
-// 	result.setIsNegative(this->_isNegative != other._isNegative);
-// 	result.reduce();
-// 	return (result);
-// }
+	remove_decimal_part_in_divisor(dividend, divisor);
+	division_loop(dividend, divisor.getIntegerPart(), result_integer, 	\
+			result_decimal);
+	return (InfiniteDouble(InfiniteInt(result_integer), 				\
+			InfiniteInt(result_decimal, false, false), 					\
+			this->_isNegative != other._isNegative));
+}
 
-// void			InfiniteDouble::operator/=(const InfiniteDouble &other)
-// {
-// 	*this = *this / other;
-// }
+void			InfiniteDouble::operator/=(const InfiniteDouble &other)
+{
+	*this = *this / other;
+}
 
-// InfiniteDouble	InfiniteDouble::operator%(const InfiniteDouble &other) const
-// {
-// 	return (*this - *this / other * other);
-// }
+InfiniteDouble	InfiniteDouble::operator%(const InfiniteDouble &other) const
+{
+	InfiniteDouble	division(*this / other);
 
-// void			InfiniteDouble::operator%=(const InfiniteDouble &other)
-// {
-// 	*this = *this % other;
-// }
+	return (*this - InfiniteDouble(division.getIntegerPart()) * other);
+}
 
-// InfiniteDouble	InfiniteDouble::operator^(const InfiniteDouble &other) const
-// {
-// 	InfiniteDouble	result(std::vector<unsigned char>(1, 1));
-// 	InfiniteDouble	exp(other);
+void			InfiniteDouble::operator%=(const InfiniteDouble &other)
+{
+	*this = *this % other;
+}
 
-// 	while (exp > InfiniteDouble())
-// 	{
-// 		result *= *this;
-// 		exp -= InfiniteDouble(1);
-// 	}
-// 	return (result);
-// }
+InfiniteDouble	InfiniteDouble::operator^(const InfiniteDouble &other) const
+{
+	InfiniteDouble	result(1);
+	InfiniteDouble	power(other.getIntegerPart());
 
-// void			InfiniteDouble::operator^=(const InfiniteDouble &other)
-// {
-// 	*this = *this ^ other;
-// }
+	if (other.getDecimalPart() || other.getIsNegative())
+		throw std::runtime_error("Exponentiation with a non-integer exponent is not supported.");//TODO: remplacer avec la bonne
+	while (power--)
+		result *= *this;
+	return (result);
+}
+
+void			InfiniteDouble::operator^=(const InfiniteDouble &other)
+{
+	*this = *this ^ other;
+}
 
 
 // Getters
@@ -297,6 +378,11 @@ InfiniteInt	InfiniteDouble::getDecimalPart(void) const
 InfiniteInt	InfiniteDouble::getIntegerPart(void) const
 {
 	return (this->_integer_part);
+}
+
+bool		InfiniteDouble::getIsDecimalInfinite(void) const
+{
+	return (this->_isDecimalInfinite);
 }
 
 bool		InfiniteDouble::getIsNegative(void) const
@@ -316,6 +402,11 @@ void	InfiniteDouble::setIntegerPart(const InfiniteInt &integer_part)
 	this->_integer_part = integer_part;
 }
 
+void	InfiniteDouble::setIsDecimalInfinite(bool is_decimal_infinite)
+{
+	this->_isDecimalInfinite = is_decimal_infinite;
+}
+
 void	InfiniteDouble::setIsNegative(bool is_negative)
 {
 	this->_isNegative = is_negative;
@@ -323,7 +414,17 @@ void	InfiniteDouble::setIsNegative(bool is_negative)
 
 
 // Methods
-void		InfiniteDouble::reduce(void)
+void	InfiniteDouble::push_back_decimal(unsigned char digit)
+{
+	this->_decimal_part.push_back(digit);
+}
+
+void	InfiniteDouble::push_back_integer(unsigned char digit)
+{
+	this->_integer_part.push_back(digit);
+}
+
+void	InfiniteDouble::reduce(void)
 {
 	this->_integer_part.reduce();
 	this->_decimal_part.reduce();
