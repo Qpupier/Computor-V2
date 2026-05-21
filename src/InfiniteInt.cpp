@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:39:10 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/20 20:39:01 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/21 11:24:38 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,13 +144,13 @@ static bool							division(InfiniteInt &dividend, 	\
 
 
 // Constructors
-InfiniteInt::InfiniteInt(const std::vector<unsigned char> &digits, \
+InfiniteInt::InfiniteInt(const std::vector<unsigned char> digits, \
 		bool is_negative, bool is_integer_part): _digits(digits), _isIntegerPart(is_integer_part), _isNegative(is_negative)
 {
 	this->reduce();
 }
 
-InfiniteInt::InfiniteInt(const std::string &str, bool is_negative, bool is_integer_part)
+InfiniteInt::InfiniteInt(const std::string str, bool is_negative, bool is_integer_part)
 {
 	if (str.empty())
 		return ;

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:39:49 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/20 21:08:06 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/21 11:24:59 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ class	InfiniteInt
 {
 	public:
 		// Constructors and destructor
-		InfiniteInt(const std::vector<unsigned char> &digits, 	\
+		InfiniteInt(const std::vector<unsigned char> digits, 	\
 				bool is_negative = false, bool is_integer_part = true);
 		InfiniteInt(void): InfiniteInt(std::vector<unsigned char>()) {};
 		InfiniteInt(const InfiniteInt &other): 					\
 				InfiniteInt(other.getDigits(), other.getIsNegative(), other.getIsIntegerPart()) {};
-		InfiniteInt(const std::string &str, bool is_negative = false, bool is_integer_part = true);
+		InfiniteInt(const std::string str, bool is_negative = false, bool is_integer_part = true);
 		InfiniteInt(const long long int value, bool is_integer_part = true): 				\
 				InfiniteInt(std::to_string(std::llabs(value)), value < 0, is_integer_part) {};
 		~InfiniteInt(void) {};

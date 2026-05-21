@@ -6,15 +6,105 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:46:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/20 22:21:08 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/21 11:53:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "InfiniteDouble.hpp"
 
 // Utils
-static void	remove_decimal_part_in_divisor(InfiniteDouble & dividend, 	\
-		InfiniteDouble & divisor)
+static void				align_sizes(						\
+		std::vector<unsigned char> & this_decimal_digits, 	\
+		std::vector<unsigned char> & other_decimal_digits, 	\
+		const std::vector<unsigned char>::size_type decimal_size)
+{
+	while (this_decimal_digits.size() < decimal_size)
+		this_decimal_digits.push_back(0);
+	while (other_decimal_digits.size() < decimal_size)
+		other_decimal_digits.push_back(0);
+}
+
+static void				concat_parts(std::vector<unsigned char> & a, 	\
+		std::vector<unsigned char> & b, 								\
+		const std::vector<unsigned char> & this_decimal_digits, 		\
+		const std::vector<unsigned char> & other_decimal_digits)
+{
+	a.insert(a.end(), this_decimal_digits.begin(), this_decimal_digits.end());
+	b.insert(b.end(), other_decimal_digits.begin(), other_decimal_digits.end());
+}
+
+static InfiniteInt		add_integer_parts(const InfiniteDouble & tmp_a, 	\
+		const InfiniteDouble & tmp_b, 										\
+		const std::vector<unsigned char>::size_type & decimal_size)
+{
+	std::vector<unsigned char>	a(tmp_a.getIntegerPart().getDigits());
+	std::vector<unsigned char>	b(tmp_b.getIntegerPart().getDigits());
+	std::vector<unsigned char>	this_decimal_digits		\
+			(tmp_a.getDecimalPart().getDigits());
+	std::vector<unsigned char>	other_decimal_digits	\
+			(tmp_b.getDecimalPart().getDigits());
+
+	align_sizes(this_decimal_digits, other_decimal_digits, decimal_size);
+	concat_parts(a, b, this_decimal_digits, other_decimal_digits);
+	return (InfiniteInt(a) + InfiniteInt(b));
+}
+
+static InfiniteInt		sub_integer_parts(const InfiniteDouble & tmp_a, 	\
+		const InfiniteDouble & tmp_b, 										\
+		const std::vector<unsigned char>::size_type & decimal_size)
+{
+	std::vector<unsigned char>	a(tmp_a.getIntegerPart().getDigits());
+	std::vector<unsigned char>	b(tmp_b.getIntegerPart().getDigits());
+	std::vector<unsigned char>	this_decimal_digits		\
+			(tmp_a.getDecimalPart().getDigits());
+	std::vector<unsigned char>	other_decimal_digits	\
+			(tmp_b.getDecimalPart().getDigits());
+
+	align_sizes(this_decimal_digits, other_decimal_digits, decimal_size);
+	concat_parts(a, b, this_decimal_digits, other_decimal_digits);
+	return (InfiniteInt(a) - InfiniteInt(b));
+}
+
+static InfiniteInt		mul_integer_parts(const InfiniteDouble & tmp_a, 	\
+		const InfiniteDouble & tmp_b)
+{
+	std::vector<unsigned char>	a(tmp_a.getIntegerPart().getDigits());
+	std::vector<unsigned char>	b(tmp_b.getIntegerPart().getDigits());
+	std::vector<unsigned char>	this_decimal_digits		\
+			(tmp_a.getDecimalPart().getDigits());
+	std::vector<unsigned char>	other_decimal_digits	\
+			(tmp_b.getDecimalPart().getDigits());
+
+	concat_parts(a, b, this_decimal_digits, other_decimal_digits);
+	return (InfiniteInt(a) * InfiniteInt(b));
+}
+
+static InfiniteDouble	place_floating_point(							\
+		const InfiniteInt & int_result, 								\
+		const std::vector<unsigned char>::size_type & decimal_size, 	\
+		const bool is_negative)
+{
+	std::vector<unsigned char>	integer_digits_sub;
+	std::vector<unsigned char>	vector_integer;
+	std::vector<unsigned char>	vector_decimal;
+	InfiniteDouble				result;
+
+	integer_digits_sub = int_result.getDigits();
+	vector_integer = std::vector<unsigned char>(		\
+			integer_digits_sub.begin(), 				\
+			integer_digits_sub.end() - decimal_size);
+	vector_decimal = std::vector<unsigned char>(		\
+			integer_digits_sub.end() - decimal_size, 	\
+			integer_digits_sub.end());
+	result.setIntegerPart(InfiniteInt(vector_integer));
+	result.setDecimalPart(InfiniteInt(vector_decimal, false, false));
+	result.setIsNegative(is_negative);
+	result.reduce();
+	return (result);
+}
+
+static void				remove_decimal_part_in_divisor(	\
+		InfiniteDouble & dividend, InfiniteDouble & divisor)
 {
 	while (divisor.getDecimalPart())
 	{
@@ -23,7 +113,7 @@ static void	remove_decimal_part_in_divisor(InfiniteDouble & dividend, 	\
 	}
 }
 
-static bool	is_division_infinite(const InfiniteInt & divisor)
+static bool				is_division_infinite(const InfiniteInt & divisor)
 {
 	InfiniteInt	divisor_copy(divisor);
 
@@ -34,9 +124,9 @@ static bool	is_division_infinite(const InfiniteInt & divisor)
 	return (divisor_copy == InfiniteInt(1));
 }
 
-static bool	division_next_digit(const InfiniteDouble & dividend, 	\
-		InfiniteInt & tmp_dividend, 								\
-		std::vector<unsigned char>::size_type & nb_integer, 		\
+static bool				division_next_digit(							\
+		const InfiniteDouble & dividend, InfiniteInt & tmp_dividend, 	\
+		std::vector<unsigned char>::size_type & nb_integer, 			\
 		std::vector<unsigned char>::size_type & nb_decimal)
 {
 	if (nb_integer < dividend.getIntegerPart().size())
@@ -57,9 +147,9 @@ static bool	division_next_digit(const InfiniteDouble & dividend, 	\
 	return (false);
 }
 
-static void	division_loop(const InfiniteDouble & dividend, 	\
-		const InfiniteInt & divisor, 						\
-		std::vector<unsigned char> & result_integer, 		\
+static void				division_loop(const InfiniteDouble & dividend, 	\
+		const InfiniteInt & divisor, 									\
+		std::vector<unsigned char> & result_integer, 					\
 		std::vector<unsigned char> & result_decimal)
 {
 	InfiniteInt								tmp_dividend;
@@ -86,8 +176,8 @@ static void	division_loop(const InfiniteDouble & dividend, 	\
 
 
 // Constructors
-InfiniteDouble::InfiniteDouble(const InfiniteInt &integer_part, 		\
-		const InfiniteInt &decimal_part, bool is_negative, 				\
+InfiniteDouble::InfiniteDouble(const InfiniteInt integer_part, 			\
+		const InfiniteInt decimal_part, bool is_negative, 				\
 		bool is_decimal_infinite):										\
 			_integer_part(integer_part), _decimal_part(decimal_part), 	\
 			_isDecimalInfinite(is_decimal_infinite), 					\
@@ -157,42 +247,17 @@ bool			InfiniteDouble::operator>=(const InfiniteDouble &other) const
 
 InfiniteDouble	InfiniteDouble::operator+(const InfiniteDouble &other) const
 {
-	std::vector<unsigned char>				a						\
-			(this->getIntegerPart().getDigits());
-	std::vector<unsigned char>				b						\
-			(other.getIntegerPart().getDigits());
-	std::vector<unsigned char>				this_decimal_digits		\
-			(this->getDecimalPart().getDigits());
-	std::vector<unsigned char>				other_decimal_digits	\
-			(other.getDecimalPart().getDigits());
-	std::vector<unsigned char>				integer_digits_sub;
-	std::vector<unsigned char>::size_type	decimal_size			\
-			(std::max(this->getDecimalPart().size(), 				\
+	std::vector<unsigned char>::size_type	decimal_size	\
+			(std::max(this->getDecimalPart().size(), 		\
 				other.getDecimalPart().size()));
 	InfiniteInt								int_result;
-	InfiniteDouble							result;
 
 	if (this->_isNegative && !other._isNegative)
 		return (other - (-*this));
 	if (!this->_isNegative && other._isNegative)
 		return (*this - (-other));
-	while (this_decimal_digits.size() < decimal_size)
-		this_decimal_digits.push_back(0);
-	while (other_decimal_digits.size() < decimal_size)
-		other_decimal_digits.push_back(0);
-	a.insert(a.end(), this_decimal_digits.begin(), this_decimal_digits.end());
-	b.insert(b.end(), other_decimal_digits.begin(), other_decimal_digits.end());
-	int_result = InfiniteInt(a) + InfiniteInt(b);
-	integer_digits_sub = int_result.getDigits();
-	result.setIntegerPart(InfiniteInt(std::vector<unsigned char>	\
-			(integer_digits_sub.begin(), 							\
-				integer_digits_sub.end() - decimal_size)));
-	std::vector<unsigned char> test(integer_digits_sub.end() - 		\
-			decimal_size, integer_digits_sub.end());
-	result.setDecimalPart(InfiniteInt(test, false, false));
-	result.setIsNegative(false);
-	result.reduce();
-	return (result);
+	int_result = add_integer_parts(*this, other, decimal_size);
+	return (place_floating_point(int_result, decimal_size, this->_isNegative));
 }
 
 void			InfiniteDouble::operator+=(const InfiniteDouble &other)
@@ -226,20 +291,10 @@ InfiniteDouble	InfiniteDouble::operator-(void) const
 
 InfiniteDouble	InfiniteDouble::operator-(const InfiniteDouble &other) const
 {
-	std::vector<unsigned char>				a						\
-			(this->getIntegerPart().getDigits());
-	std::vector<unsigned char>				b						\
-			(other.getIntegerPart().getDigits());
-	std::vector<unsigned char>				this_decimal_digits		\
-			(this->getDecimalPart().getDigits());
-	std::vector<unsigned char>				other_decimal_digits	\
-			(other.getDecimalPart().getDigits());
-	std::vector<unsigned char>				integer_digits_sub;
-	std::vector<unsigned char>::size_type	decimal_size			\
-			(std::max(this->getDecimalPart().size(), 				\
+	std::vector<unsigned char>::size_type	decimal_size	\
+			(std::max(this->getDecimalPart().size(), 		\
 				other.getDecimalPart().size()));
 	InfiniteInt								int_result;
-	InfiniteDouble							result;
 
 	if (this->_isNegative && other._isNegative)
 		return (-other - (-*this));
@@ -247,23 +302,8 @@ InfiniteDouble	InfiniteDouble::operator-(const InfiniteDouble &other) const
 		return (*this + (-other));
 	if (*this < other)
 		return (-(other - *this));
-	while (this_decimal_digits.size() < decimal_size)
-		this_decimal_digits.push_back(0);
-	while (other_decimal_digits.size() < decimal_size)
-		other_decimal_digits.push_back(0);
-	a.insert(a.end(), this_decimal_digits.begin(), this_decimal_digits.end());
-	b.insert(b.end(), other_decimal_digits.begin(), other_decimal_digits.end());
-	int_result = InfiniteInt(a) - InfiniteInt(b);
-	integer_digits_sub = int_result.getDigits();
-	result.setIntegerPart(InfiniteInt(std::vector<unsigned char>	\
-			(integer_digits_sub.begin(), 							\
-				integer_digits_sub.end() - decimal_size)));
-	std::vector<unsigned char> test(integer_digits_sub.end() - 		\
-			decimal_size, integer_digits_sub.end());
-	result.setDecimalPart(InfiniteInt(test, false, false));
-	result.setIsNegative(false);
-	result.reduce();
-	return (result);
+	int_result = sub_integer_parts(*this, other, decimal_size);
+	return (place_floating_point(int_result, decimal_size, false));
 }
 
 void			InfiniteDouble::operator-=(const InfiniteDouble &other)
@@ -287,30 +327,13 @@ InfiniteDouble	InfiniteDouble::operator--(int)
 
 InfiniteDouble	InfiniteDouble::operator*(const InfiniteDouble &other) const
 {
-	std::vector<unsigned char>				a						\
-			(this->getIntegerPart().getDigits());
-	std::vector<unsigned char>				b						\
-			(other.getIntegerPart().getDigits());
-	std::vector<unsigned char>				this_decimal_digits		\
-			(this->getDecimalPart().getDigits());
-	std::vector<unsigned char>				other_decimal_digits	\
-			(other.getDecimalPart().getDigits());
-	std::vector<unsigned char>::size_type	decimal_size			\
+	std::vector<unsigned char>::size_type	decimal_size	\
 			(this->getDecimalPart().size() + other.getDecimalPart().size());
-	std::vector<unsigned char>				integer_digits_sum;
 	InfiniteInt								int_result;
-	InfiniteDouble							result;
 
-	a.insert(a.end(), this_decimal_digits.begin(), this_decimal_digits.end());
-	b.insert(b.end(), other_decimal_digits.begin(), other_decimal_digits.end());
-	int_result = InfiniteInt(a) * InfiniteInt(b);
-	integer_digits_sum = int_result.getDigits();
-	result.setIntegerPart(InfiniteInt(std::vector<unsigned char>	\
-			(integer_digits_sum.begin(), integer_digits_sum.end() - decimal_size)));
-	result.setDecimalPart(InfiniteInt(std::vector<unsigned char>(integer_digits_sum.end() - decimal_size, integer_digits_sum.end()), false, false));
-	result.setIsNegative(this->_isNegative != other._isNegative);
-	result.reduce();
-	return (result);
+	int_result = mul_integer_parts(*this, other);
+	return (place_floating_point(int_result, decimal_size, 	\
+			this->_isNegative != other._isNegative));
 }
 
 void			InfiniteDouble::operator*=(const InfiniteDouble &other)

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:38:24 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/20 22:12:29 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/21 11:23:31 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ class	InfiniteDouble
 {
 	public:
 		// Constructors and destructor
-		InfiniteDouble(const InfiniteInt &integer_part, 					\
-				const InfiniteInt &decimal_part = InfiniteInt(0, false), 	\
+		InfiniteDouble(const InfiniteInt integer_part, 						\
+				const InfiniteInt decimal_part = InfiniteInt(0, false), 	\
 				bool is_negative = false, bool is_decimal_infinite = false);
 		InfiniteDouble(void): InfiniteDouble(InfiniteInt()) {};
 		InfiniteDouble(const unsigned long long int value, 					\
