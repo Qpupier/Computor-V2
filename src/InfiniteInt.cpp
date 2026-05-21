@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:39:10 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/21 14:45:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/21 18:29:22 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@ static std::vector<unsigned char>	add_infinite_int(	\
 	{
 		digit_a = (i < rev_a.size()) ? rev_a[i] : 0;
 		digit_b = (i < rev_b.size()) ? rev_b[i] : 0;
-		sum = digit_a + digit_b + hold;
+		sum = digit_a + digit_b;
+		if (hold)
+			sum++;
 		hold = sum >= 10;
 		result.push_back((sum % 10));
 	}
@@ -45,7 +47,7 @@ static std::vector<unsigned char>	sub_infinite_int(	\
 	std::vector<unsigned char>	rev_a(a.getDigits());
 	std::vector<unsigned char>	rev_b(b.getDigits());
 	std::vector<unsigned char>	result;
-	bool							hold(false);
+	bool						hold(false);
 
 	std::reverse(rev_a.begin(), rev_a.end());
 	std::reverse(rev_b.begin(), rev_b.end());
@@ -54,16 +56,18 @@ static std::vector<unsigned char>	sub_infinite_int(	\
 	{
 		unsigned char	digit_a((i < rev_a.size()) ? rev_a[i] : 0);
 		unsigned char	digit_b((i < rev_b.size()) ? rev_b[i] : 0);
-		short int			diff(digit_a - digit_b - hold);
+		short int		diff(digit_a - digit_b);
 
-		if (digit_a < digit_b + hold)
+		if (hold)
+			diff--;
+		if (diff < 0)
 		{
 			diff += 10;
 			hold = true;
 		}
 		else
 			hold = false;
-		result.push_back(diff);
+		result.push_back(static_cast<unsigned char>(diff));
 	}
 	std::reverse(result.begin(), result.end());
 	return (result);
@@ -78,14 +82,16 @@ static std::vector<InfiniteInt>		multiplication_part(	\
 	for (std::vector<unsigned char>::const_reverse_iterator it_b 		\
 			= b.rbegin(); it_b != b.rend(); it_b++)
 	{
-		InfiniteInt						intermediate_result;
-		unsigned char				hold(0);
+		InfiniteInt		intermediate_result;
+		unsigned char	hold(0);
 
 		for (std::vector<unsigned char>::const_reverse_iterator it_a 	\
 				= a.rbegin(); it_a != a.rend(); it_a++)
 		{
-			unsigned char	product(*it_b * *it_a + hold);
+			unsigned char	product(*it_b * *it_a);
 
+			if (hold)
+				product += hold;
 			hold = product / 10;
 			intermediate_result.push_back(product % 10);
 		}
@@ -157,7 +163,7 @@ InfiniteInt::InfiniteInt(const std::string str, bool is_negative, 	\
 	this->_isIntegerPart = is_integer_part;
 	this->_isNegative = is_negative;
 	for (std::string::size_type i = 0; i < str.size(); i++)
-		this->_digits.push_back(str[i] - '0');
+		this->_digits.push_back(static_cast<unsigned char>(str[i] - '0'));
 	this->reduce();
 }
 
@@ -176,6 +182,11 @@ InfiniteInt&		InfiniteInt::operator=(const InfiniteInt &other)
 		this->_isNegative = other._isNegative;
 	}
 	return (*this);
+}
+
+InfiniteInt&		InfiniteInt::operator=(const long long int value)
+{
+	return (*this = InfiniteInt(value));
 }
 
 unsigned char		InfiniteInt::operator[](	\
@@ -200,9 +211,29 @@ bool				InfiniteInt::operator==(const InfiniteInt &other) const
 			&& this->_isNegative == other._isNegative));
 }
 
+bool				InfiniteInt::operator==(const InfiniteDouble &other) const
+{
+	return (InfiniteDouble(*this) == other);
+}
+
+bool				InfiniteInt::operator==(const long long int value) const
+{
+	return (*this == InfiniteInt(value));
+}
+
 bool				InfiniteInt::operator!=(const InfiniteInt&other) const
 {
 	return (!(*this == other));
+}
+
+bool				InfiniteInt::operator!=(const InfiniteDouble&other) const
+{
+	return (InfiniteDouble(*this) != other);
+}
+
+bool				InfiniteInt::operator!=(const long long int value) const
+{
+	return (*this != InfiniteInt(value));
 }
 
 bool				InfiniteInt::operator<(const InfiniteInt &other) const
@@ -231,9 +262,29 @@ bool				InfiniteInt::operator<(const InfiniteInt &other) const
 	return (result);
 }
 
+bool				InfiniteInt::operator<(const InfiniteDouble &other) const
+{
+	return (InfiniteDouble(*this) < other);
+}
+
+bool				InfiniteInt::operator<(const long long int value) const
+{
+	return (*this < InfiniteInt(value));
+}
+
 bool				InfiniteInt::operator<=(const InfiniteInt &other) const
 {
 	return (*this < other || *this == other);
+}
+
+bool				InfiniteInt::operator<=(const InfiniteDouble &other) const
+{
+	return (InfiniteDouble(*this) <= other);
+}
+
+bool				InfiniteInt::operator<=(const long long int value) const
+{
+	return (*this <= InfiniteInt(value));
 }
 
 bool				InfiniteInt::operator>(const InfiniteInt &other) const
@@ -241,9 +292,29 @@ bool				InfiniteInt::operator>(const InfiniteInt &other) const
 	return (!(*this <= other));
 }
 
+bool				InfiniteInt::operator>(const InfiniteDouble &other) const
+{
+	return (InfiniteDouble(*this) > other);
+}
+
+bool				InfiniteInt::operator>(const long long int value) const
+{
+	return (*this > InfiniteInt(value));
+}
+
 bool				InfiniteInt::operator>=(const InfiniteInt &other) const
 {
 	return (!(*this < other));
+}
+
+bool				InfiniteInt::operator>=(const InfiniteDouble &other) const
+{
+	return (InfiniteDouble(*this) >= other);
+}
+
+bool				InfiniteInt::operator>=(const long long int value) const
+{
+	return (*this >= InfiniteInt(value));
 }
 
 InfiniteInt			InfiniteInt::operator+(const InfiniteInt &other) const
@@ -261,9 +332,24 @@ InfiniteInt			InfiniteInt::operator+(const InfiniteInt &other) const
 	return (result);
 }
 
+InfiniteDouble		InfiniteInt::operator+(const InfiniteDouble &other) const
+{
+	return (InfiniteDouble(*this) + other);
+}
+
+InfiniteInt			InfiniteInt::operator+(const long long int value) const
+{
+	return (*this + InfiniteInt(value));
+}
+
 void				InfiniteInt::operator+=(const InfiniteInt &other)
 {
 	*this = *this + other;
+}
+
+void				InfiniteInt::operator+=(const long long int value)
+{
+	*this += InfiniteInt(value);
 }
 
 InfiniteInt&		InfiniteInt::operator++(void)
@@ -307,9 +393,24 @@ InfiniteInt			InfiniteInt::operator-(const InfiniteInt &other) const
 	return (result);
 }
 
+InfiniteDouble		InfiniteInt::operator-(const InfiniteDouble &other) const
+{
+	return (InfiniteDouble(*this) - other);
+}
+
+InfiniteInt			InfiniteInt::operator-(const long long int value) const
+{
+	return (*this - InfiniteInt(value));
+}
+
 void				InfiniteInt::operator-=(const InfiniteInt &other)
 {
 	*this = *this - other;
+}
+
+void				InfiniteInt::operator-=(const long long int value)
+{
+	*this -= InfiniteInt(value);
 }
 
 InfiniteInt&		InfiniteInt::operator--(void)
@@ -347,9 +448,24 @@ InfiniteInt			InfiniteInt::operator*(const InfiniteInt &other) const
 	return (result);
 }
 
+InfiniteDouble		InfiniteInt::operator*(const InfiniteDouble &other) const
+{
+	return (InfiniteDouble(*this) * other);
+}
+
+InfiniteInt			InfiniteInt::operator*(const long long int value) const
+{
+	return (*this * InfiniteInt(value));
+}
+
 void				InfiniteInt::operator*=(const InfiniteInt &other)
 {
 	*this = *this * other;
+}
+
+void				InfiniteInt::operator*=(const long long int value)
+{
+	*this *= InfiniteInt(value);
 }
 
 InfiniteInt			InfiniteInt::operator/(const InfiniteInt &other) const
@@ -365,9 +481,24 @@ InfiniteInt			InfiniteInt::operator/(const InfiniteInt &other) const
 	return (result);
 }
 
+InfiniteDouble		InfiniteInt::operator/(const InfiniteDouble &other) const
+{
+	return (InfiniteDouble(*this) / other);
+}
+
+InfiniteInt			InfiniteInt::operator/(const long long int value) const
+{
+	return (*this / InfiniteInt(value));
+}
+
 void				InfiniteInt::operator/=(const InfiniteInt &other)
 {
 	*this = *this / other;
+}
+
+void				InfiniteInt::operator/=(const long long int value)
+{
+	*this /= InfiniteInt(value);
 }
 
 InfiniteInt			InfiniteInt::operator%(const InfiniteInt &other) const
@@ -375,9 +506,24 @@ InfiniteInt			InfiniteInt::operator%(const InfiniteInt &other) const
 	return (*this - *this / other * other);
 }
 
+InfiniteDouble		InfiniteInt::operator%(const InfiniteDouble &other) const
+{
+	return (InfiniteDouble(*this) % other);
+}
+
+InfiniteInt			InfiniteInt::operator%(const long long int value) const
+{
+	return (*this % InfiniteInt(value));
+}
+
 void				InfiniteInt::operator%=(const InfiniteInt &other)
 {
 	*this = *this % other;
+}
+
+void				InfiniteInt::operator%=(const long long int value)
+{
+	*this %= InfiniteInt(value);
 }
 
 InfiniteInt			InfiniteInt::operator^(const InfiniteInt &other) const
@@ -393,9 +539,24 @@ InfiniteInt			InfiniteInt::operator^(const InfiniteInt &other) const
 	return (result);
 }
 
+InfiniteDouble		InfiniteInt::operator^(const InfiniteDouble &other) const
+{
+	return (InfiniteDouble(*this) ^ other);
+}
+
+InfiniteInt			InfiniteInt::operator^(const long long int value) const
+{
+	return (*this ^ InfiniteInt(value));
+}
+
 void				InfiniteInt::operator^=(const InfiniteInt &other)
 {
 	*this = *this ^ other;
+}
+
+void				InfiniteInt::operator^=(const long long int value)
+{
+	*this ^= InfiniteInt(value);
 }
 
 

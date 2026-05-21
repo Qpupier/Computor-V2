@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/18 17:42:53 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/21 18:06:03 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ class	Matrix: public IType
 {
 	public:
 		// Constructors and destructor
-		Matrix(unsigned long width, unsigned long height);
+		Matrix(unsigned long long int width, unsigned long long int height);
 		Matrix(void): Matrix(0, 0) {};
 		Matrix(std::string str, t_data &data);
 		Matrix(const Token &token, t_data &data): Matrix(token.getValue(), data) {};
@@ -44,7 +44,8 @@ class	Matrix: public IType
 		bool		operator<=(const IType &other) const;
 		bool		operator>(const IType &other) const;
 		bool		operator>=(const IType &other) const;
-		Rational*	operator[](unsigned int index) const;
+		Rational*	operator[](unsigned long long int index) const;
+		Rational*	operator[](unsigned long long int index);
 		IType*		operator+(const IType &other) const;
 		Matrix*		operator+(const Matrix &other) const;
 		Matrix*		operator+(const Rational &other) const;
@@ -78,7 +79,8 @@ class	Matrix: public IType
 		unsigned long long int	getHeight(void) const;
 
 		// Setters
-		void			setValue(unsigned int i, unsigned int j, Rational *value);
+		void	setValue(unsigned long long int i, 	\
+				unsigned long long int j, Rational *value);
 
 		// Methods
 		IType*			matrix_operator(const IType &other) const;
@@ -90,17 +92,17 @@ class	Matrix: public IType
 		Rational*		gcd(const Rational &other) const;
 		Rational*		gcd(const Complex &other) const;
 		std::ostream&	print(std::ostream &os) const;
+		bool			finite_decimals(void) const;
+		bool			in_Z(void) const;
 		void			error(const LogicError &e);
 		void			free(void);
 		void			print_variable(const std::string var) const;
-		bool			finite_decimals(void) const;
-		bool			in_Z(void) const;
 
 	private:
 		// Members
 		unsigned long long int	_width;
 		unsigned long long int	_height;
-		Rational				**_matrix;
+		Rational**				_matrix;
 };
 
 // Output stream operator overload

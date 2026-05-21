@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/18 20:56:41 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/21 18:06:47 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ Rational	Rational::operator=(const Complex &other)
 
 Rational::operator bool() const
 {
-	return ((bool)(this->_numerator));
+	return (static_cast<bool>(this->_numerator));
 }
 
 bool		Rational::operator==(const Rational &other) const
@@ -723,20 +723,20 @@ IType*		Rational::operator^(const IType &other) const
 
 
 // Getters
-InfiniteInt	Rational::getNumerator(void) const
+InfiniteInt		Rational::getNumerator(void) const
 {
 	return (this->_numerator);
 }
 
-InfiniteInt	Rational::getDenominator(void) const
+InfiniteInt		Rational::getDenominator(void) const
 {
 	return (this->_denominator);
 }
 
-double	Rational::getValue(void) const
+InfiniteDouble	Rational::getValue(void) const
 {
-	return (0);
-	// return (static_cast<double>(this->_numerator) / this->_denominator);
+	return (InfiniteDouble(this->_numerator) 	\
+			/ InfiniteDouble(this->_denominator));
 }
 
 
@@ -862,21 +862,6 @@ void			Rational::reduce(void)
 	}
 }
 
-static InfiniteInt	count_digits(InfiniteInt n)// TODO: Refaire
-{
-	std::size_t	count;
-
-	count = 0;
-	if (!n)
-		return (1);
-	while (n)
-	{
-		n /= 10;
-		count++;
-	}
-	return (count);
-}
-
 bool			Rational::finite_decimals(void) const
 {
 	InfiniteInt	denominator;
@@ -895,8 +880,6 @@ bool			Rational::finite_decimals(void) const
 		n++;
 	}
 	return (denominator == 1);// BUG: A corriger
-	// return (denominator == 1 	\
-	// 		&& 6 - count_digits(static_cast<int>(this->getValue())) - std::max(m, n) >= 0);// TODO
 }
 
 bool			Rational::in_Z(void) const

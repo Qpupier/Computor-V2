@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/05/21 13:40:36 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/05/21 18:10:13 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,30 +14,32 @@ NAME		=	computor-v2
 DIR_SRC		=	src
 DIR_OBJ		=	.obj
 DIR_INC		=	inc
-LST_SRC		=	main.cpp																			\
-				AST.cpp																				\
-				build_ast.cpp																		\
-				equation.cpp																		\
-				errors.cpp																			\
-				parser.cpp																			\
-				Token.cpp																			\
-				utils.cpp																			\
+LST_SRC		=	quadratic_equation_resolution/print_solutions/exact_solutions.cpp					\
+				quadratic_equation_resolution/print_solutions/exact_solutions_imaginary_part.cpp	\
+				quadratic_equation_resolution/print_solutions/exact_solutions_real_part.cpp			\
+				quadratic_equation_resolution/print_solutions/rounded_solutions.cpp					\
+				quadratic_equation_resolution/print_solutions/utils.cpp								\
 				quadratic_equation_resolution/complex_solutions_structure.cpp						\
 				quadratic_equation_resolution/Computor-V1.cpp										\
 				quadratic_equation_resolution/imaginary_part.cpp									\
 				quadratic_equation_resolution/real_part.cpp											\
 				quadratic_equation_resolution/simplify_factors.cpp									\
-				quadratic_equation_resolution/print_solutions/exact_solutions.cpp					\
-				quadratic_equation_resolution/print_solutions/exact_solutions_imaginary_part.cpp	\
-				quadratic_equation_resolution/print_solutions/exact_solutions_real_part.cpp			\
-				quadratic_equation_resolution/print_solutions/rounded_solutions.cpp					\
-				quadratic_equation_resolution/print_solutions/utils.cpp								\
 				types/IType.cpp																		\
 				types/Operator.cpp																	\
 				types/Rational.cpp																	\
 				types/Complex.cpp																	\
 				types/Matrix.cpp																	\
-				types/Polynomial.cpp
+				types/Polynomial.cpp																\
+				AST.cpp																				\
+				InfiniteDouble.cpp																	\
+				InfiniteInt.cpp																		\
+				Token.cpp																			\
+				main.cpp																			\
+				build_ast.cpp																		\
+				equation.cpp																		\
+				errors.cpp																			\
+				parser.cpp																			\
+				utils.cpp
 LST_OBJ		=	$(LST_SRC:.cpp=.o)
 LST_DEP		=	$(LST_OBJ:.o=.d)
 LST_INC		= 	$(DIR_INC)	\

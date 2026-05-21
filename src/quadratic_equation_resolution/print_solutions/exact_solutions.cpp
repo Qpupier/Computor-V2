@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:19:13 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/15 14:19:49 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/21 18:37:28 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static inline bool	solutions_equal(t_quadratic_solutions& 	\
 }
 
 static void			print_exact_solution(const t_quadratic_solutions& 	\
-		solutions, const int i, const bool reduce_sqrt)
+		solutions, const unsigned char i, const bool reduce_sqrt)
 {
 	bool	has_real_part;
 	bool	has_imaginary_part;
@@ -58,7 +58,7 @@ static void			print_exact_solution(const t_quadratic_solutions& 	\
 
 static void			print_exact_solutions(t_quadratic_solutions& 	\
 		solutions, const std::string set, const bool reduce_sqrt, 	\
-		const int nb_solutions)
+		const unsigned char nb_solutions)
 {
 	std::cout << COLOR_GREEN;
 	if (nb_solutions == 1)
@@ -66,7 +66,7 @@ static void			print_exact_solutions(t_quadratic_solutions& 	\
 	else
 		std::cout << "Two solutions in ";
 	std::cout << set << ":" << std::endl << "S = {";
-	for (int i = 0; i < nb_solutions; i++)
+	for (unsigned char i = 0; i < nb_solutions; i++)
 	{
 		print_exact_solution(solutions, i, reduce_sqrt);
 		if (nb_solutions == 1)
@@ -75,13 +75,12 @@ static void			print_exact_solutions(t_quadratic_solutions& 	\
 	std::cout << "} ∈ " << set << COLOR_RESET << std::endl;
 }
 
-bool				parentheses_needed(const int term1, const int term2, 	\
-		const int term3)
+bool				parentheses_needed(const InfiniteInt term1, 	\
+		const InfiniteInt term2, const InfiniteInt term3)
 {
-	int	count_terms;
-	int	term;
+	InfiniteInt	count_terms(0);
+	InfiniteInt	term;
 
-	count_terms = 0;
 	if (term1)
 	{
 		count_terms++;
@@ -103,8 +102,8 @@ bool				parentheses_needed(const int term1, const int term2, 	\
 void				print_solutions(t_quadratic_solutions& solutions, 	\
 		std::string set, std::string var, std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
-	bool	reduce_sqrt;
-	int		nb_solutions;
+	bool			reduce_sqrt;
+	unsigned char	nb_solutions;
 
 	if (!solutions.sqrt_term1_factor || solutions.sqrt_term1_sqrt <= 1)
 	{

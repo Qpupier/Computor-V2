@@ -6,14 +6,14 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/18 20:11:38 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/21 17:11:05 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RATIONAL_HPP
 # define RATIONAL_HPP
 
-# include "InfiniteInt.hpp"
+# include "InfiniteDouble.hpp"
 
 class	Complex;
 class	Matrix;
@@ -94,7 +94,7 @@ class	Rational: public IType
 		// Getters
 		InfiniteInt	getNumerator(void) const;
 		InfiniteInt	getDenominator(void) const;
-		double		getValue(void) const;// TODO: Verifier avec la nouvelle classe
+		InfiniteDouble	getValue(void) const;
 
 		// Methods
 		IType*			matrix_operator(const IType &other) const;

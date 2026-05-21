@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:38:24 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/21 16:58:25 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/21 17:50:27 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ class	InfiniteDouble
 					InfiniteDouble(InfiniteInt(integer_digits), 			\
 						InfiniteInt(decimal_digits, false, false), 			\
 						is_negative, is_decimal_infinite) {};
-		InfiniteDouble(const unsigned long long int value, 					\
+		InfiniteDouble(const long long int value, 					\
 				bool is_integer_part = true): 								\
 					InfiniteDouble(InfiniteInt(value, is_integer_part)) {};
 		InfiniteDouble(const InfiniteDouble &other): 						\
@@ -49,29 +49,67 @@ class	InfiniteDouble
 		// Operator overloads
 		explicit			operator bool(void) const;
 		InfiniteDouble&		operator=(const InfiniteDouble &other);
+		InfiniteDouble&		operator=(const InfiniteInt &other);
+		InfiniteDouble&		operator=(const long long int value);
 		bool				operator==(const InfiniteDouble &other) const;
+		bool				operator==(const InfiniteInt &other) const;
+		bool				operator==(const long long int value) const;
 		bool				operator!=(const InfiniteDouble&other) const;
+		bool				operator!=(const InfiniteInt&other) const;
+		bool				operator!=(const long long int value) const;
 		bool				operator<(const InfiniteDouble &other) const;
+		bool				operator<(const InfiniteInt &other) const;
+		bool				operator<(const long long int value) const;
 		bool				operator<=(const InfiniteDouble &other) const;
+		bool				operator<=(const InfiniteInt &other) const;
+		bool				operator<=(const long long int value) const;
 		bool				operator>(const InfiniteDouble &other) const;
+		bool				operator>(const InfiniteInt &other) const;
+		bool				operator>(const long long int value) const;
 		bool				operator>=(const InfiniteDouble &other) const;
+		bool				operator>=(const InfiniteInt &other) const;
+		bool				operator>=(const long long int value) const;
 		InfiniteDouble		operator+(const InfiniteDouble &other) const;
+		InfiniteDouble		operator+(const InfiniteInt &other) const;
+		InfiniteDouble		operator+(const long long int value) const;
 		void				operator+=(const InfiniteDouble &other);
+		void				operator+=(const InfiniteInt &other);
+		void				operator+=(const long long int value);
 		InfiniteDouble&		operator++(void);
 		InfiniteDouble		operator++(int);
 		InfiniteDouble		operator-(void) const;
 		InfiniteDouble		operator-(const InfiniteDouble &other) const;
+		InfiniteDouble		operator-(const InfiniteInt &other) const;
+		InfiniteDouble		operator-(const long long int value) const;
 		void				operator-=(const InfiniteDouble &other);
+		void				operator-=(const InfiniteInt &other);
+		void				operator-=(const long long int value);
 		InfiniteDouble&		operator--(void);
 		InfiniteDouble		operator--(int);
 		InfiniteDouble		operator*(const InfiniteDouble &other) const;
+		InfiniteDouble		operator*(const InfiniteInt &other) const;
+		InfiniteDouble		operator*(const long long int value) const;
 		void				operator*=(const InfiniteDouble &other);
+		void				operator*=(const InfiniteInt &other);
+		void				operator*=(const long long int value);
 		InfiniteDouble		operator/(const InfiniteDouble &other) const;
+		InfiniteDouble		operator/(const InfiniteInt &other) const;
+		InfiniteDouble		operator/(const long long int value) const;
 		void				operator/=(const InfiniteDouble &other);
+		void				operator/=(const InfiniteInt &other);
+		void				operator/=(const long long int value);
 		InfiniteDouble		operator%(const InfiniteDouble &other) const;
+		InfiniteDouble		operator%(const InfiniteInt &other) const;
+		InfiniteDouble		operator%(const long long int value) const;
 		void				operator%=(const InfiniteDouble &other);
+		void				operator%=(const InfiniteInt &other);
+		void				operator%=(const long long int value);
 		InfiniteDouble		operator^(const InfiniteDouble &other) const;
+		InfiniteDouble		operator^(const InfiniteInt &other) const;
+		InfiniteDouble		operator^(const long long int value) const;
 		void				operator^=(const InfiniteDouble &other);
+		void				operator^=(const InfiniteInt &other);
+		void				operator^=(const long long int value);
 
 		// Getters
 		InfiniteInt	getDecimalPart(void) const;

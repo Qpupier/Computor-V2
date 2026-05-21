@@ -6,19 +6,21 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:39:49 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/21 11:59:14 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/21 17:50:09 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef INFINITEINT_HPP
 # define INFINITEINT_HPP
 
-// # include "computor-v2.hpp"
-# include <vector>
-# include <string>
-# include <stdexcept>
-# include <algorithm>
-# include <iostream>
+# include "computor-v2.hpp"
+// # include <vector>
+// # include <string>
+// # include <stdexcept>
+// # include <algorithm>
+// # include <iostream>
+
+class	InfiniteDouble;
 
 class	InfiniteInt
 {
@@ -37,33 +39,64 @@ class	InfiniteInt
 		// Operator overloads
 		explicit			operator bool(void) const;
 		InfiniteInt&		operator=(const InfiniteInt &other);
+		InfiniteInt&		operator=(const long long int value);
 		unsigned char		operator[](	\
 				std::vector<unsigned char>::size_type index) const;
 		unsigned char		operator[](	\
 				std::vector<unsigned char>::size_type index);
 		bool				operator==(const InfiniteInt &other) const;
+		bool				operator==(const InfiniteDouble &other) const;
+		bool				operator==(const long long int value) const;
 		bool				operator!=(const InfiniteInt&other) const;
+		bool				operator!=(const InfiniteDouble&other) const;
+		bool				operator!=(const long long int value) const;
 		bool				operator<(const InfiniteInt &other) const;
+		bool				operator<(const InfiniteDouble &other) const;
+		bool				operator<(const long long int value) const;
 		bool				operator<=(const InfiniteInt &other) const;
+		bool				operator<=(const InfiniteDouble &other) const;
+		bool				operator<=(const long long int value) const;
 		bool				operator>(const InfiniteInt &other) const;
+		bool				operator>(const InfiniteDouble &other) const;
+		bool				operator>(const long long int value) const;
 		bool				operator>=(const InfiniteInt &other) const;
+		bool				operator>=(const InfiniteDouble &other) const;
+		bool				operator>=(const long long int value) const;
 		InfiniteInt			operator+(const InfiniteInt &other) const;
+		InfiniteDouble		operator+(const InfiniteDouble &other) const;
+		InfiniteInt			operator+(const long long int value) const;
 		void				operator+=(const InfiniteInt &other);
+		void				operator+=(const long long int value);
 		InfiniteInt&		operator++(void);
 		InfiniteInt			operator++(int);
 		InfiniteInt			operator-(void) const;
 		InfiniteInt			operator-(const InfiniteInt &other) const;
+		InfiniteDouble		operator-(const InfiniteDouble &other) const;
+		InfiniteInt			operator-(const long long int value) const;
 		void				operator-=(const InfiniteInt &other);
+		void				operator-=(const long long int value);
 		InfiniteInt&		operator--(void);
 		InfiniteInt			operator--(int);
 		InfiniteInt			operator*(const InfiniteInt &other) const;
+		InfiniteDouble		operator*(const InfiniteDouble &other) const;
+		InfiniteInt			operator*(const long long int value) const;
 		void				operator*=(const InfiniteInt &other);
+		void				operator*=(const long long int value);
 		InfiniteInt			operator/(const InfiniteInt &other) const;
+		InfiniteDouble		operator/(const InfiniteDouble &other) const;
+		InfiniteInt			operator/(const long long int value) const;
 		void				operator/=(const InfiniteInt &other);
+		void				operator/=(const long long int value);
 		InfiniteInt			operator%(const InfiniteInt &other) const;
+		InfiniteDouble		operator%(const InfiniteDouble &other) const;
+		InfiniteInt			operator%(const long long int value) const;
 		void				operator%=(const InfiniteInt &other);
+		void				operator%=(const long long int value);
 		InfiniteInt			operator^(const InfiniteInt &other) const;
+		InfiniteDouble		operator^(const InfiniteDouble &other) const;
+		InfiniteInt			operator^(const long long int value) const;
 		void				operator^=(const InfiniteInt &other);
+		void				operator^=(const long long int value);
 
 		// Getters
 		std::vector<unsigned char>	getDigits(void) const;
@@ -92,5 +125,7 @@ class	InfiniteInt
 
 // Output stream operator overload
 std::ostream&	operator<<(std::ostream &os, const InfiniteInt &num);
+
+# include "InfiniteDouble.hpp"
 
 #endif

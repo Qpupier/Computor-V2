@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:03:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/15 12:20:38 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/21 17:17:26 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,13 @@ static void		find_solutions(IType *tmp_a, IType *tmp_b, IType *tmp_c, 	\
 	print_solutions(solutions_structure, set, var, stored);
 }
 
-void			reduce_sqrt(int *factor, int *sqrt)
+void			reduce_sqrt(InfiniteInt *factor, InfiniteInt *sqrt)
 {
-	double	sqrt_rounded;
-	int		perfect_square;
+	InfiniteInt		perfect_square;
+	InfiniteDouble	sqrt_rounded;
 
-	sqrt_rounded = std::sqrt(*sqrt);
-	for (int i = 2; i <= sqrt_rounded; i++)
+	sqrt_rounded = InfiniteDouble(*sqrt).sqrt();
+	for (InfiniteInt i(2); InfiniteDouble(i) <= sqrt_rounded; i++)
 	{
 		perfect_square = i * i;
 		while (!(*sqrt % perfect_square))
@@ -89,7 +89,8 @@ void			reduce_sqrt(int *factor, int *sqrt)
 	}
 }
 
-void			solve_trinomial(const Polynomial *polynomial, std::map<std::pair<std::string, std::string>, const IType*> &stored)
+void			solve_trinomial(const Polynomial *polynomial, 	\
+		std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
 	std::vector<Polynomial::t_term>	terms(polynomial->getTerms());
 	IType*							a;

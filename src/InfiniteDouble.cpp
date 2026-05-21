@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:46:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/21 17:07:09 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/21 18:20:47 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,20 +84,22 @@ static InfiniteDouble	place_floating_point(							\
 		const std::vector<unsigned char>::size_type & decimal_size, 	\
 		const bool is_negative)
 {
-	std::vector<unsigned char>	integer_digits_sub;
-	std::vector<unsigned char>	vector_integer;
-	std::vector<unsigned char>	vector_decimal;
-	InfiniteDouble				result;
-
+	InfiniteDouble							result;
+	std::vector<unsigned char>				integer_digits_sub;
+	std::vector<unsigned char>				vector_integer;
+	std::vector<unsigned char>				vector_decimal;
+	std::vector<unsigned char>::iterator	floating_point_position;
+	
 	integer_digits_sub = int_result.getDigits();
 	while (integer_digits_sub.size() <= decimal_size)
 		integer_digits_sub.insert(integer_digits_sub.begin(), 0);
-	vector_integer = std::vector<unsigned char>(		\
-			integer_digits_sub.begin(), 				\
-			integer_digits_sub.end() - decimal_size);
-	vector_decimal = std::vector<unsigned char>(		\
-			integer_digits_sub.end() - decimal_size, 	\
-			integer_digits_sub.end());
+	floating_point_position = integer_digits_sub.end() 					\
+			- static_cast<std::vector<unsigned char>::difference_type>(	\
+				decimal_size);
+	vector_integer = std::vector<unsigned char>(						\
+			integer_digits_sub.begin(), floating_point_position);
+	vector_decimal = std::vector<unsigned char>(						\
+			floating_point_position, integer_digits_sub.end());
 	result.setIntegerPart(InfiniteInt(vector_integer));
 	result.setDecimalPart(InfiniteInt(vector_decimal, false, false));
 	result.setIsNegative(is_negative);
@@ -113,17 +115,6 @@ static void				remove_decimal_part_in_divisor(	\
 		dividend *= InfiniteDouble(10);
 		divisor *= InfiniteDouble(10);
 	}
-}
-
-static bool				is_division_infinite(const InfiniteInt & divisor)
-{
-	InfiniteInt	divisor_copy(divisor);
-
-	while (divisor_copy % 2 == 0)
-		divisor_copy /= InfiniteInt(2);
-	while (divisor_copy % 5 == 0)
-		divisor_copy /= InfiniteInt(5);
-	return (divisor_copy == InfiniteInt(1));
 }
 
 static bool				division_next_digit(							\
@@ -236,15 +227,45 @@ InfiniteDouble&	InfiniteDouble::operator=(const InfiniteDouble &other)
 	return (*this);
 }
 
+InfiniteDouble&	InfiniteDouble::operator=(const InfiniteInt &other)
+{
+	return (*this = InfiniteDouble(other));
+}
+
+InfiniteDouble&	InfiniteDouble::operator=(const long long int value)
+{
+	return (*this = InfiniteDouble(value));
+}
+
 bool			InfiniteDouble::operator==(const InfiniteDouble &other) const
 {
 	return (this->getIntegerPart() == other.getIntegerPart() 	\
 			&& this->getDecimalPart() == other.getDecimalPart());
 }
 
+bool			InfiniteDouble::operator==(const InfiniteInt &other) const
+{
+	return (*this == InfiniteDouble(other));
+}
+
+bool			InfiniteDouble::operator==(const long long int value) const
+{
+	return (*this == InfiniteDouble(value));
+}
+
 bool			InfiniteDouble::operator!=(const InfiniteDouble&other) const
 {
 	return (!(*this == other));
+}
+
+bool			InfiniteDouble::operator!=(const InfiniteInt&other) const
+{
+	return (!(*this == other));
+}
+
+bool			InfiniteDouble::operator!=(const long long int value) const
+{
+	return (*this != InfiniteDouble(value));
 }
 
 bool			InfiniteDouble::operator<(const InfiniteDouble &other) const
@@ -254,9 +275,29 @@ bool			InfiniteDouble::operator<(const InfiniteDouble &other) const
 				&& this->getDecimalPart() < other.getDecimalPart()));
 }
 
+bool			InfiniteDouble::operator<(const InfiniteInt &other) const
+{
+	return (*this < InfiniteDouble(other));
+}
+
+bool			InfiniteDouble::operator<(const long long int value) const
+{
+	return (*this < InfiniteDouble(value));
+}
+
 bool			InfiniteDouble::operator<=(const InfiniteDouble &other) const
 {
 	return (*this < other || *this == other);
+}
+
+bool			InfiniteDouble::operator<=(const InfiniteInt &other) const
+{
+	return (*this <= InfiniteDouble(other));
+}
+
+bool			InfiniteDouble::operator<=(const long long int value) const
+{
+	return (*this <= InfiniteDouble(value));
 }
 
 bool			InfiniteDouble::operator>(const InfiniteDouble &other) const
@@ -264,9 +305,29 @@ bool			InfiniteDouble::operator>(const InfiniteDouble &other) const
 	return (!(*this <= other));
 }
 
+bool			InfiniteDouble::operator>(const InfiniteInt &other) const
+{
+	return (*this > InfiniteDouble(other));
+}
+
+bool			InfiniteDouble::operator>(const long long int value) const
+{
+	return (*this > InfiniteDouble(value));
+}
+
 bool			InfiniteDouble::operator>=(const InfiniteDouble &other) const
 {
 	return (!(*this < other));
+}
+
+bool			InfiniteDouble::operator>=(const InfiniteInt &other) const
+{
+	return (*this >= InfiniteDouble(other));
+}
+
+bool			InfiniteDouble::operator>=(const long long int value) const
+{
+	return (*this >= InfiniteDouble(value));
 }
 
 InfiniteDouble	InfiniteDouble::operator+(const InfiniteDouble &other) const
@@ -284,9 +345,29 @@ InfiniteDouble	InfiniteDouble::operator+(const InfiniteDouble &other) const
 	return (place_floating_point(int_result, decimal_size, this->_isNegative));
 }
 
+InfiniteDouble	InfiniteDouble::operator+(const InfiniteInt &other) const
+{
+	return (*this + InfiniteDouble(other));
+}
+
+InfiniteDouble	InfiniteDouble::operator+(const long long int value) const
+{
+	return (*this + InfiniteDouble(value));
+}
+
 void			InfiniteDouble::operator+=(const InfiniteDouble &other)
 {
 	*this = *this + other;
+}
+
+void			InfiniteDouble::operator+=(const InfiniteInt &other)
+{
+	*this += InfiniteDouble(other);
+}
+
+void			InfiniteDouble::operator+=(const long long int value)
+{
+	*this += InfiniteDouble(value);
 }
 
 InfiniteDouble&	InfiniteDouble::operator++(void)
@@ -330,9 +411,29 @@ InfiniteDouble	InfiniteDouble::operator-(const InfiniteDouble &other) const
 	return (place_floating_point(int_result, decimal_size, false));
 }
 
+InfiniteDouble	InfiniteDouble::operator-(const InfiniteInt &other) const
+{
+	return (*this - InfiniteDouble(other));
+}
+
+InfiniteDouble	InfiniteDouble::operator-(const long long int value) const
+{
+	return (*this - InfiniteDouble(value));
+}
+
 void			InfiniteDouble::operator-=(const InfiniteDouble &other)
 {
 	*this = *this - other;
+}
+
+void			InfiniteDouble::operator-=(const InfiniteInt &other)
+{
+	*this -= InfiniteDouble(other);
+}
+
+void			InfiniteDouble::operator-=(const long long int value)
+{
+	*this -= InfiniteDouble(value);
 }
 
 InfiniteDouble&	InfiniteDouble::operator--(void)
@@ -360,9 +461,29 @@ InfiniteDouble	InfiniteDouble::operator*(const InfiniteDouble &other) const
 			this->_isNegative != other._isNegative));
 }
 
+InfiniteDouble	InfiniteDouble::operator*(const InfiniteInt &other) const
+{
+	return (*this * InfiniteDouble(other));
+}
+
+InfiniteDouble	InfiniteDouble::operator*(const long long int value) const
+{
+	return (*this * InfiniteDouble(value));
+}
+
 void			InfiniteDouble::operator*=(const InfiniteDouble &other)
 {
 	*this = *this * other;
+}
+
+void			InfiniteDouble::operator*=(const InfiniteInt &other)
+{
+	*this *= InfiniteDouble(other);
+}
+
+void			InfiniteDouble::operator*=(const long long int value)
+{
+	*this *= InfiniteDouble(value);
 }
 
 InfiniteDouble	InfiniteDouble::operator/(const InfiniteDouble &other) const
@@ -371,7 +492,6 @@ InfiniteDouble	InfiniteDouble::operator/(const InfiniteDouble &other) const
 	InfiniteDouble				divisor(other);
 	std::vector<unsigned char>	result_integer;
 	std::vector<unsigned char>	result_decimal;
-	bool						infinite;
 
 	remove_decimal_part_in_divisor(dividend, divisor);
 	division_loop(dividend, divisor.getIntegerPart(), result_integer, 	\
@@ -381,9 +501,29 @@ InfiniteDouble	InfiniteDouble::operator/(const InfiniteDouble &other) const
 			this->_isNegative != other._isNegative));
 }
 
+InfiniteDouble	InfiniteDouble::operator/(const InfiniteInt &other) const
+{
+	return (*this / InfiniteDouble(other));
+}
+
+InfiniteDouble	InfiniteDouble::operator/(const long long int value) const
+{
+	return (*this / InfiniteDouble(value));
+}
+
 void			InfiniteDouble::operator/=(const InfiniteDouble &other)
 {
 	*this = *this / other;
+}
+
+void			InfiniteDouble::operator/=(const InfiniteInt &other)
+{
+	*this /= InfiniteDouble(other);
+}
+
+void			InfiniteDouble::operator/=(const long long int value)
+{
+	*this /= InfiniteDouble(value);
 }
 
 InfiniteDouble	InfiniteDouble::operator%(const InfiniteDouble &other) const
@@ -393,9 +533,29 @@ InfiniteDouble	InfiniteDouble::operator%(const InfiniteDouble &other) const
 	return (*this - InfiniteDouble(division.getIntegerPart()) * other);
 }
 
+InfiniteDouble	InfiniteDouble::operator%(const InfiniteInt &other) const
+{
+	return (*this % InfiniteDouble(other));
+}
+
+InfiniteDouble	InfiniteDouble::operator%(const long long int value) const
+{
+	return (*this % InfiniteDouble(value));
+}
+
 void			InfiniteDouble::operator%=(const InfiniteDouble &other)
 {
 	*this = *this % other;
+}
+
+void			InfiniteDouble::operator%=(const InfiniteInt &other)
+{
+	*this %= InfiniteDouble(other);
+}
+
+void			InfiniteDouble::operator%=(const long long int value)
+{
+	*this %= InfiniteDouble(value);
 }
 
 InfiniteDouble	InfiniteDouble::operator^(const InfiniteDouble &other) const
@@ -410,9 +570,29 @@ InfiniteDouble	InfiniteDouble::operator^(const InfiniteDouble &other) const
 	return (result);
 }
 
+InfiniteDouble	InfiniteDouble::operator^(const InfiniteInt &other) const
+{
+	return (*this ^ InfiniteDouble(other));
+}
+
+InfiniteDouble	InfiniteDouble::operator^(const long long int value) const
+{
+	return (*this ^ InfiniteDouble(value));
+}
+
 void			InfiniteDouble::operator^=(const InfiniteDouble &other)
 {
 	*this = *this ^ other;
+}
+
+void			InfiniteDouble::operator^=(const InfiniteInt &other)
+{
+	*this ^= InfiniteDouble(other);
+}
+
+void			InfiniteDouble::operator^=(const long long int value)
+{
+	*this ^= InfiniteDouble(value);
 }
 
 
