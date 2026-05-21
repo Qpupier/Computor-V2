@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:38:24 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/21 11:23:31 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/21 11:59:02 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,9 @@ class	InfiniteDouble
 		void	setIsNegative(bool is_negative);
 
 		// Methods
-		void		push_back_decimal(unsigned char digit);
-		void		push_back_integer(unsigned char digit);
-		void		reduce(void);
+		void	push_back_decimal(unsigned char digit);
+		void	push_back_integer(unsigned char digit);
+		void	reduce(void);
 
 		//Constants
 		static constexpr unsigned char	MAX_PRECISION = 15;

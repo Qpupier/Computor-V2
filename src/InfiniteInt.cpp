@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:39:10 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/21 11:56:55 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/21 12:35:34 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,7 +275,7 @@ InfiniteInt			InfiniteInt::operator-(void) const
 {
 	InfiniteInt	result;
 
-	result = this->clone();
+	result = *this;
 	if (result)
 		result._isNegative = !this->_isNegative;
 	return (result);
@@ -426,9 +426,34 @@ void	InfiniteInt::setIsNegative(bool is_negative)
 
 
 // Methods
-InfiniteInt	InfiniteInt::clone(void) const
+InfiniteInt	InfiniteInt::sqrt(void) const
 {
-	return (InfiniteInt(this->_digits, this->_isNegative));
+	std::vector<unsigned char>::size_type	padding_size	\
+			((this->size() - 1) / 2 + 1);
+	InfiniteInt								padding(1);
+	InfiniteInt								result;
+
+	if (this->_isNegative)
+		throw std::domain_error("Cannot compute square root of a negative number");//TODO: remplacer avec la bonne exception
+	if (!*this)
+		return (InfiniteInt());
+	for (std::vector<unsigned char>::size_type i = 0; i < padding_size; i++)
+		padding.push_back(0);
+	while (padding)
+	{
+		for (unsigned char test_digit = 1; test_digit <= 10; test_digit++)
+		{
+			std::vector<unsigned char> test(result.getDigits());
+			test.push_back(test_digit);
+			if (((InfiniteInt(test) * padding) ^ InfiniteInt(2)) > *this)
+			{
+				result.push_back(test_digit - 1);
+				break ;
+			}
+		}
+		padding /= InfiniteInt(10);
+	}
+	return (result);
 }
 
 void		InfiniteInt::push_back(unsigned char digit)
