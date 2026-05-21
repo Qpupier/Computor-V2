@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:46:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/21 11:53:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/21 17:07:09 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ static InfiniteDouble	place_floating_point(							\
 	InfiniteDouble				result;
 
 	integer_digits_sub = int_result.getDigits();
+	while (integer_digits_sub.size() <= decimal_size)
+		integer_digits_sub.insert(integer_digits_sub.begin(), 0);
 	vector_integer = std::vector<unsigned char>(		\
 			integer_digits_sub.begin(), 				\
 			integer_digits_sub.end() - decimal_size);
@@ -136,14 +138,12 @@ static bool				division_next_digit(							\
 		return (true);
 	}
 	if (nb_decimal < dividend.getDecimalPart().size())
-	{
 		tmp_dividend.push_back(	\
 				dividend.getDecimalPart().getDigits()[nb_decimal]);
-		if (!nb_decimal++)
-			return (true);
-	}
 	else
 		tmp_dividend.push_back(0);
+	if (!nb_decimal++)
+			return (true);
 	return (false);
 }
 
@@ -172,6 +172,30 @@ static void				division_loop(const InfiniteDouble & dividend, 	\
 			break ;
 		nb_integer++;
 	}
+}
+
+static void				insert_new_digit(const InfiniteDouble num, 	\
+		InfiniteDouble & padding, 						\
+		std::vector<unsigned char> & result_integer, 	\
+		std::vector<unsigned char> & result_decimal)
+{
+	unsigned char				last_good_digit(0);
+	std::vector<unsigned char>	test;
+
+	for (unsigned char test_digit = 1; test_digit < 10; test_digit++)
+	{
+		test = result_integer;
+		test.insert(test.end(), result_decimal.begin(), result_decimal.end());
+		test.push_back(test_digit);
+		if (((InfiniteDouble(test) * padding) ^ InfiniteDouble(2)) > num)
+			break ;
+		last_good_digit = test_digit;
+	}
+	if (padding >= InfiniteDouble(1))
+		result_integer.push_back(last_good_digit);
+	else
+		result_decimal.push_back(last_good_digit);
+	padding /= InfiniteDouble(10);
 }
 
 
@@ -437,17 +461,38 @@ void	InfiniteDouble::setIsNegative(bool is_negative)
 
 
 // Methods
-void	InfiniteDouble::push_back_decimal(unsigned char digit)
+InfiniteDouble	InfiniteDouble::sqrt(void) const
+{
+	InfiniteDouble							padding(1);
+	InfiniteDouble							result;
+	std::vector<unsigned char>				result_integer;
+	std::vector<unsigned char>				result_decimal;
+	std::vector<unsigned char>::size_type	padding_size	\
+			(this->_integer_part 							\
+				? (this->getIntegerPart().size() - 1) / 2 + 1 : 0);
+
+	if (this->_isNegative)
+		throw std::domain_error("Cannot compute square root of a negative number");//TODO: remplacer avec la bonne exception
+	if (!*this)
+		return (InfiniteInt());
+	for (std::vector<unsigned char>::size_type i = 0; i < padding_size; i++)
+		padding.push_back_integer(0);
+	while (padding)
+		insert_new_digit(*this, padding, result_integer, result_decimal);
+	return (InfiniteDouble(result_integer, result_decimal));
+}
+
+void			InfiniteDouble::push_back_decimal(unsigned char digit)
 {
 	this->_decimal_part.push_back(digit);
 }
 
-void	InfiniteDouble::push_back_integer(unsigned char digit)
+void			InfiniteDouble::push_back_integer(unsigned char digit)
 {
 	this->_integer_part.push_back(digit);
 }
 
-void	InfiniteDouble::reduce(void)
+void			InfiniteDouble::reduce(void)
 {
 	this->_integer_part.reduce();
 	this->_decimal_part.reduce();

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:39:10 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/21 12:35:34 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/21 14:45:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,17 +207,26 @@ bool				InfiniteInt::operator!=(const InfiniteInt&other) const
 
 bool				InfiniteInt::operator<(const InfiniteInt &other) const
 {
-	bool	result;
+	InfiniteInt	a(*this);
+	InfiniteInt	b(other);
+	bool		result;
 
-	if (*this == other)
+	if (a == b)
 		return (false);
-	if (this->_isNegative != other._isNegative)
-		return (this->_isNegative);
-	if (this->_digits.size() != other._digits.size())
-		result = this->_digits.size() < other._digits.size();
+	if (a._isNegative != b._isNegative)
+		return (a._isNegative);
+	if (!a._isIntegerPart)
+	{
+		while (a._digits.size() < b._digits.size())
+			a._digits.push_back(0);
+		while (b._digits.size() < a._digits.size())
+			b._digits.push_back(0);
+	}
+	if (a._digits.size() != b._digits.size())
+		result = a._digits.size() < b._digits.size();
 	else
-		result = this->_digits < other._digits;
-	if (this->_isNegative)
+		result = a._digits < b._digits;
+	if (a._isNegative)
 		result = !result;
 	return (result);
 }

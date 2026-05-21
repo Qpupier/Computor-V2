@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/05/13 19:01:17 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/05/21 13:40:36 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -107,5 +107,9 @@ test_debug: $(NAME)
 	@echo &> /dev/null
 	./unit_tests/run_tests.sh debug
 
-.PHONY: all clean fclean re run valgrind test test_debug
+nb_lines:
+	@echo -n "Total lines of code: "
+	find . -type f ! -path '*/.*' -exec wc -l {} + | tail -n 1 | sed "s/  //" | sed "s/ total//"
+
+.PHONY: all clean fclean re run valgrind test test_debug nb_lines
 .SILENT:
