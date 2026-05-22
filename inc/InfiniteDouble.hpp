@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:38:24 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/21 17:50:27 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 12:27:06 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ class	InfiniteDouble
 
 		//Constants
 		static constexpr unsigned char	MAX_PRECISION = 32;
+		static constexpr unsigned char	PRECISION = 8;
 
 	private:
 		// Members

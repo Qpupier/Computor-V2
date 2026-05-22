@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/18 20:38:11 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 12:21:24 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -694,15 +694,13 @@ std::ostream&	Complex::print(std::ostream &os) const
 	return (os);
 }
 
-void			Complex::print_variable(const std::string var) const
+void			Complex::print_rounded(void) const
 {
 	Rational*	tmp;
 
 	if (this->in_Z())
 		return ;
 	std::cout << COLOR_DIM;
-	if (!var.empty())
-		std::cout << var << (this->finite_decimals() ? " = " : " ≈ ");
 	if (!this->_real && !this->_imaginary)
 		std::cout << "0";
 	else if (!this->_real)

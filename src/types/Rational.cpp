@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 11:23:44 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 12:24:16 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -832,16 +832,6 @@ std::ostream&	Rational::print(std::ostream &os) const
 	return (os << numerator << "/" << copy.getDenominator());
 }
 
-void			Rational::print_variable(const std::string var) const
-{
-	if (this->in_Z())
-		return ;
-	std::cout << COLOR_DIM;
-	if (!var.empty())
-		std::cout << var << (this->finite_decimals() ? " = " : " ≈ ");
-	// std::cout << this->getValue() << COLOR_RESET << std::endl;// TODO: Useless?
-}
-
 void			Rational::reduce(void)
 {
 	InfiniteInt	gcd;
@@ -898,6 +888,13 @@ bool			Rational::is_integer(void) const
 InfiniteInt		Rational::integer_part(void) const
 {
 	return (this->_numerator / this->_denominator);
+}
+
+void			Rational::print_rounded(void) const
+{
+	if (this->in_Z())
+		return ;
+	std::cout << this->getValue() << std::endl;
 }
 
 

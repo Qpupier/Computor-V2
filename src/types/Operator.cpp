@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 14:25:16 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 12:22:36 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,10 +212,9 @@ std::ostream&	Operator::print(std::ostream &os) const
 	return (os);
 }
 
-void			Operator::print_variable(const std::string var) const
+void			Operator::print_rounded(void) const
 {
 	throw ERROR_UNEXPECTED;
-	(void)var;
 }
 
 bool			Operator::finite_decimals(void) const

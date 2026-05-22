@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:46:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/21 18:20:47 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 12:47:20 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -682,10 +682,34 @@ void			InfiniteDouble::reduce(void)
 // Output stream operator overload
 std::ostream&	operator<<(std::ostream &os, const InfiniteDouble &num)
 {
-	if (num.getIsNegative())
+	InfiniteDouble				num_copy(num);
+	InfiniteDouble				factor(1);
+	std::vector<unsigned char>	decimal_digits;
+	std::string					rounded;
+
+	if (num_copy.getIsNegative())
 		os << "-";
-	os << num.getIntegerPart();
-	if (num.getDecimalPart())
-		os << "." << num.getDecimalPart();
+	if (num_copy.getDecimalPart().size() > InfiniteDouble::PRECISION)
+	{
+		if (num_copy.getDecimalPart()[InfiniteDouble::PRECISION] >= 5)
+		{
+			for (unsigned char i(0); i < InfiniteDouble::PRECISION; i++)
+				factor /= 10;
+			num_copy += factor;
+		}
+		decimal_digits = num_copy.getDecimalPart().getDigits();
+		decimal_digits.resize(InfiniteDouble::PRECISION);
+		num_copy.setDecimalPart(InfiniteInt(decimal_digits, false, false));
+		num_copy.reduce();
+		rounded = "...";
+	}
+	os << num_copy.getIntegerPart();
+	if (num_copy.getDecimalPart())
+	{
+		os << ".";
+		for (unsigned char i(0); i < InfiniteDouble::PRECISION && i < num_copy.getDecimalPart().size(); i++)
+			os << static_cast<char>(num_copy.getDecimalPart()[i] + '0');
+	}
+	os << rounded;
 	return (os);
 }

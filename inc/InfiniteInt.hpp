@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:39:49 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/21 17:50:09 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 12:15:25 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,6 @@
 # define INFINITEINT_HPP
 
 # include "computor-v2.hpp"
-// # include <vector>
-// # include <string>
-// # include <stdexcept>
-// # include <algorithm>
-// # include <iostream>
 
 class	InfiniteDouble;
 

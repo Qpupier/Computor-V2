@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/18 18:12:17 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 12:20:27 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,23 +38,6 @@ static void	stored_variables(const std::map<std::pair<std::string, std::string>,
 		std::cout << " = " << *it->second << "\033[0m" << std::endl;
 		it++;
 	}
-}
-
-void	print_expression(const std::string &line, t_data &data)
-{
-	AST*	ast;
-
-	ast = compute_expression(line, data, true);
-	if (!ast)
-		throw UnexpectedError("Unexpected error while computing the expression");
-	if (!ast->end_of_tree())
-	{
-		delete ast;
-		throw UnexpectedError("Unexpected error: the AST is not an expression");
-	}
-	std::cout << COLOR_BOLD << *ast->getNode() << COLOR_RESET << std::endl;
-	// ast->getNode()->print_variable("");// TODO: Replace
-	delete ast;
 }
 
 static bool	is_eval(std::string &line, t_data &data, long int *nb_equal)
@@ -134,6 +117,23 @@ static int	loop(std::string &line, t_data &data, bool is_interactive)
 			return (EXIT_SUCCESS);
 	}
 	
+}
+
+void		print_expression(const std::string &line, t_data &data)
+{
+	AST*	ast;
+
+	ast = compute_expression(line, data, true);
+	if (!ast)
+		throw UnexpectedError("Unexpected error while computing the expression");
+	if (!ast->end_of_tree())
+	{
+		delete ast;
+		throw UnexpectedError("Unexpected error: the AST is not an expression");
+	}
+	std::cout << COLOR_BOLD << *ast->getNode() << COLOR_RESET << std::endl;
+	ast->getNode()->print_rounded();
+	delete ast;
 }
 
 int			main(int argc, const char **argv)

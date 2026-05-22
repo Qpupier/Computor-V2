@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/18 20:42:18 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 12:22:23 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1093,9 +1093,9 @@ void			Polynomial::free(void)
 	free_vector_terms(this->_dividers);
 }
 
-void			Polynomial::print_variable(const std::string var) const
+void			Polynomial::print_rounded(void) const
 {
-	(void)var;
+	throw ERROR_UNEXPECTED;
 }
 
 void			Polynomial::sort_powers(void)

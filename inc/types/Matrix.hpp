@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/21 18:06:03 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 12:18:37 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ class	Matrix: public IType
 		bool			in_Z(void) const;
 		void			error(const LogicError &e);
 		void			free(void);
-		void			print_variable(const std::string var) const;
+		void			print_rounded(void) const;
 
 	private:
 		// Members
