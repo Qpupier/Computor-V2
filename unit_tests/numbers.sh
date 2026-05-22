@@ -15,7 +15,7 @@ run_test "2((3 * 4 % 5)6 - (-3^2))" "42" $1 ; status=$((status | $?))
 run_test "4.2 / 3" "7/5
 1.4" $1 ; status=$((status | $?))
 run_test "2/6" "1/3
-0.333333" $1 ; status=$((status | $?))
+0.33333333..." $1 ; status=$((status | $?))
 run_test "42( 3 * 4 )" "504" $1 ; status=$((status | $?))
 run_test "2 + 4 *2 - 5 %4 + 2 * (4 + 5)" "27" $1 ; status=$((status | $?))
 run_test "-1" "-1" $1 ; status=$((status | $?))
