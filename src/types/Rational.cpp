@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 17:42:36 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 18:27:58 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,24 +245,7 @@ bool		Rational::operator<(const long long int value) const
 
 bool		Rational::operator<=(const IType &other) const
 {
-	const Rational*		other_rational;
-	const Complex*		other_complex;
-	const Matrix*		other_matrix;
-	const Polynomial*	other_polynomial;
-
-	other_rational = dynamic_cast<const Rational*>(&other);
-	if (other_rational)
-		return (*this <= *other_rational);
-	other_complex = dynamic_cast<const Complex*>(&other);
-	if (other_complex)
-		return (*this <= *other_complex);
-	other_matrix = dynamic_cast<const Matrix*>(&other);
-	if (other_matrix)
-		return (*this <= *other_matrix);
-	other_polynomial = dynamic_cast<const Polynomial*>(&other);
-	if (other_polynomial)
-		return (*this <= *other_polynomial);
-	return (false);
+	return (*this < other || *this == other);
 }
 
 bool		Rational::operator<=(const long long int value) const
@@ -272,24 +255,7 @@ bool		Rational::operator<=(const long long int value) const
 
 bool		Rational::operator>(const IType &other) const
 {
-	const Rational*		other_rational;
-	const Complex*		other_complex;
-	const Matrix*		other_matrix;
-	const Polynomial*	other_polynomial;
-
-	other_rational = dynamic_cast<const Rational*>(&other);
-	if (other_rational)
-		return (*this > *other_rational);
-	other_complex = dynamic_cast<const Complex*>(&other);
-	if (other_complex)
-		return (*this > *other_complex);
-	other_matrix = dynamic_cast<const Matrix*>(&other);
-	if (other_matrix)
-		return (*this > *other_matrix);
-	other_polynomial = dynamic_cast<const Polynomial*>(&other);
-	if (other_polynomial)
-		return (*this > *other_polynomial);
-	return (false);
+	return (!(*this <= other));
 }
 
 bool		Rational::operator>(const long long int value) const
@@ -299,24 +265,7 @@ bool		Rational::operator>(const long long int value) const
 
 bool		Rational::operator>=(const IType &other) const
 {
-	const Rational*		other_rational;
-	const Complex*		other_complex;
-	const Matrix*		other_matrix;
-	const Polynomial*	other_polynomial;
-
-	other_rational = dynamic_cast<const Rational*>(&other);
-	if (other_rational)
-		return (*this >= *other_rational);
-	other_complex = dynamic_cast<const Complex*>(&other);
-	if (other_complex)
-		return (*this >= *other_complex);
-	other_matrix = dynamic_cast<const Matrix*>(&other);
-	if (other_matrix)
-		return (*this >= *other_matrix);
-	other_polynomial = dynamic_cast<const Polynomial*>(&other);
-	if (other_polynomial)
-		return (*this >= *other_polynomial);
-	return (false);
+	return (!(*this < other));
 }
 
 bool		Rational::operator>=(const long long int value) const
