@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 12:24:16 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 13:54:35 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -804,9 +804,9 @@ Rational*		Rational::gcd(const Matrix &other) const
 
 Rational*		Rational::gcd(const IType &other) const
 {
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Matrix	*other_matrix;
+	const Rational*	other_rational;
+	const Complex*	other_complex;
+	const Matrix*	other_matrix;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
@@ -909,6 +909,6 @@ std::ostream&	operator<<(std::ostream &os, const Rational &num)
 InfiniteInt	compute_gcd(InfiniteInt a, InfiniteInt b)
 {
 	if (!b)
-		return (a >= InfiniteInt(0) ? a : -a);
+		return (a >= 0 ? a : -a);
 	return (compute_gcd(b, a % b));
 }

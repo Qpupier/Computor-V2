@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:39:10 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 11:21:46 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 13:55:05 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -478,10 +478,13 @@ void				InfiniteInt::operator*=(const long long int value)
 InfiniteInt			InfiniteInt::operator/(const InfiniteInt &other) const
 {
 	InfiniteInt	dividend(*this);
+	InfiniteInt	divisor(other);
 	InfiniteInt	result;
 
+	dividend.setIsNegative(false);
+	divisor.setIsNegative(false);
 	while (!dividend.getDigits().empty())
-		if (!division(dividend, other, result))
+		if (!division(dividend, divisor, result))
 			break ;
 	result.setIsNegative(this->_isNegative != other._isNegative);
 	result.reduce();
