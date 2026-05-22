@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/21 18:06:47 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 11:23:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,11 @@ Rational::Rational(const IType &other)
 
 
 // Operator overloads
+Rational::operator bool() const
+{
+	return (static_cast<bool>(this->_numerator));
+}
+
 Rational&	Rational::operator=(const Rational &other)
 {
 	if (this != &other)
@@ -115,11 +120,6 @@ Rational	Rational::operator=(const Complex &other)
 	if (other.getImaginary())
 		throw LogicError("Cannot convert a complex number with a non-zero imaginary part to a rational number");
 	return (Rational(other.getReal()));
-}
-
-Rational::operator bool() const
-{
-	return (static_cast<bool>(this->_numerator));
 }
 
 bool		Rational::operator==(const Rational &other) const

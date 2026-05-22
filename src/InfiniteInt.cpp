@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:39:10 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/21 18:29:22 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 11:21:46 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,14 +156,21 @@ InfiniteInt::InfiniteInt(const std::vector<unsigned char> digits, 	\
 }
 
 InfiniteInt::InfiniteInt(const std::string str, bool is_negative, 	\
-		bool is_integer_part)
+		bool is_integer_part): _isIntegerPart(false), _isNegative(false)
 {
+	std::string	str_copy(str);
+
 	if (str.empty())
 		return ;
 	this->_isIntegerPart = is_integer_part;
 	this->_isNegative = is_negative;
-	for (std::string::size_type i = 0; i < str.size(); i++)
-		this->_digits.push_back(static_cast<unsigned char>(str[i] - '0'));
+	if (str[0] == '-')
+	{
+		this->_isNegative = !this->_isNegative;
+		str_copy.erase(0, 1);
+	}
+	for (std::string::size_type i = 0; i < str_copy.size(); i++)
+		this->_digits.push_back(static_cast<unsigned char>(str_copy[i] - '0'));
 	this->reduce();
 }
 
