@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:39:10 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 14:38:43 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 21:51:14 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -614,7 +614,7 @@ InfiniteInt	InfiniteInt::sqrt(void) const
 	InfiniteInt								result;
 
 	if (this->_isNegative)
-		throw std::domain_error("Cannot compute square root of a negative number");//TODO: remplacer avec la bonne exception
+		throw ERROR_SQRT_NEGATIVE;
 	if (!*this)
 		return (InfiniteInt());
 	for (std::vector<unsigned char>::size_type i = 0; i < padding_size; i++)

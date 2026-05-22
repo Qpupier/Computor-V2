@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 14:42:47 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 21:42:41 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static void			binomial(const Polynomial *polynomial, 				\
 	IType*							tmp;
 	IType*							result;
 
-	tmp = *terms[0].coefficient * Rational(-InfiniteInt(1));// TODO: Changer tous les " * Rational(-InfiniteInt(1)) " en " - " une fois que l'opérateur unaire "-" sera implémenté
+	tmp = -(*terms[0].coefficient);
 	result = *tmp / *terms[1].coefficient;
 	delete tmp;
 	assignation(polynomial->getName(), stored, result);

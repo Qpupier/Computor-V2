@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:46:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 16:34:02 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 21:51:51 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -567,7 +567,7 @@ InfiniteDouble	InfiniteDouble::operator^(const InfiniteDouble &other) const
 	InfiniteDouble	power(other.getIntegerPart());
 
 	if (other.getDecimalPart() || other.getIsNegative())
-		throw std::runtime_error("Exponentiation with a non-integer exponent is not supported.");//TODO: remplacer avec la bonne
+		throw ERROR_EXPONENT_INTEGER;
 	while (power--)
 		result *= *this;
 	return (result);
@@ -655,7 +655,7 @@ InfiniteDouble	InfiniteDouble::sqrt(void) const
 				? (this->getIntegerPart().size() - 1) / 2 + 1 : 0);
 
 	if (this->_isNegative)
-		throw std::domain_error("Cannot compute square root of a negative number");//TODO: remplacer avec la bonne exception
+		throw ERROR_SQRT_NEGATIVE;
 	if (!*this)
 		return (InfiniteInt());
 	for (std::vector<unsigned char>::size_type i = 0; i < padding_size; i++)

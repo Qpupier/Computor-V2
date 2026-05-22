@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 21:38:51 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 21:56:08 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static std::ostream&	print_value(std::ostream &os, Rational value, 	\
 		if (value < Rational(0))
 		{
 			os << " - ";
-			copy = value * Rational(-InfiniteInt(1));
+			copy = -value;
 		}
 		else
 			os << " + ";
@@ -33,7 +33,7 @@ static std::ostream&	print_value(std::ostream &os, Rational value, 	\
 	else if (value < Rational(0) && i != std::string())
 	{
 		os << "-";
-		copy = value * Rational(-InfiniteInt(1));
+		copy = -value;
 	}
 	if (i == std::string() || copy != Rational(1))
 		os << copy.getNumerator();
@@ -93,16 +93,6 @@ Complex::Complex(const IType &other)
 
 
 // Operator overloads
-Complex&	Complex::operator=(const Complex * other)
-{
-	if (this != other)
-	{
-		this->_real = other->_real;
-		this->_imaginary = other->_imaginary;
-	}
-	return (*this);
-}
-
 Complex&	Complex::operator=(const Complex &other)
 {
 	if (this != &other)
@@ -289,7 +279,7 @@ Polynomial*	Complex::operator-(const Polynomial &other) const
 	Polynomial*	result;
 
 	tmp = other - *this;
-	result = *tmp * Rational(-InfiniteInt(1));
+	result = -*tmp;
 	delete tmp;
 	return (result);
 }

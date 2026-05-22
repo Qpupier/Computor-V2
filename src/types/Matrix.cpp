@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 21:39:24 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 21:57:48 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,23 +181,6 @@ Matrix::~Matrix(void)
 Matrix::operator bool() const
 {
 	return (this->_width && this->_height);
-}
-
-Matrix&		Matrix::operator=(const Matrix *other)
-{
-	if (this == other)
-		return (*this);
-	this->free();
-	this->_width = other->_width;
-	this->_height = other->_height;
-	this->_matrix = new Rational*[other->_height];
-	for (unsigned int i = 0; i < other->_height; i++)
-	{
-		this->_matrix[i] = new Rational[other->_width];
-		for (unsigned int j = 0; j < other->_width; j++)
-			this->_matrix[i][j] = other->_matrix[i][j];
-	}
-	return (*this);
 }
 
 Matrix&		Matrix::operator=(const Matrix &other)
@@ -420,7 +403,7 @@ Polynomial*	Matrix::operator-(const Polynomial &other) const
 	Polynomial*	result;
 
 	tmp = other - *this;
-	result = *tmp * Rational(-InfiniteInt(1));
+	result = -*tmp;
 	delete tmp;
 	return (result);
 }

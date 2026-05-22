@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 14:19:24 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 21:49:14 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,21 @@ bool		Operator::operator==(const IType &other) const
 	return (false);
 }
 
+bool		Operator::operator==(const long long int value) const
+{
+	(void)value;
+	return (false);
+}
+
 bool		Operator::operator!=(const IType &other) const
 {
 	(void)other;
+	return (true);
+}
+
+bool		Operator::operator!=(const long long int value) const
+{
+	(void)value;
 	return (true);
 }
 
@@ -95,10 +107,30 @@ IType*		Operator::operator+(const IType &other) const
 	return (nullptr);
 }
 
+IType*		Operator::operator+(const long long int value) const
+{
+	throw ERROR_UNEXPECTED;
+	(void)value;
+	return (nullptr);
+}
+
+IType*		Operator::operator-(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
 IType*		Operator::operator-(const IType &other) const
 {
 	throw ERROR_UNEXPECTED;
 	(void)other;
+	return (nullptr);
+}
+
+IType*		Operator::operator-(const long long int value) const
+{
+	throw ERROR_UNEXPECTED;
+	(void)value;
 	return (nullptr);
 }
 
@@ -109,10 +141,24 @@ IType*		Operator::operator*(const IType &other) const
 	return (nullptr);
 }
 
+IType*		Operator::operator*(const long long int value) const
+{
+	throw ERROR_UNEXPECTED;
+	(void)value;
+	return (nullptr);
+}
+
 IType*		Operator::operator/(const IType &other) const
 {
 	throw ERROR_UNEXPECTED;
 	(void)other;
+	return (nullptr);
+}
+
+IType*		Operator::operator/(const long long int value) const
+{
+	throw ERROR_UNEXPECTED;
+	(void)value;
 	return (nullptr);
 }
 
@@ -123,10 +169,24 @@ IType*		Operator::operator%(const IType &other) const
 	return (nullptr);
 }
 
+IType*		Operator::operator%(const long long int value) const
+{
+	throw ERROR_UNEXPECTED;
+	(void)value;
+	return (nullptr);
+}
+
 IType*		Operator::operator^(const IType &other) const
 {
 	throw ERROR_UNEXPECTED;
 	(void)other;
+	return (nullptr);
+}
+
+IType*		Operator::operator^(const long long int value) const
+{
+	throw ERROR_UNEXPECTED;
+	(void)value;
 	return (nullptr);
 }
 

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 21:39:15 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 21:57:21 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -328,7 +328,7 @@ Polynomial*	Rational::operator-(const Polynomial &other) const
 	Polynomial*	result;
 
 	tmp = other - *this;
-	result = *tmp * Rational(-InfiniteInt(1));
+	result = -*tmp;
 	delete tmp;
 	return (result);
 }

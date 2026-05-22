@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 17:24:41 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 21:50:43 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@
 # define ERROR_MATRIX_DIMENSIONS		LogicError("Matrix operation: incompatible dimensions")
 # define ERROR_MATRIX_OUT_OF_RANGE		LogicError("Matrix index out of range")
 # define ERROR_INCOMPATIBLE_TYPES		LogicError("Incompatible types for operation")
+# define ERROR_SQRT_NEGATIVE			LogicError("Cannot compute square root of a negative number")
 # define ERROR_OPERATOR_EXPECTED		UnexpectedError("Invalid expression: operator expected")
 # define ERROR_UNEXPECTED				UnexpectedError("Impossible to complete operation")
 # define UNSUPPORTED_DIVISION			UnsupportedError("Division not supported between polynomials with these powers")

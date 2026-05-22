@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/05/22 21:12:33 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/05/22 21:59:04 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,7 +55,7 @@ DIRS		=	$(DIR_OBJ)/quadratic_equation_resolution					\
 CC			=	g++
 CXXFLAGS	=	-W -Wall -Wextra -Werror -Wshadow -Wold-style-cast -Wcast-qual -Wconversion -Wsign-conversion -Wstrict-aliasing -g3
 # CXXFLAGS	+=	-O2 # Optimization
-CXXFLAGS	+=	-fsanitize=address # Debugging
+# CXXFLAGS	+=	-fsanitize=address # Debugging
 CDEP		=	-MMD -MP
 
 ERASE		=	\033[2K\r
