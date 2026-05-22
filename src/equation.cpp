@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/18 19:58:42 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 14:42:47 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ void			assignation(std::string var, std::map<std::pair<std::string, std::string>
 	std::pair<std::string, std::string>										pair(var_lower, std::string());
 
 	std::cout << COLOR_BOLD << var << " = " << *result << COLOR_RESET << std::endl;
-	// result->print_variable(var);// TODO: Replace
+
+	result->print_rounded(var);
 	for (it = stored.begin(); it != stored.end();)
 	{
 		if (it->first.first == var_lower)

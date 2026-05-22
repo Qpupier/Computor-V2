@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 13:54:35 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 14:43:01 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -890,10 +890,18 @@ InfiniteInt		Rational::integer_part(void) const
 	return (this->_numerator / this->_denominator);
 }
 
-void			Rational::print_rounded(void) const
+void			Rational::print_rounded(const std::string var) const
 {
 	if (this->in_Z())
 		return ;
+	if (!var.empty())
+	{
+		std::cout << var;
+		if (this->getValue().getDecimalPart().size() < InfiniteDouble::PRECISION)// TODO: changer par un booleen dans la class
+			std::cout << " = ";
+		else
+			std::cout << " ≈ ";
+	}
 	std::cout << this->getValue() << std::endl;
 }
 

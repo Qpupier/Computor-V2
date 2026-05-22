@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 13:55:38 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 14:19:45 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static std::vector<Polynomial::t_term>	vector_term_multiplication(const std::vec
 		while (it2 != terms2.end())
 		{
 			unsigned short int	new_power = it1->power + it2->power;
-			result.push_back((Polynomial::t_term){*it1->coefficient * *it2->coefficient, new_power});// TODO: Verifier overflow
+			result.push_back((Polynomial::t_term){*it1->coefficient * *it2->coefficient, new_power});
 			it2++;
 		}
 		it1++;
@@ -1093,9 +1093,9 @@ void			Polynomial::free(void)
 	free_vector_terms(this->_dividers);
 }
 
-void			Polynomial::print_rounded(void) const
+void			Polynomial::print_rounded(const std::string var) const
 {
-	return ;
+	(void)var;
 }
 
 void			Polynomial::sort_powers(void)

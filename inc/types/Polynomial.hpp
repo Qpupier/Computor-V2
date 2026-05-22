@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 12:19:52 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 14:04:43 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ class	Polynomial: public IType
 		bool			in_Z(void) const;
 		void			factorize_constant_factor(void);
 		void			free(void);
-		void			print_rounded(void) const;
+		void			print_rounded(const std::string var = std::string()) const;
 		void			reduce(void);
 		void			sort_powers(void);
 

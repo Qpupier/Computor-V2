@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 12:21:46 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 14:14:52 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -896,7 +896,7 @@ void			Matrix::free(void)
 	this->_matrix = nullptr;
 }
 
-void			Matrix::print_rounded(void) const
+void			Matrix::print_rounded(const std::string var) const
 {
 	unsigned long	width;
 	unsigned long	height;
@@ -906,6 +906,8 @@ void			Matrix::print_rounded(void) const
 	width = this->_width;
 	height = this->_height;
 	std::cout << COLOR_DIM;
+	if (!var.empty())
+		std::cout << var << " = " << std::endl;// TODO: review arrondi
 	for (unsigned int i = 0; i < height; i++)
 	{
 		std::cout << "[ ";

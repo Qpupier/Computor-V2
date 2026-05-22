@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 12:18:26 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 14:04:21 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ class	Rational: public IType
 		bool			finite_decimals(void) const;
 		bool			in_Z(void) const;
 		bool			is_integer(void) const;
-		void			print_rounded(void) const;
+		void			print_rounded(const std::string var = std::string()) const;
 		void			reduce(void);
 
 	private:

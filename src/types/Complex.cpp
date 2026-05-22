@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 12:21:24 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 14:33:41 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -694,41 +694,45 @@ std::ostream&	Complex::print(std::ostream &os) const
 	return (os);
 }
 
-void			Complex::print_rounded(void) const
+void			Complex::print_rounded(const std::string var) const
 {
-	Rational*	tmp;
+	InfiniteDouble	real(this->_real.getValue());
+	InfiniteDouble	imaginary(this->_imaginary.getValue());
+	InfiniteDouble	tmp;
 
 	if (this->in_Z())
 		return ;
 	std::cout << COLOR_DIM;
-	if (!this->_real && !this->_imaginary)
-		std::cout << "0";
-	else if (!this->_real)
-		std::cout << this->_imaginary.getValue() << "i";
-	else if (!this->_imaginary)
-		std::cout << this->_real.getValue();
-	else if (this->_real < Rational(0) && this->_imaginary > Rational(0))
+	if (!var.empty())
 	{
-		std::cout << this->_imaginary.getValue() << "i - ";
-		tmp = this->_real * Rational(-InfiniteInt(1));
-		std::cout << tmp->getValue();
-		delete tmp;
+		std::cout << var;
+		if (real.getDecimalPart().size() < InfiniteDouble::PRECISION && imaginary.getDecimalPart().size() < InfiniteDouble::PRECISION)// [ ]: Methode a implementer
+			std::cout << " = ";
+		else
+			std::cout << " ≈ ";
 	}
+	if (!real && !imaginary)
+		std::cout << "0";
+	else if (!real)
+		std::cout << imaginary << "i";
+	else if (!imaginary)
+		std::cout << real;
+	else if (real < 0 && imaginary > 0)
+		std::cout << imaginary << "i - " << -real;
 	else
 	{
-		std::cout << this->_real.getValue();
-		if (this->_imaginary < Rational(0))
+		std::cout << real;
+		if (imaginary < 0)
 		{
 			std::cout << " - ";
-			tmp = this->_imaginary * Rational(-InfiniteInt(1));
+			tmp = -imaginary;
 		}
 		else
 		{
 			std::cout << " + ";
-			tmp = new Rational(this->_imaginary);
+			tmp = imaginary;
 		}
-		std::cout << tmp->getValue() << "i";
-		delete tmp;
+		std::cout << tmp << "i";
 	}
 	std::cout << COLOR_RESET << std::endl;
 }
@@ -739,7 +743,7 @@ bool			Complex::finite_decimals(void) const
 			&& this->_imaginary.finite_decimals());
 }
 
-bool			Complex::in_Z(void) const
+bool			Complex::in_Z(void) const// [ ]: Not logic
 {
 	return (this->_real.in_Z() && this->_imaginary.in_Z());
 }
