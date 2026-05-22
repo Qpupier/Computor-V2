@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 14:04:43 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 21:40:17 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,45 +44,56 @@ class	Polynomial: public IType
 		~Polynomial(void);
 
 		// Operator overloads
-		Polynomial&	operator=(const Polynomial &other);
 		explicit	operator bool() const;
+		Polynomial&	operator=(const Polynomial &other);
+		Polynomial	operator=(const IType &other);
 		bool		operator==(const IType &other) const;
 		bool		operator==(const Polynomial &other) const;
-		bool		operator==(const Rational &other) const;
-		bool		operator==(const Complex &other) const;
-		bool		operator==(const Matrix &other) const;
+		bool		operator==(const long long int value) const;
 		bool		operator!=(const IType &other) const;
+		bool		operator!=(const long long int value) const;
 		bool		operator<(const IType &other) const;
+		bool		operator<(const long long int value) const;
 		bool		operator<=(const IType &other) const;
+		bool		operator<=(const long long int value) const;
 		bool		operator>(const IType &other) const;
+		bool		operator>(const long long int value) const;
 		bool		operator>=(const IType &other) const;
+		bool		operator>=(const long long int value) const;
 		IType*		operator+(const IType &other) const;
 		Polynomial*	operator+(const Polynomial &other) const;
 		Polynomial*	operator+(const Rational &other) const;
 		Polynomial*	operator+(const Complex &other) const;
 		Polynomial*	operator+(const Matrix &other) const;
+		Polynomial*	operator+(const long long int value) const;
+		Polynomial*	operator-(void) const;
 		IType*		operator-(const IType &other) const;
 		Polynomial*	operator-(const Polynomial &other) const;
 		Polynomial*	operator-(const Rational &other) const;
 		Polynomial*	operator-(const Complex &other) const;
 		Polynomial*	operator-(const Matrix &other) const;
+		Polynomial*	operator-(const long long int value) const;
 		IType*		operator*(const IType &other) const;
 		Polynomial*	operator*(const Polynomial &other) const;
 		Polynomial*	operator*(const Rational &other) const;
 		Polynomial*	operator*(const Complex &other) const;
 		Polynomial*	operator*(const Matrix &other) const;
+		Polynomial*	operator*(const long long int value) const;
 		IType*		operator/(const IType &other) const;
 		Polynomial*	operator/(const Polynomial &other) const;
 		Polynomial*	operator/(const Rational &other) const;
 		Polynomial*	operator/(const Complex &other) const;
 		Polynomial*	operator/(const Matrix &other) const;
+		Polynomial*	operator/(const long long int value) const;
 		IType*		operator%(const IType &other) const;
 		Polynomial*	operator%(const Polynomial &other) const;
 		Polynomial*	operator%(const Rational &other) const;
 		Polynomial*	operator%(const Complex &other) const;
 		Polynomial*	operator%(const Matrix &other) const;
+		Polynomial*	operator%(const long long int value) const;
 		IType*		operator^(const IType &other) const;
 		Polynomial*	operator^(const Rational &other) const;
+		Polynomial*	operator^(const long long int value) const;
 
 		// Getters
 		std::string			getName(void) const;

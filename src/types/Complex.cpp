@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 16:16:00 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 21:38:51 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,17 @@ Complex::Complex(const IType &other)
 
 
 // Operator overloads
-Complex		&Complex::operator=(const Complex &other)
+Complex&	Complex::operator=(const Complex * other)
+{
+	if (this != other)
+	{
+		this->_real = other->_real;
+		this->_imaginary = other->_imaginary;
+	}
+	return (*this);
+}
+
+Complex&	Complex::operator=(const Complex &other)
 {
 	if (this != &other)
 	{
@@ -103,64 +113,46 @@ Complex		&Complex::operator=(const Complex &other)
 	return (*this);
 }
 
+Complex	Complex::operator=(const IType &other)
+{
+	*this = Complex(other);
+	return (*this);
+}
+
 inline		Complex::operator bool() const
 {
 	return (this->_real || this->_imaginary);
 }
 
-bool		Complex::operator==(const Complex &other) const
-{
-	return (this->_real == other._real && this->_imaginary == other._imaginary);
-}
-
-bool		Complex::operator==(const Rational &other) const
-{
-	return (!this->_imaginary && this->_real == other);
-}
-
-bool		Complex::operator==(const Matrix &other) const
-{
-	(void)other;
-	return (false);
-}
-
-bool		Complex::operator==(const Polynomial &other) const
-{
-	std::vector<Polynomial::t_term>	terms(other.getTerms());
-	std::vector<Polynomial::t_term>	dividers(other.getDividers());
-
-	return (terms.size() == 1 && dividers.size() == 1 	\
-			&& *terms[0].coefficient == *this 			\
-			&& !terms[0].power 							\
-			&& *dividers[0].coefficient == Rational(1) 	\
-			&& !dividers[0].power);
-}
-
 bool		Complex::operator==(const IType &other) const
 {
-	const Complex	*other_complex;
-	const Rational	*other_rational;
-	const Matrix	*other_matrix;
-	const Polynomial	*other_polynomial;
+	Complex	other_complex;
 
-	other_complex = dynamic_cast<const Complex*>(&other);
-	if (other_complex)
-		return (*this == *other_complex);
-	other_rational = dynamic_cast<const Rational*>(&other);
-	if (other_rational)
-		return (*this == *other_rational);
-	other_matrix = dynamic_cast<const Matrix*>(&other);
-	if (other_matrix)
-		return (*this == *other_matrix);
-	other_polynomial = dynamic_cast<const Polynomial*>(&other);
-	if (other_polynomial)
-		return (*this == *other_polynomial);
-	return (false);
+	try
+	{
+		other_complex = Complex(other);
+	}
+	catch(const UnexpectedError &e)
+	{
+		return (false);
+	}
+	return (this->_real == other_complex._real 	\
+			&& this->_imaginary == other_complex._imaginary);
+}
+
+bool		Complex::operator==(const long long int value) const
+{
+	return (*this == Rational(value));
 }
 
 bool		Complex::operator!=(const IType &other) const
 {
 	return (!(*this == other));
+}
+
+bool		Complex::operator!=(const long long int value) const
+{
+	return (*this != Rational(value));
 }
 
 bool		Complex::operator<(const IType &other) const
@@ -247,6 +239,16 @@ IType*		Complex::operator+(const IType &other) const
 	return (nullptr);
 }
 
+Complex*	Complex::operator+(const long long int value) const
+{
+	return (*this + Rational(value));
+}
+
+Complex*	Complex::operator-(void) const
+{
+	return (*this * (-1));
+}
+
 Complex*	Complex::operator-(const Complex &other) const
 {
 	Rational*	real;
@@ -313,6 +315,11 @@ IType*		Complex::operator-(const IType &other) const
 		return (*this - *other_polynomial);
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
+}
+
+Complex*	Complex::operator-(const long long int value) const
+{
+	return (*this - Rational(value));
 }
 
 Complex*	Complex::operator*(const Complex &other) const
@@ -394,6 +401,11 @@ IType*		Complex::operator*(const IType &other) const
 		return (*this * *other_polynomial);
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
+}
+
+Complex*	Complex::operator*(const long long int value) const
+{
+	return (*this * Rational(value));
 }
 
 Complex*	Complex::operator/(const Complex &other) const
@@ -491,6 +503,11 @@ IType*		Complex::operator/(const IType &other) const
 	return (nullptr);
 }
 
+Complex*	Complex::operator/(const long long int value) const
+{
+	return (*this / Rational(value));
+}
+// TODO: Revoir les modulos complexes
 Rational*	Complex::operator%(const Complex &other) const
 {
 	Rational	rational;
@@ -572,11 +589,31 @@ IType*		Complex::operator%(const IType &other) const
 	return (nullptr);
 }
 
+Rational*	Complex::operator%(const long long int value) const
+{
+	return (*this % Rational(value));
+}
+
+Complex*		Complex::operator^(const Rational &other) const
+{
+	Complex*	result;
+	Complex*	tmp;
+
+	if (!other.is_integer() || other < Rational(0))
+		throw UNSUPPORTED_EXPONENT;
+	result = new Complex(Rational(1), Rational(0));
+	for (InfiniteInt i(0); i < other.getNumerator(); i++)
+	{
+		tmp = result;
+		result = *result * *this;
+		delete tmp;
+	}
+	return (result);
+}
+
 IType*		Complex::operator^(const IType &other) const
 {
 	Rational	power;
-	Complex*	result;
-	Complex*	tmp;
 
 	try
 	{
@@ -586,16 +623,12 @@ IType*		Complex::operator^(const IType &other) const
 	{
 		throw UNSUPPORTED_EXPONENT;
 	}
-	if (!power.is_integer() || power < Rational(0))
-		throw UNSUPPORTED_EXPONENT;
-	result = new Complex(Rational(1), Rational(0));
-	for (InfiniteInt i(0); i < power.getNumerator(); i++)
-	{
-		tmp = result;
-		result = *result * *this;
-		delete tmp;
-	}
-	return (result);
+	return (*this ^ power);
+}
+
+Complex*		Complex::operator^(const long long int value) const
+{
+	return (*this ^ Rational(value));
 }
 
 

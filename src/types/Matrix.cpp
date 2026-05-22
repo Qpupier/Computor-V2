@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 14:14:52 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 21:39:24 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,28 @@ Matrix::~Matrix(void)
 
 
 // Operator overloads
+Matrix::operator bool() const
+{
+	return (this->_width && this->_height);
+}
+
+Matrix&		Matrix::operator=(const Matrix *other)
+{
+	if (this == other)
+		return (*this);
+	this->free();
+	this->_width = other->_width;
+	this->_height = other->_height;
+	this->_matrix = new Rational*[other->_height];
+	for (unsigned int i = 0; i < other->_height; i++)
+	{
+		this->_matrix[i] = new Rational[other->_width];
+		for (unsigned int j = 0; j < other->_width; j++)
+			this->_matrix[i][j] = other->_matrix[i][j];
+	}
+	return (*this);
+}
+
 Matrix&		Matrix::operator=(const Matrix &other)
 {
 	if (this == &other)
@@ -195,72 +217,47 @@ Matrix&		Matrix::operator=(const Matrix &other)
 	return (*this);
 }
 
-Matrix::operator bool() const
+Matrix		Matrix::operator=(const IType &other)
 {
-	return (this->_width && this->_height);
-}
-
-bool		Matrix::operator==(const Matrix &other) const
-{
-	if (this->_width != other._width || this->_height != other._height)
-		return (false);
-	for (unsigned int i = 0; i < this->_height; i++)
-		for (unsigned int j = 0; j < this->_width; j++)
-			if (this->_matrix[i][j] != other._matrix[i][j])
-				return (false);
-	return (true);
-}
-
-bool		Matrix::operator==(const Rational &other) const
-{
-	(void)other;
-	return (false);
-}
-
-bool		Matrix::operator==(const Complex &other) const
-{
-	(void)other;
-	return (false);
-}
-
-bool		Matrix::operator==(const Polynomial &other) const
-{
-	std::vector<Polynomial::t_term>	terms(other.getTerms());
-	std::vector<Polynomial::t_term>	dividers(other.getDividers());
-
-	return (terms.size() == 1 && dividers.size() == 1 	\
-			&& *terms[0].coefficient == *this 			\
-			&& !terms[0].power 							\
-			&& *dividers[0].coefficient == Rational(1) 	\
-			&& !dividers[0].power);
+	*this = Matrix(other);
+	return (*this);
 }
 
 bool		Matrix::operator==(const IType &other) const
 {
-	const Matrix	*other_matrix;
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Polynomial	*other_polynomial;
+	Matrix	other_matrix;
 
-	other_matrix = dynamic_cast<const Matrix*>(&other);
-	if (other_matrix)
-		return (*this == *other_matrix);
-	other_rational = dynamic_cast<const Rational*>(&other);
-	if (other_rational)
-		return (*this == *other_rational);
-	other_complex = dynamic_cast<const Complex*>(&other);
-	if (other_complex)
-		return (*this == *other_complex);
-	other_polynomial = dynamic_cast<const Polynomial*>(&other);
-	if (other_polynomial)
-		return (*this == *other_polynomial);
-	throw ERROR_UNEXPECTED;
-	return (false);
+	try
+	{
+		other_matrix = Matrix(other);
+	}
+	catch(const UnexpectedError &e)
+	{
+		return (false);
+	}
+	if (this->_width != other_matrix._width 	\
+			|| this->_height != other_matrix._height)
+		return (false);
+	for (unsigned long long int j = 0; j < this->_height; j++)
+		for (unsigned long long int i = 0; i < this->_width; i++)
+			if (this->_matrix[j][i] != other_matrix._matrix[j][i])
+				return (false);
+	return (true);
+}
+
+bool		Matrix::operator==(const long long int value) const
+{
+	return (*this == Rational(value));
 }
 
 bool		Matrix::operator!=(const IType &other) const
 {
 	return (!(*this == other));
+}
+
+bool		Matrix::operator!=(const long long int value) const
+{
+	return (*this != Rational(value));
 }
 
 bool		Matrix::operator<(const IType &other) const
@@ -368,6 +365,16 @@ IType*		Matrix::operator+(const IType &other) const
 	return (nullptr);
 }
 
+Matrix*		Matrix::operator+(const long long int value) const
+{
+	return (*this + Rational(value));
+}
+
+Matrix*		Matrix::operator-(void) const
+{
+	return (*this * (-1));
+}
+
 Matrix*		Matrix::operator-(const Matrix &other) const
 {
 	Matrix*	result;
@@ -441,6 +448,11 @@ IType*		Matrix::operator-(const IType &other) const
 	return (nullptr);
 }
 
+Matrix*		Matrix::operator-(const long long int value) const
+{
+	return (*this - Rational(value));
+}
+
 Matrix*		Matrix::operator*(const Matrix &other) const
 {
 	Matrix	*result;
@@ -506,6 +518,11 @@ IType*		Matrix::operator*(const IType &other) const
 		return (*this * *other_polynomial);
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
+}
+
+Matrix*		Matrix::operator*(const long long int value) const
+{
+	return (*this * Rational(value));
 }
 
 Matrix*		Matrix::operator/(const Matrix &other) const
@@ -597,6 +614,11 @@ IType*		Matrix::operator/(const IType &other) const
 	return (nullptr);
 }
 
+Matrix*		Matrix::operator/(const long long int value) const
+{
+	return (*this / Rational(value));
+}
+
 Matrix*		Matrix::operator%(const Matrix &other) const
 {
 	Matrix	*result;
@@ -686,6 +708,11 @@ IType*		Matrix::operator%(const IType &other) const
 	return (nullptr);
 }
 
+Matrix*		Matrix::operator%(const long long int value) const
+{
+	return (*this % Rational(value));
+}
+
 Matrix*		Matrix::operator^(const Rational &other) const
 {
 	Matrix*	result;
@@ -724,6 +751,11 @@ IType*		Matrix::operator^(const IType &other) const
 	if (!power.is_integer() || power < Rational(0))
 		throw UNSUPPORTED_EXPONENT;
 	return (*this ^ power);
+}
+
+Matrix*		Matrix::operator^(const long long int value) const
+{
+	return (*this ^ Rational(value));
 }
 
 

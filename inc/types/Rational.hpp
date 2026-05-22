@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 17:54:41 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 21:25:01 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,22 +40,15 @@ class	Rational: public IType
 
 		// Operator overloads
 		explicit	operator bool() const;
-		Rational&	operator=(const Rational & other);
 		Rational&	operator=(const Rational * other);
+		Rational&	operator=(const Rational & other);
+		Rational	operator=(const IType & other);
 		Rational	operator=(const Complex & other);
 		bool		operator==(const IType & other) const;
-		bool		operator==(const Rational & other) const;
-		bool		operator==(const Complex & other) const;
-		bool		operator==(const Matrix & other) const;
-		bool		operator==(const Polynomial & other) const;
 		bool		operator==(const long long int value) const;
 		bool		operator!=(const IType& other) const;
 		bool		operator!=(const long long int value) const;
 		bool		operator<(const IType & other) const;
-		bool		operator<(const Rational & other) const;
-		bool		operator<(const Complex & other) const;
-		bool		operator<(const Matrix & other) const;
-		bool		operator<(const Polynomial & other) const;
 		bool		operator<(const long long int value) const;
 		bool		operator<=(const IType & other) const;
 		bool		operator<=(const long long int value) const;
@@ -69,11 +62,6 @@ class	Rational: public IType
 		Matrix*		operator+(const Matrix & other) const;
 		Polynomial*	operator+(const Polynomial & other) const;
 		Rational*	operator+(const long long int value) const;
-		void		operator+=(const IType & other);
-		void		operator+=(const Rational & other);
-		void		operator+=(const long long int value);
-		Rational*	operator++(void);
-		Rational*	operator++(int);
 		Rational*	operator-(void) const;
 		IType*		operator-(const IType & other) const;
 		Rational*	operator-(const Rational & other) const;
@@ -81,44 +69,27 @@ class	Rational: public IType
 		Matrix*		operator-(const Matrix & other) const;
 		Polynomial*	operator-(const Polynomial & other) const;
 		Rational*	operator-(const long long int value) const;
-		void		operator-=(const IType & other);
-		void		operator-=(const Rational & other);
-		void		operator-=(const long long int value);
-		Rational*	operator--(void);
-		Rational*	operator--(int);
 		IType*		operator*(const IType & other) const;
 		Rational*	operator*(const Rational & other) const;
 		Complex*	operator*(const Complex & other) const;
 		Matrix*		operator*(const Matrix & other) const;
 		Polynomial*	operator*(const Polynomial & other) const;
 		Rational*	operator*(const long long int value) const;
-		void		operator*=(const IType & other);
-		void		operator*=(const Rational & other);
-		void		operator*=(const long long int value);
 		IType*		operator/(const IType & other) const;
 		Rational*	operator/(const Rational & other) const;
 		Complex*	operator/(const Complex & other) const;
 		Matrix*		operator/(const Matrix & other) const;
 		Polynomial*	operator/(const Polynomial & other) const;
 		Rational*	operator/(const long long int value) const;
-		void		operator/=(const IType & other);
-		void		operator/=(const Rational & other);
-		void		operator/=(const long long int value);
 		IType*		operator%(const IType & other) const;
 		Rational*	operator%(const Rational & other) const;
 		Rational*	operator%(const Complex & other) const;
 		Matrix*		operator%(const Matrix & other) const;
 		Polynomial*	operator%(const Polynomial & other) const;
 		Rational*	operator%(const long long int value) const;
-		void		operator%=(const IType & other);
-		void		operator%=(const Rational & other);
-		void		operator%=(const long long int value);
 		IType*		operator^(const IType & other) const;
 		Rational*	operator^(const Rational & other) const;
 		Rational*	operator^(const long long int value) const;
-		void		operator^=(const IType & other);
-		void		operator^=(const Rational & other);
-		void		operator^=(const long long int value);
 
 		// Getters
 		InfiniteInt		getNumerator(void) const;

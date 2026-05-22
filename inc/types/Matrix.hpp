@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 14:04:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 21:16:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,14 @@ class	Matrix: public IType
 		~Matrix(void);
 
 		// Operator overloads
-		Matrix&		operator=(const Matrix &other);
 		explicit	operator bool() const;
+		Matrix&		operator=(const Matrix *other);
+		Matrix&		operator=(const Matrix &other);
+		Matrix		operator=(const IType &other);
 		bool		operator==(const IType &other) const;
-		bool		operator==(const Matrix &other) const;
-		bool		operator==(const Rational &other) const;
-		bool		operator==(const Complex &other) const;
-		bool		operator==(const Polynomial &other) const;
+		bool		operator==(const long long int value) const;
 		bool		operator!=(const IType &other) const;
+		bool		operator!=(const long long int value) const;
 		bool		operator<(const IType &other) const;
 		bool		operator<=(const IType &other) const;
 		bool		operator>(const IType &other) const;
@@ -51,28 +51,35 @@ class	Matrix: public IType
 		Matrix*		operator+(const Rational &other) const;
 		Matrix*		operator+(const Complex &other) const;
 		Polynomial*	operator+(const Polynomial &other) const;
+		Matrix*		operator+(const long long int value) const;
+		Matrix*		operator-(void) const;
 		IType*		operator-(const IType &other) const;
 		Matrix*		operator-(const Matrix &other) const;
 		Matrix*		operator-(const Rational &other) const;
 		Matrix*		operator-(const Complex &other) const;
 		Polynomial*	operator-(const Polynomial &other) const;
+		Matrix*		operator-(const long long int value) const;
 		IType*		operator*(const IType &other) const;
 		Matrix*		operator*(const Matrix &other) const;
 		Matrix*		operator*(const Rational &other) const;
 		Matrix*		operator*(const Complex &other) const;
 		Polynomial*	operator*(const Polynomial &other) const;
+		Matrix*		operator*(const long long int value) const;
 		IType*		operator/(const IType &other) const;
 		Matrix*		operator/(const Matrix &other) const;
 		Matrix*		operator/(const Rational &other) const;
 		Matrix*		operator/(const Complex &other) const;
 		Polynomial*	operator/(const Polynomial &other) const;
+		Matrix*		operator/(const long long int value) const;
 		IType*		operator%(const IType &other) const;
 		Matrix*		operator%(const Matrix &other) const;
 		Matrix*		operator%(const Rational &other) const;
 		Matrix*		operator%(const Complex &other) const;
 		Polynomial*	operator%(const Polynomial &other) const;
+		Matrix*		operator%(const long long int value) const;
 		IType*		operator^(const IType &other) const;
 		Matrix*		operator^(const Rational &other) const;
+		Matrix*		operator^(const long long int value) const;
 
 		// Getters
 		unsigned long long int	getWidth(void) const;

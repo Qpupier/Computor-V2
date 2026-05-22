@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 14:19:45 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 21:39:59 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -416,6 +416,12 @@ Polynomial&	Polynomial::operator=(const Polynomial &other)
 	return (*this);
 }
 
+Polynomial	Polynomial::operator=(const IType &other)
+{
+	*this = Polynomial(other);
+	return (*this);
+}
+
 Polynomial::operator bool() const
 {
 	std::vector<t_term>::const_iterator	it(this->_terms.begin());
@@ -455,53 +461,33 @@ bool		Polynomial::operator==(const Polynomial &other) const
 	return (true);
 }
 
-bool		Polynomial::operator==(const Rational &other) const
-{
-	if (this->_terms.size() != 1 || this->_dividers.size() != 1 || *this->_dividers[0].coefficient != Rational(1) || this->_dividers[0].power)
-		return (false);
-	return (*this->_terms[0].coefficient == other && !this->_terms[0].power);
-}
-
-bool		Polynomial::operator==(const Complex &other) const
-{
-	if (this->_terms.size() != 1 || this->_dividers.size() != 1 || *this->_dividers[0].coefficient != Rational(1) || this->_dividers[0].power)
-		return (false);
-	return (*this->_terms[0].coefficient == other && !this->_terms[0].power);
-}
-
-bool		Polynomial::operator==(const Matrix &other) const
-{
-	if (this->_terms.size() != 1 || this->_dividers.size() != 1 || *this->_dividers[0].coefficient != Rational(1) || this->_dividers[0].power)
-		return (false);
-	return (*this->_terms[0].coefficient == other && !this->_terms[0].power);
-}
-
 bool		Polynomial::operator==(const IType &other) const
 {
-	const Polynomial	*other_polynomial;
-	const Rational		*other_rational;
-	const Complex		*other_complex;
-	const Matrix		*other_matrix;
+	try
+	{
+		Polynomial	other_polynomial(other);
 
-	other_polynomial = dynamic_cast<const Polynomial*>(&other);
-	if (other_polynomial)
-		return (*this == *other_polynomial);
-	other_rational = dynamic_cast<const Rational*>(&other);
-	if (other_rational)
-		return (*this == *other_rational);
-	other_complex = dynamic_cast<const Complex*>(&other);
-	if (other_complex)
-		return (*this == *other_complex);
-	other_matrix = dynamic_cast<const Matrix*>(&other);
-	if (other_matrix)
-		return (*this == *other_matrix);
-	throw ERROR_UNEXPECTED;
+		return (*this == other_polynomial);
+	}
+	catch(const UnexpectedError &e)
+	{
+	}
 	return (false);
+}
+
+bool		Polynomial::operator==(const long long int value) const
+{
+	return (*this == Rational(value));
 }
 
 bool		Polynomial::operator!=(const IType &other) const
 {
 	return (!(*this == other));
+}
+
+bool		Polynomial::operator!=(const long long int value) const
+{
+	return (*this != Rational(value));
 }
 
 bool		Polynomial::operator<(const IType &other) const
@@ -510,10 +496,20 @@ bool		Polynomial::operator<(const IType &other) const
 	(void)other;
 }
 
+bool		Polynomial::operator<(const long long int value) const
+{
+	return (*this < Rational(value));
+}
+
 bool		Polynomial::operator<=(const IType &other) const
 {
 	return (false);
 	(void)other;
+}
+
+bool		Polynomial::operator<=(const long long int value) const
+{
+	return (*this <= Rational(value));
 }
 
 bool		Polynomial::operator>(const IType &other) const
@@ -522,10 +518,20 @@ bool		Polynomial::operator>(const IType &other) const
 	(void)other;
 }
 
+bool		Polynomial::operator>(const long long int value) const
+{
+	return (*this > Rational(value));
+}
+
 bool		Polynomial::operator>=(const IType &other) const
 {
 	return (false);
 	(void)other;
+}
+
+bool		Polynomial::operator>=(const long long int value) const
+{
+	return (*this >= Rational(value));
 }
 
 Polynomial*	Polynomial::operator+(const Polynomial &other) const
@@ -616,6 +622,16 @@ IType*		Polynomial::operator+(const IType &other) const
 	return (nullptr);
 }
 
+Polynomial*	Polynomial::operator+(const long long int value) const
+{
+	return (*this + Rational(value));
+}
+
+Polynomial*	Polynomial::operator-(void) const
+{
+	return (*this * (-1));
+}
+
 Polynomial*	Polynomial::operator-(const Polynomial &other) const
 {
 	Polynomial*	sub;
@@ -696,6 +712,11 @@ IType*		Polynomial::operator-(const IType &other) const
 		return (*this - *other_matrix);
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
+}
+
+Polynomial*	Polynomial::operator-(const long long int value) const
+{
+	return (*this - Rational(value));
 }
 
 Polynomial*	Polynomial::operator*(const Polynomial &other) const
@@ -785,6 +806,11 @@ IType*		Polynomial::operator*(const IType &other) const
 		return (*this * *other_matrix);
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
+}
+
+Polynomial*	Polynomial::operator*(const long long int value) const
+{
+	return (*this * Rational(value));
 }
 
 Polynomial*	Polynomial::operator/(const Polynomial &other) const
@@ -908,6 +934,11 @@ IType*		Polynomial::operator/(const IType &other) const
 	return (nullptr);
 }
 
+Polynomial*	Polynomial::operator/(const long long int value) const
+{
+	return (*this / Rational(value));
+}
+
 Polynomial*	Polynomial::operator%(const Polynomial &other) const
 {
 	Polynomial*			division;
@@ -967,6 +998,11 @@ IType*		Polynomial::operator%(const IType &other) const
 	return (nullptr);
 }
 
+Polynomial*	Polynomial::operator%(const long long int value) const
+{
+	return (*this % Rational(value));
+}
+
 Polynomial*	Polynomial::operator^(const Rational &other) const
 {
 	Polynomial*	result;
@@ -1002,6 +1038,11 @@ IType*		Polynomial::operator^(const IType &other) const
 	if (!power.is_integer() || power < Rational(0))
 		throw UNSUPPORTED_EXPONENT;
 	return (*this ^ power);
+}
+
+Polynomial*	Polynomial::operator^(const long long int value) const
+{
+	return (*this ^ Rational(value));
 }
 
 
