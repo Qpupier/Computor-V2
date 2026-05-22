@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:27:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/21 18:39:38 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 16:35:05 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,30 +60,42 @@ static void	rounded_calculations(const t_quadratic_solutions &solutions, 	\
 }
 
 static void	print_solution(std::string var, InfiniteDouble x_real[2], 	\
-		InfiniteDouble x_imaginary[2], unsigned char i, bool print_solution_number)
+		InfiniteDouble x_imaginary[2], unsigned char i, bool print_solution_number)// TODO: Fonction identique au print complex...
 {
+	InfiniteDouble	tmp;
+
+	// std::cerr << "print_solution: " << var << " = " << x_real[i] << " + " << x_imaginary[i] << "i" << std::endl;
 	std::cout << var;
 	if (print_solution_number)
 		std::cout << i + 1;
-	if (x_real[i] == x_real[i].getIntegerPart() && x_imaginary[i] == x_imaginary[i].getIntegerPart())// TODO: Methode isInteger()
+	if (x_real[i].getDecimalPart().size() < InfiniteDouble::PRECISION && x_imaginary[i].getDecimalPart().size() < InfiniteDouble::PRECISION)// TODO: Methode isInteger()
 		std::cout << " = ";
 	else
 		std::cout << " ≈ ";
-	if (x_real[i] != 0 || x_imaginary[i] == 0)
-		std::cout << x_real[i];
-	if (x_imaginary[i] > 0)
-	{
-		if (x_real[i] != 0)
-			std::cout << " + ";
+	if (!x_real[i] && !x_imaginary[i])
+		std::cout << "0";
+	else if (!x_real[i])
 		std::cout << x_imaginary[i] << "i";
-	}
-	else if (x_imaginary[i] < 0)
+	else if (!x_imaginary[i])
+		std::cout << x_real[i];
+	else if (x_real[i] < 0 && x_imaginary[i] > 0)
+		std::cout << x_imaginary[i] << "i - " << -x_real[i];
+	else
 	{
-		if (x_real[i] != 0)
+		std::cout << x_real[i];
+		// std::cerr << "x_imaginary[i]: " << x_imaginary[i] << " is_negative? " << x_imaginary[i].getIsNegative() << std::endl;
+		if (x_imaginary[i] < 0)
+		{
+			// std::cerr << "x_imaginary[i] is negative, print ' - ' and invert it" << std::endl;
 			std::cout << " - ";
+			tmp = -x_imaginary[i];
+		}
 		else
-			std::cout << "-";
-		std::cout << -x_imaginary[i] << "i";
+		{
+			std::cout << " + ";
+			tmp = x_imaginary[i];
+		}
+		std::cout << tmp << "i";
 	}
 }
 

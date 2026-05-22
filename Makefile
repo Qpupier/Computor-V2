@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/05/21 18:10:13 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/05/22 15:41:22 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -109,7 +109,7 @@ test_debug: $(NAME)
 	@echo &> /dev/null
 	./unit_tests/run_tests.sh debug
 
-nb_lines:
+nb_lines: fclean
 	@echo -n "Total lines of code: "
 	find . -type f ! -path '*/.*' -exec wc -l {} + | tail -n 1 | sed "s/  //" | sed "s/ total//"
 

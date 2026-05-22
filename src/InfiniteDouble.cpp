@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:46:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 12:47:20 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 16:34:02 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,7 +239,8 @@ InfiniteDouble&	InfiniteDouble::operator=(const long long int value)
 
 bool			InfiniteDouble::operator==(const InfiniteDouble &other) const
 {
-	return (this->getIntegerPart() == other.getIntegerPart() 	\
+	return (this->_isNegative == other._isNegative 					\
+			&& this->getIntegerPart() == other.getIntegerPart() 	\
 			&& this->getDecimalPart() == other.getDecimalPart());
 }
 
@@ -270,6 +271,8 @@ bool			InfiniteDouble::operator!=(const long long int value) const
 
 bool			InfiniteDouble::operator<(const InfiniteDouble &other) const
 {
+	if (this->_isNegative != other._isNegative)
+		return (this->_isNegative);
 	return (this->getIntegerPart() < other.getIntegerPart() 		\
 			|| (this->getIntegerPart() == other.getIntegerPart() 	\
 				&& this->getDecimalPart() < other.getDecimalPart()));
