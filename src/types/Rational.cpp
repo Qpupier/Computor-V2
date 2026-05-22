@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 14:43:01 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 17:42:36 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,9 +173,19 @@ bool		Rational::operator==(const IType &other) const
 	return (false);
 }
 
+bool		Rational::operator==(const long long int value) const
+{
+	return (*this == Rational(value));
+}
+
 bool		Rational::operator!=(const IType &other) const
 {
 	return (!(*this == other));
+}
+
+bool		Rational::operator!=(const long long int value) const
+{
+	return (*this != Rational(value));
 }
 
 bool		Rational::operator<(const Rational &other) const
@@ -228,33 +238,9 @@ bool		Rational::operator<(const IType &other) const
 	return (false);
 }
 
-bool		Rational::operator<=(const Rational &other) const
+bool		Rational::operator<(const long long int value) const
 {
-	return (this->_numerator * other._denominator 	\
-			<= other._numerator * this->_denominator);
-}
-
-bool		Rational::operator<=(const Complex &other) const
-{
-	return (!other.getImaginary() && *this <= other.getReal());
-}
-
-bool		Rational::operator<=(const Matrix &other) const
-{
-	(void)other;
-	return (false);
-}
-
-bool		Rational::operator<=(const Polynomial &other) const
-{
-	std::vector<Polynomial::t_term>	terms(other.getTerms());
-	std::vector<Polynomial::t_term>	dividers(other.getDividers());
-
-	return (terms.size() == 1 && dividers.size() == 1 	\
-			&& *terms[0].coefficient <= *this 			\
-			&& !terms[0].power 							\
-			&& *dividers[0].coefficient == Rational(1) 	\
-			&& !dividers[0].power);
+	return (*this < Rational(value));
 }
 
 bool		Rational::operator<=(const IType &other) const
@@ -279,33 +265,9 @@ bool		Rational::operator<=(const IType &other) const
 	return (false);
 }
 
-bool		Rational::operator>(const Rational &other) const
+bool		Rational::operator<=(const long long int value) const
 {
-	return (this->_numerator * other._denominator 	\
-			> other._numerator * this->_denominator);
-}
-
-bool		Rational::operator>(const Complex &other) const
-{
-	return (!other.getImaginary() && *this > other.getReal());
-}
-
-bool		Rational::operator>(const Matrix &other) const
-{
-	(void)other;
-	return (false);
-}
-
-bool		Rational::operator>(const Polynomial &other) const
-{
-	std::vector<Polynomial::t_term>	terms(other.getTerms());
-	std::vector<Polynomial::t_term>	dividers(other.getDividers());
-
-	return (terms.size() == 1 && dividers.size() == 1 	\
-			&& *terms[0].coefficient > *this 			\
-			&& !terms[0].power 							\
-			&& *dividers[0].coefficient == Rational(1) 	\
-			&& !dividers[0].power);
+	return (*this <= Rational(value));
 }
 
 bool		Rational::operator>(const IType &other) const
@@ -330,33 +292,9 @@ bool		Rational::operator>(const IType &other) const
 	return (false);
 }
 
-bool		Rational::operator>=(const Rational &other) const
+bool		Rational::operator>(const long long int value) const
 {
-	return (this->_numerator * other._denominator 	\
-			>= other._numerator * this->_denominator);
-}
-
-bool		Rational::operator>=(const Complex &other) const
-{
-	return (!other.getImaginary() && *this >= other.getReal());
-}
-
-bool		Rational::operator>=(const Matrix &other) const
-{
-	(void)other;
-	return (false);
-}
-
-bool		Rational::operator>=(const Polynomial &other) const
-{
-	std::vector<Polynomial::t_term>	terms(other.getTerms());
-	std::vector<Polynomial::t_term>	dividers(other.getDividers());
-
-	return (terms.size() == 1 && dividers.size() == 1 	\
-			&& *terms[0].coefficient >= *this 			\
-			&& !terms[0].power 							\
-			&& *dividers[0].coefficient == Rational(1) 	\
-			&& !dividers[0].power);
+	return (*this > Rational(value));
 }
 
 bool		Rational::operator>=(const IType &other) const
@@ -379,6 +317,11 @@ bool		Rational::operator>=(const IType &other) const
 	if (other_polynomial)
 		return (*this >= *other_polynomial);
 	return (false);
+}
+
+bool		Rational::operator>=(const long long int value) const
+{
+	return (*this >= Rational(value));
 }
 
 Rational*	Rational::operator+(const Rational &other) const
@@ -434,6 +377,53 @@ IType*		Rational::operator+(const IType &other) const
 		return (*this + *other_polynomial);
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
+}
+
+Rational*	Rational::operator+(const long long int value) const
+{
+	return (*this + Rational(value));
+}
+
+void		Rational::operator+=(const Rational &other)
+{
+	Rational*	tmp(this);
+
+	*this = *this + other;
+	delete tmp;
+}
+
+void		Rational::operator+=(const IType &other)
+{
+	const Rational*	other_rational;
+
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		*this += *other_rational;
+	throw ERROR_INCOMPATIBLE_TYPES;
+}
+
+void		Rational::operator+=(const long long int value)
+{
+	*this += Rational(value);
+}
+
+Rational*	Rational::operator++(void)
+{
+	*this += 1;
+	return (this);
+}
+
+Rational*	Rational::operator++(int)
+{
+	Rational*	result(this);
+
+	*this += 1;
+	return (result);
+}
+
+Rational*	Rational::operator-(void) const
+{
+	return (*this * (-1));
 }
 
 Rational*	Rational::operator-(const Rational &other) const
@@ -497,6 +487,48 @@ IType*		Rational::operator-(const IType &other) const
 	return (nullptr);
 }
 
+Rational*	Rational::operator-(const long long int value) const
+{
+	return (*this - Rational(value));
+}
+
+void		Rational::operator-=(const Rational &other)
+{
+	Rational*	tmp(this);
+
+	*this = *this - other;
+	delete tmp;
+}
+
+void		Rational::operator-=(const IType &other)
+{
+	const Rational*	other_rational;
+
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		*this -= *other_rational;
+	throw ERROR_INCOMPATIBLE_TYPES;
+}
+
+void		Rational::operator-=(const long long int value)
+{
+	*this -= Rational(value);
+}
+
+Rational*	Rational::operator--(void)
+{
+	*this -= 1;
+	return (this);
+}
+
+Rational*	Rational::operator--(int)
+{
+	Rational*	result(this);
+
+	*this -= 1;
+	return (result);
+}
+
 Rational*	Rational::operator*(const Rational &other) const
 {
 	return (new Rational(this->_numerator * other._numerator, 	\
@@ -549,6 +581,34 @@ IType*		Rational::operator*(const IType &other) const
 		return (*this * *other_polynomial);
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
+}
+
+Rational*	Rational::operator*(const long long int value) const
+{
+	return (*this * Rational(value));
+}
+
+void		Rational::operator*=(const Rational &other)
+{
+	Rational*	tmp(this);
+
+	*this = *this * other;
+	delete tmp;
+}
+
+void		Rational::operator*=(const IType &other)
+{
+	const Rational*	other_rational;
+
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		*this *= *other_rational;
+	throw ERROR_INCOMPATIBLE_TYPES;
+}
+
+void		Rational::operator*=(const long long int value)
+{
+	*this *= Rational(value);
 }
 
 Rational*	Rational::operator/(const Rational &other) const
@@ -616,6 +676,34 @@ IType*		Rational::operator/(const IType &other) const
 		return (*this / *other_polynomial);
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
+}
+
+Rational*	Rational::operator/(const long long int value) const
+{
+	return (*this / Rational(value));
+}
+
+void		Rational::operator/=(const Rational &other)
+{
+	Rational*	tmp(this);
+
+	*this = *this / other;
+	delete tmp;
+}
+
+void		Rational::operator/=(const IType &other)
+{
+	const Rational*	other_rational;
+
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		*this /= *other_rational;
+	throw ERROR_INCOMPATIBLE_TYPES;
+}
+
+void		Rational::operator/=(const long long int value)
+{
+	*this /= Rational(value);
 }
 
 Rational*	Rational::operator%(const Rational &other) const
@@ -695,20 +783,40 @@ IType*		Rational::operator%(const IType &other) const
 	return (nullptr);
 }
 
-IType*		Rational::operator^(const IType &other) const
+Rational*	Rational::operator%(const long long int value) const
+{
+	return (*this % Rational(value));
+}
+
+void		Rational::operator%=(const Rational &other)
+{
+	Rational*	tmp(this);
+
+	*this = *this % other;
+	delete tmp;
+}
+
+void		Rational::operator%=(const IType &other)
+{
+	const Rational*	other_rational;
+
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		*this %= *other_rational;
+	throw ERROR_INCOMPATIBLE_TYPES;
+}
+
+void		Rational::operator%=(const long long int value)
+{
+	*this %= Rational(value);
+}
+
+Rational*	Rational::operator^(const Rational &other) const
 {
 	Rational*	result;
 	Rational*	tmp;
-	Rational	power;
+	Rational	power(other);
 
-	try
-	{
-		power = Rational(other);
-	}
-	catch(const UnexpectedError &e)
-	{
-		throw UNSUPPORTED_EXPONENT;
-	}
 	if (!power.is_integer() || power < Rational(0))
 		throw UNSUPPORTED_EXPONENT;
 	result = new Rational(1);
@@ -719,6 +827,49 @@ IType*		Rational::operator^(const IType &other) const
 		delete tmp;
 	}
 	return (result);
+}
+
+IType*		Rational::operator^(const IType &other) const
+{
+	Rational	power;
+
+	try
+	{
+		power = Rational(other);
+	}
+	catch(const UnexpectedError &e)
+	{
+		throw UNSUPPORTED_EXPONENT;
+	}
+	return (*this ^ power);
+}
+
+Rational*	Rational::operator^(const long long int value) const
+{
+	return (*this ^ Rational(value));
+}
+
+void		Rational::operator^=(const Rational &other)
+{
+	Rational*	tmp(this);
+
+	*this = *this ^ other;
+	delete tmp;
+}
+
+void		Rational::operator^=(const IType &other)
+{
+	const Rational*	other_rational;
+
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		*this ^= *other_rational;
+	throw ERROR_INCOMPATIBLE_TYPES;
+}
+
+void		Rational::operator^=(const long long int value)
+{
+	*this ^= Rational(value);
 }
 
 

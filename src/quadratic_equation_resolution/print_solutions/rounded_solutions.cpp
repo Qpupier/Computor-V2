@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:27:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 16:35:05 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/22 16:50:04 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ static void	print_solution(std::string var, InfiniteDouble x_real[2], 	\
 {
 	InfiniteDouble	tmp;
 
-	// std::cerr << "print_solution: " << var << " = " << x_real[i] << " + " << x_imaginary[i] << "i" << std::endl;
 	std::cout << var;
 	if (print_solution_number)
 		std::cout << i + 1;
@@ -83,10 +82,8 @@ static void	print_solution(std::string var, InfiniteDouble x_real[2], 	\
 	else
 	{
 		std::cout << x_real[i];
-		// std::cerr << "x_imaginary[i]: " << x_imaginary[i] << " is_negative? " << x_imaginary[i].getIsNegative() << std::endl;
 		if (x_imaginary[i] < 0)
 		{
-			// std::cerr << "x_imaginary[i] is negative, print ' - ' and invert it" << std::endl;
 			std::cout << " - ";
 			tmp = -x_imaginary[i];
 		}
