@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:35:43 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 21:53:28 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/29 11:42:37 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,8 @@ class	Complex: public IType
 		Rational*		gcd(const Matrix &other) const;
 		std::ostream&	print(std::ostream &os) const;
 		bool			finite_decimals(void) const;
-		bool			in_Z(void) const;
+		bool			values_in_D(void) const;
+		bool			values_in_Z(void) const;
 		void			print_rounded(const std::string var = std::string()) const;
 
 	private:
@@ -100,5 +101,10 @@ class	Complex: public IType
 
 // Output stream operator overload
 std::ostream	&operator<<(std::ostream &os, const Complex &num);
+
+
+// Functions
+void	print_complex_rounded_value(const std::string var, 	\
+		const InfiniteDouble & real, const InfiniteDouble & imaginary);
 
 #endif

@@ -6,13 +6,13 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:19:13 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/21 18:37:28 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/29 10:49:42 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "quadratic.hpp"
 
-static inline bool	solutions_equal(t_quadratic_solutions& 	\
+static inline bool	solutions_equal(const t_quadratic_solutions& 	\
 		solutions)
 {
 	return (solutions.real_term1[0] == solutions.real_term1[1] 	\
@@ -56,8 +56,8 @@ static void			print_exact_solution(const t_quadratic_solutions& 	\
 	}
 }
 
-static void			print_exact_solutions(t_quadratic_solutions& 	\
-		solutions, const std::string set, const bool reduce_sqrt, 	\
+static void			print_exact_solutions(const t_quadratic_solutions& 	\
+		solutions, const std::string set, const bool reduce_sqrt, 		\
 		const unsigned char nb_solutions)
 {
 	std::cout << COLOR_GREEN;
@@ -100,10 +100,11 @@ bool				parentheses_needed(const InfiniteInt term1, 	\
 }
 
 void				print_solutions(t_quadratic_solutions& solutions, 	\
-		std::string set, std::string var, std::map<std::pair<std::string, std::string>, const IType*> &stored)
+		const std::string set, const std::string var, 					\
+		std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
-	bool			reduce_sqrt;
 	unsigned char	nb_solutions;
+	bool			reduce_sqrt;
 
 	if (!solutions.sqrt_term1_factor || solutions.sqrt_term1_sqrt <= 1)
 	{

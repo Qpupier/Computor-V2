@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:38:24 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 12:27:06 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/29 11:35:06 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ class	InfiniteDouble
 
 		// Methods
 		InfiniteDouble	sqrt(void) const;
+		bool			in_D(void) const;
 		void			push_back_decimal(unsigned char digit);
 		void			push_back_integer(unsigned char digit);
 		void			reduce(void);
@@ -137,7 +138,7 @@ class	InfiniteDouble
 		// Members
 		InfiniteInt	_integer_part;
 		InfiniteInt	_decimal_part;
-		bool		_isDecimalInfinite;
+		bool		_isDecimalInfinite;// [ ]: Possibilite de retirer
 		bool		_isNegative;
 };
 

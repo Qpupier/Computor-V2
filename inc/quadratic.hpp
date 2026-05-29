@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:43:37 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/21 18:36:25 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/29 10:49:19 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,17 +49,20 @@ t_quadratic_solutions	get_solutions_structure(Complex* a, Complex* b, 	\
 std::string				get_sqrt_imaginary(									\
 		const t_quadratic_solutions &solutions);
 std::string				get_sqrt_real(const t_quadratic_solutions &solutions);
-bool					parentheses_needed(const InfiniteInt term1, 				\
+bool					parentheses_needed(const InfiniteInt term1, 		\
 		const InfiniteInt term2, const InfiniteInt term3);
 void					print_imaginary_part(								\
-		const t_quadratic_solutions &solutions, unsigned char index, bool reduce_sqrt);
+		const t_quadratic_solutions &solutions, const unsigned char index, 	\
+		const bool reduce_sqrt);
 void					print_real_part(									\
-		const t_quadratic_solutions &solutions, unsigned char index, bool reduce_sqrt);
+		const t_quadratic_solutions &solutions, const unsigned char index, 	\
+		const bool reduce_sqrt);
 void					print_rounded_solutions(							\
-		const t_quadratic_solutions &solutions, bool reduce_sqrt, 				\
-		std::string var, unsigned char nb_solutions);
+		const t_quadratic_solutions &solutions, const bool reduce_sqrt, 	\
+		std::string var, const unsigned char nb_solutions);
 void					print_solutions(t_quadratic_solutions& solutions, 	\
-		std::string set, std::string var, std::map<std::pair<std::string, std::string>, const IType*> &stored);
+		const std::string set, const std::string var, 						\
+		std::map<std::pair<std::string, std::string>, const IType*> &stored);
 void					reduce_sqrt(InfiniteInt *factor, InfiniteInt *sqrt);
 void					set_imaginary_terms(Complex* a, Complex* b, 		\
 		t_quadratic_solutions &solutions, Rational sqrt_real_factor, 		\

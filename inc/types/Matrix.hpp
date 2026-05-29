@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 21:57:39 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/29 11:27:12 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,8 @@ class	Matrix: public IType
 		Rational*		gcd(const Complex &other) const;
 		std::ostream&	print(std::ostream &os) const;
 		bool			finite_decimals(void) const;
-		bool			in_Z(void) const;
+		bool			values_in_D(void) const;
+		bool			values_in_Z(void) const;
 		void			error(const LogicError &e);
 		void			free(void);
 		void			print_rounded(const std::string var = std::string()) const;

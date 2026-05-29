@@ -6,22 +6,23 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 18:20:41 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/21 18:34:47 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/29 10:45:49 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "quadratic.hpp"
 
 static void	print_imaginary_term1(const t_quadratic_solutions &solutions, 	\
-		int index)
+		const unsigned char index)
 {
-	if (solutions.imaginary_term1[index] 			\
+	if (solutions.imaginary_term1[index] 	\
 			&& solutions.imaginary_term1[index] != 1)
 		std::cout << solutions.imaginary_term1[index];
 }
 
 static void	print_imaginary_term2(const t_quadratic_solutions &solutions, 	\
-		InfiniteInt &imaginary_term2_factor, unsigned char index, bool reduce_sqrt)
+		InfiniteInt &imaginary_term2_factor, const unsigned char index, 	\
+		const bool reduce_sqrt)
 {
 	if (imaginary_term2_factor)
 	{
@@ -47,7 +48,8 @@ static void	print_imaginary_term2(const t_quadratic_solutions &solutions, 	\
 }
 
 static void	print_imaginary_term3(const t_quadratic_solutions &solutions, 	\
-		InfiniteInt &imaginary_term3_factor, unsigned char index, bool reduce_sqrt)
+		InfiniteInt &imaginary_term3_factor, const unsigned char index, 	\
+		const bool reduce_sqrt)
 {
 	if (imaginary_term3_factor)
 	{
@@ -74,11 +76,11 @@ static void	print_imaginary_term3(const t_quadratic_solutions &solutions, 	\
 }
 
 void		print_imaginary_part(const t_quadratic_solutions &solutions, 	\
-		unsigned char index, bool reduce_sqrt)
+		const unsigned char index, const bool reduce_sqrt)
 {
 	InfiniteInt	imaginary_term2_factor;
 	InfiniteInt	imaginary_term3_factor;
-	bool	parentheses;
+	bool		parentheses;
 
 	imaginary_term2_factor = solutions.imaginary_term2_factor[index];
 	imaginary_term3_factor = solutions.imaginary_term3_factor[index];

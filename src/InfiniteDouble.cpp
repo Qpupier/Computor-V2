@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:46:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 21:51:51 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/29 11:35:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -663,6 +663,11 @@ InfiniteDouble	InfiniteDouble::sqrt(void) const
 	while (padding)
 		insert_new_digit(*this, padding, result_integer, result_decimal);
 	return (InfiniteDouble(result_integer, result_decimal));
+}
+
+bool			InfiniteDouble::in_D(void) const
+{
+	return (this->_decimal_part.size() < InfiniteDouble::PRECISION);
 }
 
 void			InfiniteDouble::push_back_decimal(unsigned char digit)

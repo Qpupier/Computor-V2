@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 21:57:48 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/29 11:29:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -731,7 +731,7 @@ IType*		Matrix::operator^(const IType &other) const
 	{
 		throw UNSUPPORTED_EXPONENT;
 	}
-	if (!power.is_integer() || power < Rational(0))
+	if (!power.in_Z() || power < Rational(0))
 		throw UNSUPPORTED_EXPONENT;
 	return (*this ^ power);
 }
@@ -893,6 +893,35 @@ std::ostream&	Matrix::print(std::ostream &os) const
 	return (os);
 }
 
+bool			Matrix::finite_decimals(void) const
+{
+	for (unsigned int i = 0; i < this->_height; i++)
+		for (unsigned int j = 0; j < this->_width; j++)
+			if (!this->_matrix[i][j].finite_decimals())
+				return (false);
+	return (true);
+}
+
+
+bool			Matrix::values_in_D(void) const
+{
+	for (unsigned int i = 0; i < this->_height; i++)
+		for (unsigned int j = 0; j < this->_width; j++)
+			if (!this->_matrix[i][j].in_D())
+				return (false);
+	return (true);
+}
+
+
+bool			Matrix::values_in_Z(void) const
+{
+	for (unsigned int i = 0; i < this->_height; i++)
+		for (unsigned int j = 0; j < this->_width; j++)
+			if (!this->_matrix[i][j].in_Z())
+				return (false);
+	return (true);
+}
+
 void			Matrix::error(const LogicError &e)
 {
 	this->free();
@@ -916,13 +945,18 @@ void			Matrix::print_rounded(const std::string var) const
 	unsigned long	width;
 	unsigned long	height;
 
-	if (this->in_Z())
+	if (this->values_in_Z())
 		return ;
 	width = this->_width;
 	height = this->_height;
 	std::cout << COLOR_DIM;
 	if (!var.empty())
-		std::cout << var << " = " << std::endl;// TODO: review arrondi
+	{
+		if (this->values_in_D())
+			std::cout << var << " = " << std::endl;
+		else
+			std::cout << var << " ≈ " << std::endl;
+	}
 	for (unsigned int i = 0; i < height; i++)
 	{
 		std::cout << "[ ";
@@ -937,24 +971,6 @@ void			Matrix::print_rounded(const std::string var) const
 			std::cout << std::endl;
 	}
 	std::cout << COLOR_RESET << std::endl;
-}
-
-bool			Matrix::finite_decimals(void) const
-{
-	for (unsigned int i = 0; i < this->_height; i++)
-		for (unsigned int j = 0; j < this->_width; j++)
-			if (!this->_matrix[i][j].finite_decimals())
-				return (false);
-	return (true);
-}
-
-bool			Matrix::in_Z(void) const
-{
-	for (unsigned int i = 0; i < this->_height; i++)
-		for (unsigned int j = 0; j < this->_width; j++)
-			if (!this->_matrix[i][j].in_Z())
-				return (false);
-	return (true);
 }
 
 

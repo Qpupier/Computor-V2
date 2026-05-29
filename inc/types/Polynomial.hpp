@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 21:40:17 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/29 11:29:28 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ class	Polynomial: public IType
 		Rational*		gcd(const IType &other) const;
 		std::ostream&	print(std::ostream &os) const;
 		bool			finite_decimals(void) const;
-		bool			in_Z(void) const;
 		void			factorize_constant_factor(void);
 		void			free(void);
 		void			print_rounded(const std::string var = std::string()) const;

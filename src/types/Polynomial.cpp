@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 21:56:46 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/29 11:29:32 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1035,7 +1035,7 @@ IType*		Polynomial::operator^(const IType &other) const
 	{
 		throw UNSUPPORTED_EXPONENT;
 	}
-	if (!power.is_integer() || power < Rational(0))
+	if (!power.in_Z() || power < Rational(0))
 		throw UNSUPPORTED_EXPONENT;
 	return (*this ^ power);
 }
@@ -1128,6 +1128,11 @@ std::ostream&	Polynomial::print(std::ostream &os) const
 	return (os);
 }
 
+bool			Polynomial::finite_decimals(void) const
+{
+	return (true);
+}
+
 void			Polynomial::free(void)
 {
 	free_vector_terms(this->_terms);
@@ -1201,16 +1206,6 @@ void			Polynomial::reduce(void)
 	free_vector_terms(division_result.quotient);
 	free_vector_terms(division_result.remainder);
 	this->factorize_constant_factor();
-}
-
-bool			Polynomial::finite_decimals(void) const
-{
-	return (true);
-}
-
-bool			Polynomial::in_Z(void) const
-{
-	return (true);
 }
 
 

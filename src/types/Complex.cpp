@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 21:56:08 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/29 11:37:25 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -584,12 +584,12 @@ Rational*	Complex::operator%(const long long int value) const
 	return (*this % Rational(value));
 }
 
-Complex*		Complex::operator^(const Rational &other) const
+Complex*	Complex::operator^(const Rational &other) const
 {
 	Complex*	result;
 	Complex*	tmp;
 
-	if (!other.is_integer() || other < Rational(0))
+	if (!other.in_Z() || other < Rational(0))
 		throw UNSUPPORTED_EXPONENT;
 	result = new Complex(Rational(1), Rational(0));
 	for (InfiniteInt i(0); i < other.getNumerator(); i++)
@@ -616,7 +616,7 @@ IType*		Complex::operator^(const IType &other) const
 	return (*this ^ power);
 }
 
-Complex*		Complex::operator^(const long long int value) const
+Complex*	Complex::operator^(const long long int value) const
 {
 	return (*this ^ Rational(value));
 }
@@ -717,19 +717,15 @@ std::ostream&	Complex::print(std::ostream &os) const
 	return (os);
 }
 
-void			Complex::print_rounded(const std::string var) const
+void			print_complex_rounded_value(const std::string var, 	\
+		const InfiniteDouble & real, const InfiniteDouble & imaginary)
 {
-	InfiniteDouble	real(this->_real.getValue());
-	InfiniteDouble	imaginary(this->_imaginary.getValue());
 	InfiniteDouble	tmp;
 
-	if (this->in_Z())
-		return ;
-	std::cout << COLOR_DIM;
 	if (!var.empty())
 	{
 		std::cout << var;
-		if (real.getDecimalPart().size() < InfiniteDouble::PRECISION && imaginary.getDecimalPart().size() < InfiniteDouble::PRECISION)// [ ]: Methode a implementer
+		if (real.in_D() && imaginary.in_D())
 			std::cout << " = ";
 		else
 			std::cout << " ≈ ";
@@ -757,6 +753,17 @@ void			Complex::print_rounded(const std::string var) const
 		}
 		std::cout << tmp << "i";
 	}
+}
+
+void			Complex::print_rounded(const std::string var) const
+{
+	
+
+	if (this->values_in_Z())
+		return ;
+	std::cout << COLOR_DIM;
+	print_complex_rounded_value(var, this->_real.getValue(), 	\
+			this->_imaginary.getValue());
 	std::cout << COLOR_RESET << std::endl;
 }
 
@@ -766,7 +773,12 @@ bool			Complex::finite_decimals(void) const
 			&& this->_imaginary.finite_decimals());
 }
 
-bool			Complex::in_Z(void) const// [ ]: Not logic
+bool			Complex::values_in_D(void) const
+{
+	return (this->_real.in_D() && this->_imaginary.in_D());
+}
+
+bool			Complex::values_in_Z(void) const
 {
 	return (this->_real.in_Z() && this->_imaginary.in_Z());
 }

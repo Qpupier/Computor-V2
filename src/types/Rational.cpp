@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 21:57:21 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/29 11:35:18 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -580,7 +580,7 @@ Rational*	Rational::operator^(const Rational &other) const
 	Rational*	tmp;
 	Rational	power(other);
 
-	if (!power.is_integer() || power < Rational(0))
+	if (!power.in_Z() || power < Rational(0))
 		throw UNSUPPORTED_EXPONENT;
 	result = new Rational(1);
 	for (InfiniteInt i(0); i < power.getNumerator(); i++)
@@ -718,7 +718,7 @@ std::ostream&	Rational::print(std::ostream &os) const
 	InfiniteInt	numerator;
 
 	numerator = copy.getNumerator();
-	if (copy.is_integer())
+	if (copy.in_Z())
 		return (os << numerator);
 	return (os << numerator << "/" << copy.getDenominator());
 }
@@ -763,12 +763,12 @@ bool			Rational::finite_decimals(void) const
 	return (denominator == 1);// BUG: A corriger
 }
 
-bool			Rational::in_Z(void) const
+bool			Rational::in_D(void) const
 {
-	return (this->is_integer());
+	return (this->getValue().in_D());
 }
 
-bool			Rational::is_integer(void) const
+bool			Rational::in_Z(void) const
 {
 	Rational	copy(*this);
 
@@ -788,7 +788,7 @@ void			Rational::print_rounded(const std::string var) const
 	if (!var.empty())
 	{
 		std::cout << var;
-		if (this->getValue().getDecimalPart().size() < InfiniteDouble::PRECISION)// TODO: changer par un booleen dans la class
+		if (this->in_D())
 			std::cout << " = ";
 		else
 			std::cout << " ≈ ";
