@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:27:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/29 11:42:10 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/29 11:48:14 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ static void	rounded_calculations(const t_quadratic_solutions &solutions, 	\
 	}
 }
 
-void		print_rounded_solutions(								\
-		const t_quadratic_solutions &solutions, bool reduce_sqrt, 	\
-		std::string var, unsigned char nb_solutions)
+void		print_rounded_solutions(										\
+		const t_quadratic_solutions &solutions, const bool reduce_sqrt, 	\
+		const std::string var, const unsigned char nb_solutions)
 {
 	InfiniteDouble	sqrt[2];
 	InfiniteDouble	sqrt_imaginary;

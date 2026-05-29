@@ -6,13 +6,14 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:24:35 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/11 16:01:21 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/29 18:00:34 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "quadratic.hpp"
 
-static Rational*	get_initial_imaginary_term1(Complex* a, Complex* b)
+static Rational*	get_initial_imaginary_term1(const Complex* a, 	\
+		const Complex* b)
 {
 	Rational*	a_imaginary_b_real;
 	Rational*	a_real_b_imaginary;
@@ -26,18 +27,25 @@ static Rational*	get_initial_imaginary_term1(Complex* a, Complex* b)
 	return (result);
 }
 
-static void			imaginary_reduce_terms(\
-		t_quadratic_solutions &solutions, Rational* imaginary_term1, 	\
-		Rational* imaginary_term2_factor, 								\
-		Rational* imaginary_term3_factor, 								\
-		Rational* imaginary_denominator, Rational* imaginary_gcd)
+static void			update_imaginary_term1(									\
+		t_quadratic_solutions &solutions, const Rational* imaginary_term1, 	\
+		const Rational* imaginary_gcd)
 {
-	Rational* tmp;
+	Rational*	tmp;
 
 	tmp = *imaginary_term1 / *imaginary_gcd;
 	solutions.imaginary_term1[0] = tmp->getNumerator();
 	solutions.imaginary_term1[1] = tmp->getNumerator();
 	delete tmp;
+}
+
+static void			update_imaginary_factors(		\
+		t_quadratic_solutions &solutions, 			\
+		const Rational* imaginary_term2_factor, 	\
+		const Rational* imaginary_term3_factor, const Rational* imaginary_gcd)
+{
+	Rational*	tmp;
+
 	tmp = *imaginary_term2_factor / *imaginary_gcd;
 	solutions.imaginary_term2_factor[0] = tmp->getNumerator();
 	solutions.imaginary_term2_factor[1] = -tmp->getNumerator();
@@ -46,28 +54,40 @@ static void			imaginary_reduce_terms(\
 	solutions.imaginary_term3_factor[0] = -tmp->getNumerator();
 	solutions.imaginary_term3_factor[1] = tmp->getNumerator();
 	delete tmp;
+}
+
+static void			update_imaginary_denominator(	\
+		t_quadratic_solutions &solutions, 			\
+		const Rational* imaginary_denominator, const Rational* imaginary_gcd)
+{
+	Rational*	tmp;
+
 	tmp = *imaginary_denominator / *imaginary_gcd;
 	solutions.imaginary_denominator[0] = tmp->getNumerator();
 	solutions.imaginary_denominator[1] = tmp->getNumerator();
 	delete tmp;
 }
 
-void	set_imaginary_terms(Complex* a, Complex* b, 		\
-		t_quadratic_solutions &solutions, Rational sqrt_real_factor, 	\
-		Rational* sqrt_imaginary_factor, Rational* denominator)
+void				set_imaginary_terms(					\
+		const std::vector<const Complex*> coefficients, 	\
+		t_quadratic_solutions &solutions, 					\
+		const std::vector<Rational> sqrt_factors, Rational* denominator)
 {
 	Rational*	imaginary_term1;
 	Rational*	imaginary_term2_factor;
 	Rational*	imaginary_term3_factor;
-	Rational*	imaginary_denominator;
 	Rational*	imaginary_gcd;
 
-	imaginary_term1 = get_initial_imaginary_term1(a, b);
-	imaginary_term2_factor = a->getImaginary() * sqrt_real_factor;
-	imaginary_term3_factor = a->getReal() * *sqrt_imaginary_factor;
-	imaginary_denominator = denominator;
-	imaginary_gcd = get_gcd_terms(imaginary_term1, imaginary_term2_factor, imaginary_term3_factor, imaginary_denominator);
-	imaginary_reduce_terms(solutions, imaginary_term1, imaginary_term2_factor, imaginary_term3_factor, imaginary_denominator, imaginary_gcd);
+	imaginary_term1 = get_initial_imaginary_term1(coefficients[0], 			\
+			coefficients[1]);
+	imaginary_term2_factor = coefficients[0]->getReal() * sqrt_factors[0];
+	imaginary_term3_factor = coefficients[0]->getImaginary() * sqrt_factors[1];
+	imaginary_gcd = get_gcd_terms(imaginary_term1, imaginary_term2_factor, 	\
+			imaginary_term3_factor, denominator);
+	update_imaginary_term1(solutions, imaginary_term1, imaginary_gcd);
+	update_imaginary_factors(solutions, imaginary_term2_factor, 			\
+		imaginary_term3_factor, imaginary_gcd);
+	update_imaginary_denominator(solutions, denominator, imaginary_gcd);
 	delete imaginary_term1;
 	delete imaginary_term2_factor;
 	delete imaginary_term3_factor;

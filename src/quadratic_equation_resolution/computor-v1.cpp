@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Computor-V1.cpp                                    :+:      :+:    :+:   */
+/*   computor-v1.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:03:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/21 17:17:26 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/29 16:53:36 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Polynomial.hpp"
 #include "quadratic.hpp"
 
-static IType*	get_discriminant(IType *a, IType *b, IType *c)
+static IType*					get_discriminant(const IType *a, 	\
+		const IType *b, const IType *c)
 {
 	IType*	tmp_b2;
 	IType*	tmp_4a;
@@ -21,7 +22,7 @@ static IType*	get_discriminant(IType *a, IType *b, IType *c)
 	IType*	discriminant;
 
 	tmp_b2 = *b * *b;
-	tmp_4a = Rational(4) * *a;
+	tmp_4a = *a * 4;
 	tmp_4ac = *tmp_4a * *c;
 	delete tmp_4a;
 	discriminant = *tmp_b2 - *tmp_4ac;
@@ -32,15 +33,35 @@ static IType*	get_discriminant(IType *a, IType *b, IType *c)
 	return (discriminant);
 }
 
-static void		find_solutions(IType *tmp_a, IType *tmp_b, IType *tmp_c, 	\
-		IType *tmp_delta, std::string var, std::map<std::pair<std::string, std::string>, const IType*> &stored)
+static void						find_solutions(							\
+		const std::vector<Complex*> &coefficients, std::string var, 	\
+		std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
-	Complex*				a;
-	Complex*				b;
-	Complex*				c;
-	Complex*				delta;
 	t_quadratic_solutions	solutions_structure;
 	std::string				set;
+
+	solutions_structure = get_solutions_structure(coefficients[0], 	\
+			coefficients[1], coefficients[3]);
+	set = coefficients[0]->getImaginary() 							\
+				|| coefficients[1]->getImaginary() 					\
+				|| coefficients[2]->getImaginary() 					\
+				|| coefficients[3]->getImaginary() 					\
+			? "ℂ" : "ℝ";
+	delete coefficients[0];
+	delete coefficients[1];
+	delete coefficients[2];
+	delete coefficients[3];
+	print_solutions(solutions_structure, set, var, stored);
+}
+
+static std::vector<Complex*>	cast_coefficients_in_complex(			\
+		const IType* tmp_a, const IType* tmp_b, const IType* tmp_c, 	\
+		const IType* tmp_delta)
+{
+	Complex*	a;
+	Complex*	b;
+	Complex*	c;
+	Complex*	delta;
 
 	a = nullptr;
 	b = nullptr;
@@ -54,28 +75,19 @@ static void		find_solutions(IType *tmp_a, IType *tmp_b, IType *tmp_c, 	\
 	}
 	catch (const UnexpectedError &e)
 	{
-		if (a)
-			delete a;
-		if (b)
-			delete b;
-		if (c)
-			delete c;
+		delete a;
+		delete b;
+		delete c;
 		throw UnsupportedError("Solutions can only be found in ℝ or ℂ");
 	}
-	solutions_structure = get_solutions_structure(a, b, delta);
-	set = a->getImaginary() || b->getImaginary() || c->getImaginary() 	\
-			|| delta->getImaginary() ? "ℂ" : "ℝ";
-	delete a;
-	delete b;
-	delete c;
-	delete delta;
-	print_solutions(solutions_structure, set, var, stored);
+	return (std::vector<Complex*>{a, b, c, delta});
 }
 
-void			reduce_sqrt(InfiniteInt *factor, InfiniteInt *sqrt)
+void							reduce_sqrt(InfiniteInt *factor, 	\
+		InfiniteInt *sqrt)
 {
-	InfiniteInt		perfect_square;
 	InfiniteDouble	sqrt_rounded;
+	InfiniteInt		perfect_square;
 
 	sqrt_rounded = InfiniteDouble(*sqrt).sqrt();
 	for (InfiniteInt i(2); InfiniteDouble(i) <= sqrt_rounded; i++)
@@ -89,19 +101,20 @@ void			reduce_sqrt(InfiniteInt *factor, InfiniteInt *sqrt)
 	}
 }
 
-void			solve_trinomial(const Polynomial *polynomial, 	\
+void							solve_trinomial(	\
+		const Polynomial *polynomial, 				\
 		std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
 	std::vector<Polynomial::t_term>	terms(polynomial->getTerms());
-	IType*							a;
-	IType*							b;
-	IType*							c;
+	std::vector<IType*>				tmp_coefficients(					\
+			{terms[2].coefficient, terms[1].coefficient, terms[0].coefficient});
+	std::vector<Complex*>			coefficients;
 	IType*							discriminant;
 
-	a = terms[2].coefficient;
-	b = terms[1].coefficient;
-	c = terms[0].coefficient;
-	discriminant = get_discriminant(a, b, c);
-	find_solutions(a, b, c, discriminant, polynomial->getName(), stored);
+	discriminant = get_discriminant(tmp_coefficients[0], 				\
+			tmp_coefficients[1], tmp_coefficients[2]);
+	coefficients = cast_coefficients_in_complex(tmp_coefficients[0], 	\
+			tmp_coefficients[1], tmp_coefficients[2], discriminant);
+	find_solutions(coefficients, polynomial->getName(), stored);
 	delete discriminant;
 }

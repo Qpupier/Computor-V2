@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:43:37 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/29 10:49:19 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/29 18:01:23 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@ typedef struct	s_quadratic_solutions
 	// + i(E - F√(I√J + K) + G√(I√J - K)) / H
 }				t_quadratic_solutions;
 
-Rational*				get_gcd_terms(Rational* term1, Rational* term2, 	\
-		Rational* term3, Rational* term4);
-t_quadratic_solutions	get_solutions_structure(Complex* a, Complex* b, 	\
-		Complex* delta);
+Rational*				get_gcd_terms(const Rational* term1, 				\
+		const Rational* term2, const Rational* term3, const Rational* term4);
+t_quadratic_solutions	get_solutions_structure(const Complex* a, 			\
+		const Complex* b, const Complex* delta);
 std::string				get_sqrt_imaginary(									\
 		const t_quadratic_solutions &solutions);
 std::string				get_sqrt_real(const t_quadratic_solutions &solutions);
@@ -59,22 +59,27 @@ void					print_real_part(									\
 		const bool reduce_sqrt);
 void					print_rounded_solutions(							\
 		const t_quadratic_solutions &solutions, const bool reduce_sqrt, 	\
-		std::string var, const unsigned char nb_solutions);
+		const std::string var, const unsigned char nb_solutions);
 void					print_solutions(t_quadratic_solutions& solutions, 	\
 		const std::string set, const std::string var, 						\
 		std::map<std::pair<std::string, std::string>, const IType*> &stored);
 void					reduce_sqrt(InfiniteInt *factor, InfiniteInt *sqrt);
-void					set_imaginary_terms(Complex* a, Complex* b, 		\
-		t_quadratic_solutions &solutions, Rational sqrt_real_factor, 		\
-		Rational* sqrt_imaginary_factor, Rational* denominator);
-void					set_real_terms(Complex* a, Complex* b, 				\
-		t_quadratic_solutions &solutions, Rational sqrt_real_factor, 		\
-		Rational* sqrt_imaginary_factor, Rational* denominator);
+void					set_imaginary_terms(								\
+		const std::vector<const Complex*> coefficients, 					\
+		t_quadratic_solutions &solutions, 									\
+		const std::vector<Rational> sqrt_factors, Rational* denominator);
+void					set_real_terms(										\
+		const std::vector<const Complex*> coefficients, 					\
+		t_quadratic_solutions &solutions, 									\
+		const std::vector<Rational> sqrt_factors, Rational* denominator);
 void					simplify_deepest_sqrt(t_quadratic_solutions &solutions);
 void					simplify_factors(t_quadratic_solutions &s);
 void					simplify_factors2(t_quadratic_solutions &solutions);
 void					assignation(std::string var, 						\
 		std::map<std::pair<std::string, std::string>, 						\
 			const IType*> &stored, IType *result);
+Rational				factorize_sqrt(t_quadratic_solutions &solutions, 	\
+		const Complex* delta);
+Rational*				get_module_square(const Complex* complex);
 
 #endif
