@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 15:46:39 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/29 18:02:23 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/11 11:02:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static inline void		solutions_structure_init(	\
 		.sqrt_term2_real = 0,
 		.sqrt_term2_imaginary = 0,
 		.sqrt_real = 0,
-		.sqrt_imaginary = 0,
+		.sqrt_imaginary = 0
 	};
 }
 
@@ -77,7 +77,7 @@ t_quadratic_solutions	get_solutions_structure(const Complex* a, 	\
 	set_real_terms(std::vector<const Complex*>({a, b}), solutions, 			\
 			std::vector<Rational>											\
 				({sqrt_real_factor, *sqrt_imaginary_factor}), 				\
-			denominator);
+			denominator);// TODO: Doublon variables vectors
 	set_imaginary_terms(std::vector<const Complex*>({a, b}), solutions, 	\
 			std::vector<Rational>											\
 				({sqrt_real_factor, *sqrt_imaginary_factor}), 				\

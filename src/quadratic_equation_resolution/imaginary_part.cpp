@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:24:35 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/29 18:00:34 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/11 12:06:50 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,8 @@ void				set_imaginary_terms(					\
 
 	imaginary_term1 = get_initial_imaginary_term1(coefficients[0], 			\
 			coefficients[1]);
-	imaginary_term2_factor = coefficients[0]->getReal() * sqrt_factors[0];
-	imaginary_term3_factor = coefficients[0]->getImaginary() * sqrt_factors[1];
+	imaginary_term2_factor = coefficients[0]->getImaginary() * sqrt_factors[0];
+	imaginary_term3_factor = coefficients[0]->getReal() * sqrt_factors[1];
 	imaginary_gcd = get_gcd_terms(imaginary_term1, imaginary_term2_factor, 	\
 			imaginary_term3_factor, denominator);
 	update_imaginary_term1(solutions, imaginary_term1, imaginary_gcd);

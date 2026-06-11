@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 18:20:41 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/29 10:45:49 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/11 11:44:04 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ static void	print_imaginary_term2(const t_quadratic_solutions &solutions, 	\
 		else if (imaginary_term2_factor != 1)
 			std::cout << imaginary_term2_factor;
 		if (reduce_sqrt)
-			std::cout << "√" << solutions.sqrt_imaginary;
+			std::cout << "√" << solutions.sqrt_real;
 		else
-			std::cout << "√(" << get_sqrt_imaginary(solutions) << ")";
+			std::cout << "√(" << get_sqrt_real(solutions) << ")";
 	}
 }
 

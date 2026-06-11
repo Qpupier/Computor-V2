@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/29 11:37:25 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/05/29 18:07:40 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static std::ostream&	print_value(std::ostream &os, Rational value, 	\
 		return (os);
 	if (!is_first)
 	{
-		if (value < Rational(0))
+		if (value < 0)
 		{
 			os << " - ";
 			copy = -value;
@@ -30,14 +30,14 @@ static std::ostream&	print_value(std::ostream &os, Rational value, 	\
 		else
 			os << " + ";
 	}
-	else if (value < Rational(0) && i != std::string())
+	else if (value < 0 && !i.empty())
 	{
 		os << "-";
 		copy = -value;
 	}
-	if (i == std::string() || copy != Rational(1))
+	if (i.empty() || copy != 1)
 		os << copy.getNumerator();
-	if (i != std::string())
+	if (!i.empty())
 		os << i;
 	if (copy.getDenominator() != 1)
 		os << "/" << copy.getDenominator();
@@ -103,7 +103,7 @@ Complex&	Complex::operator=(const Complex &other)
 	return (*this);
 }
 
-Complex	Complex::operator=(const IType &other)
+Complex		Complex::operator=(const IType &other)
 {
 	*this = Complex(other);
 	return (*this);
