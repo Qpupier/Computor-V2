@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/29 11:25:03 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/11 15:29:08 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "computor-v2.hpp"
 
 // Constructors
+
 Operator::Operator(std::string op)
 {
 	if (op == "+")
@@ -40,16 +41,17 @@ Operator::Operator(std::string op)
 
 
 // Operator overloads
+
+Operator::operator bool() const
+{
+	return (false);
+}
+
 Operator&	Operator::operator=(const Operator &other)
 {
 	if (this != &other)
 		this->_op = other._op;
 	return (*this);
-}
-
-Operator::operator bool() const
-{
-	return (false);
 }
 
 bool		Operator::operator==(const IType &other) const
@@ -227,48 +229,6 @@ Rational*		Operator::gcd(const IType &other) const
 
 std::ostream&	Operator::print(std::ostream &os) const
 {
-	os << " ";
-	switch (this->_op)
-	{
-		case E_ADD:
-		{
-			os << "+";
-			break;
-		}
-		case E_SUBTRACT:
-		{
-			os << "-";
-			break;
-		}
-		case E_MULTIPLY:
-		{
-			os << "*";
-			break;
-		}
-		case E_DIVIDE:
-		{
-			os << "/";
-			break;
-		}
-		case E_MODULO:
-		{
-			os << "%";
-			break;
-		}
-		case E_POWER:
-		{
-			os << "^";
-			break;
-		}
-		case E_MATRIX:
-		{
-			os << "**";
-			break;
-		}
-		default:
-			break;
-	}
-	os << " ";
 	return (os);
 }
 
