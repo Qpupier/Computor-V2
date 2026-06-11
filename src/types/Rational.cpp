@@ -6,19 +6,35 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/11 16:53:29 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/11 18:02:03 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Rational.hpp"
 
 // Utils
+
+static Rational		from_polynomial(const Polynomial &polynomial)
+{
+	if (polynomial.getTerms().empty())
+		return (Rational(0));
+	if (polynomial.getDividers().size() != 1 					\
+			|| *polynomial.getDividers()[0].coefficient != 1 	\
+			|| polynomial.getDividers()[0].power 				\
+			|| polynomial.getTerms().size() != 1 				\
+			|| polynomial.getTerms()[0].power)
+		throw ERROR_UNEXPECTED;
+	return (Rational(*polynomial.getTerms()[0].coefficient));
+}
+
 static InfiniteInt	compute_lcm(InfiniteInt a, InfiniteInt b)
 {
 	return (a / compute_gcd(a, b) * b);
 }
 
+
 // Constructors
+
 Rational::Rational(InfiniteInt numerator, InfiniteInt denominator): 	\
 		_numerator(numerator), _denominator(denominator)
 {
@@ -68,27 +84,14 @@ Rational::Rational(const IType &other)
 	else if (other_matrix)
 		throw ERROR_UNEXPECTED;
 	else if (other_polynomial)
-	{
-		if (other_polynomial->getTerms().empty())
-			*this = Rational(0);
-		else
-		{
-			if (other_polynomial->getDividers().size() != 1 			\
-					|| *other_polynomial->getDividers()[0].coefficient 	\
-						!= 1 											\
-					|| other_polynomial->getDividers()[0].power 		\
-					|| other_polynomial->getTerms().size() != 1 		\
-					|| other_polynomial->getTerms()[0].power)
-				throw ERROR_UNEXPECTED;
-			*this = Rational(*other_polynomial->getTerms()[0].coefficient);
-		}
-	}
+		*this = from_polynomial(*other_polynomial);
 	else
 		throw ERROR_UNEXPECTED;
 }
 
 
 // Operator overloads
+
 Rational::operator bool() const
 {
 	return (static_cast<bool>(this->_numerator));
@@ -118,7 +121,8 @@ Rational&	Rational::operator=(const Rational &other)
 Rational	Rational::operator=(const Complex &other)
 {
 	if (other.getImaginary())
-		throw LogicError("Cannot convert a complex number with a non-zero imaginary part to a rational number");
+		throw LogicError("Cannot convert a complex number with a 	\
+				non-zero imaginary part to a rational number");
 	return (Rational(other.getReal()));
 }
 
@@ -458,7 +462,8 @@ Polynomial*	Rational::operator/(const Polynomial &other) const
 	Polynomial*	tmp;
 	Polynomial*	result;
 
-	tmp = new Polynomial(other.getName(), (Polynomial::t_term){this->clone(), 0});
+	tmp = new Polynomial(other.getName(), 	\
+			(Polynomial::t_term){this->clone(), 0});
 	result = *tmp / other;
 	delete tmp;
 	return (result);
@@ -540,7 +545,8 @@ Polynomial*	Rational::operator%(const Polynomial &other) const
 	Polynomial*	tmp;
 	Polynomial*	result;
 
-	tmp = new Polynomial(other.getName(), (Polynomial::t_term){this->clone(), 0});
+	tmp = new Polynomial(other.getName(), 	\
+			(Polynomial::t_term){this->clone(), 0});
 	result = *tmp % other;
 	delete tmp;
 	return (result);
@@ -614,6 +620,7 @@ Rational*	Rational::operator^(const long long int value) const
 
 
 // Getters
+
 InfiniteInt		Rational::getNumerator(void) const
 {
 	return (this->_numerator);
@@ -632,6 +639,7 @@ InfiniteDouble	Rational::getValue(void) const
 
 
 // Methods
+
 IType*			Rational::matrix_operator(const IType &other) const
 {
 	throw ERROR_MATRIX_OPERATOR;
