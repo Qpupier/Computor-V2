@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/15 11:17:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/11 18:20:39 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,26 @@
 #include "Complex.hpp"
 #include "Matrix.hpp"
 #include "Polynomial.hpp"
-#include "Matrix.hpp"
 
 // Utils
+
 static IType*	find_function(IType *node, std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
-	std::map<std::pair<std::string, std::string>, const IType*>::iterator	it;
-	const Polynomial	*polynomial;
-	std::string			var_name;
 	std::pair<std::string, std::string>	var_key;
+	std::string							var_name;
+	const Polynomial*					polynomial;
 
 	polynomial = dynamic_cast<const Polynomial*>(node);
 	if (!polynomial)
-		throw UnexpectedError("Left side of function operator must be a variable");
+		throw UnexpectedError(											\
+				"Left side of function operator must be a variable");
 	var_name = to_lower(polynomial->getName());
 	var_key.first = var_name;
-	for (it = stored.begin(); it != stored.end(); it++)
-	{
-		if (to_lower(it->first.first) == to_lower(var_key.first) && !it->first.second.empty())
+	for (std::map<std::pair<std::string, std::string>, const IType*>	\
+			::iterator it(stored.begin()); it != stored.end(); it++)
+		if (to_lower(it->first.first) == to_lower(var_key.first) 		\
+				&& !it->first.second.empty())
 			return (const_cast<IType*>(it->second));
-	}
 	throw UnexpectedError("Function not found: " + var_name);
 	return (nullptr);
 }
@@ -74,6 +74,7 @@ static IType*	get_result(IType *left_entity, IType *right_entity, 	\
 
 
 // Constructors and destructor
+
 AST::AST(const Token &token, t_data &data): _left(nullptr), _right(nullptr)
 {
 	switch (token.getType())
@@ -121,6 +122,7 @@ AST::~AST(void)
 
 
 // Operator overloads
+
 AST&	AST::operator=(const AST &other)
 {
 	if (this != &other)
@@ -135,6 +137,7 @@ AST&	AST::operator=(const AST &other)
 
 
 // Getters
+
 IType*	AST::getNode(void) const
 {
 	return (this->_node);
@@ -152,6 +155,7 @@ AST*	AST::getRight(void) const
 
 
 // Setters
+
 void	AST::setLeft(AST *left)
 {
 	this->_left = left;
@@ -164,6 +168,7 @@ void	AST::setRight(AST *right)
 
 
 // Methods
+
 std::ostream&	AST::print(std::ostream &os) const
 {
 	if (this->_left)
@@ -199,7 +204,8 @@ void			AST::free(void)
 	this->_node = nullptr;
 }
 
-void			AST::reduce_expression(std::map<std::pair<std::string, std::string>, const IType*> &stored)
+void			AST::reduce_expression(	\
+		std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
 	Operator*	op;
 	IType*		result;
@@ -213,17 +219,19 @@ void			AST::reduce_expression(std::map<std::pair<std::string, std::string>, cons
 	op = dynamic_cast<Operator*>(this->_node);
 	if (!op)
 		throw ERROR_OPERATOR_EXPECTED;
-	result = get_result(this->_left->_node, this->_right->_node, op->getOperator(), stored);
+	result = get_result(this->_left->_node, this->_right->_node, 	\
+			op->getOperator(), stored);
 	this->free();
 	this->_node = result;
 	this->_left = nullptr;
 	this->_right = nullptr;
 }
 
-void			AST::replace_variables(std::map<std::pair<std::string, std::string>, const IType*> &stored)
+void			AST::replace_variables(	\
+		std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
-	const Polynomial					*polynomial;
 	std::pair<std::string, std::string>	var_key;
+	const Polynomial*					polynomial;
 
 	polynomial = dynamic_cast<const Polynomial*>(this->_node);
 	if (!polynomial)
@@ -235,11 +243,11 @@ void			AST::replace_variables(std::map<std::pair<std::string, std::string>, cons
 		delete this->_node;
 		this->_node = stored[var_key]->clone();
 	}
-	return;
 }
 
 
 // Output stream operator overload
+
 std::ostream &operator<<(std::ostream &os, const AST &ast)
 {
 	return (ast.print(os));
