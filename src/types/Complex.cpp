@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/11 14:32:18 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/11 17:05:04 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,20 @@ static std::ostream&	print_value(std::ostream &os, Rational value, 	\
 		const std::string &i, bool is_first)
 {
 	Rational	copy(value);
-	bool		negative(false);
+	bool		negative_between(false);
 
 	if (!value)
 		return (os);
 	if (!is_first)
 	{
 		if (value < 0)
-			negative = true;
+			negative_between = true;
 		else
 			os << " + ";
 	}
-	if (negative || (is_first && value < 0 && !i.empty()))
+	if (negative_between || (is_first && value < 0 && !i.empty()))
 	{
-		os << "-";
+		os << (negative_between ? " - " : "-");
 		copy = -value;
 	}
 	if (i.empty() || copy != 1)
@@ -216,9 +216,14 @@ bool		Complex::operator!=(const long long int value) const
 
 bool		Complex::operator<(const IType &other) const
 {
-	if (other == Rational(0))
-		return (this->_imaginary < Rational(0) && this->_real < Rational(0));
+	if (!other)
+		return (this->_imaginary < 0 && this->_real < 0);
 	return (!this->_imaginary && this->_real < other);
+}
+
+bool		Complex::operator<(const long long int value) const
+{
+	return (*this < Rational(value));
 }
 
 bool		Complex::operator<=(const IType &other) const
@@ -226,14 +231,29 @@ bool		Complex::operator<=(const IType &other) const
 	return (!this->_imaginary && this->_real <= other);
 }
 
+bool		Complex::operator<=(const long long int value) const
+{
+	return (*this <= Rational(value));
+}
+
 bool		Complex::operator>(const IType &other) const
 {
 	return (!this->_imaginary && this->_real > other);
 }
 
+bool		Complex::operator>(const long long int value) const
+{
+	return (*this > Rational(value));
+}
+
 bool		Complex::operator>=(const IType &other) const
 {
 	return (!this->_imaginary && this->_real >= other);
+}
+
+bool		Complex::operator>=(const long long int value) const
+{
+	return (*this >= Rational(value));
 }
 
 Complex*	Complex::operator+(const Complex &other) const
@@ -641,7 +661,7 @@ Complex*	Complex::operator^(const Rational &other) const
 	Complex*	result;
 	Complex*	tmp;
 
-	if (!other.in_Z() || other < Rational(0))
+	if (!other.in_Z() || other < 0)
 		throw UNSUPPORTED_EXPONENT;
 	result = new Complex(Rational(1), Rational(0));
 	for (InfiniteInt i(0); i < other.getNumerator(); i++)
@@ -771,7 +791,7 @@ std::ostream&	Complex::print(std::ostream &os) const
 {
 	if (!this->_real && !this->_imaginary)
 		return (os << "0");
-	else if (this->_real < Rational(0) && this->_imaginary > Rational(0))
+	else if (this->_real < 0 && this->_imaginary > 0)
 	{
 		print_value(os, this->_imaginary, "i", true);
 		print_value(os, this->_real, "", false);

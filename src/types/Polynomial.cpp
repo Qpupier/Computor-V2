@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/11 14:32:26 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/11 16:54:22 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ static std::vector<Polynomial::t_term>	vector_term_multiplication(const std::vec
 		while (it2 != terms2.end())
 		{
 			unsigned short int	new_power = it1->power + it2->power;
-			result.push_back((Polynomial::t_term){*it1->coefficient * *it2->coefficient, new_power});
+			result.push_back((Polynomial::t_term)	\
+					{*it1->coefficient * *it2->coefficient, new_power});
 			it2++;
 		}
 		it1++;
@@ -105,7 +106,8 @@ static std::vector<Polynomial::t_term>	multiply_vectors(const std::vector<Polyno
 		while (it2 != terms2.end())
 		{
 			new_coefficient = *it1->coefficient * *it2->coefficient;
-			add_term_to_vector(new_coefficient, it1->power + it2->power, result);
+			add_term_to_vector(new_coefficient, it1->power + it2->power, 	\
+					result);
 			delete new_coefficient;
 			it2++;
 		}
@@ -122,7 +124,8 @@ static IType*							function_operator_term(const std::vector<Polynomial::t_term>
 	IType*	tmp;
 
 	result = new Rational();
-	for (std::vector<Polynomial::t_term>::const_iterator it(terms.begin()); it != terms.end(); it++)
+	for (std::vector<Polynomial::t_term>::const_iterator 	\
+			it(terms.begin()); it != terms.end(); it++)
 	{
 		power = other ^ Rational(it->power);
 		term = *it->coefficient * *power;
@@ -143,11 +146,11 @@ static void								print_coefficient(std::ostream &os, IType *coefficient, unsig
 
 	if (!first_term)
 	{
-		if (*coefficient < Rational(0))
+		if (*coefficient < 0)
 		{
 			os << " - ";
 			tmp = coefficient;
-			coefficient = *coefficient * Rational(-1);
+			coefficient = *coefficient * (-1);
 			delete tmp;
 		}
 		else
@@ -157,7 +160,7 @@ static void								print_coefficient(std::ostream &os, IType *coefficient, unsig
 	need_parenthesis = complex && complex->getReal() && complex->getImaginary();
 	if (need_parenthesis)
 		os << "(";
-	if (power && *coefficient == Rational(-1))
+	if (power && *coefficient == -1)
 		os << "-";
 	else if (!power || *coefficient != 1)
 		os << *coefficient;
@@ -175,7 +178,8 @@ static std::ostream&					print_terms(std::ostream &os, const std::vector<Polynom
 	if (!alone && terms.size() > 1)
 		os << "(";
 	first_term = true;
-	for (std::vector<Polynomial::t_term>::const_reverse_iterator it(terms.rbegin()); it != terms.rend(); it++)
+	for (std::vector<Polynomial::t_term>::const_reverse_iterator 	\
+			it(terms.rbegin()); it != terms.rend(); it++)
 	{
 		if (!*it->coefficient)
 			continue ;
@@ -260,24 +264,25 @@ static Polynomial::t_term				get_term_result(const Polynomial::t_term &dividend,
 
 static std::vector<Polynomial::t_term>	euclidean_division_step(const std::vector<Polynomial::t_term> &dividend, const std::vector<Polynomial::t_term> &divisor, std::vector<Polynomial::t_term> &quotient)
 {
+	std::vector<Polynomial::t_term>	distrib;
+	std::vector<Polynomial::t_term>	new_result;
+	std::vector<Polynomial::t_term>	result;
 	Polynomial::t_term				term_result;
 	IType*							sub;
-	std::vector<Polynomial::t_term>	result;
-	std::vector<Polynomial::t_term>	new_result;
-	std::vector<Polynomial::t_term>	distributivity;
 
 	if (dividend.size() < divisor.size())
 	{
 		add_terms_to_vector(dividend, result);
 		return (result);
 	}
-	term_result = get_term_result(dividend[dividend.size() - 1], divisor[divisor.size() - 1]);
+	term_result = get_term_result(dividend[dividend.size() - 1], 	\
+			divisor[divisor.size() - 1]);
 	quotient.push_back(term_result);
 	add_terms_to_vector(dividend, result);
 	sub = -*term_result.coefficient;
-	distributivity = vector_term_coeff_multiplication(sub, term_result.power, divisor);
-	add_terms_to_vector(distributivity, result);
-	free_vector_terms(distributivity);
+	distrib = vector_term_coeff_multiplication(sub, term_result.power, divisor);
+	add_terms_to_vector(distrib, result);
+	free_vector_terms(distrib);
 	delete sub;
 	clean_terms(result);
 	terms_sort_powers(result);
@@ -314,13 +319,15 @@ static void								divide_constant_factor(const Rational &factor, std::vector<Po
 {
 	IType	*tmp;
 
-	for (std::vector<Polynomial::t_term>::iterator it(terms.begin()); it != terms.end(); it++)
+	for (std::vector<Polynomial::t_term>::iterator it(terms.begin()); 		\
+			it != terms.end(); it++)
 	{
 		tmp = it->coefficient;
 		it->coefficient = *it->coefficient / factor;
 		delete tmp;
 	}
-	for (std::vector<Polynomial::t_term>::iterator it(dividers.begin()); it != dividers.end(); it++)
+	for (std::vector<Polynomial::t_term>::iterator it(dividers.begin()); 	\
+			it != dividers.end(); it++)
 	{
 		tmp = it->coefficient;
 		it->coefficient = *it->coefficient / factor;
@@ -1035,7 +1042,7 @@ IType*		Polynomial::operator^(const IType &other) const
 	{
 		throw UNSUPPORTED_EXPONENT;
 	}
-	if (!power.in_Z() || power < Rational(0))
+	if (!power.in_Z() || power < 0)
 		throw UNSUPPORTED_EXPONENT;
 	return (*this ^ power);
 }
@@ -1115,8 +1122,8 @@ IType*			Polynomial::clone(void) const
 
 std::ostream&	Polynomial::print(std::ostream &os) const
 {
-	if (this->_dividers.size() == 1 							\
-			&& *this->_dividers[0].coefficient == Rational(1) 	\
+	if (this->_dividers.size() == 1 					\
+			&& *this->_dividers[0].coefficient == 1 	\
 			&& !this->_dividers[0].power)
 		print_terms(os, this->_terms, this->_name, true);
 	else

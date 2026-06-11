@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:35:43 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/11 12:33:42 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/11 16:56:31 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,13 @@ class	Complex: public IType
 		bool		operator!=(const IType &other) const;
 		bool		operator!=(const long long int value) const;
 		bool		operator<(const IType &other) const;
+		bool		operator<(const long long int value) const;
 		bool		operator<=(const IType &other) const;
+		bool		operator<=(const long long int value) const;
 		bool		operator>(const IType &other) const;
+		bool		operator>(const long long int value) const;
 		bool		operator>=(const IType &other) const;
+		bool		operator>=(const long long int value) const;
 		IType*		operator+(const IType &other) const;
 		Complex*	operator+(const Complex &other) const;
 		Complex*	operator+(const Rational &other) const;

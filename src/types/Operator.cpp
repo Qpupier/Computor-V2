@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/11 15:29:08 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/11 17:00:46 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,21 +84,44 @@ bool		Operator::operator<(const IType &other) const
 	return (false);
 }
 
+bool		Operator::operator<(const long long int value) const
+{
+	(void)value;
+	return (false);
+}
+
 bool		Operator::operator<=(const IType &other) const
 {
 	(void)other;
 	return (false);
 }
 
+bool		Operator::operator<=(const long long int value) const
+{
+	(void)value;
+	return (false);
+}
 bool		Operator::operator>(const IType &other) const
 {
 	(void)other;
 	return (false);
 }
 
+bool		Operator::operator>=(const long long int value) const
+{
+	(void)value;
+	return (false);
+}
+
 bool		Operator::operator>=(const IType &other) const
 {
 	(void)other;
+	return (false);
+}
+
+bool		Operator::operator>(const long long int value) const
+{
+	(void)value;
 	return (false);
 }
 

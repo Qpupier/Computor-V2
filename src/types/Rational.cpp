@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/11 14:32:50 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/11 16:53:29 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -580,7 +580,7 @@ Rational*	Rational::operator^(const Rational &other) const
 	Rational*	tmp;
 	Rational	power(other);
 
-	if (!power.in_Z() || power < Rational(0))
+	if (!power.in_Z() || power < 0)
 		throw UNSUPPORTED_EXPONENT;
 	result = new Rational(1);
 	for (InfiniteInt i(0); i < power.getNumerator(); i++)

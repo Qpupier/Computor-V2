@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/11 16:42:42 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/11 16:59:15 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,10 +291,20 @@ bool		Matrix::operator<(const IType &other) const
 	return (false);
 }
 
+bool		Matrix::operator<(const long long int value) const
+{
+	return (*this < Rational(value));
+}
+
 bool		Matrix::operator<=(const IType &other) const
 {
 	(void)other;
 	return (false);
+}
+
+bool		Matrix::operator<=(const long long int value) const
+{
+	return (*this <= Rational(value));
 }
 
 bool		Matrix::operator>(const IType &other) const
@@ -303,10 +313,20 @@ bool		Matrix::operator>(const IType &other) const
 	return (false);
 }
 
+bool		Matrix::operator>(const long long int value) const
+{
+	return (*this > Rational(value));
+}
+
 bool		Matrix::operator>=(const IType &other) const
 {
 	(void)other;
 	return (false);
+}
+
+bool		Matrix::operator>=(const long long int value) const
+{
+	return (*this >= Rational(value));
 }
 
 Rational*	Matrix::operator[](unsigned long long int index) const
@@ -777,7 +797,7 @@ IType*		Matrix::operator^(const IType &other) const
 	{
 		throw UNSUPPORTED_EXPONENT;
 	}
-	if (!power.in_Z() || power < Rational(0))
+	if (!power.in_Z() || power < 0)
 		throw UNSUPPORTED_EXPONENT;
 	return (*this ^ power);
 }
@@ -790,7 +810,7 @@ Matrix*		Matrix::operator^(const long long int value) const
 
 // Getters
 
-Rational				Matrix::getValue(unsigned long long int i, 	\
+Rational				Matrix::getValue(unsigned long long int i, 		\
 		unsigned long long int j) const
 {
 	if (i >= this->_width || j >= this->_height)

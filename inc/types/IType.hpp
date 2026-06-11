@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 17:42:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/29 11:30:57 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/11 16:55:46 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,14 @@ class	IType
 		virtual bool		operator==(const long long int value) const = 0;
 		virtual bool		operator!=(const IType &other) const = 0;
 		virtual bool		operator!=(const long long int value) const = 0;
-		virtual bool		operator<(const IType &other) const = 0;// [ ] Garder ces 4-la ?
+		virtual bool		operator<(const IType &other) const = 0;
+		virtual bool		operator<(const long long int value) const = 0;
 		virtual bool		operator<=(const IType &other) const = 0;
+		virtual bool		operator<=(const long long int value) const = 0;
 		virtual bool		operator>(const IType &other) const = 0;
+		virtual bool		operator>(const long long int value) const = 0;
 		virtual bool		operator>=(const IType &other) const = 0;
+		virtual bool		operator>=(const long long int value) const = 0;
 		virtual IType*		operator+(const IType &other) const = 0;
 		virtual IType*		operator+(const long long int value) const = 0;
 		virtual IType*		operator-(void) const = 0;

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/11 16:41:57 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/11 16:58:49 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,13 @@ class	Matrix: public IType
 		bool		operator!=(const IType &other) const;
 		bool		operator!=(const long long int value) const;
 		bool		operator<(const IType &other) const;
+		bool		operator<(const long long int value) const;
 		bool		operator<=(const IType &other) const;
+		bool		operator<=(const long long int value) const;
 		bool		operator>(const IType &other) const;
+		bool		operator>(const long long int value) const;
 		bool		operator>=(const IType &other) const;
+		bool		operator>=(const long long int value) const;
 		Rational*	operator[](unsigned long long int index) const;
 		Rational*	operator[](unsigned long long int index);
 		IType*		operator+(const IType &other) const;
