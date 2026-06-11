@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:35:43 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/29 11:42:37 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/11 12:33:42 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,10 @@ class	Complex: public IType
 		// Getters
 		Rational	getReal(void) const;
 		Rational	getImaginary(void) const;
+
+		// Setters
+		void	setReal(const Rational &real);
+		void	setImaginary(const Rational &imaginary);
 
 		// Methods
 		IType*			matrix_operator(const IType &other) const;

@@ -6,31 +6,30 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/29 18:07:40 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/11 14:06:42 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Complex.hpp"
 
 // Utils
+
 static std::ostream&	print_value(std::ostream &os, Rational value, 	\
 		const std::string &i, bool is_first)
 {
 	Rational	copy(value);
+	bool		negative(false);
 
 	if (!value)
 		return (os);
 	if (!is_first)
 	{
 		if (value < 0)
-		{
-			os << " - ";
-			copy = -value;
-		}
+			negative = true;
 		else
 			os << " + ";
 	}
-	else if (value < 0 && !i.empty())
+	if (negative || (is_first && value < 0 && !i.empty()))
 	{
 		os << "-";
 		copy = -value;
@@ -44,19 +43,109 @@ static std::ostream&	print_value(std::ostream &os, Rational value, 	\
 	return (os);
 }
 
+static Rational*		division_real_part(const Complex& a, 			\
+		const Complex& b, const Rational& denominator)
+{
+	Rational*	part1;
+	Rational*	part2;
+	Rational*	numerator;
+	Rational*	real;
+
+	part1 = a.getReal() * b.getReal();
+	part2 = a.getImaginary() * b.getImaginary();
+	numerator = *part1 + *part2;
+	delete part1;
+	delete part2;
+	real = *numerator / denominator;
+	delete numerator;
+	return (real);
+}
+
+static Rational*		division_imaginary_part(const Complex& a, 		\
+		const Complex& b, const Rational& denominator)
+{
+	Rational*	part1;
+	Rational*	part2;
+	Rational*	numerator;
+	Rational*	imaginary;
+
+	part1 = a.getImaginary() * b.getReal();
+	part2 = a.getReal() * b.getImaginary();
+	numerator = *part1 - *part2;
+	delete part1;
+	delete part2;
+	imaginary = *numerator / denominator;
+	delete numerator;
+	return (imaginary);
+}
+
+static Complex*			division(const Complex& a, const Complex& b, 	\
+		const Rational& denominator)
+{
+	Rational*	real;
+	Rational*	imaginary;
+	Complex*	result;
+
+	result = new Complex();
+	real = division_real_part(a, b, denominator);
+	result->setReal(*real);
+	delete real;
+	imaginary = division_imaginary_part(a, b, denominator);
+	result->setImaginary(*imaginary);
+	delete imaginary;
+	return (result);
+}
+
+static void				from_polynomial(Complex &complex, 				\
+		const Polynomial &polynomial)
+{
+	if (polynomial.getTerms().empty())
+	{
+		complex.setReal(Rational(0));
+		complex.setImaginary(Rational(0));
+	}
+	else
+	{
+		if (polynomial.getDividers().size() != 1 							\
+				|| *polynomial.getDividers()[0].coefficient != Rational(1) 	\
+				|| polynomial.getDividers()[0].power 						\
+				|| polynomial.getTerms().size() != 1 						\
+				|| polynomial.getTerms()[0].power)
+			throw ERROR_UNEXPECTED;
+		complex.setReal(Rational(*polynomial.getTerms()[0].coefficient));
+		complex.setImaginary(Rational(0));
+	}
+}
+
+static void				print_complex_rounded_value_default(			\
+		const InfiniteDouble& real, const InfiniteDouble& imaginary)
+{
+	InfiniteDouble	tmp;
+
+	std::cout << real;
+	if (imaginary < 0)
+	{
+		std::cout << " - ";
+		tmp = -imaginary;
+	}
+	else
+	{
+		std::cout << " + ";
+		tmp = imaginary;
+	}
+	std::cout << tmp << "i";
+}
+
 
 // Constructors
+
 Complex::Complex(const IType &other)
 {
-	const Complex		*other_complex;
-	const Rational		*other_rational;
-	const Matrix		*other_matrix;
-	const Polynomial	*other_polynomial;
+	const Complex*		other_complex(dynamic_cast<const Complex*>(&other));
+	const Rational*		other_rational(dynamic_cast<const Rational*>(&other));
+	const Polynomial*	other_polynomial								\
+			(dynamic_cast<const Polynomial*>(&other));
 
-	other_complex = dynamic_cast<const Complex*>(&other);
-	other_rational = dynamic_cast<const Rational*>(&other);
-	other_matrix = dynamic_cast<const Matrix*>(&other);
-	other_polynomial = dynamic_cast<const Polynomial*>(&other);
 	if (other_complex)
 		*this = *other_complex;
 	else if (other_rational)
@@ -64,35 +153,15 @@ Complex::Complex(const IType &other)
 		this->_real = *other_rational;
 		this->_imaginary = Rational(0);
 	}
-	else if (other_matrix)
-		throw ERROR_UNEXPECTED;
 	else if (other_polynomial)
-	{
-		if (other_polynomial->getTerms().empty())
-		{
-			this->_real = Rational(0);
-			this->_imaginary = Rational(0);
-		}
-		else
-		{
-			if (other_polynomial->getDividers().size() != 1 			\
-					|| *other_polynomial->getDividers()[0].coefficient 	\
-						!= Rational(1) 									\
-					|| other_polynomial->getDividers()[0].power 		\
-					|| other_polynomial->getTerms().size() != 1 		\
-					|| other_polynomial->getTerms()[0].power)
-				throw ERROR_UNEXPECTED;
-			this->_real 												\
-					= Rational(*other_polynomial->getTerms()[0].coefficient);
-			this->_imaginary = Rational(0);
-		}
-	}
+		from_polynomial(*this, *other_polynomial);
 	else
 		throw ERROR_UNEXPECTED;
 }
 
 
 // Operator overloads
+
 Complex&	Complex::operator=(const Complex &other)
 {
 	if (this != &other)
@@ -208,10 +277,10 @@ Polynomial*	Complex::operator+(const Polynomial &other) const
 
 IType*		Complex::operator+(const IType &other) const
 {
-	const Complex	*other_complex;
-	const Rational	*other_rational;
-	const Matrix	*other_matrix;
-	const Polynomial	*other_polynomial;
+	const Complex*		other_complex;
+	const Rational*		other_rational;
+	const Matrix*		other_matrix;
+	const Polynomial*	other_polynomial;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -286,10 +355,10 @@ Polynomial*	Complex::operator-(const Polynomial &other) const
 
 IType*		Complex::operator-(const IType &other) const
 {
-	const Complex	*other_complex;
-	const Rational	*other_rational;
-	const Matrix	*other_matrix;
-	const Polynomial	*other_polynomial;
+	const Complex*		other_complex;
+	const Rational*		other_rational;
+	const Matrix*		other_matrix;
+	const Polynomial*	other_polynomial;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -372,10 +441,10 @@ Polynomial*	Complex::operator*(const Polynomial &other) const
 
 IType*		Complex::operator*(const IType &other) const
 {
-	const Complex	*other_complex;
-	const Rational	*other_rational;
-	const Matrix	*other_matrix;
-	const Polynomial	*other_polynomial;
+	const Complex*		other_complex;
+	const Rational*		other_rational;
+	const Matrix*		other_matrix;
+	const Polynomial*	other_polynomial;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -402,10 +471,7 @@ Complex*	Complex::operator/(const Complex &other) const
 {
 	Rational*	part1;
 	Rational*	part2;
-	Rational*	numerator;
 	Rational*	denominator;
-	Rational*	real;
-	Rational*	imaginary;
 	Complex*	result;
 
 	part1 = other._real * other._real;
@@ -418,24 +484,8 @@ Complex*	Complex::operator/(const Complex &other) const
 		delete denominator;
 		throw ERROR_DIVISION_BY_ZERO;
 	}
-	part1 = this->_real * other._real;
-	part2 = this->_imaginary * other._imaginary;
-	numerator = *part1 + *part2;
-	delete part1;
-	delete part2;
-	real = *numerator / *denominator;
-	delete numerator;
-	part1 = this->_imaginary * other._real;
-	part2 = this->_real * other._imaginary;
-	numerator = *part1 - *part2;
-	delete part1;
-	delete part2;
-	imaginary = *numerator / *denominator;
-	delete numerator;
+	result = division(*this, other, *denominator);
 	delete denominator;
-	result = new Complex(*real, *imaginary);
-	delete real;
-	delete imaginary;
 	return (result);
 }
 
@@ -464,7 +514,8 @@ Polynomial*	Complex::operator/(const Polynomial &other) const
 	Polynomial*	tmp;
 	Polynomial*	result;
 
-	tmp = new Polynomial(other.getName(), (Polynomial::t_term){this->clone(), 0});
+	tmp = new Polynomial(other.getName(), 	\
+			(Polynomial::t_term){this->clone(), 0});
 	result = *tmp / other;
 	delete tmp;
 	return (result);
@@ -472,10 +523,10 @@ Polynomial*	Complex::operator/(const Polynomial &other) const
 
 IType*		Complex::operator/(const IType &other) const
 {
-	const Complex	*other_complex;
-	const Rational	*other_rational;
-	const Matrix	*other_matrix;
-	const Polynomial	*other_polynomial;
+	const Complex*		other_complex;
+	const Rational*		other_rational;
+	const Matrix*		other_matrix;
+	const Polynomial*	other_polynomial;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -497,7 +548,7 @@ Complex*	Complex::operator/(const long long int value) const
 {
 	return (*this / Rational(value));
 }
-// TODO: Revoir les modulos complexes
+
 Rational*	Complex::operator%(const Complex &other) const
 {
 	Rational	rational;
@@ -550,7 +601,8 @@ Polynomial*	Complex::operator%(const Polynomial &other) const
 	Polynomial*	tmp;
 	Polynomial*	result;
 
-	tmp = new Polynomial(other.getName(), (Polynomial::t_term){this->clone(), 0});
+	tmp = new Polynomial(other.getName(), 	\
+			(Polynomial::t_term){this->clone(), 0});
 	result = *tmp % other;
 	delete tmp;
 	return (result);
@@ -558,10 +610,10 @@ Polynomial*	Complex::operator%(const Polynomial &other) const
 
 IType*		Complex::operator%(const IType &other) const
 {
-	const Complex	*other_complex;
-	const Rational	*other_rational;
-	const Matrix	*other_matrix;
-	const Polynomial	*other_polynomial;
+	const Complex*		other_complex;
+	const Rational*		other_rational;
+	const Matrix*		other_matrix;
+	const Polynomial*	other_polynomial;
 
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
@@ -623,6 +675,7 @@ Complex*	Complex::operator^(const long long int value) const
 
 
 // Getters
+
 Rational	Complex::getImaginary(void) const
 {
 	return (this->_imaginary);
@@ -634,7 +687,21 @@ Rational	Complex::getReal(void) const
 }
 
 
+// Setters
+
+void	Complex::setReal(const Rational &real)
+{
+	this->_real = real;
+}
+
+void	Complex::setImaginary(const Rational &imaginary)
+{
+	this->_imaginary = imaginary;
+}
+
+
 // Methods
+
 IType*			Complex::matrix_operator(const IType &other) const
 {
 	throw ERROR_MATRIX_OPERATOR;
@@ -683,9 +750,9 @@ Rational*		Complex::gcd(const Matrix &other) const
 
 Rational*		Complex::gcd(const IType &other) const
 {
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Matrix	*other_matrix;
+	const Rational*	other_rational;
+	const Complex*	other_complex;
+	const Matrix*	other_matrix;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
@@ -720,8 +787,6 @@ std::ostream&	Complex::print(std::ostream &os) const
 void			print_complex_rounded_value(const std::string var, 	\
 		const InfiniteDouble & real, const InfiniteDouble & imaginary)
 {
-	InfiniteDouble	tmp;
-
 	if (!var.empty())
 	{
 		std::cout << var;
@@ -739,26 +804,11 @@ void			print_complex_rounded_value(const std::string var, 	\
 	else if (real < 0 && imaginary > 0)
 		std::cout << imaginary << "i - " << -real;
 	else
-	{
-		std::cout << real;
-		if (imaginary < 0)
-		{
-			std::cout << " - ";
-			tmp = -imaginary;
-		}
-		else
-		{
-			std::cout << " + ";
-			tmp = imaginary;
-		}
-		std::cout << tmp << "i";
-	}
+		print_complex_rounded_value_default(real, imaginary);
 }
 
 void			Complex::print_rounded(const std::string var) const
 {
-	
-
 	if (this->values_in_Z())
 		return ;
 	std::cout << COLOR_DIM;
@@ -785,6 +835,7 @@ bool			Complex::values_in_Z(void) const
 
 
 // Output stream operator overload
+
 std::ostream	&operator<<(std::ostream &os, const Complex &num)
 {
 	return (num.print(os));
