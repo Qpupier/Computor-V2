@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/11 14:57:07 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/11 16:42:42 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ static void										print_rounded_matrix(	\
 		std::cout << "[ ";
 		for (unsigned int i = 0; i < width; i++)
 		{
-			std::cout << matrix->getValue(i, j);
+			std::cout << matrix->getRoundedValue(i, j);
 			if (i < width - 1)
 				std::cout << " , ";
 		}
@@ -798,6 +798,14 @@ Rational				Matrix::getValue(unsigned long long int i, 	\
 	return (this->_matrix[j][i]);
 }
 
+InfiniteDouble		Matrix::getRoundedValue(unsigned long long int i, 	\
+		unsigned long long int j) const
+{
+	if (i >= this->_width || j >= this->_height)
+		throw ERROR_MATRIX_OUT_OF_RANGE;
+	return (this->_matrix[j][i].getValue());
+}
+
 unsigned long long int	Matrix::getWidth(void) const
 {
 	return (this->_width);
@@ -967,7 +975,6 @@ bool			Matrix::values_in_D(void) const
 	return (true);
 }
 
-
 bool			Matrix::values_in_Z(void) const
 {
 	for (unsigned int i = 0; i < this->_height; i++)
@@ -997,11 +1004,8 @@ void			Matrix::free(void)
 
 void			Matrix::print_rounded(const std::string var) const
 {
-	
-
 	if (this->values_in_Z())
 		return ;
-	
 	std::cout << COLOR_DIM;
 	if (!var.empty())
 	{
