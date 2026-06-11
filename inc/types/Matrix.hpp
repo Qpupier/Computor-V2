@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/29 11:27:12 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/11 14:51:51 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ class	Matrix: public IType
 		Matrix*		operator^(const long long int value) const;
 
 		// Getters
+		Rational				getValue(unsigned long long int i, 	\
+				unsigned long long int j) const;
 		unsigned long long int	getWidth(void) const;
 		unsigned long long int	getHeight(void) const;
 

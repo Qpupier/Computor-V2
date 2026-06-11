@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/29 11:29:07 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/11 14:57:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 #include "AST.hpp"
 
 // Utils
-static std::vector<std::string>					parse_line(std::string &line, unsigned long long int * width)
+
+static std::vector<std::string>					parse_line(				\
+		std::string &line, unsigned long long int * width)
 {
 	std::vector<std::string>	row;
 	std::size_t					pos;
@@ -41,7 +43,8 @@ static std::vector<std::string>					parse_line(std::string &line, unsigned long 
 	return (row);
 }
 
-static std::vector<std::vector<std::string>>	parse_matrix(std::string &matrix, unsigned long long int * width)
+static std::vector<std::vector<std::string>>	parse_matrix(			\
+		std::string &matrix, unsigned long long int * width)
 {
 	std::vector<std::vector<std::string>>	rows;
 	std::string								line;
@@ -66,8 +69,74 @@ static std::vector<std::vector<std::string>>	parse_matrix(std::string &matrix, u
 	return (rows);
 }
 
+static Matrix									from_polynomial(		\
+		const Polynomial *polynomial)
+{
+	if (polynomial->getDividers().size() != 1 					\
+			|| *polynomial->getDividers()[0].coefficient != 1 	\
+			|| polynomial->getDividers()[0].power 				\
+			|| polynomial->getTerms().size() != 1 				\
+			|| polynomial->getTerms()[0].power)
+		throw ERROR_UNEXPECTED;
+	return (Matrix(*polynomial->getTerms()[0].coefficient));
+}
+
+static Rational*								value_to_rational(		\
+		std::string value, t_data &data, Matrix *matrix)
+{
+	AST*		cell;
+	Rational*	rational;
+
+	try
+	{
+		cell = compute_expression(value, data, true);
+	}
+	catch (const std::exception &e)
+	{
+		matrix->error(	\
+				LogicError(std::string("Invalid matrix format: ") + e.what()));
+	}
+	if (!cell)
+		matrix->error(LogicError("Invalid matrix format: invalid element"));
+	if (cell->getLeft() || cell->getRight())
+	{
+		delete cell;
+		matrix->error(LogicError("Invalid matrix format: incomplete element"));
+	}
+	rational = dynamic_cast<Rational*>(cell->getNode()->clone());
+	delete cell;
+	if (!rational)
+		matrix->error(	\
+				LogicError("Invalid matrix format: non-rational element"));
+	return (rational);
+}
+
+static void										print_rounded_matrix(	\
+		const Matrix *matrix)
+{
+	unsigned long	width;
+	unsigned long	height;
+
+	width = matrix->getWidth();
+	height = matrix->getHeight();
+	for (unsigned int j = 0; j < height; j++)
+	{
+		std::cout << "[ ";
+		for (unsigned int i = 0; i < width; i++)
+		{
+			std::cout << matrix->getValue(i, j);
+			if (i < width - 1)
+				std::cout << " , ";
+		}
+		std::cout << " ]";
+		if (j < height - 1)
+			std::cout << std::endl;
+	}
+}
+
 
 // Constructors and destructor
+
 Matrix::Matrix(unsigned long long int width, 	\
 		unsigned long long int height): _width(width), _height(height)
 {
@@ -90,7 +159,6 @@ Matrix::Matrix(unsigned long long int width, 	\
 Matrix::Matrix(std::string str, t_data &data): _width(0), _height(0)
 {
 	std::vector<std::vector<std::string>>	rows;
-	AST*									cell;
 	Rational*								rational;
 	unsigned long long int					height;
 
@@ -103,25 +171,7 @@ Matrix::Matrix(std::string str, t_data &data): _width(0), _height(0)
 		this->_height++;
 		for (unsigned long long int j = 0; j < this->_width; j++)
 		{
-			try
-			{
-				cell = compute_expression(rows[i][j], data, true);
-			}
-			catch (const std::exception &e)
-			{
-				this->error(LogicError(std::string("Invalid matrix format: ") + e.what()));
-			}
-			if (!cell)
-				this->error(LogicError("Invalid matrix format: invalid element"));
-			if (cell->getLeft() || cell->getRight())
-			{
-				delete cell;
-				this->error(LogicError("Invalid matrix format: incomplete element"));
-			}
-			rational = dynamic_cast<Rational*>(cell->getNode()->clone());
-			delete cell;
-			if (!rational)
-				this->error(LogicError("Invalid matrix format: non-rational element"));
+			rational = value_to_rational(rows[i][j], data, this);
 			this->_matrix[i][j] = *rational;
 			delete rational;
 		}
@@ -141,10 +191,10 @@ Matrix::Matrix(const Matrix &other): _width(other._width), _height(other._height
 
 Matrix::Matrix(const IType &other): Matrix()
 {
-	const Matrix		*other_matrix;
-	const Rational		*other_rational;
-	const Complex		*other_complex;
-	const Polynomial	*other_polynomial;
+	const Matrix*		other_matrix;
+	const Rational*		other_rational;
+	const Complex*		other_complex;
+	const Polynomial*	other_polynomial;
 
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	other_rational = dynamic_cast<const Rational*>(&other);
@@ -157,16 +207,7 @@ Matrix::Matrix(const IType &other): Matrix()
 	else if (other_complex)
 		throw ERROR_UNEXPECTED;
 	else if (other_polynomial)
-	{
-		if (other_polynomial->getDividers().size() != 1 			\
-				|| *other_polynomial->getDividers()[0].coefficient 	\
-					!= Rational(1) 									\
-				|| other_polynomial->getDividers()[0].power 		\
-				|| other_polynomial->getTerms().size() != 1 		\
-				|| other_polynomial->getTerms()[0].power)
-			throw ERROR_UNEXPECTED;
-		*this = Matrix(*other_polynomial->getTerms()[0].coefficient);
-	}
+		*this = from_polynomial(other_polynomial);
 	else
 		throw ERROR_UNEXPECTED;
 }
@@ -178,6 +219,7 @@ Matrix::~Matrix(void)
 
 
 // Operator overloads
+
 Matrix::operator bool() const
 {
 	return (this->_width && this->_height);
@@ -410,10 +452,10 @@ Polynomial*	Matrix::operator-(const Polynomial &other) const
 
 IType*		Matrix::operator-(const IType &other) const
 {
-	const Matrix	*other_matrix;
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Polynomial	*other_polynomial;
+	const Matrix*		other_matrix;
+	const Rational*		other_rational;
+	const Complex*		other_complex;
+	const Polynomial*	other_polynomial;
 
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
@@ -519,7 +561,8 @@ Matrix*		Matrix::operator/(const Matrix &other) const
 		for (unsigned long long int j = 0; j < this->_width; j++)
 			try
 			{
-				result->_matrix[i][j] = this->_matrix[i][j] / other._matrix[i][j];
+				result->_matrix[i][j] = this->_matrix[i][j] 	\
+						/ other._matrix[i][j];
 			}
 			catch(const LogicError& e)
 			{
@@ -568,7 +611,8 @@ Polynomial*	Matrix::operator/(const Polynomial &other) const
 	Polynomial*	tmp;
 	Polynomial*	result;
 
-	tmp = new Polynomial(other.getName(), (Polynomial::t_term){this->clone(), 0});
+	tmp = new Polynomial(other.getName(), 	\
+			(Polynomial::t_term){this->clone(), 0});
 	result = *tmp / other;
 	delete tmp;
 	return (result);
@@ -613,7 +657,8 @@ Matrix*		Matrix::operator%(const Matrix &other) const
 		for (unsigned long long int j = 0; j < this->_width; j++)
 			try
 			{
-				result->_matrix[i][j] = this->_matrix[i][j] % other._matrix[i][j];
+				result->_matrix[i][j] 	\
+						= this->_matrix[i][j] % other._matrix[i][j];
 			}
 			catch(const LogicError& e)
 			{
@@ -662,7 +707,8 @@ Polynomial*	Matrix::operator%(const Polynomial &other) const
 	Polynomial*	tmp;
 	Polynomial*	result;
 
-	tmp = new Polynomial(other.getName(), (Polynomial::t_term){this->clone(), 0});
+	tmp = new Polynomial(other.getName(), 	\
+			(Polynomial::t_term){this->clone(), 0});
 	result = *tmp % other;
 	delete tmp;
 	return (result);
@@ -743,6 +789,15 @@ Matrix*		Matrix::operator^(const long long int value) const
 
 
 // Getters
+
+Rational				Matrix::getValue(unsigned long long int i, 	\
+		unsigned long long int j) const
+{
+	if (i >= this->_width || j >= this->_height)
+		throw ERROR_MATRIX_OUT_OF_RANGE;
+	return (this->_matrix[j][i]);
+}
+
 unsigned long long int	Matrix::getWidth(void) const
 {
 	return (this->_width);
@@ -765,6 +820,7 @@ void	Matrix::setValue(unsigned long long int i, 	\
 
 
 // Methods
+
 Matrix*			Matrix::matrix_operator(const Matrix &other) const
 {
 	Matrix*		result;
@@ -853,9 +909,9 @@ Rational*		Matrix::gcd(const Matrix &other) const
 
 Rational*		Matrix::gcd(const IType &other) const
 {
-	const Rational	*other_rational;
-	const Complex	*other_complex;
-	const Matrix	*other_matrix;
+	const Rational*	other_rational;
+	const Complex*	other_complex;
+	const Matrix*	other_matrix;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
@@ -902,7 +958,6 @@ bool			Matrix::finite_decimals(void) const
 	return (true);
 }
 
-
 bool			Matrix::values_in_D(void) const
 {
 	for (unsigned int i = 0; i < this->_height; i++)
@@ -942,13 +997,11 @@ void			Matrix::free(void)
 
 void			Matrix::print_rounded(const std::string var) const
 {
-	unsigned long	width;
-	unsigned long	height;
+	
 
 	if (this->values_in_Z())
 		return ;
-	width = this->_width;
-	height = this->_height;
+	
 	std::cout << COLOR_DIM;
 	if (!var.empty())
 	{
@@ -957,30 +1010,21 @@ void			Matrix::print_rounded(const std::string var) const
 		else
 			std::cout << var << " ≈ " << std::endl;
 	}
-	for (unsigned int i = 0; i < height; i++)
-	{
-		std::cout << "[ ";
-		for (unsigned int j = 0; j < width; j++)
-		{
-			std::cout << this->_matrix[i][j].getValue();
-			if (j < width - 1)
-				std::cout << " , ";
-		}
-		std::cout << " ]";
-		if (i < height - 1)
-			std::cout << std::endl;
-	}
+	print_rounded_matrix(this);
 	std::cout << COLOR_RESET << std::endl;
 }
 
 
 // Output stream operator overload
+
 std::ostream&	operator<<(std::ostream &os, const Matrix &matrix)
 {
 	return (matrix.print(os));
 }
 
+
 // Functions
+
 bool	is_matrix(const IType& type)
 {
 	Matrix	matrix;

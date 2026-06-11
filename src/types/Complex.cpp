@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/11 14:06:42 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/11 14:32:18 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,10 +106,10 @@ static void				from_polynomial(Complex &complex, 				\
 	}
 	else
 	{
-		if (polynomial.getDividers().size() != 1 							\
-				|| *polynomial.getDividers()[0].coefficient != Rational(1) 	\
-				|| polynomial.getDividers()[0].power 						\
-				|| polynomial.getTerms().size() != 1 						\
+		if (polynomial.getDividers().size() != 1 					\
+				|| *polynomial.getDividers()[0].coefficient != 1 	\
+				|| polynomial.getDividers()[0].power 				\
+				|| polynomial.getTerms().size() != 1 				\
 				|| polynomial.getTerms()[0].power)
 			throw ERROR_UNEXPECTED;
 		complex.setReal(Rational(*polynomial.getTerms()[0].coefficient));

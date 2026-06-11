@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/29 11:29:32 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/11 14:32:26 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ static void								print_coefficient(std::ostream &os, IType *coefficient, unsig
 		os << "(";
 	if (power && *coefficient == Rational(-1))
 		os << "-";
-	else if (!power || *coefficient != Rational(1))
+	else if (!power || *coefficient != 1)
 		os << *coefficient;
 	if (need_parenthesis)
 		os << ")";

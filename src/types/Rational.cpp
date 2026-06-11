@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/29 11:35:18 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/11 14:32:50 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ Rational::Rational(const IType &other)
 		{
 			if (other_polynomial->getDividers().size() != 1 			\
 					|| *other_polynomial->getDividers()[0].coefficient 	\
-						!= Rational(1) 									\
+						!= 1 											\
 					|| other_polynomial->getDividers()[0].power 		\
 					|| other_polynomial->getTerms().size() != 1 		\
 					|| other_polynomial->getTerms()[0].power)
