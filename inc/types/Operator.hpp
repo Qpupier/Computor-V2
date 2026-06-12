@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 14:55:07 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/11 16:59:45 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/12 17:48:51 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ class	Operator: public IType
 		IType*			clone(void) const;
 		Rational*		gcd(const IType &other) const;
 		std::ostream&	print(std::ostream &os) const;
-		bool			finite_decimals(void) const;
 		void			print_rounded(const std::string var = std::string()) const;
 
 	private:

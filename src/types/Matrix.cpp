@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/11 16:59:15 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/12 17:49:04 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -975,15 +975,6 @@ std::ostream&	Matrix::print(std::ostream &os) const
 			os << std::endl;
 	}
 	return (os);
-}
-
-bool			Matrix::finite_decimals(void) const
-{
-	for (unsigned int i = 0; i < this->_height; i++)
-		for (unsigned int j = 0; j < this->_width; j++)
-			if (!this->_matrix[i][j].finite_decimals())
-				return (false);
-	return (true);
 }
 
 bool			Matrix::values_in_D(void) const

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/22 21:50:43 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/12 17:44:53 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,9 @@ typedef struct	s_data
 	std::map<std::pair<std::string, std::string>, const IType*>	stored;
 }				t_data;
 
-int		usage(void);
-void	define_patterns(std::map<std::string, std::regex> &patterns);
-void	delete_empty_function_stored(	\
-		std::map<std::pair<std::string, std::string>, 	\
-			const IType*> &stored, 						\
-		const std::string error_msg, const bool throw_error = false);
+std::string	to_lower(std::string s);
+int			usage(void);
+void		assignation(std::string var, std::map<std::pair<std::string, std::string>, const IType*> &stored, IType *result);
+void		define_patterns(std::map<std::string, std::regex> &patterns);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/29 11:18:07 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/12 17:48:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ class	Rational: public IType
 		Rational*		gcd(const Matrix & other) const;
 		InfiniteInt		integer_part(void) const;
 		std::ostream&	print(std::ostream &os) const;
-		bool			finite_decimals(void) const;
 		bool			in_D(void) const;
 		bool			in_Z(void) const;
 		void			print_rounded(const std::string var = std::string()) const;
@@ -123,6 +122,7 @@ std::ostream&	operator<<(std::ostream &os, const Rational &num);
 
 // Functions
 InfiniteInt	compute_gcd(InfiniteInt a, InfiniteInt b);
+Rational*	get_gcd_terms(const Rational* term1, const Rational* term2, const Rational* term3, const Rational* term4);
 
 # include "Complex.hpp"
 # include "Matrix.hpp"

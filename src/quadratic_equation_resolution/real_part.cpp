@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:24:12 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/29 17:58:55 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/12 17:57:16 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static void			update_real_denominator(	\
 	delete tmp;
 }
 
-void				set_real_terms(							\
+void				set_terms(								\
 		const std::vector<const Complex*> coefficients, 	\
 		t_quadratic_solutions &solutions, 					\
 		const std::vector<Rational> sqrt_factors, Rational* denominator)
@@ -91,4 +91,5 @@ void				set_real_terms(							\
 	delete real_term2_factor;
 	delete real_term3_factor;
 	delete real_gcd;
+	set_imaginary_terms(coefficients, solutions, sqrt_factors, denominator);
 }

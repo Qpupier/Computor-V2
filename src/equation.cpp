@@ -6,12 +6,12 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 14:15:12 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/12 17:47:13 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
-#include "Polynomial.hpp"
+#include "quadratic.hpp"
 
 static void	equation_error(AST *left_ast, AST *right_ast, 	\
 		const UnexpectedError &error)

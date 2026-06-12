@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/11 17:00:46 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/12 17:49:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,10 +259,4 @@ void			Operator::print_rounded(const std::string var) const
 {
 	throw ERROR_UNEXPECTED;
 	(void)var;
-}
-
-bool			Operator::finite_decimals(void) const
-{
-	throw ERROR_UNEXPECTED;
-	return (false);
 }

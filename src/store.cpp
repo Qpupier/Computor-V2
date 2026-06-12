@@ -6,11 +6,12 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:11:12 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 16:19:40 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/12 17:47:33 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
+#include "Polynomial.hpp"
 
 static void	store_new_variable(								\
 		std::map<std::pair<std::string, std::string>, 		\

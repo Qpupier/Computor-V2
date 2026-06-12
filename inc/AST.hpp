@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:01:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 16:20:36 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/12 17:42:43 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,17 +56,15 @@ class	AST
 std::ostream &operator<<(std::ostream &os, const AST &ast);
 
 // Functions
-AST*	compute_expression(const std::string &line, t_data &data, bool is_right_side, const bool eval = true);
+Token	create_token(std::string::const_iterator &start, const std::string::const_iterator &end, const t_data &data);
+bool	set_function_left(std::vector<Token> &tokens, std::map<std::pair<std::string, std::string>, const IType*> &stored);
 AST*	build_ast(std::vector<Token> &tokens, t_data &data);
-void	compute_equation(const std::string &line, t_data &data, const bool eval);
-void	print_expression(const std::string &line, t_data &data);
-std::vector<Token>*	adapt_tokens(std::vector<Token> &tokens, std::vector<Token> &sub_tokens, long int *pos);
-#include "Polynomial.hpp"// TODO: Ameliorer les includes
-void			display_result(const Polynomial *polynomial, std::map<std::pair<std::string, std::string>, const IType*> &stored);
-void	compute_line(std::string &line, t_data &data);
-bool			set_function_left(std::vector<Token> &tokens, std::map<std::pair<std::string, std::string>, const IType*> &stored);
-void			set_function_right(std::map<std::pair<std::string, std::string>, const IType*> &stored, AST *ast);
+AST*	compute_expression(const std::string &line, t_data &data, bool is_right_side, const bool eval = true);
 void	clean_tokens(std::vector<Token> &tokens, const std::string line, const t_data &data);
-Token		create_token(std::string::const_iterator &start, 	\
-		const std::string::const_iterator &end, const t_data &data);
+void	compute_equation(const std::string &line, t_data &data, const bool eval);
+void	compute_line(std::string &line, t_data &data);
+void	delete_empty_function_stored(std::map<std::pair<std::string, std::string>, const IType*> &stored, const std::string error_msg, const bool throw_error = false);
+void	print_expression(const std::string &line, t_data &data);
+void	set_function_right(std::map<std::pair<std::string, std::string>, const IType*> &stored, AST *ast);
+
 #endif

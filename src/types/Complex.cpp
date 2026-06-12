@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/11 17:05:04 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/12 17:49:00 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -835,12 +835,6 @@ void			Complex::print_rounded(const std::string var) const
 	print_complex_rounded_value(var, this->_real.getValue(), 	\
 			this->_imaginary.getValue());
 	std::cout << COLOR_RESET << std::endl;
-}
-
-bool			Complex::finite_decimals(void) const
-{
-	return (this->_real.finite_decimals() 	\
-			&& this->_imaginary.finite_decimals());
 }
 
 bool			Complex::values_in_D(void) const

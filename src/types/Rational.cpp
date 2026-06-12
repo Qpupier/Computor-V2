@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/11 18:02:03 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/12 17:49:18 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -749,26 +749,6 @@ void			Rational::reduce(void)
 		this->_numerator = -this->_numerator;
 		this->_denominator = -this->_denominator;
 	}
-}
-
-bool			Rational::finite_decimals(void) const
-{
-	InfiniteInt	denominator;
-	InfiniteInt	m;
-	InfiniteInt	n;
-
-	denominator = this->_denominator;
-	while (denominator % 2 == 0)
-	{
-		denominator /= 2;
-		m++;
-	}
-	while (denominator % 5 == 0)
-	{
-		denominator /= 5;
-		n++;
-	}
-	return (denominator == 1);// BUG: A corriger
 }
 
 bool			Rational::in_D(void) const

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:46:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 16:23:41 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/12 17:58:48 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,10 +194,8 @@ static void				insert_new_digit(const InfiniteDouble num, 	\
 // Constructors
 
 InfiniteDouble::InfiniteDouble(const InfiniteInt integer_part, 			\
-		const InfiniteInt decimal_part, bool is_negative, 				\
-		bool is_decimal_infinite):										\
+		const InfiniteInt decimal_part, bool is_negative):				\
 			_integer_part(integer_part), _decimal_part(decimal_part), 	\
-			_isDecimalInfinite(is_decimal_infinite), 					\
 			_isNegative(is_negative)
 {
 	this->_integer_part.setIsIntegerPart(true);
@@ -224,7 +222,6 @@ InfiniteDouble&	InfiniteDouble::operator=(const InfiniteDouble &other)
 	{
 		this->_integer_part = other._integer_part;
 		this->_decimal_part = other._decimal_part;
-		this->_isDecimalInfinite = other._isDecimalInfinite;
 		this->_isNegative = other._isNegative;
 	}
 	return (*this);
@@ -614,11 +611,6 @@ InfiniteInt	InfiniteDouble::getIntegerPart(void) const
 	return (this->_integer_part);
 }
 
-bool		InfiniteDouble::getIsDecimalInfinite(void) const
-{
-	return (this->_isDecimalInfinite);
-}
-
 bool		InfiniteDouble::getIsNegative(void) const
 {
 	return (this->_isNegative);
@@ -635,11 +627,6 @@ void	InfiniteDouble::setDecimalPart(const InfiniteInt &decimal_part)
 void	InfiniteDouble::setIntegerPart(const InfiniteInt &integer_part)
 {
 	this->_integer_part = integer_part;
-}
-
-void	InfiniteDouble::setIsDecimalInfinite(bool is_decimal_infinite)
-{
-	this->_isDecimalInfinite = is_decimal_infinite;
 }
 
 void	InfiniteDouble::setIsNegative(bool is_negative)
