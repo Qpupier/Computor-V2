@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 15:48:19 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 15:49:55 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/12 18:38:57 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static void	parse_line(std::string &line, t_data &data)
 		print_expression(line, data);
 }
 
-void		compute_line(std::string &line, t_data &data)
+void		compute_line(std::string line, t_data &data)
 {
 	if (line.empty())
 		return;

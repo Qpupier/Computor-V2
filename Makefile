@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/06/12 16:38:28 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/06/12 19:15:45 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,6 +63,7 @@ CXXFLAGS	=	-W -Wall -Wextra -Werror -Wshadow -Wold-style-cast -Wcast-qual -Wconv
 # CXXFLAGS	+=	-O2 # Optimization
 # CXXFLAGS	+=	-fsanitize=address # Debugging
 CDEP		=	-MMD -MP
+LIBRAIRIES	=	-lreadline
 
 ERASE		=	\033[2K\r
 GREY		=	\033[30m
@@ -82,8 +83,9 @@ all: $(NAME)
 	@printf "$(BLUE)> $(NAME): $(YELLOW)Project ready!$(END)\n"
 
 $(NAME): $(OBJ)
-	$(CC) $(CXXFLAGS) $^ -o $@
+	$(CC) $(CXXFLAGS) $^ $(LIBRAIRIES) -o $@
 	@printf "$(ERASE)$(BLUE)> $@: $(GREEN)Success!$(END)\n\n"
+
 -include $(DEP)
 
 $(DIR_OBJ)/%.o: $(DIR_SRC)/%.cpp Makefile
@@ -105,7 +107,7 @@ run: $(NAME)
 	./$<
 
 valgrind: $(NAME)
-	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all -s ./$<
+	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all -s --suppressions=valgrind.supp ./$<
 
 test: $(NAME)
 	@echo &> /dev/null

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 15:50:08 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/12 19:35:52 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,25 +25,27 @@ static void	free_stored(const 	\
 	}
 }
 
-static int	loop(std::string &line, t_data &data, bool is_interactive)
+static int	loop(t_data &data, bool is_interactive)
 {
+	std::string	str_line;
+	char*		line;
+
 	while (true)
 	{
-		if (is_interactive)
-			std::cout << "> ";
-		std::getline(std::cin, line);
-		if (std::cin.bad())
+		line = readline(is_interactive ? "> " : "");
+		if (!line || std::regex_match(std::string(line), data.patterns.at(TOKEN_QUIT)))
 		{
-			std::cerr << "\033[31mError reading input\033[0m" << std::endl;
-			return (EXIT_FAILURE);
+			free(line);
+			rl_clear_history();
+			return (EXIT_SUCCESS);
 		}
-		if (std::regex_match(line, data.patterns.at(TOKEN_QUIT)))
-			return (EXIT_SUCCESS);
-		compute_line(line, data);
-		if (std::cin.eof())
-			return (EXIT_SUCCESS);
+		str_line = std::string(line);
+		if (!str_line.empty() && str_line != "\n")
+			add_history(line);
+		free(line);
+		compute_line(str_line, data);
 	}
-	
+	return (EXIT_FAILURE);
 }
 
 void		print_expression(const std::string &line, t_data &data)
@@ -66,15 +68,14 @@ void		print_expression(const std::string &line, t_data &data)
 
 int			main(int argc, const char **argv)
 {
-	t_data		data;
-	std::string	line;
-	int			status;
+	t_data	data;
+	int		status;
 
 	if (argc > 1)
 		return (usage());
 	define_patterns(data.patterns);
 	define_token_types(data.tokens_types);
-	status = loop(line, data, isatty(STDIN_FILENO));
+	status = loop(data, isatty(STDIN_FILENO));
 	free_stored(data.stored);
 	return (status);
 	(void)argv;
