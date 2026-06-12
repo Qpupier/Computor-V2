@@ -1,8 +1,13 @@
 varA = 2
+varA = 2
+varB= 2 * (4 + varA + 3)
 varB = 18
+varC =2 * varB
 varC = 36
+varD = 2 *(2 + 4 *varC -4 /3)
 varD = 868/3
 varD ≈ 289.33333333...
+?
 Listing stored variables and functions
   vara = 2
   varb = 18

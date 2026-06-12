@@ -1,8 +1,14 @@
+funA(x) = 2 * 4 + x
 funA(χ) = χ + 8
+funB(x) = 4 -5 + (x + 2)^2 - 4
 funB(χ) = χ^2 + 4χ - 1
+funC(x) = 4x + 5 - 2
 funC(χ) = 4χ + 3
+funA(2) + funB(4) = ?
 41
+funC(3) = ?
 15
+?
 Listing stored variables and functions
   funA(χ) = χ + 8
   funB(χ) = χ^2 + 4χ - 1

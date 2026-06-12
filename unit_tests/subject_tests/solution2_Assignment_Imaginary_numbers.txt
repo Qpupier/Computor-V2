@@ -1,5 +1,8 @@
+varA = 2*i + 3
 varA = 3 + 2i
+varB = -4i - 4
 varB = -4 - 4i
+?
 Listing stored variables and functions
   vara = 3 + 2i
   varb = -4 - 4i
