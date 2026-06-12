@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/11 17:54:25 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/12 13:19:38 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,15 +255,15 @@ static Polynomial::t_division_result	euclidean_division(					\
 }
 
 static void								print_coefficient_sign(				\
-		std::ostream& os, IType* coefficient)
+		std::ostream& os, IType** coefficient)
 {
 	IType*	tmp;
 
-	if (*coefficient < 0)
+	if (**coefficient < 0)
 	{
 		os << " - ";
-		tmp = coefficient;
-		coefficient = *coefficient * (-1);
+		tmp = *coefficient;
+		*coefficient = **coefficient * (-1);
 		delete tmp;
 	}
 	else
@@ -278,7 +278,7 @@ static void								print_coefficient(					\
 	bool		need_parenthesis;
 
 	if (!first_term)
-		print_coefficient_sign(os, coefficient);
+		print_coefficient_sign(os, &coefficient);
 	complex = dynamic_cast<Complex*>(coefficient);
 	need_parenthesis = complex && complex->getReal() && complex->getImaginary();
 	if (need_parenthesis)
