@@ -6,13 +6,14 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:15:11 by qpupier           #+#    #+#             */
-/*   Updated: 2026/03/11 19:01:06 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/12 16:24:49 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Token.hpp"
 
 // Operator overloads
+
 Token& Token::operator=(const Token &other)
 {
 	if (this != &other)
@@ -25,6 +26,7 @@ Token& Token::operator=(const Token &other)
 
 
 // Getters
+
 std::string		Token::getValue(void) const
 {
 	return (_value);
@@ -37,6 +39,7 @@ Token::t_token	Token::getType(void) const
 
 
 // Setters
+
 void	Token::setValue(const std::string &value)
 {
 	this->_value = value;
@@ -49,6 +52,7 @@ void	Token::setType(t_token type)
 
 
 // Functions
+
 void			define_token_types(std::map<const Token::t_token, 	\
 		std::regex> &tokens_types)
 {

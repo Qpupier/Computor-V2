@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/11 18:20:39 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/12 13:30:52 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 
 // Utils
 
-static IType*	find_function(IType *node, std::map<std::pair<std::string, std::string>, const IType*> &stored)
+static IType*	find_function(IType *node, std::map<std::pair<std::string, 	\
+		std::string>, const IType*> &stored)
 {
 	std::pair<std::string, std::string>	var_key;
 	std::string							var_name;
@@ -40,8 +41,16 @@ static IType*	find_function(IType *node, std::map<std::pair<std::string, std::st
 	return (nullptr);
 }
 
+static IType*	matrix_operator(IType *left_entity, IType *right_entity)
+{
+	if (is_matrix(*left_entity) && is_matrix(*right_entity))
+		return (left_entity->matrix_operator(*right_entity));
+	return (*left_entity * *right_entity);
+}
+
 static IType*	get_result(IType *left_entity, IType *right_entity, 	\
-		Operator::t_operator op, std::map<std::pair<std::string, std::string>, const IType*> &stored)
+		Operator::t_operator op, 										\
+		std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
 	switch (op)
 	{
@@ -62,10 +71,7 @@ static IType*	get_result(IType *left_entity, IType *right_entity, 	\
 		case Operator::E_FUNCTION:
 			return (find_function(left_entity, stored)->function_operator(*right_entity));
 		case Operator::E_UNKNOWN:
-			if (is_matrix(*left_entity) && is_matrix(*right_entity))
-				return (left_entity->matrix_operator(*right_entity));
-			else
-				return (*left_entity * *right_entity);
+			return (matrix_operator(left_entity, right_entity));
 		default:
 			throw UnexpectedError("Unknown operator");
 	}
@@ -80,36 +86,27 @@ AST::AST(const Token &token, t_data &data): _left(nullptr), _right(nullptr)
 	switch (token.getType())
 	{
 		case Token::E_OPERATOR:
-		{
 			_node = new Operator(token);
 			break;
-		}
 		case Token::E_NUMBER:
-		{
 			_node = new Rational(token);
 			break;
-		}
 		case Token::E_IMAGINARY:
-		{
 			_node = new Complex();
 			break;
-		}
 		case Token::E_MATRIX:
-		{
 			_node = new Matrix(token, data);
 			break;
-		}
 		case Token::E_POLYNOMIAL:
-		{
 			_node = new Polynomial(token);
 			break;
-		}
 		default:
 			throw UnexpectedError("Invalid token type for AST node");
 	}
 }
 
-AST::AST(const Token &token, AST *left, AST *right, t_data &data): AST(token, data)
+AST::AST(const Token &token, AST *left, AST *right, t_data &data): 	\
+		AST(token, data)
 {
 	this->_left = left;
 	this->_right = right;

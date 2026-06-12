@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/05/29 13:31:03 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/06/12 16:18:53 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,9 +37,14 @@ LST_SRC		=	quadratic_equation_resolution/print_solutions/exact_solutions.cpp				
 				Token.cpp																			\
 				main.cpp																			\
 				build_ast.cpp																		\
+				build_ast_tokens.cpp																\
+				clean_tokens.cpp																	\
+				compute_line.cpp																	\
 				equation.cpp																		\
+				equation_resolution.cpp																\
 				errors.cpp																			\
 				parser.cpp																			\
+				store.cpp																			\
 				utils.cpp
 LST_OBJ		=	$(LST_SRC:.cpp=.o)
 LST_DEP		=	$(LST_OBJ:.o=.d)

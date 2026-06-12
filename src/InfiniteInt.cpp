@@ -6,13 +6,14 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:39:10 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/11 11:17:43 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/12 16:23:26 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "InfiniteInt.hpp"
 
 // Utils
+
 static std::vector<unsigned char>	add_infinite_int(	\
 		const InfiniteInt &a, const InfiniteInt &b)
 {
@@ -41,6 +42,27 @@ static std::vector<unsigned char>	add_infinite_int(	\
 	return (result);
 }
 
+static unsigned char	sub_infinite_int_digit(		\
+		const std::vector<unsigned char>& rev_a, 	\
+		const std::vector<unsigned char>& rev_b, 	\
+		std::vector<unsigned char>::size_type i, bool& hold)
+{
+	unsigned char	digit_a((i < rev_a.size()) ? rev_a[i] : 0);
+	unsigned char	digit_b((i < rev_b.size()) ? rev_b[i] : 0);
+	short int		diff(digit_a - digit_b);
+
+	if (hold)
+		diff--;
+	if (diff < 0)
+	{
+		diff += 10;
+		hold = true;
+	}
+	else
+		hold = false;
+	return (static_cast<unsigned char>(diff));
+}
+
 static std::vector<unsigned char>	sub_infinite_int(	\
 		const InfiniteInt &a, const InfiniteInt &b)
 {
@@ -53,22 +75,7 @@ static std::vector<unsigned char>	sub_infinite_int(	\
 	std::reverse(rev_b.begin(), rev_b.end());
 	for (std::vector<unsigned char>::size_type i = 0; 	\
 			i < rev_a.size() || i < rev_b.size() || hold; i++)
-	{
-		unsigned char	digit_a((i < rev_a.size()) ? rev_a[i] : 0);
-		unsigned char	digit_b((i < rev_b.size()) ? rev_b[i] : 0);
-		short int		diff(digit_a - digit_b);
-
-		if (hold)
-			diff--;
-		if (diff < 0)
-		{
-			diff += 10;
-			hold = true;
-		}
-		else
-			hold = false;
-		result.push_back(static_cast<unsigned char>(diff));
-	}
+		result.push_back(sub_infinite_int_digit(rev_a, rev_b, i, hold));
 	std::reverse(result.begin(), result.end());
 	return (result);
 }
@@ -147,6 +154,7 @@ static bool							division(InfiniteInt &dividend, 	\
 
 
 // Constructors
+
 InfiniteInt::InfiniteInt(const std::vector<unsigned char> digits, 	\
 		bool is_negative, bool is_integer_part): 					\
 			_digits(digits), _isIntegerPart(is_integer_part), 		\
@@ -176,6 +184,7 @@ InfiniteInt::InfiniteInt(const std::string str, bool is_negative, 	\
 
 
 // Operator overloads
+
 InfiniteInt::operator bool() const
 {
 	return (!this->_digits.empty());
@@ -571,6 +580,7 @@ void				InfiniteInt::operator^=(const long long int value)
 
 
 // Getters
+
 std::vector<unsigned char>	InfiniteInt::getDigits(void) const
 {
 	return (this->_digits);
@@ -588,6 +598,7 @@ bool						InfiniteInt::getIsNegative(void) const
 
 
 // Setters
+
 void	InfiniteInt::setDigits(const std::vector<unsigned char> &digits)
 {
 	this->_digits = digits;
@@ -606,10 +617,10 @@ void	InfiniteInt::setIsNegative(bool is_negative)
 
 
 // Methods
+
 InfiniteInt	InfiniteInt::sqrt(void) const
 {
-	std::vector<unsigned char>::size_type	padding_size	\
-			((this->size() - 1) / 2 + 1);
+	std::vector<unsigned char>::size_type	size((this->size() - 1) / 2 + 1);
 	InfiniteInt								padding(1);
 	InfiniteInt								result;
 
@@ -617,7 +628,7 @@ InfiniteInt	InfiniteInt::sqrt(void) const
 		throw ERROR_SQRT_NEGATIVE;
 	if (!*this)
 		return (InfiniteInt());
-	for (std::vector<unsigned char>::size_type i = 0; i < padding_size; i++)
+	for (std::vector<unsigned char>::size_type i = 0; i < size; i++)
 		padding.push_back(0);
 	while (padding)
 	{
@@ -677,6 +688,7 @@ void		InfiniteInt::reduce(void)
 
 
 // Output stream operator overload
+
 std::ostream&	operator<<(std::ostream &os, const InfiniteInt &num)
 {
 	std::vector<unsigned char>	digits(num.getDigits());

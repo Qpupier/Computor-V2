@@ -1,0 +1,119 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   store.cpp                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/12 16:11:12 by qpupier           #+#    #+#             */
+/*   Updated: 2026/06/12 16:19:40 by qpupier          ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "AST.hpp"
+
+static void	store_new_variable(								\
+		std::map<std::pair<std::string, std::string>, 		\
+			const IType*> &stored, std::pair<std::string, 	\
+		std::string> key)
+{
+	for (std::map<std::pair<std::string, std::string>, const IType*>	\
+			::iterator it(stored.begin()); it != stored.end();)
+	{
+		if (to_lower(key.second) == to_lower(it->first.first))
+			throw LogicError("Function parameter is already defined");
+		if (to_lower(key.first) == to_lower(it->first.first))
+		{
+			delete it->second;
+			it = stored.erase(it);
+		}
+		else
+			it++;
+	}
+}
+
+static void	store_function(									\
+		std::map<std::pair<std::string, std::string>, 		\
+			const IType*> &stored, 							\
+		std::pair<std::string, std::string> key, Polynomial *polynomial)
+{
+	stored.erase(key);
+	if (!polynomial->getName().empty() 										\
+			&& to_lower(key.second) != to_lower(polynomial->getName()))
+	{
+		delete polynomial;
+		delete_empty_function_stored(stored, 								\
+			"Function parameter does not match the variable in the right side \
+				of the equation", true);
+	}
+	key.first.erase(0, 1);
+	try
+	{
+		store_new_variable(stored, key);
+	}
+	catch (const LogicError &e)
+	{
+		delete polynomial;
+		throw;
+	}
+	polynomial->setName("χ");
+	key.second = polynomial->getName();
+	stored[key] = polynomial;
+	std::cout << COLOR_BOLD << key.first << "(" << key.second << ") = " 	\
+			<< *polynomial << COLOR_RESET << std::endl;
+}
+
+bool		set_function_left(std::vector<Token> &tokens, 	\
+		std::map<std::pair<std::string, std::string>, const IType*> &stored)
+{
+	std::pair<std::string, std::string>	pair;
+
+	if (tokens.size() == 4 && tokens[0].getType() == Token::E_POLYNOMIAL 	\
+			&& tokens[1].getType() == Token::E_LEFT_PARENTHESIS 			\
+			&& tokens[2].getType() == Token::E_POLYNOMIAL 					\
+			&& tokens[3].getType() == Token::E_RIGHT_PARENTHESIS)
+	{
+		pair.first = "_" + tokens[0].getValue();
+		pair.second = tokens[2].getValue();
+		stored[pair] = nullptr;
+		return (true);
+	}
+	return (false);
+}
+
+void		set_function_right(							\
+		std::map<std::pair<std::string, std::string>, 	\
+			const IType*> &stored, 						\
+		AST *ast)
+{
+	Polynomial*	polynomial;
+
+	if (!ast->end_of_tree())
+		delete_empty_function_stored(stored, 							\
+				"The right side of the function definition must be a single \
+					expression", true);
+	polynomial = new Polynomial(*ast->getNode());
+	for (std::map<std::pair<std::string, std::string>, const IType*>	\
+			::iterator it(stored.begin()); it != stored.end(); it++)
+		if (!it->second)
+			return store_function(stored, it->first, polynomial);
+}
+
+void		delete_empty_function_stored(				\
+		std::map<std::pair<std::string, std::string>, 	\
+			const IType*> &stored, 						\
+		const std::string error_msg, const bool throw_error)
+{
+	std::map<std::pair<std::string, std::string>, const IType*>	\
+			::iterator	it;
+
+	for (it = stored.begin(); it != stored.end(); it++)
+		if (!it->second)
+		{
+			it = stored.erase(it);
+			break;
+		}
+	if (throw_error)
+		throw LogicError(error_msg);
+	std::cerr << error_msg << std::endl;
+}

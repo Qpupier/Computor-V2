@@ -6,13 +6,14 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:46:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/29 11:35:07 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/12 16:23:41 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "InfiniteDouble.hpp"
 
 // Utils
+
 static void				align_sizes(						\
 		std::vector<unsigned char> & this_decimal_digits, 	\
 		std::vector<unsigned char> & other_decimal_digits, 	\
@@ -191,6 +192,7 @@ static void				insert_new_digit(const InfiniteDouble num, 	\
 
 
 // Constructors
+
 InfiniteDouble::InfiniteDouble(const InfiniteInt integer_part, 			\
 		const InfiniteInt decimal_part, bool is_negative, 				\
 		bool is_decimal_infinite):										\
@@ -210,6 +212,7 @@ InfiniteDouble::InfiniteDouble(const InfiniteInt integer_part, 			\
 
 
 // Operator overloads
+
 InfiniteDouble::operator bool() const
 {
 	return (this->getIntegerPart() || this->getDecimalPart());
@@ -600,6 +603,7 @@ void			InfiniteDouble::operator^=(const long long int value)
 
 
 // Getters
+
 InfiniteInt	InfiniteDouble::getDecimalPart(void) const
 {
 	return (this->_decimal_part);
@@ -622,6 +626,7 @@ bool		InfiniteDouble::getIsNegative(void) const
 
 
 // Setters
+
 void	InfiniteDouble::setDecimalPart(const InfiniteInt &decimal_part)
 {
 	this->_decimal_part = decimal_part;
@@ -644,6 +649,7 @@ void	InfiniteDouble::setIsNegative(bool is_negative)
 
 
 // Methods
+
 InfiniteDouble	InfiniteDouble::sqrt(void) const
 {
 	InfiniteDouble							padding(1);
@@ -688,6 +694,7 @@ void			InfiniteDouble::reduce(void)
 
 
 // Output stream operator overload
+
 std::ostream&	operator<<(std::ostream &os, const InfiniteDouble &num)
 {
 	InfiniteDouble				num_copy(num);
