@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 17:47:13 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/15 13:19:58 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ static void	equation_error(AST *left_ast, AST *right_ast, 	\
 	throw error;
 }
 
-static void	equation(AST *left_ast, AST *right_ast, 	\
-		std::map<std::pair<std::string, std::string>, const IType*> &stored)
+static void	equation(AST *left_ast, AST *right_ast, t_data &data)
 {
 	IType*		left;
 	IType*		right;
@@ -45,7 +44,7 @@ static void	equation(AST *left_ast, AST *right_ast, 	\
 	delete right;
 	polynomial = new Polynomial(*all_left);
 	delete all_left;
-	display_result(polynomial, stored);
+	display_result(polynomial, data);
 	delete polynomial;
 }
 
@@ -74,7 +73,7 @@ void		compute_equation(const std::string &line, t_data &data, 	\
 		equation_error(left_ast, right_ast, UnexpectedError(e.what()));
 	}
 	if (left_ast)
-		equation(left_ast, right_ast, data.stored);
+		equation(left_ast, right_ast, data);
 	delete left_ast;
 	delete right_ast;
 }

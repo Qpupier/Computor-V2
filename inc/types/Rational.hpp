@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 17:48:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/15 13:44:21 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ class	Rational: public IType
 		Rational*		gcd(const Matrix & other) const;
 		InfiniteInt		integer_part(void) const;
 		std::ostream&	print(std::ostream &os) const;
+		std::string		to_string(void) const;
 		bool			in_D(void) const;
 		bool			in_Z(void) const;
 		void			print_rounded(const std::string var = std::string()) const;

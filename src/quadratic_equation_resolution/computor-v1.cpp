@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:03:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/05/29 16:53:36 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/15 13:31:16 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static IType*					get_discriminant(const IType *a, 	\
 
 static void						find_solutions(							\
 		const std::vector<Complex*> &coefficients, std::string var, 	\
-		std::map<std::pair<std::string, std::string>, const IType*> &stored)
+		t_data &data)
 {
 	t_quadratic_solutions	solutions_structure;
 	std::string				set;
@@ -51,7 +51,7 @@ static void						find_solutions(							\
 	delete coefficients[1];
 	delete coefficients[2];
 	delete coefficients[3];
-	print_solutions(solutions_structure, set, var, stored);
+	print_solutions(solutions_structure, set, var, data);
 }
 
 static std::vector<Complex*>	cast_coefficients_in_complex(			\
@@ -102,8 +102,7 @@ void							reduce_sqrt(InfiniteInt *factor, 	\
 }
 
 void							solve_trinomial(	\
-		const Polynomial *polynomial, 				\
-		std::map<std::pair<std::string, std::string>, const IType*> &stored)
+		const Polynomial *polynomial, t_data &data)
 {
 	std::vector<Polynomial::t_term>	terms(polynomial->getTerms());
 	std::vector<IType*>				tmp_coefficients(					\
@@ -115,6 +114,6 @@ void							solve_trinomial(	\
 			tmp_coefficients[1], tmp_coefficients[2]);
 	coefficients = cast_coefficients_in_complex(tmp_coefficients[0], 	\
 			tmp_coefficients[1], tmp_coefficients[2], discriminant);
-	find_solutions(coefficients, polynomial->getName(), stored);
+	find_solutions(coefficients, polynomial->getName(), data);
 	delete discriminant;
 }

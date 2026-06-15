@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:11:12 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 17:47:33 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/15 14:53:20 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,24 +33,24 @@ static void	store_new_variable(								\
 	}
 }
 
-static void	store_function(									\
-		std::map<std::pair<std::string, std::string>, 		\
-			const IType*> &stored, 							\
+static void	store_function(t_data &data, 	\
 		std::pair<std::string, std::string> key, Polynomial *polynomial)
 {
-	stored.erase(key);
+	std::string	result;
+
+	data.stored.erase(key);
 	if (!polynomial->getName().empty() 										\
 			&& to_lower(key.second) != to_lower(polynomial->getName()))
 	{
 		delete polynomial;
-		delete_empty_function_stored(stored, 								\
+		delete_empty_function_stored(data.stored, 								\
 			"Function parameter does not match the variable in the right side \
 				of the equation", true);
 	}
 	key.first.erase(0, 1);
 	try
 	{
-		store_new_variable(stored, key);
+		store_new_variable(data.stored, key);
 	}
 	catch (const LogicError &e)
 	{
@@ -59,9 +59,11 @@ static void	store_function(									\
 	}
 	polynomial->setName("χ");
 	key.second = polynomial->getName();
-	stored[key] = polynomial;
-	std::cout << COLOR_BOLD << key.first << "(" << key.second << ") = " 	\
-			<< *polynomial << COLOR_RESET << std::endl;
+	data.stored[key] = polynomial;
+	result = key.first + "(" + key.second + ") = " + polynomial->to_string();
+	std::cout << COLOR_BOLD << result << COLOR_RESET << std::endl;
+	data.history_results.push_back(std::string(COLOR_GREEN) + result 	\
+			+ std::string(COLOR_RESET));
 }
 
 bool		set_function_left(std::vector<Token> &tokens, 	\
@@ -82,22 +84,19 @@ bool		set_function_left(std::vector<Token> &tokens, 	\
 	return (false);
 }
 
-void		set_function_right(							\
-		std::map<std::pair<std::string, std::string>, 	\
-			const IType*> &stored, 						\
-		AST *ast)
+void		set_function_right(t_data &data, AST* ast)
 {
 	Polynomial*	polynomial;
 
 	if (!ast->end_of_tree())
-		delete_empty_function_stored(stored, 							\
+		delete_empty_function_stored(data.stored, 							\
 				"The right side of the function definition must be a single \
 					expression", true);
 	polynomial = new Polynomial(*ast->getNode());
 	for (std::map<std::pair<std::string, std::string>, const IType*>	\
-			::iterator it(stored.begin()); it != stored.end(); it++)
+			::iterator it(data.stored.begin()); it != data.stored.end(); it++)
 		if (!it->second)
-			return store_function(stored, it->first, polynomial);
+			return store_function(data, it->first, polynomial);
 }
 
 void		delete_empty_function_stored(				\

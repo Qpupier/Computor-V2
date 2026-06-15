@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:43:37 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 17:57:24 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/15 14:09:06 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,19 +46,19 @@ t_quadratic_solutions	get_solutions_structure(const Complex* a, const Complex* b
 Rational				factorize_sqrt(t_quadratic_solutions &solutions, const Complex* delta);
 std::string				get_sqrt_imaginary(const t_quadratic_solutions &solutions);
 std::string				get_sqrt_real(const t_quadratic_solutions &solutions);
+std::string				print_imaginary_part(const t_quadratic_solutions &solutions, const unsigned char index, const bool reduce_sqrt);
+std::string				print_real_part(const t_quadratic_solutions &solutions, const unsigned char index, const bool reduce_sqrt);
 bool					parentheses_needed(const InfiniteInt term1, const InfiniteInt term2, const InfiniteInt term3);
 Rational*				get_module_square(const Complex* complex);
-void					display_result(const Polynomial *polynomial, std::map<std::pair<std::string, std::string>, const IType*> &stored);
-void					print_imaginary_part(const t_quadratic_solutions &solutions, const unsigned char index, const bool reduce_sqrt);
-void					print_real_part(const t_quadratic_solutions &solutions, const unsigned char index, const bool reduce_sqrt);
+void					display_result(const Polynomial *polynomial, t_data &data);
 void					print_rounded_solutions(const t_quadratic_solutions &solutions, const bool reduce_sqrt, const std::string var, const unsigned char nb_solutions);
-void					print_solutions(t_quadratic_solutions& solutions, const std::string set, const std::string var, std::map<std::pair<std::string, std::string>, const IType*> &stored);
+void					print_solutions(t_quadratic_solutions& solutions, const std::string set, const std::string var, t_data &data);
 void					reduce_sqrt(InfiniteInt *factor, InfiniteInt *sqrt);
 void					set_imaginary_terms(const std::vector<const Complex*> coefficients, t_quadratic_solutions &solutions, const std::vector<Rational> sqrt_factors, Rational* denominator);
 void					set_terms(const std::vector<const Complex*> coefficients, t_quadratic_solutions &solutions, const std::vector<Rational> sqrt_factors, Rational* denominator);
 void					simplify_deepest_sqrt(t_quadratic_solutions &solutions);
 void					simplify_factors(t_quadratic_solutions &s);
 void					simplify_factors2(t_quadratic_solutions &solutions);
-void					solve_trinomial(const Polynomial *polynomial, std::map<std::pair<std::string, std::string>, const IType*> &stored);
+void					solve_trinomial(const Polynomial *polynomial, t_data &data);
 
 #endif

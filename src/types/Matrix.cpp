@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 17:49:04 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/15 13:47:04 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -975,6 +975,14 @@ std::ostream&	Matrix::print(std::ostream &os) const
 			os << std::endl;
 	}
 	return (os);
+}
+
+std::string		Matrix::to_string(void) const
+{
+	std::ostringstream	oss;
+
+	this->print(oss);
+	return (oss.str());
 }
 
 bool			Matrix::values_in_D(void) const

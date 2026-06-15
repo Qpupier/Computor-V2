@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 15:48:19 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 18:38:57 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/15 14:42:02 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,21 +73,29 @@ static void	parse_line(std::string &line, t_data &data)
 
 void		compute_line(std::string line, t_data &data)
 {
+	std::string	error;
+
 	if (line.empty())
 		return;
 	if (std::regex_match(line, data.patterns.at(TOKEN_LIST)))
+	{
+		if (history_length > 0)
+			remove_history(history_length - 1);
 		return stored_variables(data.stored);
+	}
 	try
 	{
 		parse_line(line, data);
 	}
 	catch(const std::regex_error& e)
 	{
-		std::cerr << "\033[33mRegex error: " << e.what() << "\033[0m" 	\
-				<< std::endl;
+		error = std::string(COLOR_RED) + "Regex error: " + std::string(e.what()) + COLOR_RESET;
+		std::cerr << error << std::endl;
+		data.history_results.push_back(error);
 	}
 	catch(const std::exception& e)
 	{
 		delete_empty_function_stored(data.stored, e.what());
+		data.history_results.push_back(std::string(COLOR_RED) + e.what() + COLOR_RESET);
 	}
 }

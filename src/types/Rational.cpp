@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 17:49:18 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/15 13:47:48 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -729,6 +729,14 @@ std::ostream&	Rational::print(std::ostream &os) const
 	if (copy.in_Z())
 		return (os << numerator);
 	return (os << numerator << "/" << copy.getDenominator());
+}
+
+std::string		Rational::to_string(void) const
+{
+	std::ostringstream	oss;
+
+	this->print(oss);
+	return (oss.str());
 }
 
 void			Rational::reduce(void)

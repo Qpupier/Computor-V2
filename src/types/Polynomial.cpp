@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 17:49:12 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/15 13:47:34 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1231,6 +1231,14 @@ std::ostream&	Polynomial::print(std::ostream &os) const
 		print_terms(os, this->_dividers, this->_name);
 	}
 	return (os);
+}
+
+std::string		Polynomial::to_string(void) const
+{
+	std::ostringstream	oss;
+
+	this->print(oss);
+	return (oss.str());
 }
 
 void			Polynomial::free(void)

@@ -6,23 +6,21 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 14:12:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 14:16:43 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/15 14:49:45 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
 #include "quadratic.hpp"
 
-static void		trinomial(const Polynomial *polynomial, 	\
-		std::map<std::pair<std::string, std::string>, const IType*>& stored)
+static void	trinomial(const Polynomial *polynomial, t_data &data)
 {
 	std::cout << COLOR_BOLD << *polynomial << " = 0" << COLOR_RESET 	\
 			<< std::endl;
-	solve_trinomial(polynomial, stored);
+	solve_trinomial(polynomial, data);
 }
 
-static void		binomial(const Polynomial *polynomial, 				\
-		std::map<std::pair<std::string, std::string>, const IType*>& stored)
+static void	binomial(const Polynomial *polynomial, t_data &data)
 {
 	std::vector<Polynomial::t_term>	terms(polynomial->getTerms());
 	IType*							tmp;
@@ -31,31 +29,39 @@ static void		binomial(const Polynomial *polynomial, 				\
 	tmp = -(*terms[0].coefficient);
 	result = *tmp / *terms[1].coefficient;
 	delete tmp;
-	assignation(polynomial->getName(), stored, result);
+	data.history_results.push_back(std::string(COLOR_GREEN) 		\
+			+ polynomial->getName() + " = " + result->to_string() 	\
+			+ std::string(COLOR_RESET));
+	assignation(polynomial->getName(), data.stored, result);
 }
 
-static void		monomial(const Polynomial *polynomial)
+static void	monomial(const Polynomial *polynomial, 	\
+		std::vector<std::string> &history_results)
 {
+	std::string	result;
+
 	if (polynomial->getTerms().empty())
-		std::cout << COLOR_BOLD << "True" << COLOR_RESET << std::endl;
+		result = "True";
 	else
-		std::cout << COLOR_BOLD << "False" << COLOR_RESET << std::endl;
+		result = "False";
+	std::cout << COLOR_BOLD << result << COLOR_RESET << std::endl;
+	history_results.push_back(std::string(COLOR_GREEN) + result 	\
+			+ std::string(COLOR_RESET));
 }
 
-void			assignation(std::string var, 							\
-		std::map<std::pair<std::string, std::string>, const IType*>& 	\
-			stored, 													\
+void		assignation(std::string var, 				\
+		std::map<std::pair<std::string, std::string>, 	\
+			const IType*> &stored, 						\
 		IType *result)
 {
-	std::map<std::pair<std::string, std::string>, const IType*>::iterator	it;
-	std::string							\
-			var_lower(to_lower(var));
-	std::pair<std::string, std::string>	\
-			pair(var_lower, std::string());
+	std::string							var_lower(to_lower(var));
+	std::pair<std::string, std::string>	pair(var_lower, std::string());
 
-	std::cout << COLOR_BOLD << var << " = " << *result << COLOR_RESET << std::endl;
+	std::cout << COLOR_BOLD << var << " = " << *result << COLOR_RESET 	\
+			<< std::endl;
 	result->print_rounded(var);
-	for (it = stored.begin(); it != stored.end();)
+	for (std::map<std::pair<std::string, std::string>, const IType*>	\
+			::iterator it(stored.begin()); it != stored.end();)
 	{
 		if (it->first.first == var_lower)
 		{
@@ -68,19 +74,18 @@ void			assignation(std::string var, 							\
 	stored[pair] = result;
 }
 
-void			display_result(const Polynomial *polynomial, 	\
-		std::map<std::pair<std::string, std::string>, const IType*>& stored)
+void		display_result(const Polynomial *polynomial, t_data &data)
 {
 	unsigned long int	degree;
 
 	degree = polynomial->getTerms().size() - 1;
 	if (polynomial->getTerms().empty() || degree == 0)
-		monomial(polynomial);
+		monomial(polynomial, data.history_results);
 	else if (degree == 1)
-		binomial(polynomial, stored);
+		binomial(polynomial, data);
 	else if (degree == 2)
-		trinomial(polynomial, stored);
+		trinomial(polynomial, data);
 	else
-		std::cout << COLOR_BOLD << "The polynomial degree is stricly \
-			greater than 2, I can't solve." << COLOR_RESET << std::endl;
+		throw UnsupportedError("The polynomial degree is stricly greater than \
+				2, I can't solve.");
 }

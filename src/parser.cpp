@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 16:21:24 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/15 13:42:53 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ AST*				compute_expression(const std::string &line, 	\
 		if (is_right_side || !ast->end_of_tree())
 			ast->reduce_expression(data.stored);
 		if (is_right_side && !eval && waiting_function(data.stored))
-			set_function_right(data.stored, ast);
+			set_function_right(data, ast);
 	}
 	catch (...)
 	{

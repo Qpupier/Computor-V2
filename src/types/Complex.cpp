@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 17:49:00 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/15 13:47:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -802,6 +802,14 @@ std::ostream&	Complex::print(std::ostream &os) const
 		print_value(os, this->_imaginary, "i", !this->_real);
 	}
 	return (os);
+}
+
+std::string		Complex::to_string(void) const
+{
+	std::ostringstream	oss;
+
+	this->print(oss);
+	return (oss.str());
 }
 
 void			print_complex_rounded_value(const std::string var, 	\

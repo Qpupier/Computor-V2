@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 17:49:07 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/15 13:46:17 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ bool		Operator::operator<=(const long long int value) const
 	(void)value;
 	return (false);
 }
+
 bool		Operator::operator>(const IType &other) const
 {
 	(void)other;
@@ -253,6 +254,14 @@ Rational*		Operator::gcd(const IType &other) const
 std::ostream&	Operator::print(std::ostream &os) const
 {
 	return (os);
+}
+
+std::string		Operator::to_string(void) const
+{
+	std::ostringstream	oss;
+
+	this->print(oss);
+	return (oss.str());
 }
 
 void			Operator::print_rounded(const std::string var) const

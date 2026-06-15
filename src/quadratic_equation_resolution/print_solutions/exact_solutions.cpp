@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:19:13 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/11 11:44:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/15 15:02:22 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,15 @@ static inline bool	solutions_equal(const t_quadratic_solutions& 	\
 				== solutions.imaginary_denominator[1]);
 }
 
-static void			print_exact_solution(const t_quadratic_solutions& 	\
+static std::string	print_exact_solution(const t_quadratic_solutions& 	\
 		solutions, const unsigned char i, const bool reduce_sqrt)
 {
-	bool	has_real_part;
-	bool	has_imaginary_part;
+	std::string	result;
+	bool		has_real_part;
+	bool		has_imaginary_part;
 
 	if (i)
-		std::cout << ", ";
+		result += ", ";
 	has_real_part = solutions.real_term1[i] 			\
 			|| solutions.real_term2_factor[i] 			\
 			|| solutions.real_term3_factor[i];
@@ -47,32 +48,37 @@ static void			print_exact_solution(const t_quadratic_solutions& 	\
 			|| solutions.imaginary_term2_factor[i] 		\
 			|| solutions.imaginary_term3_factor[i];
 	if (has_real_part || !has_imaginary_part)
-		print_real_part(solutions, i, reduce_sqrt);
+		result += print_real_part(solutions, i, reduce_sqrt);
 	if (has_imaginary_part)
 	{
 		if (has_real_part)
-			std::cout << " + ";
-		print_imaginary_part(solutions, i, reduce_sqrt);
+			result += " + ";
+		result += print_imaginary_part(solutions, i, reduce_sqrt);
 	}
+	return (result);
 }
 
-static void			print_exact_solutions(const t_quadratic_solutions& 	\
+static std::string	print_exact_solutions(const t_quadratic_solutions& 	\
 		solutions, const std::string set, const bool reduce_sqrt, 		\
 		const unsigned char nb_solutions)
 {
+	std::string	result;
+
 	std::cout << COLOR_GREEN;
 	if (nb_solutions == 1)
 		std::cout << "One solution in ";
 	else
 		std::cout << "Two solutions in ";
-	std::cout << set << ":" << std::endl << "S = {";
+	result = "S = {";
 	for (unsigned char i = 0; i < nb_solutions; i++)
 	{
-		print_exact_solution(solutions, i, reduce_sqrt);
+		result += print_exact_solution(solutions, i, reduce_sqrt);
 		if (nb_solutions == 1)
 			break;
 	}
-	std::cout << "} ∈ " << set << COLOR_RESET << std::endl;
+	result += "} ∈ " + set;
+	std::cout << set << ":" << std::endl << result << COLOR_RESET << std::endl;
+	return (result);
 }
 
 bool				parentheses_needed(const InfiniteInt term1, 	\
@@ -99,31 +105,32 @@ bool				parentheses_needed(const InfiniteInt term1, 	\
 	return (count_terms > 1 || (count_terms == 1 && term < 0));
 }
 
-void				print_solutions(t_quadratic_solutions& solutions, 	\
-		const std::string set, const std::string var, 					\
-		std::map<std::pair<std::string, std::string>, const IType*> &stored)
+void				print_solutions(t_quadratic_solutions& s, 	\
+		const std::string set, const std::string var, t_data &data)
 {
+	std::string		result;
 	unsigned char	nb_solutions;
 	bool			reduce_sqrt;
 
-	if (!solutions.sqrt_term1_factor || solutions.sqrt_term1_sqrt <= 1)
+	if (!s.sqrt_term1_factor || s.sqrt_term1_sqrt <= 1)
 	{
-		simplify_deepest_sqrt(solutions);
-		simplify_factors(solutions);
+		simplify_deepest_sqrt(s);
+		simplify_factors(s);
 		reduce_sqrt = true;
 	}
 	else
 	{
-		simplify_factors2(solutions);
+		simplify_factors2(s);
 		reduce_sqrt = false;
 	}
-	nb_solutions = solutions_equal(solutions) ? 1 : 2;
-	print_exact_solutions(solutions, set, reduce_sqrt, nb_solutions);
+	nb_solutions = solutions_equal(s) ? 1 : 2;
+	result = std::string(COLOR_GREEN) 									\
+			+ print_exact_solutions(s, set, reduce_sqrt, nb_solutions) 	\
+			+ std::string(COLOR_RESET);
+	data.history_results.push_back(result);
 	if (nb_solutions == 1)
-		assignation(var, stored, new Complex(			\
-				Rational(solutions.real_term1[0], 		\
-					solutions.real_denominator[0]), 	\
-				Rational(solutions.imaginary_term1[0], 	\
-					solutions.imaginary_denominator[0])));
-	print_rounded_solutions(solutions, reduce_sqrt, var, nb_solutions);
+		assignation(var, data.stored, new Complex(						\
+				Rational(s.real_term1[0], s.real_denominator[0]), 		\
+				Rational(s.imaginary_term1[0], s.imaginary_denominator[0])));
+	print_rounded_solutions(s, reduce_sqrt, var, nb_solutions);
 }
