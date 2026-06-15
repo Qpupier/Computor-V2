@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 11:16:51 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/15 12:13:54 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,32 @@ static void	free_stored(const 	\
 	}
 }
 
+static void	history(std::smatch match)
+{
+	HIST_ENTRY**	hist(history_list());
+	bool			max(false);
+	int				n;
+	int				last;
+
+	if (match.length() > 1 && !match[1].str().empty())
+	{
+		n = std::stoi(match[1].str());
+		max = true;
+	}
+	if (hist)
+	{
+		for (int i = 0; hist[i] != NULL; ++i)
+			last = i;
+		if (!max)
+			n = last + 1;
+		for (int i = std::max(0, last - n + 1); hist[i] != NULL; i++)
+			std::cout << hist[i]->line << '\n';
+	}
+}
+
 static int	loop(t_data &data, bool is_interactive)
 {
+	std::smatch	match;
 	std::string	str_line;
 	char*		line;
 
@@ -41,10 +65,14 @@ static int	loop(t_data &data, bool is_interactive)
 			return (EXIT_SUCCESS);
 		}
 		str_line = std::string(line);
-		if (!str_line.empty())
+		if (std::regex_match(str_line, match, data.patterns.at(TOKEN_HISTORY)))
+			history(match);
+		else if (!str_line.empty())
+		{
 			add_history(line);
+			compute_line(str_line, data);
+		}
 		free(line);
-		compute_line(str_line, data);
 	}
 	return (EXIT_FAILURE);
 }

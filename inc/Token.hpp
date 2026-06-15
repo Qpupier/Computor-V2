@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:10:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 17:34:41 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/15 11:56:26 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 # define TOKEN_NEXT				"^(" TOKEN "|\\?)"
 # define TOKEN_FULL_EXPRESSION	"^(?:" TOKEN "+\\??|" TOKEN_QUESTION ")$"
 # define TOKEN_QUIT				TOKEN_WHITESPACE "quit" TOKEN_WHITESPACE
+# define TOKEN_HISTORY			TOKEN_WHITESPACE "history" TOKEN_WHITESPACE "(\\d*)" TOKEN_WHITESPACE
 
 class	Token
 {
