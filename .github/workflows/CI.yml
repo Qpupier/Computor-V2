@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install Valgrind
-        run: sudo apt-get install -y valgrind
+        run: sudo apt-get install -y valgrind libreadline-dev
       - name: Compilation
         run: make -j
       - name: Unit tests - Format
