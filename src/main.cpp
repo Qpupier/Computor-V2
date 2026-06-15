@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 19:35:52 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/15 11:16:51 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,15 @@ static int	loop(t_data &data, bool is_interactive)
 	while (true)
 	{
 		line = readline(is_interactive ? "> " : "");
-		if (!line || std::regex_match(std::string(line), data.patterns.at(TOKEN_QUIT)))
+		if (!line || std::regex_match(std::string(line), 	\
+				data.patterns.at(TOKEN_QUIT)))
 		{
 			free(line);
 			rl_clear_history();
 			return (EXIT_SUCCESS);
 		}
 		str_line = std::string(line);
-		if (!str_line.empty() && str_line != "\n")
+		if (!str_line.empty())
 			add_history(line);
 		free(line);
 		compute_line(str_line, data);

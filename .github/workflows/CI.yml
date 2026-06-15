@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Valgrind
+      - name: Install Valgrind & Readline
         run: sudo apt-get install -y valgrind libreadline-dev
       - name: Compilation
         run: make -j

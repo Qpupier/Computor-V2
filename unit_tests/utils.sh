@@ -9,6 +9,7 @@ run()
 {
 	echo -n "\033[35;3mTesting:\033[0m \"$1\"\n$2 "
 	echo "$1" | ./computor-v2 > output 2> error
+	sed -i '1d' output
 	truncate -s -1 output error
 	sed -i 's/\x1b\[[0-9;]*m//g' output error
 }
