@@ -1,10 +1,6 @@
-funA(x) = 2*x^5 + 4x^2 - 5*x + 4
 funA(χ) = 2χ^5 + 4χ^2 - 5χ + 4
-funB(y) = 43 * y / (4 % 2 * y)
 Division by zero is impossible
-funC(z) = -2 * z - 5
 funC(χ) = -2χ - 5
-?
 Listing stored variables and functions
   funA(χ) = 2χ^5 + 4χ^2 - 5χ + 4
   funC(χ) = -2χ - 5

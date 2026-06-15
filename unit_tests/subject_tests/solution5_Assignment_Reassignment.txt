@@ -1,12 +1,7 @@
 x = 2
-x = 2
-y = x
 y = 2
 y = 7
-y = 7
-y = 2 * i - 4
 y = 2i - 4
-?
 Listing stored variables and functions
   x = 2
   y = 2i - 4

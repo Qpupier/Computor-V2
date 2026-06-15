@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:10:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 11:56:26 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/15 17:42:23 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,16 @@
 # include <regex>
 # include <iostream>
 
+# define TOKEN_BEGIN			"^"
+# define TOKEN_END				"$"
 # define TOKEN_WHITESPACE		"\\s*"
 # define TOKEN_QUESTION			TOKEN_WHITESPACE "\\?" TOKEN_WHITESPACE
-# define TOKEN_LIST				"^" TOKEN_QUESTION "$"
+# define TOKEN_LIST				TOKEN_BEGIN TOKEN_QUESTION TOKEN_END
 # define TOKEN_EXPRESSION		"[^=\\?]+"
 # define TOKEN_EQUATION			TOKEN_EXPRESSION "(?:=(?:" TOKEN_EXPRESSION ")?(?:" TOKEN_QUESTION ")?)?"
 # define TOKEN_EXPRESSION_EVAL	TOKEN_EXPRESSION "=" TOKEN_QUESTION
 # define TOKEN_EQUATION_EVAL	TOKEN_EXPRESSION "=" TOKEN_EXPRESSION TOKEN_QUESTION
-# define TOKEN_FULL				"^(?:" TOKEN_EXPRESSION "|" TOKEN_EQUATION ")$"
+# define TOKEN_FULL				TOKEN_BEGIN "(?:" TOKEN_EXPRESSION "|" TOKEN_EQUATION ")" TOKEN_END
 # define TOKEN_POLYNOMIAL		"(?:[a-zA-Z]{2,}|[a-hj-zA-HJ-Z])"
 # define TOKEN_NUMBER			"\\d+(?:\\.\\d+)?"
 # define TOKEN_IMAGINARY		"i"
@@ -33,10 +35,10 @@
 # define TOKEN_MATRIX_LINE		TOKEN_WHITESPACE "\\[" TOKEN_MATRIX_ELEMMENT "(?:," TOKEN_MATRIX_ELEMMENT ")*\\]" TOKEN_WHITESPACE
 # define TOKEN_MATRIX			"\\[" TOKEN_MATRIX_LINE "(?:;" TOKEN_MATRIX_LINE ")*\\]"
 # define TOKEN					"(?:" TOKEN_MATRIX "|[\\(\\)]|" TOKEN_NUMBER "|" TOKEN_POLYNOMIAL "|" TOKEN_IMAGINARY "|" TOKEN_OPERATOR "|\\s+)"
-# define TOKEN_NEXT				"^(" TOKEN "|\\?)"
-# define TOKEN_FULL_EXPRESSION	"^(?:" TOKEN "+\\??|" TOKEN_QUESTION ")$"
-# define TOKEN_QUIT				TOKEN_WHITESPACE "quit" TOKEN_WHITESPACE
-# define TOKEN_HISTORY			TOKEN_WHITESPACE "history" TOKEN_WHITESPACE "(\\d*)" TOKEN_WHITESPACE
+# define TOKEN_NEXT				"^(" TOKEN "|\\?)"// [ ] token end??
+# define TOKEN_FULL_EXPRESSION	TOKEN_BEGIN "(?:" TOKEN "+\\??|" TOKEN_QUESTION ")" TOKEN_END
+# define TOKEN_QUIT				TOKEN_BEGIN TOKEN_WHITESPACE "quit" TOKEN_WHITESPACE TOKEN_END
+# define TOKEN_HISTORY			TOKEN_BEGIN TOKEN_WHITESPACE "history" TOKEN_WHITESPACE "(\\d*)" TOKEN_WHITESPACE TOKEN_END
 
 class	Token
 {

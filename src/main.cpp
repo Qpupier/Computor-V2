@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 14:59:46 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/15 18:35:41 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ static void	history(std::smatch match, 	\
 		const std::vector<std::string> &history_results)
 {
 	HIST_ENTRY**		hist(history_list());
-	bool				max(false);
 	unsigned long int	n;
 	unsigned long int	last;
 	unsigned long int	first;
+	bool				max(false);
 
 	if (match.length() > 1 && !match[1].str().empty())
 	{
@@ -47,37 +47,76 @@ static void	history(std::smatch match, 	\
 			n = last + 1;
 		first = last + 1 >= n ? last - n + 1 : 0;
 		for (unsigned long int i(first); hist[i] != NULL; i++)
-			std::cout << hist[i]->line << COLOR_DIM << " => " << COLOR_RESET << COLOR_ITALIC << history_results[i] 	\
+			std::cout << hist[i]->line << COLOR_DIM << " => " 				\
+					<< COLOR_RESET << COLOR_ITALIC << history_results[i] 	\
 					<< std::endl;
 	}
 }
 
-static int	loop(t_data &data, bool is_interactive)
+static unsigned char	read_interactive(std::string &str_line, t_data &data)
 {
 	std::smatch	match;
-	std::string	str_line;
 	char*		line;
+
+	line = readline("> ");
+	if (!line)
+		return (EXIT_SUCCESS);
+	str_line = std::string(line);
+	if (std::regex_match(str_line, data.patterns.at(TOKEN_WHITESPACE)))
+	{
+		free(line);
+		return (CONTINUE);
+	}
+	if (std::regex_match(str_line, data.patterns.at(TOKEN_QUIT)))
+	{
+		free(line);
+		return (EXIT_SUCCESS);
+	}
+	if (std::regex_match(str_line, match, data.patterns.at(TOKEN_HISTORY)))
+	{
+		history(match, data.history_results);
+		return (CONTINUE);
+	}
+	add_history(line);
+	free(line);
+	return (NOTHING);
+}
+
+static unsigned char	read_tty(std::string &str_line, t_data &data)
+{
+	if (!std::getline(std::cin, str_line))
+		return (EXIT_SUCCESS);
+	if (std::regex_match(str_line, data.patterns.at(TOKEN_WHITESPACE)))
+		return (CONTINUE);
+	if (std::regex_match(str_line, data.patterns.at(TOKEN_QUIT)))
+		return (EXIT_SUCCESS);
+	if (std::regex_match(str_line, data.patterns.at(TOKEN_HISTORY)))
+		return (CONTINUE);
+	return (NOTHING);
+}
+
+static int	loop(t_data &data, bool is_interactive)
+{
+	std::string		str_line;
+	unsigned char	status;
 
 	while (true)
 	{
-		line = readline(is_interactive ? "> " : "");
-		if (!line || std::regex_match(std::string(line), 	\
-				data.patterns.at(TOKEN_QUIT)))
+		if (is_interactive)
+			status = read_interactive(str_line, data);
+		else
+			status = read_tty(str_line, data);
+		if (status == CONTINUE)
+			continue;
+		if (status != NOTHING)
 		{
-			free(line);
 			rl_clear_history();
-			return (EXIT_SUCCESS);
+			return (status);
 		}
-		str_line = std::string(line);
-		if (std::regex_match(str_line, match, data.patterns.at(TOKEN_HISTORY)))
-			history(match, data.history_results);
-		else if (!str_line.empty())
-		{
-			add_history(line);
-			compute_line(str_line, data);
-		}
-		free(line);
+		compute_line(str_line, data);
 	}
+	if (is_interactive)
+		rl_clear_history();
 	return (EXIT_FAILURE);
 }
 

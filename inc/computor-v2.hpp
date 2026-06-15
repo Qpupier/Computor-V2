@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 14:01:54 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/15 18:04:04 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@
 # define UNSUPPORTED_DIVISION			UnsupportedError("Division not supported between polynomials with these powers")
 # define UNSUPPORTED_EXPONENT			UnsupportedError("Exponentiation can only be positive integers")
 # define UNSUPPORTED_MULTI_POLYNOMIALS	UnsupportedError("Multiple unknown polynomials are not supported")
+# define CONTINUE						2
+# define NOTHING						3
 
 typedef struct	s_data
 {

@@ -1,15 +1,9 @@
-varA = 2 + 4 *2 - 5 %4 + 2 * (4 + 5)
 varA = 27
-varB = 2 * varA - 5 %4
 varB = 53
-funA(x) = varA + varB * 4 - 1 / 2 + x
 funA(χ) = (2χ + 477) / 2
-varC = 2 * varA - varB
 varC = 1
-varD = funA(varC)
 varD = 479/2
 varD = 239.5
-?
 Listing stored variables and functions
   funA(χ) = (2χ + 477) / 2
   vara = 27

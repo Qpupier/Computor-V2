@@ -1,10 +1,6 @@
-funA(x) = 2*x+1
 funA(χ) = 2χ + 1
-funB(x) = 2 * x+1
 funB(χ) = 2χ + 1
-funA(funB(x)) = ?
 4x + 3
-?
 Listing stored variables and functions
   funA(χ) = 2χ + 1
   funB(χ) = 2χ + 1

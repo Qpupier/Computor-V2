@@ -1,12 +1,7 @@
-funA(b) = 2*b+b
 funA(χ) = 3χ
-funB(a) =2 * a
 funB(χ) = 2χ
-funC(y) =2* y + 4 -2 * 4+1/3
 funC(χ) = (6χ - 11) / 3
-funD(x) = 2 *x
 funD(χ) = 2χ
-?
 Listing stored variables and functions
   funA(χ) = 3χ
   funB(χ) = 2χ
