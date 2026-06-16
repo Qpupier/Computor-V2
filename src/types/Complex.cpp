@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 13:47:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/16 17:51:31 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -722,11 +722,9 @@ void	Complex::setImaginary(const Rational &imaginary)
 
 // Methods
 
-IType*			Complex::matrix_operator(const IType &other) const
+IType*			Complex::clone(void) const
 {
-	throw ERROR_MATRIX_OPERATOR;
-	(void)other;
-	return (nullptr);
+	return (new Complex(*this));
 }
 
 IType*			Complex::function_operator(const IType &other) const
@@ -736,9 +734,17 @@ IType*			Complex::function_operator(const IType &other) const
 	return (nullptr);
 }
 
-IType*			Complex::clone(void) const
+IType*			Complex::matrix_operator(const IType &other) const
 {
-	return (new Complex(*this));
+	throw ERROR_MATRIX_OPERATOR;
+	(void)other;
+	return (nullptr);
+}
+
+IType*			Complex::matrix_inversion(void) const
+{
+	throw ERROR_MATRIX_INVERSION;
+	return (nullptr);
 }
 
 Rational*		Complex::gcd(const Rational &other) const

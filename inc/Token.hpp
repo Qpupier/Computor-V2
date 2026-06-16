@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:10:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 17:42:23 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/16 16:20:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@
 # define TOKEN_POLYNOMIAL		"(?:[a-zA-Z]{2,}|[a-hj-zA-HJ-Z])"
 # define TOKEN_NUMBER			"\\d+(?:\\.\\d+)?"
 # define TOKEN_IMAGINARY		"i"
-# define TOKEN_OPERATOR			"(?:\\*\\*|[\\+\\-\\*\\/\\^%])"
+# define TOKEN_OPERATOR_INVERSE	"~"
+# define TOKEN_OPERATOR			"(?:\\*\\*|[\\+\\-\\*\\/\\^%]|" TOKEN_OPERATOR_INVERSE ")"
 # define TOKEN_RATIONAL			"[\\(\\)]|" TOKEN_NUMBER "|" TOKEN_POLYNOMIAL "|" TOKEN_OPERATOR
 # define TOKEN_MATRIX_ELEMMENT	"(?:" TOKEN_WHITESPACE "(?:" TOKEN_RATIONAL "))+" TOKEN_WHITESPACE
 # define TOKEN_MATRIX_LINE		TOKEN_WHITESPACE "\\[" TOKEN_MATRIX_ELEMMENT "(?:," TOKEN_MATRIX_ELEMMENT ")*\\]" TOKEN_WHITESPACE
@@ -52,6 +53,7 @@ class	Token
 			E_IMAGINARY,
 			E_POLYNOMIAL,
 			E_FUNCTION,
+			E_OPERATOR_INVERSE,
 			E_OPERATOR,
 			E_MATRIX,
 			E_WHITESPACE,

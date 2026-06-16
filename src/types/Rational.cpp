@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 13:47:48 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/16 18:00:38 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -640,12 +640,9 @@ InfiniteDouble	Rational::getValue(void) const
 
 // Methods
 
-IType*			Rational::matrix_operator(const IType &other) const
+IType*			Rational::clone(void) const
 {
-	throw ERROR_MATRIX_OPERATOR;
-	(void)other;
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
+	return (new Rational(*this));
 }
 
 IType*			Rational::function_operator(const IType &other) const
@@ -655,9 +652,18 @@ IType*			Rational::function_operator(const IType &other) const
 	return (nullptr);
 }
 
-IType*			Rational::clone(void) const
+IType*			Rational::matrix_operator(const IType &other) const
 {
-	return (new Rational(*this));
+	throw ERROR_MATRIX_OPERATOR;
+	(void)other;
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Rational::matrix_inversion(void) const
+{
+	throw ERROR_MATRIX_INVERSION;
+	return (nullptr);
 }
 
 Rational*		Rational::gcd(const Rational &other) const

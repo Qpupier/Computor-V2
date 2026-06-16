@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 13:47:34 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/16 17:58:57 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1176,20 +1176,9 @@ void	Polynomial::setName(const std::string& name)
 
 // Methods
 
-IType*			Polynomial::matrix_operator(const IType &other) const
+IType*			Polynomial::clone(void) const
 {
-	try
-	{
-		Matrix	matrix(*this);
-		Matrix	other_matrix(other);
-
-		return (matrix.matrix_operator(other_matrix));
-	}
-	catch (const LogicError &e)
-	{
-		throw ERROR_MATRIX_OPERATOR;
-	}
-	return (nullptr);
+	return (new Polynomial(*this));
 }
 
 IType*			Polynomial::function_operator(const IType &other) const
@@ -1206,16 +1195,42 @@ IType*			Polynomial::function_operator(const IType &other) const
 	return (result);
 }
 
+IType*			Polynomial::matrix_operator(const IType &other) const
+{
+	try
+	{
+		Matrix	matrix(*this);
+		Matrix	other_matrix(other);
+
+		return (matrix.matrix_operator(other_matrix));
+	}
+	catch (const LogicError &e)
+	{
+		throw ERROR_MATRIX_OPERATOR;
+	}
+	return (nullptr);
+}
+
+IType*			Polynomial::matrix_inversion(void) const
+{
+	try
+	{
+		Matrix	matrix(*this);
+
+		return (matrix.matrix_inversion());
+	}
+	catch (const LogicError &e)
+	{
+		throw ERROR_MATRIX_INVERSION;
+	}
+	return (nullptr);
+}
+
 Rational*		Polynomial::gcd(const IType &other) const
 {
 	throw ERROR_UNEXPECTED;
 	(void)other;
 	return (nullptr);
-}
-
-IType*			Polynomial::clone(void) const
-{
-	return (new Polynomial(*this));
 }
 
 std::ostream&	Polynomial::print(std::ostream &os) const

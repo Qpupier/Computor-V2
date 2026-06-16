@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 14:55:07 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 13:44:08 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/16 17:54:58 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ class	Operator: public IType
 			E_MATRIX,
 			E_POWER,
 			E_FUNCTION,
+			E_INVERSE,
 			E_UNKNOWN
 		}				t_operator;
 
@@ -72,9 +73,10 @@ class	Operator: public IType
 		t_operator	getOperator(void) const;
 
 		// Methods
-		IType*			matrix_operator(const IType &other) const;
-		IType*			function_operator(const IType &other) const;
 		IType*			clone(void) const;
+		IType*			function_operator(const IType &other) const;
+		IType*			matrix_operator(const IType &other) const;
+		IType*			matrix_inversion(void) const;
 		Rational*		gcd(const IType &other) const;
 		std::ostream&	print(std::ostream &os) const;
 		std::string		to_string(void) const;
@@ -84,5 +86,8 @@ class	Operator: public IType
 		// Members
 		t_operator	_op;
 };
+
+// Output stream operator overload
+std::ostream &operator<<(std::ostream &os, const Operator &op);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 14:02:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 14:06:49 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/16 17:43:18 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,9 @@ static long int				select_less_priority_operator(	\
 	if (pos != -1)
 		return (pos);
 	pos = select_operator(tokens, size, {"^"});
+	if (pos != -1)
+		return (pos);
+	pos = select_operator(tokens, size, {TOKEN_OPERATOR_INVERSE});
 	if (pos != -1)
 		return (pos);
 	pos = select_operator(tokens, size, {"<>"});
@@ -109,15 +112,18 @@ static std::vector<Token>*	insert_token(std::vector<Token>* tokens, 	\
 std::vector<Token>*			adapt_tokens(std::vector<Token> &tokens, 	\
 		std::vector<Token> &sub_tokens, long int *pos)
 {
-	if (tokens[0].getType() == Token::E_LEFT_PARENTHESIS 	\
-			&& tokens[tokens.size() - 1].getType() 			\
-				== Token::E_RIGHT_PARENTHESIS 				\
+	if (tokens[0].getType() == Token::E_LEFT_PARENTHESIS 				\
+			&& tokens[tokens.size() - 1].getType() 						\
+				== Token::E_RIGHT_PARENTHESIS 							\
 			&& can_remove_external_parenthesis(sub_tokens))
 		return (&sub_tokens);
 	*pos = select_less_priority_operator(tokens);
 	if (*pos < 0)
 		return (nullptr);
-	if (!*pos || static_cast<unsigned long int>(*pos) == tokens.size() - 1)
+	if ((!*pos || static_cast<unsigned long int>(*pos) 					\
+				== tokens.size() - 1) 									\
+			&& tokens[static_cast<unsigned long int>(*pos)].getType() 	\
+				!= Token::E_OPERATOR_INVERSE)
 		return (insert_token(&tokens, pos));
 	return (nullptr);
 }

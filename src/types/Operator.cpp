@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 13:46:17 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/16 17:55:23 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ Operator::Operator(std::string op)
 		_op = E_UNKNOWN;
 	else if (op == "<>")
 		_op = E_FUNCTION;
+	else if (op == TOKEN_OPERATOR_INVERSE)
+		_op = E_INVERSE;
 	else
 		throw UnexpectedError("Invalid operator: " + op);
 }
@@ -218,6 +220,7 @@ IType*		Operator::operator^(const long long int value) const
 
 
 // Getters
+
 Operator::t_operator	Operator::getOperator(void) const
 {
 	return (this->_op);
@@ -225,11 +228,10 @@ Operator::t_operator	Operator::getOperator(void) const
 
 
 // Methods
-IType*			Operator::matrix_operator(const IType &other) const
+
+IType*			Operator::clone(void) const
 {
-	throw ERROR_UNEXPECTED;
-	(void)other;
-	return (nullptr);
+	return (new Operator(*this));
 }
 
 IType*			Operator::function_operator(const IType &other) const
@@ -239,9 +241,17 @@ IType*			Operator::function_operator(const IType &other) const
 	return (nullptr);
 }
 
-IType*			Operator::clone(void) const
+IType*			Operator::matrix_operator(const IType &other) const
 {
-	return (new Operator(*this));
+	throw ERROR_UNEXPECTED;
+	(void)other;
+	return (nullptr);
+}
+
+IType*			Operator::matrix_inversion(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
 }
 
 Rational*		Operator::gcd(const IType &other) const
@@ -253,6 +263,29 @@ Rational*		Operator::gcd(const IType &other) const
 
 std::ostream&	Operator::print(std::ostream &os) const
 {
+	switch (this->_op)
+	{
+		case E_ADD:
+			return (os << "+");
+		case E_SUBTRACT:
+			return (os << "-");
+		case E_MULTIPLY:
+			return (os << "*");
+		case E_DIVIDE:
+			return (os << "/");
+		case E_MODULO:
+			return (os << "%");
+		case E_MATRIX:
+			return (os << "**");
+		case E_POWER:
+			return (os << "^");
+		case E_FUNCTION:
+			return (os << "<>");
+		case E_INVERSE:
+			return (os << TOKEN_OPERATOR_INVERSE);
+		default:
+			break;
+	}
 	return (os);
 }
 
@@ -268,4 +301,12 @@ void			Operator::print_rounded(const std::string var) const
 {
 	throw ERROR_UNEXPECTED;
 	(void)var;
+}
+
+
+// Output stream operator overload
+
+std::ostream &operator<<(std::ostream &os, const Operator &op)
+{
+	return (op.print(os));
 }

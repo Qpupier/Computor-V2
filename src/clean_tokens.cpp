@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:17:56 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 16:21:47 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/16 16:17:45 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static bool	bad_sign_placement(const std::vector<Token> &tokens, size_t i)
 	if ((i == 1 || tokens[i - 2].getType() == Token::E_LEFT_PARENTHESIS) 	\
 			&& prev_is_sign && current_is_whitespace)
 		return (true);
-	return (i > 1 																\
+	return (i > 1 															\
 			&& (i == 2 														\
 				|| tokens[i - 3].getType() == Token::E_LEFT_PARENTHESIS) 	\
 			&& tokens[i - 2].getType() == Token::E_WHITESPACE 				\
@@ -78,6 +78,8 @@ static void	whitespaces_format_error(const std::vector<Token> &tokens)
 					&& next_type != Token::E_RIGHT_PARENTHESIS 	\
 					&& next_type != Token::E_QUESTION)
 				throw LogicError("No space allowed without operator");
+			if (prev_type == Token::E_OPERATOR_INVERSE)
+				throw LogicError("No space allowed after inversed operator");
 		}
 		if (bad_sign_placement(tokens, i))
 			throw LogicError("Invalid placement for sign operator");

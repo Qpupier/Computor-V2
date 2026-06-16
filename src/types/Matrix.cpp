@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 13:47:04 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/16 17:53:57 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -849,6 +849,18 @@ void	Matrix::setValue(unsigned long long int i, 	\
 
 // Methods
 
+IType*			Matrix::clone(void) const
+{
+	return (new Matrix(*this));
+}
+
+IType*			Matrix::function_operator(const IType &other) const
+{
+	throw ERROR_UNEXPECTED;
+	(void)other;
+	return (nullptr);
+}
+
 Matrix*			Matrix::matrix_operator(const Matrix &other) const
 {
 	Matrix*		result;
@@ -891,16 +903,10 @@ IType*			Matrix::matrix_operator(const IType &other) const
 	return (this->matrix_operator(other_matrix));
 }
 
-IType*			Matrix::function_operator(const IType &other) const
+IType*			Matrix::matrix_inversion(void) const
 {
-	throw ERROR_UNEXPECTED;
-	(void)other;
+	throw ERROR_MATRIX_INVERSION;
 	return (nullptr);
-}
-
-IType*			Matrix::clone(void) const
-{
-	return (new Matrix(*this));
 }
 
 Rational*		Matrix::gcd(const Rational &other) const

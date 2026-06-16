@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 13:44:21 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/16 17:50:31 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,10 @@ class	Rational: public IType
 		InfiniteDouble	getValue(void) const;
 
 		// Methods
-		IType*			matrix_operator(const IType & other) const;
-		IType*			function_operator(const IType & other) const;
 		IType*			clone(void) const;
+		IType*			function_operator(const IType &other) const;
+		IType*			matrix_operator(const IType &other) const;
+		IType*			matrix_inversion(void) const;
 		Rational*		gcd(const IType & other) const;
 		Rational*		gcd(const Rational & other) const;
 		Rational*		gcd(const Complex & other) const;

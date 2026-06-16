@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 16:48:49 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 14:06:37 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/16 17:43:54 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static AST*	build_ast_recur(std::vector<Token> &tokens, long int& pos, 	\
 	if (pos == -1)
 	{
 		if (tokens.size() != 2)
-			throw LogicError("Invalid expression format: operator expected");
+			throw ERROR_OPERATOR_EXPECTED;
 		must_return = true;
 		return (new AST(Token(tokens[0].getValue() + tokens[1].getValue(), 	\
 				Token::E_FUNCTION), data));
@@ -44,12 +44,11 @@ static AST*	build_node(std::vector<Token>& left_tokens, 	\
 
 	left_child = build_ast(left_tokens, data);
 	right_child = build_ast(right_tokens, data);
-	if (!left_child || !right_child)
+	if ((token.getType() != Token::E_OPERATOR_INVERSE && !left_child) 	\
+			|| !right_child)
 	{
-		if (left_child)
-			delete left_child;
-		if (right_child)
-			delete right_child;
+		delete left_child;
+		delete right_child;
 		throw LogicError("Invalid expression: empty parenthesis");
 	}
 	return (new AST(token, left_child, right_child, data));

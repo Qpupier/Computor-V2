@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 13:30:52 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/16 17:59:34 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ static IType*	get_result(IType *left_entity, IType *right_entity, 	\
 			return (*left_entity ^ *right_entity);
 		case Operator::E_FUNCTION:
 			return (find_function(left_entity, stored)->function_operator(*right_entity));
+		case Operator::E_INVERSE:
+			return (right_entity->matrix_inversion());
 		case Operator::E_UNKNOWN:
 			return (matrix_operator(left_entity, right_entity));
 		default:
@@ -85,6 +87,9 @@ AST::AST(const Token &token, t_data &data): _left(nullptr), _right(nullptr)
 {
 	switch (token.getType())
 	{
+		case Token::E_OPERATOR_INVERSE:
+			_node = new Operator(token);
+			break;
 		case Token::E_OPERATOR:
 			_node = new Operator(token);
 			break;
@@ -179,13 +184,11 @@ std::ostream&	AST::print(std::ostream &os) const
 
 bool			AST::end_of_tree(void) const
 {
-	if (!this->_left || !this->_right)
-	{
-		if (this->_left || this->_right)
-			throw ERROR_OPERATOR_EXPECTED;
-		return (true);
-	}
-	return (false);
+	if ((this->_node->to_string() != TOKEN_OPERATOR_INVERSE 	\
+				&& !this->_left && this->_right) 				\
+			|| (this->_left && !this->_right))
+		throw ERROR_OPERATOR_EXPECTED;
+	return (!this->_right);
 }
 
 void			AST::free(void)
@@ -209,15 +212,16 @@ void			AST::reduce_expression(	\
 
 	if (this->end_of_tree())
 		return this->replace_variables(stored);
-	this->_left->reduce_expression(stored);
+	if (this->_left)
+		this->_left->reduce_expression(stored);
 	this->_right->reduce_expression(stored);
 	if (this->end_of_tree())
 		return;
 	op = dynamic_cast<Operator*>(this->_node);
 	if (!op)
 		throw ERROR_OPERATOR_EXPECTED;
-	result = get_result(this->_left->_node, this->_right->_node, 	\
-			op->getOperator(), stored);
+	result = get_result(this->_left ? this->_left->_node : nullptr, 	\
+			this->_right->_node, op->getOperator(), stored);
 	this->free();
 	this->_node = result;
 	this->_left = nullptr;

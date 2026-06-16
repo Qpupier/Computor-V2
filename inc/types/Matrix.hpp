@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 13:44:03 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/16 17:49:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,10 +97,11 @@ class	Matrix: public IType
 				unsigned long long int j, Rational *value);
 
 		// Methods
+		IType*			clone(void) const;
+		IType*			function_operator(const IType &other) const;
 		IType*			matrix_operator(const IType &other) const;
 		Matrix*			matrix_operator(const Matrix &other) const;
-		IType*			function_operator(const IType &other) const;
-		IType*			clone(void) const;
+		IType*			matrix_inversion(void) const;
 		Rational*		gcd(const IType &ther) const;
 		Rational*		gcd(const Matrix &other) const;
 		Rational*		gcd(const Rational &other) const;

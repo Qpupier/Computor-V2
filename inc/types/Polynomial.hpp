@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 13:44:15 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/16 17:50:25 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,10 @@ class	Polynomial: public IType
 		void				setName(const std::string& name);
 
 		// Methods
-		IType*			matrix_operator(const IType &other) const;
-		IType*			function_operator(const IType &other) const;
 		IType*			clone(void) const;
+		IType*			function_operator(const IType &other) const;
+		IType*			matrix_operator(const IType &other) const;
+		IType*			matrix_inversion(void) const;
 		Rational*		gcd(const IType &other) const;
 		std::ostream&	print(std::ostream &os) const;
 		std::string		to_string(void) const;

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 13:42:53 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/16 16:38:35 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ static void			set_missing_operators(std::vector<Token> &tokens)
 		if (prev_token != Token::E_OPERATOR 								\
 				&& current_token != Token::E_OPERATOR 						\
 				&& prev_token != Token::E_LEFT_PARENTHESIS 					\
-				&& current_token != Token::E_RIGHT_PARENTHESIS)
+				&& current_token != Token::E_RIGHT_PARENTHESIS				\
+				&& prev_token != Token::E_OPERATOR_INVERSE)
 		{
 			if (prev_token == Token::E_POLYNOMIAL 							\
 					&& current_token == Token::E_LEFT_PARENTHESIS)
@@ -88,7 +89,7 @@ AST*				compute_expression(const std::string &line, 	\
 		t_data &data, bool is_right_side, const bool eval)
 {
 	std::vector<Token>	tokens;
-	AST					*ast;
+	AST*				ast;
 
 	if (!std::regex_match(line, data.patterns.at(TOKEN_FULL_EXPRESSION)))
 		throw ERROR_INVALID_EXPRESSION;
