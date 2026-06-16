@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/06/12 19:15:45 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/06/16 14:33:07 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,7 @@ LST_SRC		=	quadratic_equation_resolution/print_solutions/exact_solutions.cpp				
 				equation.cpp																		\
 				equation_resolution.cpp																\
 				errors.cpp																			\
+				loop.cpp																			\
 				parser.cpp																			\
 				store.cpp																			\
 				utils.cpp

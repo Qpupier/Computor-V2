@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 18:04:04 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/16 14:35:10 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include <cmath>
 # include <utility>
 # include <unistd.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 # include "IType.hpp"
 # include "Token.hpp"
@@ -58,8 +60,10 @@ typedef struct	s_data
 }				t_data;
 
 std::string	to_lower(std::string s);
+int			loop(t_data &data, bool is_interactive);
 int			usage(void);
 void		assignation(std::string var, std::map<std::pair<std::string, std::string>, const IType*> &stored, IType* result);
+void		compute_line(std::string line, t_data &data);
 void		define_patterns(std::map<std::string, std::regex> &patterns);
 
 #endif

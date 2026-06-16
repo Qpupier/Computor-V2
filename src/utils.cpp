@@ -6,11 +6,11 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 20:00:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 17:21:26 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/16 14:36:52 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "computor-v2.hpp"
+#include "AST.hpp"
 
 int			usage(void)
 {
@@ -37,4 +37,26 @@ std::string	to_lower(std::string s)
 	std::transform(s.begin(), s.end(), s.begin(), 	\
 			[](unsigned char c){return (static_cast<char>(std::tolower(c)));});
 	return (s);
+}
+
+void		print_expression(const std::string &line, t_data &data)
+{
+	std::string	result;
+	AST*		ast;
+
+	ast = compute_expression(line, data, true);
+	if (!ast)
+		throw UnexpectedError											\
+				("Unexpected error while computing the expression");
+	if (!ast->end_of_tree())
+	{
+		delete ast;
+		throw UnexpectedError("Unexpected error: the AST is not an expression");
+	}
+	result = ast->getNode()->to_string();
+	std::cout << COLOR_BOLD << result << COLOR_RESET << std::endl;
+	data.history_results.push_back(std::string(COLOR_GREEN) + result 	\
+			+ std::string(COLOR_RESET));
+	ast->getNode()->print_rounded();
+	delete ast;
 }

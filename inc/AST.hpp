@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:01:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 13:41:26 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/16 14:34:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 # define AST_HPP
 
 # include <stdio.h>
-# include <readline/readline.h>
-# include <readline/history.h>
 # include "computor-v2.hpp"
 
 class	AST
@@ -65,7 +63,6 @@ AST*	build_ast(std::vector<Token> &tokens, t_data &data);
 AST*	compute_expression(const std::string &line, t_data &data, bool is_right_side, const bool eval = true);
 void	clean_tokens(std::vector<Token> &tokens, const std::string line, const t_data &data);
 void	compute_equation(const std::string &line, t_data &data, const bool eval);
-void	compute_line(std::string line, t_data &data);
 void	delete_empty_function_stored(std::map<std::pair<std::string, std::string>, const IType*> &stored, const std::string error_msg, const bool throw_error = false);
 void	print_expression(const std::string &line, t_data &data);
 void	set_function_right(t_data &data, AST* ast);
