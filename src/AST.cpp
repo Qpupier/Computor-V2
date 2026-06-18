@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/16 17:59:34 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/18 18:56:16 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,9 @@ AST::AST(const Token &token, t_data &data): _left(nullptr), _right(nullptr)
 			break;
 		case Token::E_MATRIX:
 			_node = new Matrix(token, data);
+			break;
+		case Token::E_VECTOR:
+			_node = new Vector(token, data);
 			break;
 		case Token::E_POLYNOMIAL:
 			_node = new Polynomial(token);

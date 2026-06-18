@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/16 16:38:35 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/18 18:56:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,12 @@ static std::string	new_operator(Token::t_token prev_token, 	\
 		return ("**");
 	if ((prev_token == Token::E_RIGHT_PARENTHESIS 			\
 				|| prev_token == Token::E_POLYNOMIAL 		\
-				|| prev_token == Token::E_MATRIX) 			\
+				|| prev_token == Token::E_MATRIX 			\
+				|| prev_token == Token::E_VECTOR) 			\
 			&& (current_token == Token::E_LEFT_PARENTHESIS 	\
 				|| current_token == Token::E_POLYNOMIAL 	\
-				|| current_token == Token::E_MATRIX))
+				|| current_token == Token::E_MATRIX 		\
+				|| current_token == Token::E_VECTOR))
 		return ("***");
 	return ("*");
 }

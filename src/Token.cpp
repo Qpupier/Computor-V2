@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:15:11 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/16 17:45:35 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/18 18:16:02 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,15 @@ void			define_token_types(std::map<const Token::t_token, 	\
 	tokens_types[Token::E_IMAGINARY] 			\
 			= std::regex(TOKEN_BEGIN TOKEN_IMAGINARY TOKEN_END);
 	tokens_types[Token::E_POLYNOMIAL] 			\
-			= std::regex(TOKEN_BEGIN TOKEN_POLYNOMIAL TOKEN_END);
+			= std::regex(TOKEN_BEGIN TOKEN_VARIABLE TOKEN_END);
 	tokens_types[Token::E_OPERATOR_INVERSE] 	\
 			= std::regex(TOKEN_BEGIN TOKEN_OPERATOR_INVERSE TOKEN_END);
 	tokens_types[Token::E_OPERATOR] 			\
 			= std::regex(TOKEN_BEGIN TOKEN_OPERATOR TOKEN_END);
 	tokens_types[Token::E_MATRIX] 				\
 			= std::regex(TOKEN_BEGIN TOKEN_MATRIX TOKEN_END);
+	tokens_types[Token::E_VECTOR] 				\
+			= std::regex(TOKEN_BEGIN TOKEN_VECTOR TOKEN_END);
 	tokens_types[Token::E_WHITESPACE] 			\
 			= std::regex(TOKEN_BEGIN TOKEN_WHITESPACE TOKEN_END);
 	tokens_types[Token::E_QUESTION] 			\
