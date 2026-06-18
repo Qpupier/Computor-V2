@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/16 17:53:57 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/18 12:13:49 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 // Utils
 
-static std::vector<std::string>					parse_line(				\
+static std::vector<std::string>					parse_line(					\
 		std::string &line, unsigned long long int * width)
 {
 	std::vector<std::string>	row;
@@ -43,7 +43,7 @@ static std::vector<std::string>					parse_line(				\
 	return (row);
 }
 
-static std::vector<std::vector<std::string>>	parse_matrix(			\
+static std::vector<std::vector<std::string>>	parse_matrix(				\
 		std::string &matrix, unsigned long long int * width)
 {
 	std::vector<std::vector<std::string>>	rows;
@@ -69,7 +69,7 @@ static std::vector<std::vector<std::string>>	parse_matrix(			\
 	return (rows);
 }
 
-static Matrix									from_polynomial(		\
+static Matrix									from_polynomial(			\
 		const Polynomial *polynomial)
 {
 	if (polynomial->getDividers().size() != 1 					\
@@ -81,7 +81,7 @@ static Matrix									from_polynomial(		\
 	return (Matrix(*polynomial->getTerms()[0].coefficient));
 }
 
-static Rational*								value_to_rational(		\
+static Rational*								value_to_rational(			\
 		std::string value, t_data &data, Matrix *matrix)
 {
 	AST*		cell;
@@ -111,7 +111,7 @@ static Rational*								value_to_rational(		\
 	return (rational);
 }
 
-static void										print_rounded_matrix(	\
+static void										print_rounded_matrix(		\
 		const Matrix *matrix)
 {
 	unsigned long	width;
@@ -131,6 +131,78 @@ static void										print_rounded_matrix(	\
 		std::cout << " ]";
 		if (j < height - 1)
 			std::cout << std::endl;
+	}
+}
+
+unsigned long long int							line_pivot(					\
+		const Matrix& matrix, unsigned long long int pivot)
+{
+	for (unsigned long long int i(pivot); i < matrix.getHeight(); i++)
+		if (matrix.getValue(pivot, i))
+			return (i);
+	throw ERROR_MATRIX_INVERSION_PIVOT;
+	return (pivot);
+}
+
+static void										elimination(				\
+		Matrix& matrix, unsigned long long int pivot, unsigned long long int j)
+{
+	Rational	coeff(matrix.getValue(pivot, j));
+	Rational*	tmp;
+	Rational*	tmp2;
+
+	if (coeff)
+		for (unsigned long long int i(0); i < matrix.getWidth(); i++)
+		{
+			tmp = coeff * matrix.getValue(i, pivot);
+			tmp2 = matrix.getValue(i, j) - *tmp;
+			matrix.setValue(i, j, *tmp2);
+			delete tmp;
+			delete tmp2;
+		}
+}
+
+static void										gauss_elimination(			\
+		Matrix& matrix, unsigned long long int pivot)
+{
+	for (unsigned long long int j(pivot + 1); j < matrix.getHeight(); j++)
+		elimination(matrix, pivot, j);
+}
+
+static void										jordan_elimination(			\
+		Matrix& matrix, unsigned long long int pivot)
+{
+	for (unsigned long long int j(0); j < pivot; j++)
+		elimination(matrix, pivot, j);
+}
+
+static void										normalize_pivot(			\
+		Matrix& matrix, unsigned long long int pivot)
+{
+	Rational	coeff(matrix.getValue(pivot, pivot));
+	Rational*	tmp;
+
+	if (coeff != 1 && coeff)
+		for (unsigned long long int i = 0; i < matrix.getWidth(); i++)
+		{
+			tmp = matrix.getValue(i, pivot) / coeff;
+			matrix.setValue(i, pivot, *tmp);
+			delete tmp;
+		}
+}
+
+static void										gauss_jordan_elimination(	\
+		Matrix& matrix)
+{
+	for (unsigned long long int pivot(0); pivot < matrix.getHeight(); pivot++)
+	{
+		unsigned long long int pivot_line(line_pivot(matrix, pivot));
+
+		if (pivot_line != pivot)
+			matrix.swap_lines(pivot, pivot_line);
+		normalize_pivot(matrix, pivot);
+		gauss_elimination(matrix, pivot);
+		jordan_elimination(matrix, pivot);
 	}
 }
 
@@ -838,12 +910,12 @@ unsigned long long int	Matrix::getHeight(void) const
 
 
 // Setters
-void	Matrix::setValue(unsigned long long int i, 	\
-		unsigned long long int j, Rational *value)
+void	Matrix::setValue(unsigned long long int x, 	\
+		unsigned long long int y, Rational value)
 {
-	if (i >= this->_height || j >= this->_width)
+	if (x >= this->_width || y >= this->_height)
 		throw ERROR_MATRIX_OUT_OF_RANGE;
-	this->_matrix[i][j] = value;
+	this->_matrix[y][x] = value;
 }
 
 
@@ -905,8 +977,24 @@ IType*			Matrix::matrix_operator(const IType &other) const
 
 IType*			Matrix::matrix_inversion(void) const
 {
-	throw ERROR_MATRIX_INVERSION;
-	return (nullptr);
+	Matrix	matrix(this->_width * 2, this->_height);
+	Matrix*	result;
+
+	if (this->_width != this->_height)
+		throw ERROR_MATRIX_INVERSION_SQUARE;
+	for (unsigned long long int j(0); j < this->_height; j++)
+	{
+		for (unsigned long long int i(0); i < this->_width; i++)
+			matrix.setValue(i, j, this->_matrix[j][i]);
+		for (unsigned long long int i(0); i < this->_width; i++)
+			matrix.setValue(this->_width + i, j, Rational(i == j));
+	}
+	gauss_jordan_elimination(matrix);
+	result = new Matrix(this->_width, this->_height);
+	for (unsigned long long int j(0); j < this->_height; j++)
+		for (unsigned long long int i(0); i < this->_width; i++)
+			result->setValue(i, j, matrix.getValue(this->_width + i, j));
+	return (result);
 }
 
 Rational*		Matrix::gcd(const Rational &other) const
@@ -1041,6 +1129,18 @@ void			Matrix::print_rounded(const std::string var) const
 	}
 	print_rounded_matrix(this);
 	std::cout << COLOR_RESET << std::endl;
+}
+
+void			Matrix::swap_lines(unsigned long long int line1, 	\
+		unsigned long long int line2)
+{
+	Rational*	tmp;
+
+	if (line1 >= this->_height || line2 >= this->_height)
+		throw ERROR_MATRIX_OUT_OF_RANGE;
+	tmp = this->_matrix[line1];
+	this->_matrix[line1] = this->_matrix[line2];
+	this->_matrix[line2] = tmp;
 }
 
 

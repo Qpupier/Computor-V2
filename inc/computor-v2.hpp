@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/16 17:51:57 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/18 12:11:46 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,18 @@
 # define COLOR_BLUE						"\033[34m"
 # define COLOR_PINK						"\033[35m"
 # define COLOR_CYAN						"\033[36m"
-# define ERROR_INVALID_EXPRESSION		LogicError("Invalid expression format")
-# define ERROR_EXPONENT_INTEGER			LogicError("Only integers (ℤ) can be used as exponents")
 # define ERROR_DIVISION_BY_ZERO			LogicError("Division by zero is impossible")
+# define ERROR_EXPONENT_INTEGER			LogicError("Only integers (ℤ) can be used as exponents")
+# define ERROR_INCOMPATIBLE_TYPES		LogicError("Incompatible types for operation")
+# define ERROR_INVALID_EXPRESSION		LogicError("Invalid expression format")
+# define ERROR_MATRIX_DIMENSIONS		LogicError("Matrix operation: incompatible dimensions")
+# define ERROR_MATRIX_INVERSION_PIVOT	LogicError("Impossible matrix inversion (pivot is missing)")
+# define ERROR_MATRIX_INVERSION_SQUARE	LogicError("Matrix inversion is only possible for square matrices")
 # define ERROR_MATRIX_OPERATOR			LogicError("Matrix operator (**) can only be applied to matrices")
+# define ERROR_MATRIX_OUT_OF_RANGE		LogicError("Matrix index out of range")
 # define ERROR_MODULO_COMPLEX			LogicError("Modulo operator (%) cannot be applied to complex numbers")
 # define ERROR_OPERATION_MATRIX_COMPLEX	LogicError("Impossible operation between matrix and complex number")
-# define ERROR_MATRIX_DIMENSIONS		LogicError("Matrix operation: incompatible dimensions")
-# define ERROR_MATRIX_OUT_OF_RANGE		LogicError("Matrix index out of range")
-# define ERROR_INCOMPATIBLE_TYPES		LogicError("Incompatible types for operation")
 # define ERROR_SQRT_NEGATIVE			LogicError("Cannot compute square root of a negative number")
-# define ERROR_MATRIX_INVERSION			LogicError("Matrix inversion is only possible for square matrices")
 # define ERROR_OPERATOR_EXPECTED		UnexpectedError("Invalid expression: operator expected")
 # define ERROR_UNEXPECTED				UnexpectedError("Impossible to complete operation")
 # define UNSUPPORTED_DIVISION			UnsupportedError("Division not supported between polynomials with these powers")

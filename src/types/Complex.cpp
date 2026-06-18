@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/16 17:51:31 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/18 12:14:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -743,7 +743,7 @@ IType*			Complex::matrix_operator(const IType &other) const
 
 IType*			Complex::matrix_inversion(void) const
 {
-	throw ERROR_MATRIX_INVERSION;
+	throw ERROR_MATRIX_INVERSION_SQUARE;
 	return (nullptr);
 }
 

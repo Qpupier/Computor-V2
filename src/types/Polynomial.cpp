@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/16 17:58:57 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/18 12:14:50 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1221,7 +1221,7 @@ IType*			Polynomial::matrix_inversion(void) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_MATRIX_INVERSION;
+		throw ERROR_MATRIX_INVERSION_SQUARE;
 	}
 	return (nullptr);
 }

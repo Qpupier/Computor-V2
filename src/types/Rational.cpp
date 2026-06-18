@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/16 18:00:38 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/18 12:15:06 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,6 +249,7 @@ Complex*	Rational::operator+(const Complex &other) const
 Matrix*		Rational::operator+(const Matrix &other) const
 {
 	Matrix*					result;
+	Rational*				tmp;
 	unsigned long long int	width;
 	unsigned long long int	height;
 
@@ -257,7 +258,11 @@ Matrix*		Rational::operator+(const Matrix &other) const
 	result = new Matrix(width, height);
 	for (unsigned long long int i = 0; i < height; i++)
 		for (unsigned long long int j = 0; j < width; j++)
-			result->setValue(i, j, *this + other[i][j]);
+		{
+			tmp = *this + other[i][j];
+			result->setValue(i, j, *tmp);
+			delete tmp;
+		}
 	return (result);
 }
 
@@ -314,6 +319,7 @@ Complex*	Rational::operator-(const Complex &other) const
 Matrix*		Rational::operator-(const Matrix &other) const
 {
 	Matrix*					result;
+	Rational*				tmp;
 	unsigned long long int	width;
 	unsigned long long int	height;
 
@@ -322,7 +328,11 @@ Matrix*		Rational::operator-(const Matrix &other) const
 	result = new Matrix(width, height);
 	for (unsigned long long int i = 0; i < height; i++)
 		for (unsigned long long int j = 0; j < width; j++)
-			result->setValue(i, j, *this - other[i][j]);
+		{
+			tmp = *this - other[i][j];
+			result->setValue(i, j, *tmp);
+			delete tmp;
+		}
 	return (result);
 }
 
@@ -379,6 +389,7 @@ Complex*	Rational::operator*(const Complex &other) const
 Matrix*		Rational::operator*(const Matrix &other) const
 {
 	Matrix*					result;
+	Rational*				tmp;
 	unsigned long long int	width;
 	unsigned long long int	height;
 
@@ -387,7 +398,11 @@ Matrix*		Rational::operator*(const Matrix &other) const
 	result = new Matrix(width, height);
 	for (unsigned long long int i = 0; i < height; i++)
 		for (unsigned long long int j = 0; j < width; j++)
-			result->setValue(i, j, *this * other[i][j]);
+		{
+			tmp = *this * other[i][j];
+			result->setValue(i, j, *tmp);
+			delete tmp;
+		}
 	return (result);
 }
 
@@ -437,6 +452,7 @@ Complex*	Rational::operator/(const Complex &other) const
 Matrix*		Rational::operator/(const Matrix &other) const
 {
 	Matrix*					result;
+	Rational*				tmp;
 	unsigned long long int	width;
 	unsigned long long int	height;
 
@@ -447,7 +463,9 @@ Matrix*		Rational::operator/(const Matrix &other) const
 		for (unsigned long long int j = 0; j < width; j++)
 			try
 			{
-				result->setValue(i, j, *this / other[i][j]);
+				tmp = *this / other[i][j];
+				result->setValue(i, j, *tmp);
+				delete tmp;
 			}
 			catch (const std::exception &e)
 			{
@@ -520,6 +538,7 @@ Rational*	Rational::operator%(const Complex &other) const
 Matrix*		Rational::operator%(const Matrix &other) const
 {
 	Matrix*					result;
+	Rational*				tmp;
 	unsigned long long int	width;
 	unsigned long long int	height;
 
@@ -530,7 +549,9 @@ Matrix*		Rational::operator%(const Matrix &other) const
 		for (unsigned long long int j = 0; j < width; j++)
 			try
 			{
-				result->setValue(i, j, *this % other[i][j]);
+				tmp = *this % other[i][j];
+				result->setValue(i, j, *tmp);
+				delete tmp;
 			}
 			catch (const std::exception &e)
 			{
@@ -662,7 +683,7 @@ IType*			Rational::matrix_operator(const IType &other) const
 
 IType*			Rational::matrix_inversion(void) const
 {
-	throw ERROR_MATRIX_INVERSION;
+	throw ERROR_MATRIX_INVERSION_SQUARE;
 	return (nullptr);
 }
 

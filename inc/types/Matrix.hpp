@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/16 17:49:44 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/18 11:57:28 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ class	Matrix: public IType
 
 		// Setters
 		void	setValue(unsigned long long int i, 	\
-				unsigned long long int j, Rational *value);
+				unsigned long long int j, Rational value);
 
 		// Methods
 		IType*			clone(void) const;
@@ -113,6 +113,7 @@ class	Matrix: public IType
 		void			error(const LogicError &e);
 		void			free(void);
 		void			print_rounded(const std::string var = std::string()) const;
+		void			swap_lines(unsigned long long int line1, unsigned long long int line2);
 
 	private:
 		// Members
