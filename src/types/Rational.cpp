@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/18 12:15:06 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/18 13:19:50 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,10 +256,10 @@ Matrix*		Rational::operator+(const Matrix &other) const
 	width = other.getWidth();
 	height = other.getHeight();
 	result = new Matrix(width, height);
-	for (unsigned long long int i = 0; i < height; i++)
-		for (unsigned long long int j = 0; j < width; j++)
+	for (unsigned long long int j(0); j < height; j++)
+		for (unsigned long long int i(0); i < width; i++)
 		{
-			tmp = *this + other[i][j];
+			tmp = *this + other[j][i];
 			result->setValue(i, j, *tmp);
 			delete tmp;
 		}
@@ -326,10 +326,10 @@ Matrix*		Rational::operator-(const Matrix &other) const
 	width = other.getWidth();
 	height = other.getHeight();
 	result = new Matrix(width, height);
-	for (unsigned long long int i = 0; i < height; i++)
-		for (unsigned long long int j = 0; j < width; j++)
+	for (unsigned long long int j(0); j < height; j++)
+		for (unsigned long long int i(0); i < width; i++)
 		{
-			tmp = *this - other[i][j];
+			tmp = *this - other[j][i];
 			result->setValue(i, j, *tmp);
 			delete tmp;
 		}
@@ -396,10 +396,10 @@ Matrix*		Rational::operator*(const Matrix &other) const
 	width = other.getWidth();
 	height = other.getHeight();
 	result = new Matrix(width, height);
-	for (unsigned long long int i = 0; i < height; i++)
-		for (unsigned long long int j = 0; j < width; j++)
+	for (unsigned long long int j(0); j < height; j++)
+		for (unsigned long long int i(0); i < width; i++)
 		{
-			tmp = *this * other[i][j];
+			tmp = *this * other[j][i];
 			result->setValue(i, j, *tmp);
 			delete tmp;
 		}
@@ -459,11 +459,11 @@ Matrix*		Rational::operator/(const Matrix &other) const
 	width = other.getWidth();
 	height = other.getHeight();
 	result = new Matrix(width, height);
-	for (unsigned long long int i = 0; i < height; i++)
-		for (unsigned long long int j = 0; j < width; j++)
+	for (unsigned long long int j(0); j < height; j++)
+		for (unsigned long long int i(0); i < width; i++)
 			try
 			{
-				tmp = *this / other[i][j];
+				tmp = *this / other[j][i];
 				result->setValue(i, j, *tmp);
 				delete tmp;
 			}
@@ -545,11 +545,11 @@ Matrix*		Rational::operator%(const Matrix &other) const
 	width = other.getWidth();
 	height = other.getHeight();
 	result = new Matrix(width, height);
-	for (unsigned long long int i = 0; i < height; i++)
-		for (unsigned long long int j = 0; j < width; j++)
+	for (unsigned long long int j(0); j < height; j++)
+		for (unsigned long long int i(0); i < width; i++)
 			try
 			{
-				tmp = *this % other[i][j];
+				tmp = *this % other[j][i];
 				result->setValue(i, j, *tmp);
 				delete tmp;
 			}
