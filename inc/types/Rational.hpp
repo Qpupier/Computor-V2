@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/16 17:50:31 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/18 17:01:59 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 class	Complex;
 class	Matrix;
+class	Vector;
 class	Polynomial;
 
 class	Rational: public IType
@@ -60,6 +61,7 @@ class	Rational: public IType
 		Rational*	operator+(const Rational & other) const;
 		Complex*	operator+(const Complex & other) const;
 		Matrix*		operator+(const Matrix & other) const;
+		Vector*		operator+(const Vector & other) const;
 		Polynomial*	operator+(const Polynomial & other) const;
 		Rational*	operator+(const long long int value) const;
 		Rational*	operator-(void) const;
@@ -67,24 +69,28 @@ class	Rational: public IType
 		Rational*	operator-(const Rational & other) const;
 		Complex*	operator-(const Complex & other) const;
 		Matrix*		operator-(const Matrix & other) const;
+		Vector*		operator-(const Vector & other) const;
 		Polynomial*	operator-(const Polynomial & other) const;
 		Rational*	operator-(const long long int value) const;
 		IType*		operator*(const IType & other) const;
 		Rational*	operator*(const Rational & other) const;
 		Complex*	operator*(const Complex & other) const;
 		Matrix*		operator*(const Matrix & other) const;
+		Vector*		operator*(const Vector & other) const;
 		Polynomial*	operator*(const Polynomial & other) const;
 		Rational*	operator*(const long long int value) const;
 		IType*		operator/(const IType & other) const;
 		Rational*	operator/(const Rational & other) const;
 		Complex*	operator/(const Complex & other) const;
 		Matrix*		operator/(const Matrix & other) const;
+		Vector*		operator/(const Vector & other) const;
 		Polynomial*	operator/(const Polynomial & other) const;
 		Rational*	operator/(const long long int value) const;
 		IType*		operator%(const IType & other) const;
 		Rational*	operator%(const Rational & other) const;
 		Rational*	operator%(const Complex & other) const;
 		Matrix*		operator%(const Matrix & other) const;
+		Vector*		operator%(const Vector & other) const;
 		Polynomial*	operator%(const Polynomial & other) const;
 		Rational*	operator%(const long long int value) const;
 		IType*		operator^(const IType & other) const;
@@ -105,12 +111,14 @@ class	Rational: public IType
 		Rational*		gcd(const Rational & other) const;
 		Rational*		gcd(const Complex & other) const;
 		Rational*		gcd(const Matrix & other) const;
+		Rational*		gcd(const Vector & other) const;
 		InfiniteInt		integer_part(void) const;
 		std::ostream&	print(std::ostream &os) const;
 		std::string		to_string(void) const;
 		bool			in_D(void) const;
 		bool			in_Z(void) const;
-		void			print_rounded(const std::string var = std::string()) const;
+		void			print_rounded	\
+				(const std::string var = std::string()) const;
 		void			reduce(void);
 
 	private:
@@ -124,10 +132,12 @@ std::ostream&	operator<<(std::ostream &os, const Rational &num);
 
 // Functions
 InfiniteInt	compute_gcd(InfiniteInt a, InfiniteInt b);
-Rational*	get_gcd_terms(const Rational* term1, const Rational* term2, const Rational* term3, const Rational* term4);
+Rational*	get_gcd_terms(const Rational* term1, const Rational* term2, 	\
+		const Rational* term3, const Rational* term4);
 
 # include "Complex.hpp"
 # include "Matrix.hpp"
+# include "Vector.hpp"
 # include "Polynomial.hpp"
 
 #endif

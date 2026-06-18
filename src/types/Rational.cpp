@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/18 13:19:50 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/18 17:20:25 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,10 @@ Rational::Rational(const IType &other)
 {
 	const Rational*		other_rational;
 	const Complex*		other_complex;
-	const Matrix*		other_matrix;
 	const Polynomial*	other_polynomial;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	other_complex = dynamic_cast<const Complex*>(&other);
-	other_matrix = dynamic_cast<const Matrix*>(&other);
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
 	if (other_rational)
 		*this = *other_rational;
@@ -81,8 +79,6 @@ Rational::Rational(const IType &other)
 			throw ERROR_UNEXPECTED;
 		*this = other_complex->getReal();
 	}
-	else if (other_matrix)
-		throw ERROR_UNEXPECTED;
 	else if (other_polynomial)
 		*this = from_polynomial(*other_polynomial);
 	else
@@ -266,6 +262,22 @@ Matrix*		Rational::operator+(const Matrix &other) const
 	return (result);
 }
 
+Vector*		Rational::operator+(const Vector &other) const
+{
+	unsigned long long int	size(other.size());
+	Vector*					result;
+	Rational*				tmp;
+
+	result = new Vector(size);
+	for (unsigned long long int i(0); i < size; i++)
+	{
+		tmp = *this + other[i];
+		result[i] = *tmp;
+		delete tmp;
+	}
+	return (result);
+}
+
 Polynomial*	Rational::operator+(const Polynomial &other) const
 {
 	return (other + *this);
@@ -333,6 +345,22 @@ Matrix*		Rational::operator-(const Matrix &other) const
 			result->setValue(i, j, *tmp);
 			delete tmp;
 		}
+	return (result);
+}
+
+Vector*		Rational::operator-(const Vector &other) const
+{
+	unsigned long long int	size(other.size());
+	Vector*					result;
+	Rational*				tmp;
+
+	result = new Vector(size);
+	for (unsigned long long int i(0); i < size; i++)
+	{
+		tmp = *this - other[i];
+		result[i] = *tmp;
+		delete tmp;
+	}
 	return (result);
 }
 
@@ -406,6 +434,22 @@ Matrix*		Rational::operator*(const Matrix &other) const
 	return (result);
 }
 
+Vector*	Rational::operator*(const Vector &other) const
+{
+	unsigned long long int	size(other.size());
+	Vector*					result;
+	Rational*				tmp;
+
+	result = new Vector(size);
+	for (unsigned long long int i(0); i < size; i++)
+	{
+		tmp = *this * other[i];
+		result[i] = *tmp;
+		delete tmp;
+	}
+	return (result);
+}
+
 Polynomial*	Rational::operator*(const Polynomial &other) const
 {
 	return (other * *this);
@@ -472,6 +516,28 @@ Matrix*		Rational::operator/(const Matrix &other) const
 				delete result;
 				throw;
 			}
+	return (result);
+}
+
+Vector*		Rational::operator/(const Vector &other) const
+{
+	unsigned long long int	size(other.size());
+	Vector*					result;
+	Rational*				tmp;
+
+	result = new Vector(size);
+	for (unsigned long long int i(0); i < size; i++)
+		try
+		{
+			tmp = *this / other[i];
+			result[i] = *tmp;
+			delete tmp;
+		}
+		catch (const std::exception &e)
+		{
+			delete result;
+			throw;
+		}
 	return (result);
 }
 
@@ -558,6 +624,28 @@ Matrix*		Rational::operator%(const Matrix &other) const
 				delete result;
 				throw;
 			}
+	return (result);
+}
+
+Vector*		Rational::operator%(const Vector &other) const
+{
+	unsigned long long int	size(other.size());
+	Vector*					result;
+	Rational*				tmp;
+
+	result = new Vector(size);
+	for (unsigned long long int i(0); i < size; i++)
+		try
+		{
+			tmp = *this % other[i];
+			result[i] = *tmp;
+			delete tmp;
+		}
+		catch (const std::exception &e)
+		{
+			delete result;
+			throw;
+		}
 	return (result);
 }
 
@@ -725,6 +813,21 @@ Rational*		Rational::gcd(const Matrix &other) const
 			gcd = gcd->gcd(other[i][j]);
 			delete tmp;
 		}
+	return (gcd);
+}
+
+Rational*		Rational::gcd(const Vector &other) const
+{
+	Rational*	gcd;
+	Rational*	tmp;
+
+	gcd = new Rational(*this);
+	for (unsigned long long int i = 0; i < other.size(); i++)
+	{
+		tmp = gcd;
+		gcd = gcd->gcd(other[i]);
+		delete tmp;
+	}
 	return (gcd);
 }
 

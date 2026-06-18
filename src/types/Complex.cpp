@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/18 12:14:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/18 17:18:06 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,6 +290,21 @@ Matrix*		Complex::operator+(const Matrix &other) const
 	return (rational + other);
 }
 
+Vector*		Complex::operator+(const Vector &other) const
+{
+	Rational	rational;
+
+	try
+	{
+		rational = *this;
+	}
+	catch (const LogicError &e)
+	{
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
+	}
+	return (rational + other);
+}
+
 Polynomial*	Complex::operator+(const Polynomial &other) const
 {
 	return (other + *this);
@@ -348,6 +363,21 @@ Complex*	Complex::operator-(const Rational &other) const
 }
 
 Matrix*		Complex::operator-(const Matrix &other) const
+{
+	Rational	rational;
+
+	try
+	{
+		rational = *this;
+	}
+	catch (const LogicError &e)
+	{
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
+	}
+	return (rational - other);
+}
+
+Vector*		Complex::operator-(const Vector &other) const
 {
 	Rational	rational;
 
@@ -454,6 +484,21 @@ Matrix*		Complex::operator*(const Matrix &other) const
 	return (rational * other);
 }
 
+Vector*		Complex::operator*(const Vector &other) const
+{
+	Rational	rational;
+
+	try
+	{
+		rational = *this;
+	}
+	catch (const LogicError &e)
+	{
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
+	}
+	return (rational * other);
+}
+
 Polynomial*	Complex::operator*(const Polynomial &other) const
 {
 	return (other * *this);
@@ -515,6 +560,21 @@ Complex*	Complex::operator/(const Rational &other) const
 }
 
 Matrix*		Complex::operator/(const Matrix &other) const
+{
+	Rational	rational;
+
+	try
+	{
+		rational = *this;
+	}
+	catch (const LogicError &e)
+	{
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
+	}
+	return (rational / other);
+}
+
+Vector*	Complex::operator/(const Vector &other) const
 {
 	Rational	rational;
 
@@ -602,6 +662,21 @@ Rational*	Complex::operator%(const Rational &other) const
 }
 
 Matrix*		Complex::operator%(const Matrix &other) const
+{
+	Rational	rational;
+
+	try
+	{
+		rational = *this;
+	}
+	catch(const LogicError &e)
+	{
+		throw ERROR_MODULO_COMPLEX;
+	}
+	return (rational % other);
+}
+
+Vector*	Complex::operator%(const Vector &other) const
 {
 	Rational	rational;
 
@@ -764,6 +839,17 @@ Rational*		Complex::gcd(const Complex &other) const
 }
 
 Rational*		Complex::gcd(const Matrix &other) const
+{
+	Rational*	first;
+	Rational*	second;
+
+	first = other.gcd(this->getReal());
+	second = first->gcd(this->getImaginary());
+	delete first;
+	return (second);
+}
+
+Rational*		Complex::gcd(const Vector &other) const
 {
 	Rational*	first;
 	Rational*	second;

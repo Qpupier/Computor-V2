@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:35:43 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/16 17:49:26 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/18 17:33:24 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "IType.hpp"
 # include "Rational.hpp"
 # include "Matrix.hpp"
+# include "Vector.hpp"
 # include "Polynomial.hpp"
 
 class	Complex: public IType
@@ -48,6 +49,7 @@ class	Complex: public IType
 		Complex*	operator+(const Complex &other) const;
 		Complex*	operator+(const Rational &other) const;
 		Matrix*		operator+(const Matrix &other) const;
+		Vector*		operator+(const Vector &other) const;
 		Polynomial*	operator+(const Polynomial &other) const;
 		Complex*	operator+(const long long int value) const;
 		Complex*	operator-(void) const;
@@ -55,24 +57,28 @@ class	Complex: public IType
 		Complex*	operator-(const Complex &other) const;
 		Complex*	operator-(const Rational &other) const;
 		Matrix*		operator-(const Matrix &other) const;
+		Vector*		operator-(const Vector &other) const;
 		Polynomial*	operator-(const Polynomial &other) const;
 		Complex*	operator-(const long long int value) const;
 		IType*		operator*(const IType &other) const;
 		Complex*	operator*(const Complex &other) const;
 		Complex*	operator*(const Rational &other) const;
 		Matrix*		operator*(const Matrix &other) const;
+		Vector*		operator*(const Vector &other) const;
 		Polynomial*	operator*(const Polynomial &other) const;
 		Complex*	operator*(const long long int value) const;
 		IType*		operator/(const IType &other) const;
 		Complex*	operator/(const Complex &other) const;
 		Complex*	operator/(const Rational &other) const;
 		Matrix*		operator/(const Matrix &other) const;
+		Vector*		operator/(const Vector &other) const;
 		Polynomial*	operator/(const Polynomial &other) const;
 		Complex*	operator/(const long long int value) const;
 		IType*		operator%(const IType &other) const;
 		Rational*	operator%(const Rational &other) const;
 		Rational*	operator%(const Complex &other) const;
 		Matrix*		operator%(const Matrix &other) const;
+		Vector*		operator%(const Vector &other) const;
 		Polynomial*	operator%(const Polynomial &other) const;
 		Rational*	operator%(const long long int value) const;
 		IType*		operator^(const IType &other) const;
@@ -96,6 +102,7 @@ class	Complex: public IType
 		Rational*		gcd(const Complex &other) const;
 		Rational*		gcd(const Rational &other) const;
 		Rational*		gcd(const Matrix &other) const;
+		Rational*		gcd(const Vector &other) const;
 		std::ostream&	print(std::ostream &os) const;
 		std::string		to_string(void) const;
 		bool			values_in_D(void) const;

@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/06/16 14:33:07 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/06/18 17:00:13 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ LST_SRC		=	quadratic_equation_resolution/print_solutions/exact_solutions.cpp				
 				types/Operator.cpp																	\
 				types/Polynomial.cpp																\
 				types/Rational.cpp																	\
+				types/Vector.cpp																	\
 				AST.cpp																				\
 				InfiniteDouble.cpp																	\
 				InfiniteInt.cpp																		\

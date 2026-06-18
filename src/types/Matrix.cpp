@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/18 12:13:49 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/18 17:31:38 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,18 +67,6 @@ static std::vector<std::vector<std::string>>	parse_matrix(				\
 	if (rows.empty())
 		throw LogicError("Invalid matrix format: empty matrix");
 	return (rows);
-}
-
-static Matrix									from_polynomial(			\
-		const Polynomial *polynomial)
-{
-	if (polynomial->getDividers().size() != 1 					\
-			|| *polynomial->getDividers()[0].coefficient != 1 	\
-			|| polynomial->getDividers()[0].power 				\
-			|| polynomial->getTerms().size() != 1 				\
-			|| polynomial->getTerms()[0].power)
-		throw ERROR_UNEXPECTED;
-	return (Matrix(*polynomial->getTerms()[0].coefficient));
 }
 
 static Rational*								value_to_rational(			\
@@ -250,7 +238,8 @@ Matrix::Matrix(std::string str, t_data &data): _width(0), _height(0)
 	}
 }
 
-Matrix::Matrix(const Matrix &other): _width(other._width), _height(other._height)
+Matrix::Matrix(const Matrix &other): 			\
+		_width(other._width), _height(other._height)
 {
 	this->_matrix = new Rational*[this->_height];
 	for (unsigned long long int i = 0; i < this->_height; i++)
@@ -264,24 +253,37 @@ Matrix::Matrix(const Matrix &other): _width(other._width), _height(other._height
 Matrix::Matrix(const IType &other): Matrix()
 {
 	const Matrix*		other_matrix;
-	const Rational*		other_rational;
-	const Complex*		other_complex;
+	const Vector*		other_vector;
 	const Polynomial*	other_polynomial;
 
 	other_matrix = dynamic_cast<const Matrix*>(&other);
-	other_rational = dynamic_cast<const Rational*>(&other);
-	other_complex = dynamic_cast<const Complex*>(&other);
+	other_vector = dynamic_cast<const Vector*>(&other);
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
 	if (other_matrix)
 		*this = *other_matrix;
-	else if (other_rational)
-		throw ERROR_UNEXPECTED;
-	else if (other_complex)
-		throw ERROR_UNEXPECTED;
+	else if (other_vector)
+		*this = Matrix(*other_vector);
 	else if (other_polynomial)
-		*this = from_polynomial(other_polynomial);
+		*this = Matrix(*other_polynomial);
 	else
 		throw ERROR_UNEXPECTED;
+}
+
+Matrix::Matrix(const Vector &vector): Matrix(vector.size(), 1)
+{
+	for (unsigned long long int i = 0; i < vector.size(); i++)
+		this->setValue(i, 0, vector[i]);
+}
+
+Matrix::Matrix(const Polynomial &polynomial)
+{
+	if (polynomial.getDividers().size() != 1 					\
+			|| *polynomial.getDividers()[0].coefficient != 1 	\
+			|| polynomial.getDividers()[0].power 				\
+			|| polynomial.getTerms().size() != 1 				\
+			|| polynomial.getTerms()[0].power)
+		throw ERROR_UNEXPECTED;
+	*this = Matrix(*polynomial.getTerms()[0].coefficient);
 }
 
 Matrix::~Matrix(void)
@@ -454,6 +456,11 @@ Matrix*		Matrix::operator+(const Complex &other) const
 	return (*this + rational);
 }
 
+Matrix*		Matrix::operator+(const Vector &other) const
+{
+	return (*this + Matrix(other));
+}
+
 Polynomial*	Matrix::operator+(const Polynomial &other) const
 {
 	return (other + *this);
@@ -529,6 +536,11 @@ Matrix*		Matrix::operator-(const Complex &other) const
 		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (*this - rational);
+}
+
+Matrix*		Matrix::operator-(const Vector &other) const
+{
+	return (*this - Matrix(other));
 }
 
 Polynomial*	Matrix::operator-(const Polynomial &other) const
@@ -607,6 +619,11 @@ Matrix*		Matrix::operator*(const Complex &other) const
 		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (*this * rational);
+}
+
+Matrix*		Matrix::operator*(const Vector &other) const
+{
+	return (*this * Matrix(other));
 }
 
 Polynomial*	Matrix::operator*(const Polynomial &other) const
@@ -696,6 +713,11 @@ Matrix*		Matrix::operator/(const Complex &other) const
 		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (*this / rational);
+}
+
+Matrix*		Matrix::operator/(const Vector &other) const
+{
+	return (*this / Matrix(other));
 }
 
 Polynomial*	Matrix::operator/(const Polynomial &other) const
@@ -794,6 +816,11 @@ Matrix*		Matrix::operator%(const Complex &other) const
 	return (*this % rational);
 }
 
+Matrix*		Matrix::operator%(const Vector &other) const
+{
+	return (*this % Matrix(other));
+}
+
 Polynomial*	Matrix::operator%(const Polynomial &other) const
 {
 	Polynomial*	tmp;
@@ -882,7 +909,7 @@ Matrix*		Matrix::operator^(const long long int value) const
 
 // Getters
 
-Rational				Matrix::getValue(unsigned long long int i, 		\
+Rational				Matrix::getValue(unsigned long long int i, 			\
 		unsigned long long int j) const
 {
 	if (i >= this->_width || j >= this->_height)
@@ -890,7 +917,7 @@ Rational				Matrix::getValue(unsigned long long int i, 		\
 	return (this->_matrix[j][i]);
 }
 
-InfiniteDouble		Matrix::getRoundedValue(unsigned long long int i, 	\
+InfiniteDouble			Matrix::getRoundedValue(unsigned long long int i, 	\
 		unsigned long long int j) const
 {
 	if (i >= this->_width || j >= this->_height)
@@ -910,6 +937,7 @@ unsigned long long int	Matrix::getHeight(void) const
 
 
 // Setters
+
 void	Matrix::setValue(unsigned long long int x, 	\
 		unsigned long long int y, Rational value)
 {
@@ -1011,6 +1039,11 @@ Rational*		Matrix::gcd(const Complex &other) const
 	second = first->gcd(other.getImaginary());
 	delete first;
 	return (second);
+}
+
+Rational*		Matrix::gcd(const Vector &other) const
+{
+	return (this->gcd(Matrix(other)));
 }
 
 Rational*		Matrix::gcd(const Matrix &other) const
