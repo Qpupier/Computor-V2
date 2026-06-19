@@ -14,8 +14,6 @@ name: CI
 on:
   push:
     branches: ["master"]
-  pull_request:
-    branches: ["master"]
   workflow_dispatch:
 jobs:
   build:
@@ -40,3 +38,5 @@ jobs:
         run: ./unit_tests/polynomials.sh debug
       - name: Unit tests - Subject examples
         run: ./unit_tests/subject.sh debug
+      - name: Unit tests - Bonus
+        run: ./unit_tests/bonus.sh debug
