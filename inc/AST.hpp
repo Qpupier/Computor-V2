@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:01:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/16 14:34:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/22 13:57:47 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ Token	create_token(std::string::const_iterator &start, const std::string::const_
 bool	set_function_left(std::vector<Token> &tokens, std::map<std::pair<std::string, std::string>, const IType*> &stored);
 AST*	build_ast(std::vector<Token> &tokens, t_data &data);
 AST*	compute_expression(const std::string &line, t_data &data, bool is_right_side, const bool eval = true);
-void	clean_tokens(std::vector<Token> &tokens, const std::string line, const t_data &data);
+void	clean_tokens(std::vector<Token> &tokens);
 void	compute_equation(const std::string &line, t_data &data, const bool eval);
 void	delete_empty_function_stored(std::map<std::pair<std::string, std::string>, const IType*> &stored, const std::string error_msg, const bool throw_error = false);
 void	print_expression(const std::string &line, t_data &data);

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/18 18:56:16 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/22 18:09:19 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ AST::AST(const Token &token, t_data &data): _left(nullptr), _right(nullptr)
 			_node = new Polynomial(token);
 			break;
 		default:
-			throw UnexpectedError("Invalid token type for AST node");
+			throw UnexpectedError("Invalid token type for AST node (\"" + token.getValue() + "\")");
 	}
 }
 

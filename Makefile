@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/06/18 17:00:13 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/06/19 17:01:10 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ LST_SRC		=	quadratic_equation_resolution/print_solutions/exact_solutions.cpp				
 				InfiniteInt.cpp																		\
 				Token.cpp																			\
 				main.cpp																			\
+				backtracking_possibilities.cpp														\
 				build_ast.cpp																		\
 				build_ast_tokens.cpp																\
 				clean_tokens.cpp																	\

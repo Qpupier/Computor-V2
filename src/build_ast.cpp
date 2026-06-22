@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 16:48:49 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/16 17:43:54 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/22 16:51:42 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ static AST*	build_node(std::vector<Token>& left_tokens, 	\
 		delete right_child;
 		throw LogicError("Invalid expression: empty parenthesis");
 	}
+	std::cout << COLOR_YELLOW << "Building node with token: " << token.getValue() 	\
+			<< COLOR_RESET << std::endl;
 	return (new AST(token, left_child, right_child, data));
 }
 
@@ -62,10 +64,18 @@ AST*		build_ast(std::vector<Token> &tokens, t_data &data)
 	bool				must_return(false);
 	AST*				recur;
 
+	std::cout << COLOR_DIM << "Building AST with tokens: ";
+	for (const auto& token : tokens)
+		std::cout << token.getValue() << " ";
+	std::cout << COLOR_RESET << std::endl;
 	if (tokens.empty())
 		return (nullptr);
 	if (tokens.size() == 1)
+	{
+		std::cout << COLOR_YELLOW << "Building node with token: " << tokens[0].getValue() 	\
+				<< COLOR_RESET << std::endl;
 		return (new AST(tokens[0], data));
+	}
 	recur = build_ast_recur(tokens, pos, data, must_return);
 	if (must_return)
 		return (recur);

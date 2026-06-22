@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:17:56 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/18 18:57:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/22 13:57:31 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,13 +86,8 @@ static void	whitespaces_format_error(const std::vector<Token> &tokens)
 	}
 }
 
-void		clean_tokens(std::vector<Token> &tokens, 	\
-		const std::string line, const t_data &data)
+void		clean_tokens(std::vector<Token> &tokens)
 {
-	std::string::const_iterator	end(line.end());
-
-	for (std::string::const_iterator start(line.begin()); start != end;)
-		tokens.push_back(create_token(start, end, data));
 	whitespaces_format_error(tokens);
 	remove_whitespaces(tokens);
 	semantic_verification(tokens);
