@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/22 16:45:10 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/24 17:51:35 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,16 @@
 static std::string	new_operator(Token::t_token prev_token, 	\
 		Token::t_token current_token)
 {
-	if (prev_token == Token::E_MATRIX && current_token == Token::E_MATRIX)
+	if (prev_token == Token::E_TOKEN_MATRIX && current_token == Token::E_TOKEN_MATRIX)
 		return ("**");
-	if ((prev_token == Token::E_RIGHT_PARENTHESIS 			\
-				|| prev_token == Token::E_POLYNOMIAL 		\
-				|| prev_token == Token::E_MATRIX 			\
-				|| prev_token == Token::E_VECTOR) 			\
-			&& (current_token == Token::E_LEFT_PARENTHESIS 	\
-				|| current_token == Token::E_POLYNOMIAL 	\
-				|| current_token == Token::E_MATRIX 		\
-				|| current_token == Token::E_VECTOR))
+	if ((prev_token == Token::E_TOKEN_RIGHT_PARENTHESIS 			\
+				|| prev_token == Token::E_TOKEN_POLYNOMIAL 		\
+				|| prev_token == Token::E_TOKEN_MATRIX 			\
+				|| prev_token == Token::E_TOKEN_VECTOR) 			\
+			&& (current_token == Token::E_TOKEN_LEFT_PARENTHESIS 	\
+				|| current_token == Token::E_TOKEN_POLYNOMIAL 	\
+				|| current_token == Token::E_TOKEN_MATRIX 		\
+				|| current_token == Token::E_TOKEN_VECTOR))
 		return ("***");
 	return ("*");
 }
@@ -40,24 +40,24 @@ static void			set_missing_operators(std::vector<Token> &tokens)
 
 		prev_token = tokens[i - 1].getType();
 		current_token = tokens[i].getType();
-		if (prev_token != Token::E_OPERATOR 								\
-				&& current_token != Token::E_OPERATOR 						\
-				&& prev_token != Token::E_LEFT_PARENTHESIS 					\
-				&& current_token != Token::E_RIGHT_PARENTHESIS 				\
-				&& prev_token != Token::E_LEFT_ABS 							\
-				&& current_token != Token::E_RIGHT_ABS 						\
-				&& prev_token != Token::E_LEFT_NORM 						\
-				&& current_token != Token::E_RIGHT_NORM 					\
-				&& prev_token != Token::E_OPERATOR_INVERSE)
+		if (prev_token != Token::E_TOKEN_OPERATOR 								\
+				&& current_token != Token::E_TOKEN_OPERATOR 						\
+				&& prev_token != Token::E_TOKEN_LEFT_PARENTHESIS 					\
+				&& current_token != Token::E_TOKEN_RIGHT_PARENTHESIS 				\
+				&& prev_token != Token::E_TOKEN_LEFT_ABS 							\
+				&& current_token != Token::E_TOKEN_RIGHT_ABS 						\
+				&& prev_token != Token::E_TOKEN_LEFT_NORM 						\
+				&& current_token != Token::E_TOKEN_RIGHT_NORM 					\
+				&& prev_token != Token::E_TOKEN_OPERATOR_INVERSE)
 		{
-			if (prev_token == Token::E_POLYNOMIAL 							\
-					&& current_token == Token::E_LEFT_PARENTHESIS)
+			if (prev_token == Token::E_TOKEN_POLYNOMIAL 							\
+					&& current_token == Token::E_TOKEN_LEFT_PARENTHESIS)
 				tokens.insert(tokens.begin() + static_cast<long int>(i), 	\
-						Token("<>", Token::E_OPERATOR));
+						Token("<>", Token::E_TOKEN_OPERATOR));
 			else
 				tokens.insert(tokens.begin() + static_cast<long int>(i), 	\
 						Token(new_operator(prev_token, current_token), 		\
-						Token::E_OPERATOR));
+						Token::E_TOKEN_OPERATOR));
 		}
 	}
 }
@@ -91,7 +91,7 @@ Token				create_token(std::string::const_iterator &start, 	\
 	start = it->second;
 	return Token(*it, get_token_type(*it, data.tokens_types));
 }
-static std::vector<std::vector<Token>>	get_tokens(const std::string &line, const t_data &data)
+static std::vector<t_possibility>	get_tokens(const std::string &line, const t_data &data)
 {
 	std::vector<Token>	initial_tokens;
 	std::string::const_iterator	end(line.end());
@@ -104,25 +104,25 @@ static std::vector<std::vector<Token>>	get_tokens(const std::string &line, const
 AST*				compute_expression(const std::string &line, 	\
 		t_data &data, bool is_right_side, const bool eval)
 {
-	std::vector<std::vector<Token>>	tokens;
+	std::vector<t_possibility>	possibilities;
 	AST*				ast;
 	AST*				tmp;
 	unsigned long int	nb_possibilities(0);
 
 	if (!std::regex_match(line, data.patterns.at(TOKEN_FULL_EXPRESSION)))
 		throw ERROR_INVALID_EXPRESSION;
-	tokens = get_tokens(line, data);
-	std::cout << COLOR_YELLOW << "Total possibilities: " << tokens.size() << COLOR_RESET << std::endl;
-	if (tokens.size() > 1)
+	possibilities = get_tokens(line, data);
+	std::cout << COLOR_YELLOW << "Total possibilities: " << possibilities.size() << COLOR_RESET << std::endl;
+	if (possibilities.size() > 1)
 	{
-		for (std::vector<Token> &line_tokens : tokens)
+		for (t_possibility &possibility : possibilities)
 			try
 			{
-				clean_tokens(line_tokens);
-				if (!is_right_side && !eval && set_function_left(line_tokens, data.stored))
+				clean_tokens(possibility.tokens);
+				if (!is_right_side && !eval && set_function_left(possibility.tokens, data.stored))
 					return (nullptr);
-				set_missing_operators(line_tokens);
-				tmp = build_ast(line_tokens, data);
+				set_missing_operators(possibility.tokens);
+				tmp = build_ast(possibility, data);
 				if (!tmp)
 					throw ERROR_INVALID_EXPRESSION;
 				ast = tmp;
@@ -137,11 +137,11 @@ AST*				compute_expression(const std::string &line, 	\
 	}
 	else
 	{
-		clean_tokens(tokens[0]);
-		if (!is_right_side && !eval && set_function_left(tokens[0], data.stored))
+		clean_tokens(possibilities[0].tokens);
+		if (!is_right_side && !eval && set_function_left(possibilities[0].tokens, data.stored))
 			return (nullptr);
-		set_missing_operators(tokens[0]);
-		ast = build_ast(tokens[0], data);
+		set_missing_operators(possibilities[0].tokens);
+		ast = build_ast(possibilities[0], data);
 		if (!ast)
 			throw ERROR_INVALID_EXPRESSION;
 	}

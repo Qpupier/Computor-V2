@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:10:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/22 18:27:15 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/24 17:49:26 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,46 +42,47 @@
 # define TOKEN_QUIT				TOKEN_BEGIN TOKEN_WHITESPACE "quit" TOKEN_WHITESPACE TOKEN_END
 # define TOKEN_HISTORY			TOKEN_BEGIN TOKEN_WHITESPACE "history" TOKEN_WHITESPACE "(\\d*)" TOKEN_WHITESPACE TOKEN_END
 
-typedef enum	e_parenthesis
+typedef enum	e_bracket
 {
-	E_PARENTHESIS,
-	E_LEFT_PARENTHESIS,
-	E_RIGHT_PARENTHESIS,
-	E_NORM,
-	E_LEFT_NORM,
-	E_RIGHT_NORM,
-	E_ABS,
-	E_LEFT_ABS,
-	E_RIGHT_ABS
-}				t_parenthesis;
+	E_BRACKET_NOTHING,
+	E_BRACKET_PARENTHESIS,
+	E_BRACKET_LEFT_PARENTHESIS,
+	E_BRACKET_RIGHT_PARENTHESIS,
+	E_BRACKET_NORM,
+	E_BRACKET_LEFT_NORM,
+	E_BRACKET_RIGHT_NORM,
+	E_BRACKET_ABS,
+	E_BRACKET_LEFT_ABS,
+	E_BRACKET_RIGHT_ABS
+}				t_bracket;
 
 class	Token
 {
 	public:
 		typedef enum	e_token
 		{
-			E_ERROR,
-			E_LEFT_PARENTHESIS,
-			E_RIGHT_PARENTHESIS,
-			E_PIPE,
-			E_LEFT_NORM,
-			E_RIGHT_NORM,
-			E_LEFT_ABS,
-			E_RIGHT_ABS,
-			E_NUMBER,
-			E_IMAGINARY,
-			E_POLYNOMIAL,
-			E_FUNCTION,
-			E_OPERATOR_INVERSE,
-			E_OPERATOR,
-			E_MATRIX,
-			E_VECTOR,
-			E_WHITESPACE,
-			E_QUESTION
+			E_TOKEN_ERROR,
+			E_TOKEN_LEFT_PARENTHESIS,
+			E_TOKEN_RIGHT_PARENTHESIS,
+			E_TOKEN_PIPE,
+			E_TOKEN_LEFT_NORM,
+			E_TOKEN_RIGHT_NORM,
+			E_TOKEN_LEFT_ABS,
+			E_TOKEN_RIGHT_ABS,
+			E_TOKEN_NUMBER,
+			E_TOKEN_IMAGINARY,
+			E_TOKEN_POLYNOMIAL,
+			E_TOKEN_FUNCTION,
+			E_TOKEN_OPERATOR_INVERSE,
+			E_TOKEN_OPERATOR,
+			E_TOKEN_MATRIX,
+			E_TOKEN_VECTOR,
+			E_TOKEN_WHITESPACE,
+			E_TOKEN_QUESTION
 		}				t_token;
 
 		// Constructors and destructor
-		Token(void): _value(), _type(E_ERROR) {};
+		Token(void): _value(), _type(E_TOKEN_ERROR) {};
 		Token(const std::string &value, t_token type): _value(value), _type(type) {};
 		Token(const Token &other): _value(other._value), _type(other._type) {};
 		~Token(void) {};
@@ -105,7 +106,7 @@ class	Token
 
 // Functions
 Token::t_token		get_token_type(const std::string &token, const std::map<const Token::t_token, std::regex> &tokens_types);
-std::vector<Token>*	adapt_tokens(std::vector<Token> &tokens, std::vector<Token> &sub_tokens, long int *pos);
+std::vector<Token>*	begin_by_operator(std::vector<Token> &tokens, long int *pos);
 void				define_token_types(std::map<const Token::t_token, std::regex> &tokens_types);
 
 #endif

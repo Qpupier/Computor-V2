@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:11:12 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 14:53:20 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/24 19:38:06 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,10 @@ bool		set_function_left(std::vector<Token> &tokens, 	\
 {
 	std::pair<std::string, std::string>	pair;
 
-	if (tokens.size() == 4 && tokens[0].getType() == Token::E_POLYNOMIAL 	\
-			&& tokens[1].getType() == Token::E_LEFT_PARENTHESIS 			\
-			&& tokens[2].getType() == Token::E_POLYNOMIAL 					\
-			&& tokens[3].getType() == Token::E_RIGHT_PARENTHESIS)
+	if (tokens.size() == 4 && tokens[0].getType() == Token::E_TOKEN_POLYNOMIAL 	\
+			&& tokens[1].getType() == Token::E_TOKEN_LEFT_PARENTHESIS 			\
+			&& tokens[2].getType() == Token::E_TOKEN_POLYNOMIAL 					\
+			&& tokens[3].getType() == Token::E_TOKEN_RIGHT_PARENTHESIS)
 	{
 		pair.first = "_" + tokens[0].getValue();
 		pair.second = tokens[2].getValue();

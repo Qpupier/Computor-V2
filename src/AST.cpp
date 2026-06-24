@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/22 18:09:19 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/24 17:51:53 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,25 +87,25 @@ AST::AST(const Token &token, t_data &data): _left(nullptr), _right(nullptr)
 {
 	switch (token.getType())
 	{
-		case Token::E_OPERATOR_INVERSE:
+		case Token::E_TOKEN_OPERATOR_INVERSE:
 			_node = new Operator(token);
 			break;
-		case Token::E_OPERATOR:
+		case Token::E_TOKEN_OPERATOR:
 			_node = new Operator(token);
 			break;
-		case Token::E_NUMBER:
+		case Token::E_TOKEN_NUMBER:
 			_node = new Rational(token);
 			break;
-		case Token::E_IMAGINARY:
+		case Token::E_TOKEN_IMAGINARY:
 			_node = new Complex();
 			break;
-		case Token::E_MATRIX:
+		case Token::E_TOKEN_MATRIX:
 			_node = new Matrix(token, data);
 			break;
-		case Token::E_VECTOR:
+		case Token::E_TOKEN_VECTOR:
 			_node = new Vector(token, data);
 			break;
-		case Token::E_POLYNOMIAL:
+		case Token::E_TOKEN_POLYNOMIAL:
 			_node = new Polynomial(token);
 			break;
 		default:
@@ -217,7 +217,8 @@ void			AST::reduce_expression(	\
 		return this->replace_variables(stored);
 	if (this->_left)
 		this->_left->reduce_expression(stored);
-	this->_right->reduce_expression(stored);
+	if (this->_right)
+		this->_right->reduce_expression(stored);
 	if (this->end_of_tree())
 		return;
 	op = dynamic_cast<Operator*>(this->_node);

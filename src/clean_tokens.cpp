@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:17:56 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/22 13:57:31 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/24 17:52:22 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	semantic_verification(const std::vector<Token>& tokens)
 		current_type = tokens[i].getType();
 		prev_token = i > 1 ? current_token : tokens[0].getValue();
 		current_token = tokens[i].getValue();
-		if (prev_type == Token::E_OPERATOR && current_type == Token::E_OPERATOR)
+		if (prev_type == Token::E_TOKEN_OPERATOR && current_type == Token::E_TOKEN_OPERATOR)
 			throw LogicError("Two operators cannot be adjacent");
 	}
 }
@@ -33,7 +33,7 @@ static void	semantic_verification(const std::vector<Token>& tokens)
 static void	remove_whitespaces(std::vector<Token> &tokens)
 {
 	for (size_t i = 0; i < tokens.size();)
-		if (tokens[i].getType() == Token::E_WHITESPACE)
+		if (tokens[i].getType() == Token::E_TOKEN_WHITESPACE)
 			tokens.erase(tokens.begin() + static_cast<long>(i));
 		else
 			i++;
@@ -46,14 +46,14 @@ static bool	bad_sign_placement(const std::vector<Token> &tokens, size_t i)
 
 	prev_is_sign = tokens[i - 1].getValue() == "-" 							\
 			|| tokens[i - 1].getValue() == "+";
-	current_is_whitespace = tokens[i].getType() == Token::E_WHITESPACE;
-	if ((i == 1 || tokens[i - 2].getType() == Token::E_LEFT_PARENTHESIS) 	\
+	current_is_whitespace = tokens[i].getType() == Token::E_TOKEN_WHITESPACE;
+	if ((i == 1 || tokens[i - 2].getType() == Token::E_TOKEN_LEFT_PARENTHESIS) 	\
 			&& prev_is_sign && current_is_whitespace)
 		return (true);
 	return (i > 1 															\
 			&& (i == 2 														\
-				|| tokens[i - 3].getType() == Token::E_LEFT_PARENTHESIS) 	\
-			&& tokens[i - 2].getType() == Token::E_WHITESPACE 				\
+				|| tokens[i - 3].getType() == Token::E_TOKEN_LEFT_PARENTHESIS) 	\
+			&& tokens[i - 2].getType() == Token::E_TOKEN_WHITESPACE 				\
 			&& prev_is_sign && current_is_whitespace);
 }
 
@@ -69,16 +69,16 @@ static void	whitespaces_format_error(const std::vector<Token> &tokens)
 	{
 		prev_type = tokens[i - 1].getType();
 		current_type = tokens[i].getType();
-		if (i < size - 1 && current_type == Token::E_WHITESPACE)
+		if (i < size - 1 && current_type == Token::E_TOKEN_WHITESPACE)
 		{
 			next_type = tokens[i + 1].getType();
-			if (prev_type != Token::E_OPERATOR 					\
-					&& prev_type != Token::E_LEFT_PARENTHESIS 	\
-					&& next_type != Token::E_OPERATOR 			\
-					&& next_type != Token::E_RIGHT_PARENTHESIS 	\
-					&& next_type != Token::E_QUESTION)
+			if (prev_type != Token::E_TOKEN_OPERATOR 					\
+					&& prev_type != Token::E_TOKEN_LEFT_PARENTHESIS 	\
+					&& next_type != Token::E_TOKEN_OPERATOR 			\
+					&& next_type != Token::E_TOKEN_RIGHT_PARENTHESIS 	\
+					&& next_type != Token::E_TOKEN_QUESTION)
 				throw LogicError("No space allowed without operator");
-			if (prev_type == Token::E_OPERATOR_INVERSE)
+			if (prev_type == Token::E_TOKEN_OPERATOR_INVERSE)
 				throw LogicError("No space allowed after inversed operator");
 		}
 		if (bad_sign_placement(tokens, i))
@@ -92,6 +92,6 @@ void		clean_tokens(std::vector<Token> &tokens)
 	remove_whitespaces(tokens);
 	semantic_verification(tokens);
 	if (!tokens.empty() 	\
-			&& tokens[tokens.size() - 1].getType() == Token::E_QUESTION)
+			&& tokens[tokens.size() - 1].getType() == Token::E_TOKEN_QUESTION)
 		tokens.pop_back();
 }

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:01:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/22 13:57:47 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/24 16:50:46 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <stdio.h>
 # include "computor-v2.hpp"
+# include "backtracking_possibilities.hpp"
 
 class	AST
 {
@@ -59,7 +60,7 @@ std::ostream &operator<<(std::ostream &os, const AST &ast);
 // Functions
 Token	create_token(std::string::const_iterator &start, const std::string::const_iterator &end, const t_data &data);
 bool	set_function_left(std::vector<Token> &tokens, std::map<std::pair<std::string, std::string>, const IType*> &stored);
-AST*	build_ast(std::vector<Token> &tokens, t_data &data);
+AST*	build_ast(t_possibility &tokens, t_data &data);
 AST*	compute_expression(const std::string &line, t_data &data, bool is_right_side, const bool eval = true);
 void	clean_tokens(std::vector<Token> &tokens);
 void	compute_equation(const std::string &line, t_data &data, const bool eval);

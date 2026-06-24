@@ -6,14 +6,14 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 15:53:13 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/22 18:27:53 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/24 19:31:59 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "backtracking_possibilities.hpp"
 #include "computor-v2.hpp"
 
-std::vector<std::vector<std::pair<t_parenthesis, std::pair<unsigned long int, unsigned long int>>>>	backtracking_possibilities(const std::vector<Token>& tokens, t_parenthesis_data data = t_parenthesis_data({std::vector<std::pair<t_parenthesis, unsigned long int>>(), std::vector<std::pair<t_parenthesis, std::pair<unsigned long int, unsigned long int>>>()}), const unsigned long int pos = 0)
+std::vector<std::vector<std::pair<t_bracket, std::pair<unsigned long int, unsigned long int>>>>	backtracking_possibilities(const std::vector<Token>& tokens, t_parenthesis_data data = t_parenthesis_data({std::vector<std::pair<t_bracket, unsigned long int>>(), std::vector<std::pair<t_bracket, std::pair<unsigned long int, unsigned long int>>>(), 0}), const unsigned long int pos = 0)
 {
 	std::cout << COLOR_YELLOW << "Backtracking at pos: " << pos << " / " << tokens.size() << COLOR_RESET << std::endl;
 	std::cout << COLOR_BLUE << "Lasts: ";
@@ -44,17 +44,17 @@ std::vector<std::vector<std::pair<t_parenthesis, std::pair<unsigned long int, un
 			throw LogicError("Mismatched parentheses");
 		}
 		std::cout << COLOR_GREEN << "Backtracking completed successfully" << COLOR_RESET << std::endl;
-		return (std::vector<std::vector<std::pair<t_parenthesis, std::pair<unsigned long int, unsigned long int>>>>(1, data.pairs));
+		return (std::vector<std::vector<std::pair<t_bracket, std::pair<unsigned long int, unsigned long int>>>>(1, data.pairs));
 	}
-	if (tokens[pos].getType() == Token::E_LEFT_PARENTHESIS)
+	if (tokens[pos].getType() == Token::E_TOKEN_LEFT_PARENTHESIS)
 	{
 		// data.all.push_back(E_LEFT_PARENTHESIS);
-		data.lasts.push_back(std::make_pair(E_LEFT_PARENTHESIS, pos));
+		data.lasts.push_back(std::make_pair(E_BRACKET_LEFT_PARENTHESIS, data.nb_brackets++));
 		return (backtracking_possibilities(tokens, data, pos + 1));
 	}
-	else if (tokens[pos].getType() == Token::E_RIGHT_PARENTHESIS)
+	else if (tokens[pos].getType() == Token::E_TOKEN_RIGHT_PARENTHESIS)
 	{
-		if (data.lasts.empty() || data.lasts.back().first != E_LEFT_PARENTHESIS)
+		if (data.lasts.empty() || data.lasts.back().first != E_BRACKET_LEFT_PARENTHESIS)
 		{
 			for (const auto& t : data.lasts)
 				std::cout << t.first << " ";
@@ -63,14 +63,14 @@ std::vector<std::vector<std::pair<t_parenthesis, std::pair<unsigned long int, un
 			throw LogicError("Mismatched parentheses");
 		}
 		// data.all.push_back(E_RIGHT_PARENTHESIS);
+		data.pairs.push_back(std::make_pair(E_BRACKET_PARENTHESIS, std::make_pair(data.lasts.back().second, data.nb_brackets++)));
 		data.lasts.pop_back();
-		data.pairs.push_back(std::make_pair(E_PARENTHESIS, std::make_pair(data.lasts.back().second, pos)));
 		return (backtracking_possibilities(tokens, data, pos + 1));
 	}
-	else if (tokens[pos].getType() == Token::E_PIPE)
+	else if (tokens[pos].getType() == Token::E_TOKEN_PIPE)
 	{
-		std::vector<std::vector<std::pair<t_parenthesis, std::pair<unsigned long int, unsigned long int>>>> result;
-		std::vector<std::vector<std::pair<t_parenthesis, std::pair<unsigned long int, unsigned long int>>>> results;
+		std::vector<std::vector<std::pair<t_bracket, std::pair<unsigned long int, unsigned long int>>>> result;
+		std::vector<std::vector<std::pair<t_bracket, std::pair<unsigned long int, unsigned long int>>>> results;
 		// if (pos && tokens[pos - 1].getValue() == "|")
 		// 	norm_possible = true;
 		// try
@@ -93,8 +93,8 @@ std::vector<std::vector<std::pair<t_parenthesis, std::pair<unsigned long int, un
 		// 	std::cout << COLOR_GREEN << "Test 2 (NORM exit)" << COLOR_RESET << std::endl;
 		// 	if (!norm_possible || data.lasts.empty() || data.lasts.back() != E_NORM || !data.norm)
 		// 		throw LogicError("Mismatched pipes (absolute values and/or norms)");
-		// 	data.lasts.pop_back();
 		// 	data.pairs.push_back(std::make_pair(E_NORM, std::make_pair(data.lasts.back().second, pos)));
+		// 	data.lasts.pop_back();
 		// 	data.norm--;
 		// 	results.push_back(pos > 1 ? backtracking_possibilities(tokens, data, pos - 2) : -1);
 		// }
@@ -107,7 +107,7 @@ std::vector<std::vector<std::pair<t_parenthesis, std::pair<unsigned long int, un
 			// ABS entry
 			t_parenthesis_data	data_copy(data);
 			// data_copy.all.push_back(E_LEFT_ABS);
-			data_copy.lasts.push_back(std::make_pair(E_LEFT_ABS, pos));
+			data_copy.lasts.push_back(std::make_pair(E_BRACKET_LEFT_ABS, data_copy.nb_brackets++));
 			result = backtracking_possibilities(tokens, data_copy, pos + 1);
 			results.insert(results.end(), result.begin(), result.end());
 		}
@@ -118,14 +118,14 @@ std::vector<std::vector<std::pair<t_parenthesis, std::pair<unsigned long int, un
 		{
 			// ABS exit
 			t_parenthesis_data	data_copy(data);
-			if (data_copy.lasts.empty() || data_copy.lasts.back().first != E_LEFT_ABS)
+			if (data_copy.lasts.empty() || data_copy.lasts.back().first != E_BRACKET_LEFT_ABS)
 			{
 				std::cout << COLOR_RED << "Error 6" << COLOR_RESET << std::endl;
 				throw LogicError("Mismatched pipes (absolute values and/or norms)");
 			}
 			// data_copy.all.push_back(E_RIGHT_ABS);
+			data_copy.pairs.push_back(std::make_pair(E_BRACKET_ABS, std::make_pair(data_copy.lasts.back().second, data_copy.nb_brackets++)));
 			data_copy.lasts.pop_back();
-			data_copy.pairs.push_back(std::make_pair(E_ABS, std::make_pair(data_copy.lasts.back().second, pos)));
 			std::cout << COLOR_GREEN << "Test 4 (ABS exit)" << COLOR_RESET << std::endl;
 			result = backtracking_possibilities(tokens, data_copy, pos + 1);
 			results.insert(results.end(), result.begin(), result.end());
@@ -144,68 +144,54 @@ std::vector<std::vector<std::pair<t_parenthesis, std::pair<unsigned long int, un
 	return (backtracking_possibilities(tokens, data, pos + 1));
 }
 
-std::vector<std::vector<Token>>	all_possibilities(const std::vector<Token>& initial_tokens)
+std::vector<t_possibility>	all_possibilities(const std::vector<Token>& initial_tokens)
 {
-	std::vector<std::vector<std::pair<t_parenthesis, std::pair<unsigned long int, unsigned long int>>>>	possibilities;
-	std::vector<std::vector<Token>> results;
+	std::vector<std::vector<std::pair<t_bracket, std::pair<unsigned long int, unsigned long int>>>>	possibilities;
+	std::vector<t_possibility> results;
 
 	possibilities = backtracking_possibilities(initial_tokens);
-	for (const auto& possibility : possibilities)
+	for (const auto& pairs : possibilities)
 	{
 		std::vector<Token> new_tokens;
-		unsigned long int	pos = 0;
 		
+		for (const auto& t : pairs)
+			std::cout << COLOR_PINK << t.first << "|" << t.second.first << "," << t.second.second << " ";
+		std::cout << COLOR_RESET << std::endl;
+		unsigned long long int	nb_brackets = 0;
 		for (const auto& token : initial_tokens)
 		{
-			bool	token_pushed(false);
-			for (const auto& t : possibility)
-				std::cout << COLOR_PINK << t.first << "|" << t.second.first << "," << t.second.second << " ";
-			std::cout << COLOR_RESET << std::endl;
-			for (const auto& t : possibility)
-				if (t.second.first == pos)
-				{
-					new_tokens.push_back(Token(token.getValue(), token.getType() == Token::E_PIPE ? Token::E_LEFT_ABS : token.getType()));
-					token_pushed = true;
-				}
-				else if (t.second.second == pos)
-				{
-					new_tokens.push_back(Token(token.getValue(), token.getType() == Token::E_PIPE ? Token::E_RIGHT_ABS : token.getType()));
-					token_pushed = true;
-				}
-			if (!token_pushed)
+			std::cout << COLOR_BLUE << nb_brackets << " / " << pairs.size() * 2 << COLOR_RESET << std::endl;
+			if (token.getType() == Token::E_TOKEN_LEFT_PARENTHESIS || token.getType() == Token::E_TOKEN_RIGHT_PARENTHESIS || token.getType() == Token::E_TOKEN_PIPE)
 			{
-				if (token.getType() == Token::E_PIPE)
-					std::cout << COLOR_RED << "Error 7" << COLOR_RESET << std::endl;
-				new_tokens.push_back(Token(token.getValue(), token.getType()));
+				bool	token_pushed(false);
+				std::cout << COLOR_YELLOW << "Pipe" << COLOR_RESET << std::endl;
+				for (const auto& t : pairs)
+				{
+					std::cout << COLOR_BLUE << "Checking: " << t.second.first << " or " << t.second.second << " ==? " << nb_brackets << COLOR_RESET << std::endl;
+					if (t.second.first == nb_brackets)
+					{
+						// new_tokens.push_back(Token(token.getValue(), token.getType() == Token::E_TOKEN_PIPE ? Token::E_LEFT_ABS : token.getType()));
+						new_tokens.push_back(Token(token.getType() == Token::E_TOKEN_PIPE ? "[" : token.getValue(), token.getType() == Token::E_TOKEN_PIPE ? Token::E_TOKEN_LEFT_ABS : token.getType()));
+						token_pushed = true;
+						nb_brackets++;
+						break;
+					}
+					else if (t.second.second == nb_brackets)
+					{
+						// new_tokens.push_back(Token(token.getValue(), token.getType() == Token::E_TOKEN_PIPE ? Token::E_RIGHT_ABS : token.getType()));
+						new_tokens.push_back(Token(token.getType() == Token::E_TOKEN_PIPE ? "]" : token.getValue(), token.getType() == Token::E_TOKEN_PIPE ? Token::E_TOKEN_RIGHT_ABS : token.getType()));
+						token_pushed = true;
+						nb_brackets++;
+						break;
+					}
+				}
+				if (!token_pushed)
+					throw LogicError("Mismatched pipes (absolute values and/or norms)");//TODO: A adapter
 			}
-			// if (token.getValue() == "|")
-			// {
-			// 	if (pos >= possibility.size())
-			// 	{
-			// 		std::cout << COLOR_RED << "Error 1" << COLOR_RESET << std::endl;
-			// 		throw LogicError("Mismatched pipes (absolute values and/or norms)");
-			// 	}
-			// 	if (possibility[pos].first == E_LEFT_ABS)
-			// 		new_tokens.push_back(Token("|", Token::E_LEFT_ABS));
-			// 	else if (possibility[pos].first == E_RIGHT_ABS)
-			// 		new_tokens.push_back(Token("|", Token::E_RIGHT_ABS));
-			// 	else
-			// 	{
-			// 		for (const auto& t : possibility)
-			// 			std::cout << t.first << " ";
-			// 		std::cout << std::endl;
-			// 		std::cout << COLOR_RED << "Error 2: " << possibility[pos].first << COLOR_RESET << std::endl;
-			// 		throw LogicError("Mismatched pipes (absolute values and/or norms)");
-			// 	}
-			// }
-			// else
-			// 	new_tokens.push_back(token);
-			if (token.getValue() == "(" || token.getValue() == ")" || token.getValue() == "|")
-				pos++;
-			if (new_tokens.back().getType() == Token::E_LEFT_NORM || new_tokens.back().getType() == Token::E_RIGHT_NORM)
-				pos++;
+			else
+				new_tokens.push_back(Token(token.getValue(), token.getType()));
 		}
-		results.push_back(new_tokens);
+		results.push_back(t_possibility{new_tokens, pairs, nb_brackets});
 	}
 	return (results);
 }

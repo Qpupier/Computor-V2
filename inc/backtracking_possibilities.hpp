@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 16:56:45 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/22 17:32:02 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/24 17:02:03 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,20 @@
 
 typedef struct	s_parenthesis_data
 {
-	std::vector<std::pair<t_parenthesis, unsigned long int>>	lasts;
-	// std::vector<t_parenthesis>	all;
-	std::vector<std::pair<t_parenthesis, std::pair<unsigned long int, unsigned long int>>>	pairs;
+	std::vector<std::pair<t_bracket, unsigned long int>>	lasts;
+	// std::vector<t_bracket>	all;
+	std::vector<std::pair<t_bracket, std::pair<unsigned long int, unsigned long int>>>	pairs;
+	unsigned long long int	nb_brackets;
 }				t_parenthesis_data;
 
-std::vector<std::vector<std::pair<t_parenthesis, std::pair<unsigned long int, unsigned long int>>>>	backtracking_possibilities(const std::vector<Token>& tokens, t_parenthesis_data data, const unsigned long int pos);
-std::vector<std::vector<Token>>	all_possibilities(const std::vector<Token>& tokens);
+typedef struct	s_possibility
+{
+	std::vector<Token>	tokens;
+	std::vector<std::pair<t_bracket, std::pair<unsigned long int, unsigned long int>>>	brackets_pairs;
+	unsigned long long int	nb_brackets;
+}				t_possibility;
+
+std::vector<std::vector<std::pair<t_bracket, std::pair<unsigned long int, unsigned long int>>>>	backtracking_possibilities(const std::vector<Token>& tokens, t_parenthesis_data data, const unsigned long int pos);
+std::vector<t_possibility>	all_possibilities(const std::vector<Token>& tokens);
 
 #endif
