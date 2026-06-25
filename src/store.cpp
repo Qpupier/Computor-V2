@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:11:12 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/25 11:33:40 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/25 15:43:59 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	store_function(t_data &data, 	\
 			&& to_lower(key.second) != to_lower(polynomial->getName()))
 	{
 		delete polynomial;
-		delete_empty_function_stored(data.stored, 								\
+		delete_empty_function_stored(data.stored, 							\
 			"Function parameter does not match the variable in the right side \
 				of the equation", true);
 	}
@@ -71,9 +71,10 @@ bool		set_function_left(const std::vector<Token> &tokens, 	\
 {
 	std::pair<std::string, std::string>	pair;
 
-	if (tokens.size() == 4 && tokens[0].getType() == Token::E_TOKEN_POLYNOMIAL 	\
-			&& tokens[1].getType() == Token::E_TOKEN_LEFT_PARENTHESIS 			\
-			&& tokens[2].getType() == Token::E_TOKEN_POLYNOMIAL 					\
+	if (tokens.size() == 4 	\
+			&& tokens[0].getType() == Token::E_TOKEN_POLYNOMIAL 		\
+			&& tokens[1].getType() == Token::E_TOKEN_LEFT_PARENTHESIS 	\
+			&& tokens[2].getType() == Token::E_TOKEN_POLYNOMIAL 		\
 			&& tokens[3].getType() == Token::E_TOKEN_RIGHT_PARENTHESIS)
 	{
 		pair.first = "_" + tokens[0].getValue();
@@ -89,7 +90,7 @@ void		set_function_right(t_data &data, AST* ast)
 	Polynomial*	polynomial;
 
 	if (!ast->end_of_tree())
-		delete_empty_function_stored(data.stored, 							\
+		delete_empty_function_stored(data.stored, 						\
 				"The right side of the function definition must be a single \
 					expression", true);
 	polynomial = new Polynomial(*ast->getNode());
@@ -115,5 +116,5 @@ void		delete_empty_function_stored(				\
 		}
 	if (throw_error)
 		throw LogicError(error_msg);
-	std::cerr << error_msg << std::endl;
+	std::cerr << error_msg << std::endl;// [ ]: Is this usefull?
 }

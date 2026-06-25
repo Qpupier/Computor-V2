@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:17:56 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/25 11:32:45 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/25 14:20:42 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ static void	semantic_verification(const std::vector<Token>& tokens)
 		current_type = tokens[i].getType();
 		prev_token = i > 1 ? current_token : tokens[0].getValue();
 		current_token = tokens[i].getValue();
-		if (prev_type == Token::E_TOKEN_OPERATOR && current_type == Token::E_TOKEN_OPERATOR)
+		if (prev_type == Token::E_TOKEN_OPERATOR 	\
+				&& current_type == Token::E_TOKEN_OPERATOR)
 			throw LogicError("Two operators cannot be adjacent");
 	}
 }
@@ -35,14 +36,16 @@ static void	remove_whitespaces(t_possibility& possibility)
 	for (std::vector<Token>::size_type i = 0; i < possibility.tokens.size();)
 		if (possibility.tokens[i].getType() == Token::E_TOKEN_WHITESPACE)
 		{
-			for (auto pair = possibility.brackets_pairs.begin(); pair != possibility.brackets_pairs.end(); pair++)
+			for (auto pair = possibility.brackets_pairs.begin(); 	\
+					pair != possibility.brackets_pairs.end(); pair++)
 			{
 				if (pair->second.first > i)
 					pair->second.first--;
 				if (pair->second.second > i)
 					pair->second.second--;
 			}
-			possibility.tokens.erase(possibility.tokens.begin() + static_cast<std::vector<Token>::difference_type>(i));
+			possibility.tokens.erase(possibility.tokens.begin() 	\
+					+ static_cast<std::vector<Token>::difference_type>(i));
 		}
 		else
 			i++;
@@ -50,19 +53,28 @@ static void	remove_whitespaces(t_possibility& possibility)
 
 static bool	bad_sign_placement(const std::vector<Token> &tokens, size_t i)
 {
-	bool	prev_is_sign;
-	bool	current_is_whitespace;
+	Token::t_token	token_type(Token::E_TOKEN_ERROR);
+	bool			prev_is_sign;
+	bool			current_is_whitespace;
 
-	prev_is_sign = tokens[i - 1].getValue() == "-" 							\
+	prev_is_sign = tokens[i - 1].getValue() == "-" 						\
 			|| tokens[i - 1].getValue() == "+";
 	current_is_whitespace = tokens[i].getType() == Token::E_TOKEN_WHITESPACE;
-	if ((i == 1 || tokens[i - 2].getType() == Token::E_TOKEN_LEFT_PARENTHESIS) 	\
+	if (i > 2)
+		token_type = tokens[i - 2].getType();
+	if ((i == 1 || token_type == Token::E_TOKEN_LEFT_PARENTHESIS 		\
+				|| token_type == Token::E_TOKEN_LEFT_NORM 				\
+				|| token_type == Token::E_TOKEN_LEFT_ABS) 				\
 			&& prev_is_sign && current_is_whitespace)
 		return (true);
-	return (i > 1 															\
-			&& (i == 2 														\
-				|| tokens[i - 3].getType() == Token::E_TOKEN_LEFT_PARENTHESIS) 	\
-			&& tokens[i - 2].getType() == Token::E_TOKEN_WHITESPACE 				\
+	if (i > 3)
+		token_type = tokens[i - 3].getType();
+	return (i > 1 														\
+			&& (i == 2 													\
+				|| token_type == Token::E_TOKEN_LEFT_PARENTHESIS 		\
+				|| token_type == Token::E_TOKEN_LEFT_NORM 				\
+				|| token_type == Token::E_TOKEN_LEFT_ABS) 				\
+			&& tokens[i - 2].getType() == Token::E_TOKEN_WHITESPACE 	\
 			&& prev_is_sign && current_is_whitespace);
 }
 

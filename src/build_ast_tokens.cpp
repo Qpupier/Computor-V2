@@ -6,119 +6,100 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 14:02:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/25 12:35:22 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/25 15:17:18 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Token.hpp"
 #include "computor-v2.hpp"
+#include "backtracking_possibilities.hpp"
 
-static long int				select_operator(						\
-		const std::vector<Token> &tokens, unsigned long int size, 	\
+static long long int	select_operator(const t_possibility& possibility, 	\
 		const std::vector<std::string> &operators)
 {
 	unsigned long int	pos;
-	unsigned int		depth;
+	bool				surface;
 
-	depth = 0;
-	for (size_t i = 0; i < size; i++)
+	for (size_t i = 0; i < possibility.tokens.size(); i++)
 	{
-		pos = size - i - 1;
-		if (!depth)
+		pos = possibility.tokens.size() - i - 1;
+		surface = true;
+		for (const auto& pair : possibility.brackets_pairs)
+			if (pos >= pair.second.first && pos <= pair.second.second)
+				surface = false;
+		if (surface)
 			for (const std::string& op: operators)
-				if (tokens[pos].getValue() == op)
+				if (possibility.tokens[pos].getValue() == op)
 					return (static_cast<long int>(pos));
-		if (tokens[pos].getType() == Token::E_TOKEN_RIGHT_PARENTHESIS)
-			depth++;
-		else if (tokens[pos].getType() == Token::E_TOKEN_LEFT_PARENTHESIS)
-			depth--;
 	}
 	return (-1);
 }
 
-static long int				select_less_priority_operator(	\
-		const std::vector<Token> &tokens)
+static long long int	select_less_priority_operator(	\
+		const t_possibility& possibility)
 {
-	unsigned long int	size;
-	long int			pos;
+	long long int	pos;
 
-	size = tokens.size();
-	pos = select_operator(tokens, size, {"-", "+"});
+	pos = select_operator(possibility, {"-", "+"});
 	if (pos != -1)
 		return (pos);
-	pos = select_operator(tokens, size, {"*", "/", "%"});
+	pos = select_operator(possibility, {"*", "/", "%"});
 	if (pos != -1)
 		return (pos);
-	pos = select_operator(tokens, size, {"**", "***"});
+	pos = select_operator(possibility, {"**", "***"});
 	if (pos != -1)
 		return (pos);
-	pos = select_operator(tokens, size, {"^"});
+	pos = select_operator(possibility, {"^"});
 	if (pos != -1)
 		return (pos);
-	pos = select_operator(tokens, size, {TOKEN_OPERATOR_INVERSE});
+	pos = select_operator(possibility, {TOKEN_OPERATOR_INVERSE});
 	if (pos != -1)
 		return (pos);
-	pos = select_operator(tokens, size, {"<>"});
+	pos = select_operator(possibility, {"<>"});
 	if (pos != -1)
 		return (pos);
 	return (-1);
 }
 
-// static bool					can_remove_external_parenthesis(	
-// 		const std::vector<Token> &tokens)
-// {
-// 	Token::t_token	type;
-// 	int				depth;
-
-// 	depth = 0;
-// 	for (const Token& token: tokens)
-// 	{
-// 		type = token.getType();
-// 		if (type == Token::E_TOKEN_LEFT_PARENTHESIS)
-// 			depth++;
-// 		else if (type == Token::E_TOKEN_RIGHT_PARENTHESIS)
-// 		{
-// 			depth--;
-// 			if (depth < 0)
-// 				return (false);
-// 		}
-// 	}
-// 	return (!depth);
-// }
-
-static std::vector<Token>*	insert_token(std::vector<Token>* tokens, 	\
-		long int* pos)
+static void		insert_token(t_possibility &possibility, long long int* pos)
 {
 	std::string	first_value;
 
-	first_value = (*tokens)[0].getValue();
+	first_value = possibility.tokens[0].getValue();
 	if (!*pos && (first_value == "-" || first_value == "+"))
 	{
 		if (first_value == "-")
 		{
-			(*tokens)[0].setValue(first_value + "1");
-			(*tokens)[0].setType(Token::E_TOKEN_NUMBER);
-			(*tokens).insert((*tokens).begin() + 1, 	\
+			possibility.tokens[0].setValue(first_value + "1");
+			possibility.tokens[0].setType(Token::E_TOKEN_NUMBER);
+			possibility.tokens.insert(possibility.tokens.begin() + 1, 	\
 					Token("*", Token::E_TOKEN_OPERATOR));
+			for (auto pair = possibility.brackets_pairs.begin(); 		\
+					pair != possibility.brackets_pairs.end(); pair++)
+			{
+				pair->second.first++;
+				pair->second.second++;
+			}
 		}
 		else
-			(*tokens).erase((*tokens).begin());
-		return (tokens);
+			possibility.tokens.erase(possibility.tokens.begin());
 	}
-	throw LogicError	\
-			("Operator cannot be at the beginning or end of an expression");
+	else
+		throw LogicError	\
+				("Operator cannot be at the beginning or end of an expression");
 }
 
-std::vector<Token>*			begin_by_operator(std::vector<Token> &tokens, long int *pos)
+bool			handle_operators(t_possibility& possibility, long long int *pos)
 {
-	*pos = select_less_priority_operator(tokens);
-	std::cout << COLOR_YELLOW << "Pos: " << *pos << COLOR_RESET << std::endl;
+	*pos = select_less_priority_operator(possibility);
 	if (*pos < 0)
-		return (nullptr);
+		return (false);
 	if ((!*pos || static_cast<unsigned long int>(*pos) 					\
-				== tokens.size() - 1) 									\
-			&& tokens[static_cast<unsigned long int>(*pos)].getType() 	\
-				!= Token::E_TOKEN_OPERATOR_INVERSE)
-		return (insert_token(&tokens, pos));
-	return (nullptr);
+				== possibility.tokens.size() - 1) 						\
+			&& possibility.tokens[static_cast<unsigned long int>(*pos)]	\
+				.getType() != Token::E_TOKEN_OPERATOR_INVERSE)
+	{
+		insert_token(possibility, pos);
+		return (true);
+	}
+	return (false);
 }

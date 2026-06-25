@@ -6,13 +6,12 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/25 11:39:34 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/25 15:14:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
 #include "Polynomial.hpp"
-#include "backtracking_possibilities.hpp"
 
 static std::string	new_operator(Token::t_token prev_token, 	\
 		Token::t_token current_token)
@@ -119,7 +118,6 @@ AST*				compute_expression(const std::string &line, 	\
 	if (!std::regex_match(line, data.patterns.at(TOKEN_FULL_EXPRESSION)))
 		throw ERROR_INVALID_EXPRESSION;
 	possibilities = get_tokens(line, data);
-	std::cout << COLOR_YELLOW << "Total possibilities: " << possibilities.size() << COLOR_RESET << std::endl;
 	if (possibilities.size() > 1)
 	{
 		for (t_possibility &possibility : possibilities)
@@ -138,7 +136,6 @@ AST*				compute_expression(const std::string &line, 	\
 			catch (...)
 			{
 			}
-		std::cout << COLOR_YELLOW << "Valid possibilities: " << nb_possibilities << COLOR_RESET << std::endl;
 		if (nb_possibilities != 1)
 			throw ERROR_NON_DETERMINISTIC_EXPRESSION;
 	}
