@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 15:53:13 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/25 19:01:50 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/25 19:12:29 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,35 @@ static std::vector<std::vector<std::pair<t_bracket, std::pair<unsigned long int,
 	return (results);
 }
 
+static std::vector<std::vector<std::pair<t_bracket, std::pair<unsigned long int, unsigned long int>>>>	try_norm_brackets(const std::vector<Token>& tokens, t_parenthesis_data data, const unsigned long int pos)
+{
+	std::vector<std::vector<std::pair<t_bracket, 	\
+			std::pair<unsigned long int, unsigned long int>>>> results;
+
+	try
+	{
+		t_parenthesis_data	data_copy(data);
+
+		data_copy.lasts.push_back(std::make_pair(E_BRACKET_LEFT_NORM, pos));
+		add_new_possibility(results, tokens, data_copy, pos + 2);
+	}
+	catch (...) {}
+	try
+	{
+		t_parenthesis_data	data_copy(data);
+
+		if (data_copy.lasts.empty() 								\
+				|| data_copy.lasts.back().first != E_BRACKET_LEFT_NORM)
+			throw ERROR_BRACKETS;
+		data_copy.pairs.push_back(std::make_pair(E_BRACKET_NORM, 	\
+				std::make_pair(data_copy.lasts.back().second, pos)));
+		data_copy.lasts.pop_back();
+		add_new_possibility(results, tokens, data_copy, pos + 2);// TODO: Modifier pour que ca ne decale pas les positions des autres brackets
+	}
+	catch (...) {}
+	return (results);
+}// TODO: refacto pour fusionner les 2 fonctions
+
 static std::vector<std::vector<std::pair<t_bracket, std::pair<unsigned long int, unsigned long int>>>>	parentheses_brackets(const std::vector<Token>& tokens, t_parenthesis_data data, const unsigned long int pos, Token::t_token token_type)
 {
 	if (token_type == Token::E_TOKEN_LEFT_PARENTHESIS)
@@ -86,9 +115,20 @@ std::vector<std::vector<std::pair<t_bracket, std::pair<unsigned long int, unsign
 		return (parentheses_brackets(tokens, data, pos, token_type));
 	if (token_type == Token::E_TOKEN_PIPE)
 	{
-		results = try_absolute_brackets(tokens, data, pos);
-		if (results.empty())
-			throw ERROR_BRACKETS;
+		try
+		{
+			if (pos + 1 >= tokens.size() || tokens[pos + 1].getType() != Token::E_TOKEN_PIPE)
+				throw ERROR_BRACKETS;
+			results = try_norm_brackets(tokens, data, pos);
+			if (results.empty())
+				throw ERROR_BRACKETS;
+		}
+		catch (...)
+		{
+			results = try_absolute_brackets(tokens, data, pos);
+			if (results.empty())
+				throw ERROR_BRACKETS;
+		}
 		return (results);
 	}
 	return (backtracking_possibilities(tokens, data, pos + 1));
