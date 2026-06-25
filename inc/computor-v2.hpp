@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/22 13:42:05 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/25 17:31:11 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # define COLOR_BLUE							"\033[34m"
 # define COLOR_PINK							"\033[35m"
 # define COLOR_CYAN							"\033[36m"
+# define ERROR_BRACKETS						LogicError("Mismatched brackets (parentheses, absolute values or norms)")
 # define ERROR_DIVISION_BY_ZERO				LogicError("Division by zero is impossible")
 # define ERROR_EXPONENT_INTEGER				LogicError("Only integers (ℤ) can be used as exponents")
 # define ERROR_INCOMPATIBLE_TYPES			LogicError("Incompatible types for operation")

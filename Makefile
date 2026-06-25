@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/06/19 17:01:10 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/06/25 17:21:26 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,16 @@ NAME		=	computor-v2
 DIR_SRC		=	src
 DIR_OBJ		=	.obj
 DIR_INC		=	inc
-LST_SRC		=	quadratic_equation_resolution/print_solutions/exact_solutions.cpp					\
+LST_SRC		=	AST/AST.cpp																			\
+				AST/backtracking_possibilities.cpp													\
+				AST/build_ast.cpp																	\
+				AST/build_ast_tokens.cpp															\
+				AST/external_brackets.cpp															\
+				parser/Token.cpp																	\
+				parser/clean_tokens.cpp																\
+				parser/parser.cpp																	\
+				parser/parser_possibilities.cpp														\
+				quadratic_equation_resolution/print_solutions/exact_solutions.cpp					\
 				quadratic_equation_resolution/print_solutions/exact_solutions_imaginary_part.cpp	\
 				quadratic_equation_resolution/print_solutions/exact_solutions_real_part.cpp			\
 				quadratic_equation_resolution/print_solutions/rounded_solutions.cpp					\
@@ -27,26 +36,19 @@ LST_SRC		=	quadratic_equation_resolution/print_solutions/exact_solutions.cpp				
 				quadratic_equation_resolution/simplify_factors.cpp									\
 				types/IType.cpp																		\
 				types/Complex.cpp																	\
+				types/InfiniteDouble.cpp															\
+				types/InfiniteInt.cpp																\
 				types/Matrix.cpp																	\
 				types/Operator.cpp																	\
 				types/Polynomial.cpp																\
 				types/Rational.cpp																	\
 				types/Vector.cpp																	\
-				AST.cpp																				\
-				InfiniteDouble.cpp																	\
-				InfiniteInt.cpp																		\
-				Token.cpp																			\
 				main.cpp																			\
-				backtracking_possibilities.cpp														\
-				build_ast.cpp																		\
-				build_ast_tokens.cpp																\
-				clean_tokens.cpp																	\
 				compute_line.cpp																	\
 				equation.cpp																		\
 				equation_resolution.cpp																\
 				errors.cpp																			\
 				loop.cpp																			\
-				parser.cpp																			\
 				store.cpp																			\
 				utils.cpp
 LST_OBJ		=	$(LST_SRC:.cpp=.o)
@@ -57,7 +59,9 @@ SRC			=	$(addprefix $(DIR_SRC)/, $(LST_SRC))
 OBJ			=	$(addprefix $(DIR_OBJ)/, $(LST_OBJ))
 DEP			=	$(addprefix $(DIR_OBJ)/, $(LST_DEP))
 INC			=	$(addprefix -I./, $(LST_INC))
-DIRS		=	$(DIR_OBJ)/quadratic_equation_resolution					\
+DIRS		=	$(DIR_OBJ)/AST												\
+				$(DIR_OBJ)/parser											\
+				$(DIR_OBJ)/quadratic_equation_resolution					\
 				$(DIR_OBJ)/quadratic_equation_resolution/print_solutions	\
 				$(DIR_OBJ)/types
 # CC			=	c++

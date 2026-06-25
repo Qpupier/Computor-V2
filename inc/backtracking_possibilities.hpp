@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 16:56:45 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/25 15:15:42 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/25 17:20:03 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct	s_possibility
 
 std::vector<std::vector<std::pair<t_bracket, std::pair<unsigned long int, unsigned long int>>>>	backtracking_possibilities(const std::vector<Token>& tokens, t_parenthesis_data data, const unsigned long int pos);
 std::vector<t_possibility>																		all_possibilities(const std::vector<Token>& tokens);
-bool			handle_operators(t_possibility& possibility, long long int *pos);
+t_bracket																						test_external_brackets(t_possibility& p);
+bool																							handle_operators(t_possibility& possibility, long long int *pos);
 
 #endif

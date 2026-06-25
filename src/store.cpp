@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:11:12 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/25 15:43:59 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/25 17:27:43 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,16 @@
 static void	store_new_variable(								\
 		std::map<std::pair<std::string, std::string>, 		\
 			const IType*> &stored, std::pair<std::string, 	\
-		std::string> key)
+		std::string> key, const Polynomial* polynomial)
 {
 	for (std::map<std::pair<std::string, std::string>, const IType*>	\
 			::iterator it(stored.begin()); it != stored.end();)
 	{
 		if (to_lower(key.second) == to_lower(it->first.first))
+		{
+			delete polynomial;
 			throw LogicError("Function parameter is already defined");
+		}
 		if (to_lower(key.first) == to_lower(it->first.first))
 		{
 			delete it->second;
@@ -39,24 +42,16 @@ static void	store_function(t_data &data, 	\
 	std::string	result;
 
 	data.stored.erase(key);
-	if (!polynomial->getName().empty() 										\
+	if (!polynomial->getName().empty() 									\
 			&& to_lower(key.second) != to_lower(polynomial->getName()))
 	{
 		delete polynomial;
-		delete_empty_function_stored(data.stored, 							\
+		delete_empty_function_stored(data.stored, 						\
 			"Function parameter does not match the variable in the right side \
 				of the equation", true);
 	}
 	key.first.erase(0, 1);
-	try
-	{
-		store_new_variable(data.stored, key);
-	}
-	catch (const LogicError &e)
-	{
-		delete polynomial;
-		throw;
-	}
+	store_new_variable(data.stored, key, polynomial);
 	polynomial->setName("χ");
 	key.second = polynomial->getName();
 	data.stored[key] = polynomial;
