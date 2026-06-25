@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 16:48:49 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/24 19:37:31 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/25 12:37:14 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,13 @@ static t_bracket	test_external_brackets(t_possibility& possibility)
 
 	for (auto pair = possibility.brackets_pairs.begin(); pair != possibility.brackets_pairs.end(); pair++)
 	{
-		if (pair->second.first == 0 && pair->second.second == possibility.nb_brackets - 1)
+		if (pair->second.first == 0 && pair->second.second == possibility.tokens.size() - 1)
 		{
+			for (auto sub_pair = possibility.brackets_pairs.begin(); sub_pair != possibility.brackets_pairs.end(); sub_pair++)
+			{
+				sub_pair->second.first--;
+				sub_pair->second.second--;
+			}
 			if (possibility.tokens.front().getType() == Token::E_TOKEN_LEFT_PARENTHESIS && possibility.tokens.back().getType() == Token::E_TOKEN_RIGHT_PARENTHESIS)
 			{
 				possibility.tokens = sub_tokens;
@@ -51,14 +56,19 @@ static AST*	build_ast_recur(t_possibility& possibility, long int& pos, 	\
 
 	external_brackets = test_external_brackets(possibility);
 	if (external_brackets == E_BRACKET_PARENTHESIS)
+	{
+		must_return = true;
 		return (build_ast(possibility, data));
+	}
 	if (external_brackets == E_BRACKET_NORM)
 	{
+		must_return = true;
 		return (build_ast(possibility, data));
 		// return (new AST(new Function(NORM), build_ast(possibility, data), nullptr));//TODO
 	}
 	if (external_brackets == E_BRACKET_ABS)
 	{
+		must_return = true;
 		return (build_ast(possibility, data));
 		// return (new AST(new Function(ABSOLUTE), build_ast(possibility, data), nullptr));//TODO
 	}
@@ -66,7 +76,7 @@ static AST*	build_ast_recur(t_possibility& possibility, long int& pos, 	\
 	if (first_token_completed)
 	{
 		must_return = true;
-		t_possibility	new_possibility = (t_possibility){*first_token_completed, possibility.brackets_pairs, possibility.nb_brackets};
+		t_possibility	new_possibility = (t_possibility){*first_token_completed, possibility.brackets_pairs};
 		return (build_ast(new_possibility, data));
 	}
 	if (pos == -1)
@@ -105,12 +115,16 @@ static t_possibility	separate_tokens(t_possibility& possibility, 	\
 {
 	t_possibility	result;
 
+	std::cout << COLOR_RED << "Separating tokens from " << start << " to " << pos - 1 << COLOR_RESET << std::endl;
+	if (start >= pos || pos > possibility.tokens.size())
+		throw LogicError("Invalid range for separate_tokens");
 	result.tokens = std::vector<Token>(possibility.tokens.begin() + static_cast<long int>(start), possibility.tokens.begin() + static_cast<long int>(pos));
 	for (auto pair = possibility.brackets_pairs.begin(); pair != possibility.brackets_pairs.end(); pair++)
 	{
+		std::cout << COLOR_CYAN << "Checking pair: " << pair->first << "|" << pair->second.first << "," << pair->second.second << " for range: " << start << "," << pos - 1 << COLOR_RESET << std::endl;
 		if (pair->second.first >= start && pair->second.second < pos)
 			result.brackets_pairs.push_back(std::make_pair(pair->first, std::make_pair(pair->second.first - start, pair->second.second - start)));
-		if ((pair->second.first >= start && pair->second.first < pos) || (pair->second.second >= start && pair->second.second < pos))
+		else if ((pair->second.first >= start && pair->second.first < pos) || (pair->second.second >= start && pair->second.second < pos))
 			throw LogicError("Mismatched brackets");
 	}
 	return (result);
@@ -139,6 +153,9 @@ AST*		build_ast(t_possibility& possibility, t_data& data)
 	recur = build_ast_recur(possibility, pos, data, must_return);
 	if (must_return)
 		return (recur);
+	if (pos < 0)
+		throw ERROR_OPERATOR_EXPECTED;
+	std::cout << COLOR_GREEN << "Pos: " << pos << COLOR_RESET << std::endl;
 	left_tokens = separate_tokens(possibility, 0, static_cast<unsigned long int>(pos));
 	right_tokens = separate_tokens(possibility, static_cast<unsigned long int>(pos) + 1, possibility.tokens.size());
 	return (build_node(left_tokens, right_tokens, 	\

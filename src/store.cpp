@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:11:12 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/24 19:38:06 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/25 11:33:40 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static void	store_function(t_data &data, 	\
 			+ std::string(COLOR_RESET));
 }
 
-bool		set_function_left(std::vector<Token> &tokens, 	\
+bool		set_function_left(const std::vector<Token> &tokens, 	\
 		std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
 	std::pair<std::string, std::string>	pair;

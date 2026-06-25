@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 14:02:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/24 19:37:51 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/25 12:35:22 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ static std::vector<Token>*	insert_token(std::vector<Token>* tokens, 	\
 std::vector<Token>*			begin_by_operator(std::vector<Token> &tokens, long int *pos)
 {
 	*pos = select_less_priority_operator(tokens);
+	std::cout << COLOR_YELLOW << "Pos: " << *pos << COLOR_RESET << std::endl;
 	if (*pos < 0)
 		return (nullptr);
 	if ((!*pos || static_cast<unsigned long int>(*pos) 					\

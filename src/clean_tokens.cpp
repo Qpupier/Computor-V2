@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:17:56 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/24 17:52:22 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/25 11:32:45 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,20 @@ static void	semantic_verification(const std::vector<Token>& tokens)
 	}
 }
 
-static void	remove_whitespaces(std::vector<Token> &tokens)
+static void	remove_whitespaces(t_possibility& possibility)
 {
-	for (size_t i = 0; i < tokens.size();)
-		if (tokens[i].getType() == Token::E_TOKEN_WHITESPACE)
-			tokens.erase(tokens.begin() + static_cast<long>(i));
+	for (std::vector<Token>::size_type i = 0; i < possibility.tokens.size();)
+		if (possibility.tokens[i].getType() == Token::E_TOKEN_WHITESPACE)
+		{
+			for (auto pair = possibility.brackets_pairs.begin(); pair != possibility.brackets_pairs.end(); pair++)
+			{
+				if (pair->second.first > i)
+					pair->second.first--;
+				if (pair->second.second > i)
+					pair->second.second--;
+			}
+			possibility.tokens.erase(possibility.tokens.begin() + static_cast<std::vector<Token>::difference_type>(i));
+		}
 		else
 			i++;
 }
@@ -86,12 +95,13 @@ static void	whitespaces_format_error(const std::vector<Token> &tokens)
 	}
 }
 
-void		clean_tokens(std::vector<Token> &tokens)
+void		clean_tokens(t_possibility& possibility)
 {
-	whitespaces_format_error(tokens);
-	remove_whitespaces(tokens);
-	semantic_verification(tokens);
-	if (!tokens.empty() 	\
-			&& tokens[tokens.size() - 1].getType() == Token::E_TOKEN_QUESTION)
-		tokens.pop_back();
+	whitespaces_format_error(possibility.tokens);
+	remove_whitespaces(possibility);
+	semantic_verification(possibility.tokens);
+	if (!possibility.tokens.empty() 	\
+			&& possibility.tokens[possibility.tokens.size() - 1].getType() 	\
+				== Token::E_TOKEN_QUESTION)
+		possibility.tokens.pop_back();
 }

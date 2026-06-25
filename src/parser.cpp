@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/24 17:51:35 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/25 11:39:34 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,15 @@ static std::string	new_operator(Token::t_token prev_token, 	\
 	return ("*");
 }
 
-static void			set_missing_operators(std::vector<Token> &tokens)
+static void			set_missing_operators(t_possibility &possibility)
 {
-	for (unsigned long int i = 1; i < tokens.size(); i++)
+	for (unsigned long int i = 1; i < possibility.tokens.size(); i++)
 	{
 		Token::t_token	prev_token;
 		Token::t_token	current_token;
 
-		prev_token = tokens[i - 1].getType();
-		current_token = tokens[i].getType();
+		prev_token = possibility.tokens[i - 1].getType();
+		current_token = possibility.tokens[i].getType();
 		if (prev_token != Token::E_TOKEN_OPERATOR 								\
 				&& current_token != Token::E_TOKEN_OPERATOR 						\
 				&& prev_token != Token::E_TOKEN_LEFT_PARENTHESIS 					\
@@ -52,12 +52,19 @@ static void			set_missing_operators(std::vector<Token> &tokens)
 		{
 			if (prev_token == Token::E_TOKEN_POLYNOMIAL 							\
 					&& current_token == Token::E_TOKEN_LEFT_PARENTHESIS)
-				tokens.insert(tokens.begin() + static_cast<long int>(i), 	\
+				possibility.tokens.insert(possibility.tokens.begin() + static_cast<long int>(i), 	\
 						Token("<>", Token::E_TOKEN_OPERATOR));
 			else
-				tokens.insert(tokens.begin() + static_cast<long int>(i), 	\
+				possibility.tokens.insert(possibility.tokens.begin() + static_cast<long int>(i), 	\
 						Token(new_operator(prev_token, current_token), 		\
 						Token::E_TOKEN_OPERATOR));
+			for (auto pair = possibility.brackets_pairs.begin(); pair != possibility.brackets_pairs.end(); pair++)
+			{
+				if (pair->second.first >= i)
+					pair->second.first++;
+				if (pair->second.second >= i)
+					pair->second.second++;
+			}
 		}
 	}
 }
@@ -118,10 +125,10 @@ AST*				compute_expression(const std::string &line, 	\
 		for (t_possibility &possibility : possibilities)
 			try
 			{
-				clean_tokens(possibility.tokens);
+				clean_tokens(possibility);
 				if (!is_right_side && !eval && set_function_left(possibility.tokens, data.stored))
 					return (nullptr);
-				set_missing_operators(possibility.tokens);
+				set_missing_operators(possibility);
 				tmp = build_ast(possibility, data);
 				if (!tmp)
 					throw ERROR_INVALID_EXPRESSION;
@@ -137,10 +144,10 @@ AST*				compute_expression(const std::string &line, 	\
 	}
 	else
 	{
-		clean_tokens(possibilities[0].tokens);
+		clean_tokens(possibilities[0]);
 		if (!is_right_side && !eval && set_function_left(possibilities[0].tokens, data.stored))
 			return (nullptr);
-		set_missing_operators(possibilities[0].tokens);
+		set_missing_operators(possibilities[0]);
 		ast = build_ast(possibilities[0], data);
 		if (!ast)
 			throw ERROR_INVALID_EXPRESSION;
