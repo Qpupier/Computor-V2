@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/06/25 17:21:26 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/06/26 15:00:04 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,7 @@ DIR_SRC		=	src
 DIR_OBJ		=	.obj
 DIR_INC		=	inc
 LST_SRC		=	AST/AST.cpp																			\
+				AST/backtracking_brackets.cpp														\
 				AST/backtracking_possibilities.cpp													\
 				AST/build_ast.cpp																	\
 				AST/build_ast_tokens.cpp															\
