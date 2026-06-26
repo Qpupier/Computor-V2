@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 16:10:44 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 17:20:02 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1309,6 +1309,37 @@ IType*			Polynomial::matrix_inversion(void) const
 		throw ERROR_MATRIX_INVERSION_SQUARE;
 	}
 	return (nullptr);
+}
+
+IType*			Polynomial::norm(void) const
+{
+	IType*	numerator_sum;
+	IType*	denominator_sum;
+	IType*	result;
+	IType*	square;
+	IType*	tmp;
+
+	numerator_sum = new Rational();
+	for (const auto& term : this->_terms)
+	{
+		tmp = numerator_sum;
+		square = *term.coefficient * *term.coefficient;
+		numerator_sum = *numerator_sum + *square;
+		delete square;
+		delete tmp;
+	}
+	for (const auto& divider : this->_dividers)
+	{
+		tmp = denominator_sum;
+		square = *divider.coefficient * *divider.coefficient;
+		denominator_sum = *denominator_sum + *square;
+		delete square;
+		delete tmp;
+	}
+	result = *numerator_sum / *denominator_sum;
+	delete numerator_sum;
+	delete denominator_sum;
+	return (result);// TODO: SQRT
 }
 
 Rational*		Polynomial::gcd(const IType &other) const

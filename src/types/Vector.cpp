@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/18 18:56:58 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 17:14:13 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -864,6 +864,11 @@ IType*		Vector::matrix_operator(const IType &other) const
 		throw ERROR_MATRIX_OPERATOR;
 	}
 	return (this_matrix.matrix_operator(other_matrix));
+}
+
+IType*		Vector::norm(void) const
+{
+	return (Matrix(*this).norm());
 }
 
 Rational*	Vector::gcd(const IType &other) const

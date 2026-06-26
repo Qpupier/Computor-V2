@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/18 17:01:59 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 16:57:33 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,9 @@ class	Rational: public IType
 		InfiniteDouble	getValue(void) const;
 
 		// Methods
+		InfiniteInt		integer_part(void) const;
+		std::ostream&	print(std::ostream &os) const;
+		std::string		to_string(void) const;
 		IType*			clone(void) const;
 		IType*			function_operator(const IType &other) const;
 		IType*			matrix_operator(const IType &other) const;
@@ -112,9 +115,6 @@ class	Rational: public IType
 		Rational*		gcd(const Complex & other) const;
 		Rational*		gcd(const Matrix & other) const;
 		Rational*		gcd(const Vector & other) const;
-		InfiniteInt		integer_part(void) const;
-		std::ostream&	print(std::ostream &os) const;
-		std::string		to_string(void) const;
 		bool			in_D(void) const;
 		bool			in_Z(void) const;
 		void			print_rounded	\

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/18 17:33:33 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 17:08:19 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ class	Matrix: public IType
 		IType*			matrix_operator(const IType &other) const;
 		Matrix*			matrix_operator(const Matrix &other) const;
 		IType*			matrix_inversion(void) const;
+		IType*			norm(void) const;
 		Rational*		gcd(const IType &ther) const;
 		Rational*		gcd(const Matrix &other) const;
 		Rational*		gcd(const Rational &other) const;

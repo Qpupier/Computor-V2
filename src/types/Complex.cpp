@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/18 17:18:06 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 17:09:46 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -820,6 +820,23 @@ IType*			Complex::matrix_inversion(void) const
 {
 	throw ERROR_MATRIX_INVERSION_SQUARE;
 	return (nullptr);
+}
+
+IType*			Complex::norm(void) const
+{
+	Rational*	real_squared;
+	Rational*	imaginary_squared;
+	Rational*	sum;
+	Rational*	result;
+
+	real_squared = this->_real * this->_real;
+	imaginary_squared = this->_imaginary * this->_imaginary;
+	sum = *real_squared + *imaginary_squared;
+	delete real_squared;
+	delete imaginary_squared;
+	result = new Rational(*sum);
+	delete sum;// TODO: SQRT
+	return (result);
 }
 
 Rational*		Complex::gcd(const Rational &other) const

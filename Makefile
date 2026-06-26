@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/06/26 15:54:42 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/06/26 17:03:11 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,14 +38,14 @@ LST_SRC		=	AST/AST.cpp																			\
 				types/IType.cpp																		\
 				types/Complex.cpp																	\
 				types/DefinedFunction.cpp															\
-				types/InfiniteDouble.cpp															\
-				types/InfiniteInt.cpp																\
 				types/Matrix.cpp																	\
 				types/Operator.cpp																	\
 				types/Polynomial.cpp																\
 				types/Rational.cpp																	\
 				types/Vector.cpp																	\
 				main.cpp																			\
+				InfiniteDouble.cpp																	\
+				InfiniteInt.cpp																		\
 				compute_line.cpp																	\
 				equation.cpp																		\
 				equation_resolution.cpp																\

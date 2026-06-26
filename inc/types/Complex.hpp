@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:35:43 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/18 17:33:24 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 17:08:00 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,9 @@ class	Complex: public IType
 		void	setImaginary(const Rational &imaginary);
 
 		// Methods
+		std::string		to_string(void) const;
+		std::ostream&	print(std::ostream &os) const;
+		IType*			norm(void) const;
 		IType*			clone(void) const;
 		IType*			function_operator(const IType &other) const;
 		IType*			matrix_operator(const IType &other) const;
@@ -103,8 +106,6 @@ class	Complex: public IType
 		Rational*		gcd(const Rational &other) const;
 		Rational*		gcd(const Matrix &other) const;
 		Rational*		gcd(const Vector &other) const;
-		std::ostream&	print(std::ostream &os) const;
-		std::string		to_string(void) const;
 		bool			values_in_D(void) const;
 		bool			values_in_Z(void) const;
 		void			print_rounded(const std::string var = std::string()) const;

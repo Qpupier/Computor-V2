@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:35:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 16:49:19 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 17:19:36 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,29 @@
 #include "Vector.hpp"
 
 // Utils
+
+static IType*	function_norm(const IType &other)
+{
+	const Complex*		other_complex;
+	const Matrix*		other_matrix;
+	const Polynomial*	other_polynomial;
+	const Vector*		other_vector;
+
+	other_complex = dynamic_cast<const Complex*>(&other);
+	if (other_complex)
+		return (other_complex->norm());
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (other_matrix->norm());
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	if (other_polynomial)
+		return (other_polynomial->norm());
+	other_vector = dynamic_cast<const Vector*>(&other);
+	if (other_vector)
+		return (other_vector->norm());
+	throw LogicError("Norm function not exists for rationals");
+	return (nullptr);
+}
 
 static IType*	function_absolute(const IType &other)
 {
@@ -226,7 +249,7 @@ IType*			DefinedFunction::function_operator(const IType &other) const
 	switch (this->_function)
 	{
 		case E_FUNCTION_NORM:
-			return (other.clone());// TODO
+			return (function_norm(other));
 		case E_FUNCTION_ABSOLUTE:
 			return (function_absolute(other));
 		default:

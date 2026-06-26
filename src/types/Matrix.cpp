@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/18 17:31:38 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 17:12:47 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1023,6 +1023,26 @@ IType*			Matrix::matrix_inversion(void) const
 		for (unsigned long long int i(0); i < this->_width; i++)
 			result->setValue(i, j, matrix.getValue(this->_width + i, j));
 	return (result);
+}
+
+IType*			Matrix::norm(void) const
+{
+	Rational*	result;
+
+	result = new Rational();
+	for (unsigned long long int j(0); j < this->_height; j++)
+		for (unsigned long long int i(0); i < this->_width; i++)
+		{
+			Rational*	square;
+			Rational*	tmp;
+
+			square = this->_matrix[j][i] * this->_matrix[j][i];
+			tmp = result;
+			result = *result + *square;
+			delete square;
+			delete tmp;
+		}
+	return (result);// TODO: SQRT
 }
 
 Rational*		Matrix::gcd(const Rational &other) const

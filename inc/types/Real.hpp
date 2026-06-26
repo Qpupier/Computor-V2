@@ -1,38 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   DefinedFunction.hpp                                :+:      :+:    :+:   */
+/*   Real.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/26 15:16:29 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 17:44:03 by qpupier          ###   ########lyon.fr   */
+/*   Created: 2026/06/26 17:41:08 by qpupier           #+#    #+#             */
+/*   Updated: 2026/06/26 17:44:55 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FUNCTION_HPP
-# define FUNCTION_HPP
+#ifndef REAL_HPP
+# define REAL_HPP
 
 # include "IType.hpp"
+# include "InfiniteDouble.hpp"
 
-class	DefinedFunction: public IType
+class	Real: public IType
 {
+	// Constructors and destructor
 	public:
-		// Utils
-		typedef enum	e_function
-		{
-			E_FUNCTION_NOTHING,
-			E_FUNCTION_NORM,
-			E_FUNCTION_ABSOLUTE
-		}				t_function;
-
-		// Constructors and destructor
-		DefinedFunction(t_function function): _function(function) {};
-		DefinedFunction(void): _function(E_FUNCTION_NOTHING) {};
-		~DefinedFunction(void) {};
+		Real(void);
+		Real(const Real &other);
+		~Real(void) {};
 
 		// Operator overloads
-		explicit	operator bool(void) const;
+		explicit	operator bool() const;
 		bool		operator==(const IType &other) const;
 		bool		operator==(const long long int value) const;
 		bool		operator!=(const IType &other) const;
@@ -65,14 +58,13 @@ class	DefinedFunction: public IType
 		IType*			matrix_inversion(void) const;
 		IType*			matrix_operator(const IType &other) const;
 		Rational*		gcd(const IType &other) const;
-		std::ostream&	print(std::ostream &os) const;
+		std::ostream	&print(std::ostream &os) const;
 		std::string		to_string(void) const;
 		void			print_rounded(const std::string var = std::string()) const;
-
+	
 	private:
-		t_function	_function;
+		// Members
+		InfiniteDouble	_value;
 };
-
-std::ostream&	operator<<(std::ostream& os, const DefinedFunction& function);
 
 #endif
