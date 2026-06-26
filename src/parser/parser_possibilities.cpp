@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/25 17:04:19 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 11:27:14 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 16:31:39 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ static std::string	new_operator(Token::t_token prev_token, 			\
 {
 	if (prev_token == Token::E_TOKEN_MATRIX && current_token == Token::E_TOKEN_MATRIX)
 		return ("**");
-	if ((prev_token == Token::E_TOKEN_RIGHT_PARENTHESIS 			\
+	if ((prev_token == Token::E_TOKEN_RIGHT_PARENTHESES 			\
 				|| prev_token == Token::E_TOKEN_POLYNOMIAL 			\
 				|| prev_token == Token::E_TOKEN_MATRIX 				\
 				|| prev_token == Token::E_TOKEN_VECTOR) 			\
-			&& (current_token == Token::E_TOKEN_LEFT_PARENTHESIS 	\
+			&& (current_token == Token::E_TOKEN_LEFT_PARENTHESES 	\
 				|| current_token == Token::E_TOKEN_POLYNOMIAL 		\
 				|| current_token == Token::E_TOKEN_MATRIX 			\
 				|| current_token == Token::E_TOKEN_VECTOR))
@@ -35,8 +35,8 @@ static inline bool	is_operator_missing(Token::t_token prev_token, 		\
 {
 	return (prev_token != Token::E_TOKEN_OPERATOR 					\
 			&& current_token != Token::E_TOKEN_OPERATOR 			\
-			&& prev_token != Token::E_TOKEN_LEFT_PARENTHESIS 		\
-			&& current_token != Token::E_TOKEN_RIGHT_PARENTHESIS 	\
+			&& prev_token != Token::E_TOKEN_LEFT_PARENTHESES 		\
+			&& current_token != Token::E_TOKEN_RIGHT_PARENTHESES 	\
 			&& prev_token != Token::E_TOKEN_LEFT_ABS 				\
 			&& current_token != Token::E_TOKEN_RIGHT_ABS 			\
 			&& prev_token != Token::E_TOKEN_LEFT_NORM 				\
@@ -54,7 +54,7 @@ static void			set_missing_operators(t_possibility &possibility)
 		if (is_operator_missing(prev_token, current_token))
 		{
 			bool	is_function(prev_token == Token::E_TOKEN_POLYNOMIAL 	\
-					&& current_token == Token::E_TOKEN_LEFT_PARENTHESIS);
+					&& current_token == Token::E_TOKEN_LEFT_PARENTHESES);
 
 			possibility.tokens.insert(possibility.tokens.begin() 			\
 					+ static_cast<long int>(i), Token(is_function 			\
@@ -102,7 +102,7 @@ AST*				get_the_only_possibility(							\
 				eval));
 	for (t_possibility &possibility : possibilities)
 		try
-		{
+		{// TODO: Enlever les possibilites ou il y a des brackets ouvrants et fermants consecutifs
 			tmp = compute_possibility(possibility, data, is_right_side, eval);
 			if (tmp)
 			{

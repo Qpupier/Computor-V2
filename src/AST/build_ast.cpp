@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 16:48:49 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 12:24:41 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 16:10:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static AST*				build_ast_recur(t_possibility& possibility, 	\
 
 	must_return = true;
 	external_brackets = test_external_brackets(possibility);
-	if (external_brackets == E_BRACKET_PARENTHESIS 				\
+	if (external_brackets == E_BRACKET_PARENTHESES 				\
 			|| external_brackets == E_BRACKET_NORM 				\
 			|| external_brackets == E_BRACKET_ABS)
 		return (handle_external_brackets(possibility, external_brackets, data));
@@ -51,7 +51,7 @@ static AST*				build_node(t_possibility& left_tokens, 			\
 	{
 		delete left_child;
 		delete right_child;
-		throw LogicError("Invalid expression: empty parenthesis");
+		throw LogicError("Invalid expression: empty parentheses");
 	}
 	return (new AST(token, left_child, right_child, data));
 }

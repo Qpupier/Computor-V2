@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:15:11 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/25 14:22:07 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 16:10:23 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ void	Token::setType(t_token type)
 void			define_token_types(std::map<const Token::t_token, 	\
 		std::regex> &tokens_types)
 {
-	tokens_types[Token::E_TOKEN_LEFT_PARENTHESIS] 	\
+	tokens_types[Token::E_TOKEN_LEFT_PARENTHESES] 	\
 			= std::regex(TOKEN_BEGIN "\\(" TOKEN_END);
-	tokens_types[Token::E_TOKEN_RIGHT_PARENTHESIS] 	\
+	tokens_types[Token::E_TOKEN_RIGHT_PARENTHESES] 	\
 			= std::regex(TOKEN_BEGIN "\\)" TOKEN_END);
 	tokens_types[Token::E_TOKEN_PIPE] 				\
 			= std::regex(TOKEN_BEGIN "\\|" TOKEN_END);

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/18 17:20:25 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 16:37:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,7 +288,7 @@ IType*		Rational::operator+(const IType &other) const
 	const Rational*		other_rational;
 	const Complex*		other_complex;
 	const Matrix*		other_matrix;
-	const Polynomial*	other_polynomial;
+	const Polynomial*	other_polynomial;// TODO: Ajouter partout les Vectors
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)

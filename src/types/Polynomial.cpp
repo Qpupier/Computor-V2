@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/18 17:40:38 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 16:10:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,19 +275,19 @@ static void								print_coefficient(					\
 		bool first_term)
 {
 	Complex*	complex;
-	bool		need_parenthesis;
+	bool		need_parentheses;
 
 	if (!first_term)
 		print_coefficient_sign(os, &coefficient);
 	complex = dynamic_cast<Complex*>(coefficient);
-	need_parenthesis = complex && complex->getReal() && complex->getImaginary();
-	if (need_parenthesis)
+	need_parentheses = complex && complex->getReal() && complex->getImaginary();
+	if (need_parentheses)
 		os << "(";
 	if (power && *coefficient == -1)
 		os << "-";
 	else if (!power || *coefficient != 1)
 		os << *coefficient;
-	if (need_parenthesis)
+	if (need_parentheses)
 		os << ")";
 	else if (complex && complex->getImaginary() && power)
 		os << " * ";

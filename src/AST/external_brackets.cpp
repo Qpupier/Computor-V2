@@ -6,11 +6,12 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/25 17:12:46 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 12:26:05 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 16:22:57 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
+#include "DefinedFunction.hpp"
 
 static t_bracket	remove_external_brackets(t_possibility& possibility, 	\
 		std::vector<Token>& sub_tokens, 									\
@@ -43,10 +44,10 @@ t_bracket			test_external_brackets(t_possibility& p)
 		{
 			first_token_type = p.tokens.front().getType();
 			last_token_type = p.tokens.back().getType();
-			if (first_token_type == Token::E_TOKEN_LEFT_PARENTHESIS 	\
-					&& last_token_type == Token::E_TOKEN_RIGHT_PARENTHESIS)
+			if (first_token_type == Token::E_TOKEN_LEFT_PARENTHESES 	\
+					&& last_token_type == Token::E_TOKEN_RIGHT_PARENTHESES)
 				return (remove_external_brackets(p, sub_tokens, 		\
-						pair, E_BRACKET_PARENTHESIS));
+						pair, E_BRACKET_PARENTHESES));
 			if (first_token_type == Token::E_TOKEN_LEFT_NORM 			\
 					&& last_token_type == Token::E_TOKEN_RIGHT_NORM)
 				return (remove_external_brackets(p, sub_tokens, 		\
@@ -62,13 +63,15 @@ t_bracket			test_external_brackets(t_possibility& p)
 AST*				handle_external_brackets(t_possibility& possibility, 	\
 		t_bracket brackets_type, t_data& data)
 {
-	return (build_ast(possibility, data));
-	// if (brackets_type == E_BRACKET_PARENTHESIS)
-	// 	return (build_ast(possibility, data));
-	// if (brackets_type == E_BRACKET_NORM)
-	// 	return (new AST(new Function(NORM), build_ast(possibility, data), nullptr));
-	// if (brackets_type == E_BRACKET_ABS)
-	// 	return (new AST(new Function(ABSOLUTE), build_ast(possibility, data), nullptr));
-	(void)brackets_type;
-	throw UnexpectedError("Invalid bracket type");
+	if (brackets_type == E_BRACKET_PARENTHESES)
+		return (build_ast(possibility, data));
+	if (brackets_type == E_BRACKET_NORM)
+		return (new AST(													\
+				new DefinedFunction(DefinedFunction::E_FUNCTION_NORM), 		\
+				build_ast(possibility, data), nullptr));
+	if (brackets_type == E_BRACKET_ABS)
+		return (new AST(													\
+				new DefinedFunction(DefinedFunction::E_FUNCTION_ABSOLUTE), 	\
+				build_ast(possibility, data), nullptr));
+	throw ERROR_UNKNOWN_BRACKET;
 }

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:16:29 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 15:54:31 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 16:13:21 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ class	DefinedFunction: public IType
 		{
 			E_FUNCTION_NOTHING,
 			E_FUNCTION_NORM,
-			E_FUNCTION_ABS
+			E_FUNCTION_ABSOLUTE
 		}				t_function;
 
 		// Constructor

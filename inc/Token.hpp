@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:10:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 12:22:32 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 16:10:23 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@
 typedef enum	e_bracket
 {
 	E_BRACKET_NOTHING,
-	E_BRACKET_PARENTHESIS,
-	E_BRACKET_LEFT_PARENTHESIS,
-	E_BRACKET_RIGHT_PARENTHESIS,
+	E_BRACKET_PARENTHESES,
+	E_BRACKET_LEFT_PARENTHESES,
+	E_BRACKET_RIGHT_PARENTHESES,
 	E_BRACKET_NORM,
 	E_BRACKET_LEFT_NORM,
 	E_BRACKET_RIGHT_NORM,
@@ -63,8 +63,8 @@ class	Token
 		{
 			E_TOKEN_ERROR,
 			E_TOKEN_TO_DELETE,
-			E_TOKEN_LEFT_PARENTHESIS,
-			E_TOKEN_RIGHT_PARENTHESIS,
+			E_TOKEN_LEFT_PARENTHESES,
+			E_TOKEN_RIGHT_PARENTHESES,
 			E_TOKEN_PIPE,
 			E_TOKEN_LEFT_NORM,
 			E_TOKEN_RIGHT_NORM,

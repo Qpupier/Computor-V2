@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 15:53:13 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 15:00:29 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 16:22:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ static void					push_bracket_token(						\
 		std::vector<Token>& new_tokens, t_bracket bracket_type, 	\
 		bool is_left, unsigned long int& increment)
 {
-	if (bracket_type == E_BRACKET_PARENTHESIS)
+	if (bracket_type == E_BRACKET_PARENTHESES)
 		new_tokens.push_back(Token("(", is_left 	\
-				? Token::E_TOKEN_LEFT_PARENTHESIS 	\
-				: Token::E_TOKEN_RIGHT_PARENTHESIS));
+				? Token::E_TOKEN_LEFT_PARENTHESES 	\
+				: Token::E_TOKEN_RIGHT_PARENTHESES));
 	else if (bracket_type == E_BRACKET_NORM)
 	{
 		new_tokens.push_back(Token("||", is_left 	\
@@ -34,7 +34,7 @@ static void					push_bracket_token(						\
 				? Token::E_TOKEN_LEFT_ABS 			\
 				: Token::E_TOKEN_RIGHT_ABS));
 	else
-		throw UnexpectedError("Unknown bracket type");
+		throw ERROR_UNKNOWN_BRACKET;
 }
 
 static t_possibility		get_possibility(	\
@@ -43,8 +43,8 @@ static t_possibility		get_possibility(	\
 	std::vector<Token>	result;
 
 	for (std::vector<Token>::size_type i = 0; i < tokens.size(); i++)
-		if (tokens[i].getType() == Token::E_TOKEN_LEFT_PARENTHESIS 			\
-				|| tokens[i].getType() == Token::E_TOKEN_RIGHT_PARENTHESIS 	\
+		if (tokens[i].getType() == Token::E_TOKEN_LEFT_PARENTHESES 			\
+				|| tokens[i].getType() == Token::E_TOKEN_RIGHT_PARENTHESES 	\
 				|| tokens[i].getType() == Token::E_TOKEN_PIPE)
 		{
 			bool	token_pushed(false);
@@ -67,7 +67,7 @@ static t_possibility		get_possibility(	\
 
 void						add_new_possibility(							\
 		t_list_brackets_pairs& results, const std::vector<Token>& tokens, 	\
-		t_parenthesis_data& data, const unsigned long int pos)
+		t_parentheses_data& data, const unsigned long int pos)
 {
 	t_list_brackets_pairs	result;
 
@@ -77,8 +77,8 @@ void						add_new_possibility(							\
 
 t_list_brackets_pairs		backtracking_possibilities(						\
 		const std::vector<Token>& tokens, 									\
-		t_parenthesis_data data 											\
-			= t_parenthesis_data({											\
+		t_parentheses_data data 											\
+			= t_parentheses_data({											\
 				std::vector<std::pair<t_bracket, unsigned long int>>(), 	\
 				t_brackets_pairs()}), 										\
 		const unsigned long int pos = 0)
@@ -92,8 +92,8 @@ t_list_brackets_pairs		backtracking_possibilities(						\
 		return (t_list_brackets_pairs(1, data.pairs));
 	}
 	token_type = tokens[pos].getType();
-	if (token_type == Token::E_TOKEN_LEFT_PARENTHESIS 	\
-			|| token_type == Token::E_TOKEN_RIGHT_PARENTHESIS)
+	if (token_type == Token::E_TOKEN_LEFT_PARENTHESES 	\
+			|| token_type == Token::E_TOKEN_RIGHT_PARENTHESES)
 		return (parentheses_brackets(tokens, data, pos, token_type));
 	if (token_type == Token::E_TOKEN_PIPE)
 		return (try_pipe_brackets(tokens, data, pos));

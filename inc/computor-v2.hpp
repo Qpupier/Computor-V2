@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/25 17:31:11 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 16:33:59 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@
 # define ERROR_VECTOR_OUT_OF_RANGE			LogicError("Vector index out of range")
 # define ERROR_OPERATOR_EXPECTED			UnexpectedError("Invalid expression: operator expected")
 # define ERROR_UNEXPECTED					UnexpectedError("Impossible to complete operation")
+# define ERROR_UNKNOWN_BRACKET				UnexpectedError("Unknown bracket type")
+# define ERROR_UNKNOWN_FUNCTION				UnexpectedError("Unknown function")
 # define UNSUPPORTED_DIVISION				UnsupportedError("Division not supported between polynomials with these powers")
 # define UNSUPPORTED_EXPONENT				UnsupportedError("Exponentiation can only be positive integers")
 # define UNSUPPORTED_MULTI_POLYNOMIALS		UnsupportedError("Multiple unknown polynomials are not supported")

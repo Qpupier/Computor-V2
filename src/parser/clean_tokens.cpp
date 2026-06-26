@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:17:56 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 12:24:24 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 16:10:23 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static bool	bad_sign_placement(const std::vector<Token> &tokens, size_t i)
 	current_is_whitespace = tokens[i].getType() == Token::E_TOKEN_WHITESPACE;
 	if (i > 2)
 		token_type = tokens[i - 2].getType();
-	if ((i == 1 || token_type == Token::E_TOKEN_LEFT_PARENTHESIS 		\
+	if ((i == 1 || token_type == Token::E_TOKEN_LEFT_PARENTHESES 		\
 				|| token_type == Token::E_TOKEN_LEFT_NORM 				\
 				|| token_type == Token::E_TOKEN_LEFT_ABS) 				\
 			&& prev_is_sign && current_is_whitespace)
@@ -72,7 +72,7 @@ static bool	bad_sign_placement(const std::vector<Token> &tokens, size_t i)
 		token_type = tokens[i - 3].getType();
 	return (i > 1 														\
 			&& (i == 2 													\
-				|| token_type == Token::E_TOKEN_LEFT_PARENTHESIS 		\
+				|| token_type == Token::E_TOKEN_LEFT_PARENTHESES 		\
 				|| token_type == Token::E_TOKEN_LEFT_NORM 				\
 				|| token_type == Token::E_TOKEN_LEFT_ABS) 				\
 			&& tokens[i - 2].getType() == Token::E_TOKEN_WHITESPACE 	\
@@ -95,9 +95,9 @@ static void	whitespaces_format_error(const std::vector<Token> &tokens)
 		{
 			next_type = tokens[i + 1].getType();
 			if (prev_type != Token::E_TOKEN_OPERATOR 					\
-					&& prev_type != Token::E_TOKEN_LEFT_PARENTHESIS 	\
+					&& prev_type != Token::E_TOKEN_LEFT_PARENTHESES 	\
 					&& next_type != Token::E_TOKEN_OPERATOR 			\
-					&& next_type != Token::E_TOKEN_RIGHT_PARENTHESIS 	\
+					&& next_type != Token::E_TOKEN_RIGHT_PARENTHESES 	\
 					&& next_type != Token::E_TOKEN_QUESTION)
 				throw LogicError("No space allowed without operator");
 			if (prev_type == Token::E_TOKEN_OPERATOR_INVERSE)

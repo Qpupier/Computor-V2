@@ -6,12 +6,31 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:35:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 15:55:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 16:49:19 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "DefinedFunction.hpp"
 #include "computor-v2.hpp"
+#include "Rational.hpp"
+#include "Complex.hpp"
+#include "Matrix.hpp"
+#include "Polynomial.hpp"
+#include "Vector.hpp"
+
+// Utils
+
+static IType*	function_absolute(const IType &other)
+{
+	const Rational*	other_rational;
+
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (other < 0 ? -other : other.clone());
+	throw LogicError("Absolute function only exists for Rational types");
+	return (nullptr);
+}
+
 
 // Operator overloads
 
@@ -204,9 +223,15 @@ IType*			DefinedFunction::clone(void) const
 
 IType*			DefinedFunction::function_operator(const IType &other) const
 {
-	throw ERROR_UNEXPECTED;
-	(void)other;
-	return (nullptr);
+	switch (this->_function)
+	{
+		case E_FUNCTION_NORM:
+			return (other.clone());// TODO
+		case E_FUNCTION_ABSOLUTE:
+			return (function_absolute(other));
+		default:
+			throw ERROR_UNKNOWN_FUNCTION;
+	}
 }
 
 IType*			DefinedFunction::matrix_inversion(void) const
@@ -234,13 +259,11 @@ std::ostream&	DefinedFunction::print(std::ostream &os) const
 	switch (this->_function)
 	{
 		case E_FUNCTION_NORM:
-			os << "norm";
-			break;
-		case E_FUNCTION_ABS:
-			os << "abs";
-			break;
+			return (os << "norm");
+		case E_FUNCTION_ABSOLUTE:
+			return (os << "abs");
 		default:
-			throw UnexpectedError("Unknown function");
+			throw ERROR_UNKNOWN_FUNCTION;
 	}
 	return (os);
 }

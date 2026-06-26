@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 14:49:16 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 15:11:27 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 16:10:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "computor-v2.hpp"
 
 static t_list_brackets_pairs	pipe_left_bracket(					\
-		const std::vector<Token>& tokens, t_parenthesis_data data, 	\
+		const std::vector<Token>& tokens, t_parentheses_data data, 	\
 		const unsigned long int pos, t_bracket bracket_type)
 {
 	t_list_brackets_pairs	results;
@@ -37,7 +37,7 @@ static t_list_brackets_pairs	pipe_left_bracket(					\
 }
 
 static t_list_brackets_pairs	pipe_right_bracket(	\
-		const std::vector<Token>& tokens, t_parenthesis_data data, 	\
+		const std::vector<Token>& tokens, t_parentheses_data data, 	\
 		const unsigned long int pos, t_bracket bracket_type)
 {
 	t_list_brackets_pairs	results;
@@ -64,7 +64,7 @@ static t_list_brackets_pairs	pipe_right_bracket(	\
 }
 
 static t_list_brackets_pairs	try_norm_absolute_brackets(			\
-		const std::vector<Token>& tokens, t_parenthesis_data data, 	\
+		const std::vector<Token>& tokens, t_parentheses_data data, 	\
 		const unsigned long int pos, t_bracket bracket_type)
 {
 	t_list_brackets_pairs	result;
@@ -86,7 +86,7 @@ static t_list_brackets_pairs	try_norm_absolute_brackets(			\
 }
 
 t_list_brackets_pairs			try_pipe_brackets(					\
-		const std::vector<Token>& tokens, t_parenthesis_data data, 	\
+		const std::vector<Token>& tokens, t_parentheses_data data, 	\
 		const unsigned long int pos)
 {
 	t_list_brackets_pairs	results;
@@ -110,18 +110,18 @@ t_list_brackets_pairs			try_pipe_brackets(					\
 }
 
 t_list_brackets_pairs			parentheses_brackets(			\
-	const std::vector<Token>& tokens, t_parenthesis_data data, 	\
+	const std::vector<Token>& tokens, t_parentheses_data data, 	\
 	const unsigned long int pos, Token::t_token token_type)
 {
-	if (token_type == Token::E_TOKEN_LEFT_PARENTHESIS)
+	if (token_type == Token::E_TOKEN_LEFT_PARENTHESES)
 	{
-		data.lasts.push_back(std::make_pair(E_BRACKET_LEFT_PARENTHESIS, pos));
+		data.lasts.push_back(std::make_pair(E_BRACKET_LEFT_PARENTHESES, pos));
 		return (backtracking_possibilities(tokens, data, pos + 1));
 	}
 	if (data.lasts.empty() 										\
-			|| data.lasts.back().first != E_BRACKET_LEFT_PARENTHESIS)
+			|| data.lasts.back().first != E_BRACKET_LEFT_PARENTHESES)
 		throw ERROR_BRACKETS;
-	data.pairs.push_back(std::make_pair(E_BRACKET_PARENTHESIS, 	\
+	data.pairs.push_back(std::make_pair(E_BRACKET_PARENTHESES, 	\
 			std::make_pair(data.lasts.back().second, pos)));
 	data.lasts.pop_back();
 	return (backtracking_possibilities(tokens, data, pos + 1));

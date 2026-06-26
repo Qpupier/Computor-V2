@@ -11,7 +11,7 @@ run_error " " "" $1 ; status=$((status | $?))
 run_error "42 = 42 = 42" "Too many '=' in the expression" $1 ; status=$((status | $?))
 run_error "42 = ??" "Too many '?' in the expression" $1 ; status=$((status | $?))
 run_error "()" "Invalid expression format" $1 ; status=$((status | $?))
-run_error "42()" "Invalid expression: empty parenthesis" $1 ; status=$((status | $?))
+run_error "42()" "Invalid expression: empty parentheses" $1 ; status=$((status | $?))
 run_error "*1" "Operator cannot be at the beginning or end of an expression" $1 ; status=$((status | $?))
 run_error "1++1" "Two operators cannot be adjacent" $1 ; status=$((status | $?))
 

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 12:24:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 16:29:05 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,11 +188,9 @@ std::ostream&	AST::print(std::ostream &os) const
 
 bool			AST::end_of_tree(void) const
 {
-	if ((this->_node->to_string() != TOKEN_OPERATOR_INVERSE 	\
-				&& !this->_left && this->_right) 				\
-			|| (this->_left && !this->_right))
-		throw ERROR_OPERATOR_EXPECTED;
-	return (!this->_right);
+	// if (!this->_left && !this->_right)
+	// 	throw ERROR_OPERATOR_EXPECTED;// [ ]: Verifier si c'est suffisant comme verif
+	return (!this->_left && !this->_right);
 }
 
 void			AST::free(void)
@@ -222,11 +220,16 @@ void			AST::reduce_expression(	\
 		this->_right->reduce_expression(stored);
 	if (this->end_of_tree())
 		return;
-	op = dynamic_cast<Operator*>(this->_node);
-	if (!op)
-		throw ERROR_OPERATOR_EXPECTED;
-	result = get_result(this->_left ? this->_left->_node : nullptr, 	\
-			this->_right->_node, op->getOperator(), stored);
+	if (this->_left && !this->_right)
+		result = this->_node->function_operator(*this->_left->_node);
+	else
+	{
+		op = dynamic_cast<Operator*>(this->_node);
+		if (!op)
+			throw ERROR_OPERATOR_EXPECTED;
+		result = get_result(this->_left ? this->_left->_node : nullptr, 	\
+				this->_right->_node, op->getOperator(), stored);
+	}
 	this->free();
 	this->_node = result;
 	this->_left = nullptr;
