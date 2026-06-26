@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 15:53:13 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/25 19:12:29 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 12:26:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static std::vector<std::vector<std::pair<t_bracket, std::pair<unsigned long int,
 		data_copy.pairs.push_back(std::make_pair(E_BRACKET_NORM, 	\
 				std::make_pair(data_copy.lasts.back().second, pos)));
 		data_copy.lasts.pop_back();
-		add_new_possibility(results, tokens, data_copy, pos + 2);// TODO: Modifier pour que ca ne decale pas les positions des autres brackets
+		add_new_possibility(results, tokens, data_copy, pos + 2);
 	}
 	catch (...) {}
 	return (results);
@@ -137,25 +137,47 @@ std::vector<std::vector<std::pair<t_bracket, std::pair<unsigned long int, unsign
 t_possibility	get_possibility(const std::vector<Token>& initial_tokens, const std::vector<std::pair<t_bracket, std::pair<unsigned long int, unsigned long int>>>& pairs)
 {
 	std::vector<Token>		new_tokens;
-	unsigned long long int	pos(0);
 
-	for (const auto& token : initial_tokens)
+	for (std::vector<Token>::size_type i = 0; i < initial_tokens.size(); ++i)
 	{
+		const Token& token = initial_tokens[i];
 		if (token.getType() == Token::E_TOKEN_LEFT_PARENTHESIS || token.getType() == Token::E_TOKEN_RIGHT_PARENTHESIS || token.getType() == Token::E_TOKEN_PIPE)
 		{
 			bool	token_pushed(false);
 
 			for (const auto& t : pairs)
 			{
-				if (t.second.first == pos)
+				if (t.second.first == i)
 				{
-					new_tokens.push_back(Token(token.getValue(), token.getType() == Token::E_TOKEN_PIPE ? Token::E_TOKEN_LEFT_ABS : token.getType()));
+					if (t.first == E_BRACKET_PARENTHESIS)
+						new_tokens.push_back(Token(token.getValue(), token.getType()));
+					else if (t.first == E_BRACKET_NORM)
+					{
+						new_tokens.push_back(Token("||", Token::E_TOKEN_LEFT_NORM));
+						new_tokens.push_back(Token("", Token::E_TOKEN_TO_DELETE));
+						i++;
+					}
+					else if (t.first == E_BRACKET_ABS)
+						new_tokens.push_back(Token(token.getValue(), Token::E_TOKEN_LEFT_ABS));
+					else
+						throw UnexpectedError("Unknown bracket type");
 					token_pushed = true;
 					break;
 				}
-				if (t.second.second == pos)
+				else if (t.second.second == i)
 				{
-					new_tokens.push_back(Token(token.getValue(), token.getType() == Token::E_TOKEN_PIPE ? Token::E_TOKEN_RIGHT_ABS : token.getType()));
+					if (t.first == E_BRACKET_PARENTHESIS)
+						new_tokens.push_back(Token(token.getValue(), token.getType()));
+					else if (t.first == E_BRACKET_NORM)
+					{
+						new_tokens.push_back(Token("||", Token::E_TOKEN_RIGHT_NORM));
+						new_tokens.push_back(Token("", Token::E_TOKEN_TO_DELETE));
+						i++;
+					}
+					else if (t.first == E_BRACKET_ABS)
+						new_tokens.push_back(Token(token.getValue(), Token::E_TOKEN_RIGHT_ABS));
+					else
+						throw UnexpectedError("Unknown bracket type");
 					token_pushed = true;
 					break;
 				}
@@ -165,7 +187,6 @@ t_possibility	get_possibility(const std::vector<Token>& initial_tokens, const st
 		}
 		else
 			new_tokens.push_back(Token(token.getValue(), token.getType()));
-		pos++;
 	}
 	return (t_possibility{new_tokens, pairs});
 }

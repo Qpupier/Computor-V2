@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:10:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/25 15:15:38 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 12:22:32 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ class	Token
 		typedef enum	e_token
 		{
 			E_TOKEN_ERROR,
+			E_TOKEN_TO_DELETE,
 			E_TOKEN_LEFT_PARENTHESIS,
 			E_TOKEN_RIGHT_PARENTHESIS,
 			E_TOKEN_PIPE,

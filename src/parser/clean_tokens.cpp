@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:17:56 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/25 14:20:42 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 12:24:24 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,10 @@ static void	semantic_verification(const std::vector<Token>& tokens)
 static void	remove_whitespaces(t_possibility& possibility)
 {
 	for (std::vector<Token>::size_type i = 0; i < possibility.tokens.size();)
-		if (possibility.tokens[i].getType() == Token::E_TOKEN_WHITESPACE)
+		if (possibility.tokens[i].getType() == Token::E_TOKEN_WHITESPACE 	\
+				|| possibility.tokens[i].getType() == Token::E_TOKEN_TO_DELETE)
 		{
-			for (auto pair = possibility.brackets_pairs.begin(); 	\
+			for (auto pair = possibility.brackets_pairs.begin(); 			\
 					pair != possibility.brackets_pairs.end(); pair++)
 			{
 				if (pair->second.first > i)
@@ -44,7 +45,7 @@ static void	remove_whitespaces(t_possibility& possibility)
 				if (pair->second.second > i)
 					pair->second.second--;
 			}
-			possibility.tokens.erase(possibility.tokens.begin() 	\
+			possibility.tokens.erase(possibility.tokens.begin() 			\
 					+ static_cast<std::vector<Token>::difference_type>(i));
 		}
 		else
