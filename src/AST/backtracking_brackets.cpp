@@ -6,14 +6,16 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 14:49:16 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 14:52:42 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/26 15:11:27 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "backtracking_possibilities.hpp"
 #include "computor-v2.hpp"
 
-static t_list_brackets_pairs	pipe_left_bracket(const std::vector<Token>& tokens, t_parenthesis_data data, const unsigned long int pos, t_bracket bracket_type)
+static t_list_brackets_pairs	pipe_left_bracket(					\
+		const std::vector<Token>& tokens, t_parenthesis_data data, 	\
+		const unsigned long int pos, t_bracket bracket_type)
 {
 	t_list_brackets_pairs	results;
 	t_bracket				bracket;
@@ -34,7 +36,9 @@ static t_list_brackets_pairs	pipe_left_bracket(const std::vector<Token>& tokens,
 	return (results);
 }
 
-static t_list_brackets_pairs	pipe_right_bracket(const std::vector<Token>& tokens, t_parenthesis_data data, const unsigned long int pos, t_bracket bracket_type)
+static t_list_brackets_pairs	pipe_right_bracket(	\
+		const std::vector<Token>& tokens, t_parenthesis_data data, 	\
+		const unsigned long int pos, t_bracket bracket_type)
 {
 	t_list_brackets_pairs	results;
 	t_bracket				bracket;
@@ -59,7 +63,9 @@ static t_list_brackets_pairs	pipe_right_bracket(const std::vector<Token>& tokens
 	return (results);
 }
 
-static t_list_brackets_pairs	try_norm_absolute_brackets(const std::vector<Token>& tokens, t_parenthesis_data data, const unsigned long int pos, t_bracket bracket_type)
+static t_list_brackets_pairs	try_norm_absolute_brackets(			\
+		const std::vector<Token>& tokens, t_parenthesis_data data, 	\
+		const unsigned long int pos, t_bracket bracket_type)
 {
 	t_list_brackets_pairs	result;
 	t_list_brackets_pairs	results;
@@ -79,7 +85,9 @@ static t_list_brackets_pairs	try_norm_absolute_brackets(const std::vector<Token>
 	return (results);
 }
 
-t_list_brackets_pairs	try_pipe_brackets(const std::vector<Token>& tokens, t_parenthesis_data data, const unsigned long int pos)
+t_list_brackets_pairs			try_pipe_brackets(					\
+		const std::vector<Token>& tokens, t_parenthesis_data data, 	\
+		const unsigned long int pos)
 {
 	t_list_brackets_pairs	results;
 
@@ -101,7 +109,9 @@ t_list_brackets_pairs	try_pipe_brackets(const std::vector<Token>& tokens, t_pare
 	return (results);
 }
 
-t_list_brackets_pairs	parentheses_brackets(const std::vector<Token>& tokens, t_parenthesis_data data, const unsigned long int pos, Token::t_token token_type)
+t_list_brackets_pairs			parentheses_brackets(			\
+	const std::vector<Token>& tokens, t_parenthesis_data data, 	\
+	const unsigned long int pos, Token::t_token token_type)
 {
 	if (token_type == Token::E_TOKEN_LEFT_PARENTHESIS)
 	{

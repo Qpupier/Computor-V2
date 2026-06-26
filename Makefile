@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/06/26 15:00:04 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/06/26 15:54:42 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ LST_SRC		=	AST/AST.cpp																			\
 				quadratic_equation_resolution/simplify_factors.cpp									\
 				types/IType.cpp																		\
 				types/Complex.cpp																	\
+				types/DefinedFunction.cpp															\
 				types/InfiniteDouble.cpp															\
 				types/InfiniteInt.cpp																\
 				types/Matrix.cpp																	\
