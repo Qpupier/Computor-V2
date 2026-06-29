@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 17:14:13 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/29 10:57:58 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static Vector					from_matrix(const Matrix* matrix)
 
 	if (matrix->getHeight() != 1)
 		throw ERROR_UNEXPECTED;
-	for (unsigned long long int i(0); i < matrix->getWidth(); i++)
+	for (unsigned long int i(0); i < matrix->getWidth(); i++)
 		result.push_back(matrix->getValue(i, 0));
 	return (result);
 }
@@ -89,7 +89,7 @@ static Vector					from_polynomial(const Polynomial* polynomial)
 
 static void						print_rounded_vector(const Vector* vector)
 {
-	unsigned long long int	size(vector->size());
+	unsigned long int	size(vector->size());
 
 	std::cout << "[ ";
 	for (unsigned int i = 0; i < size; i++)
@@ -107,12 +107,12 @@ static void						print_rounded_vector(const Vector* vector)
 Vector::Vector(std::string str, t_data &data)
 {
 	std::vector<std::string>	vector;
-	unsigned long long int		size;
+	unsigned long int		size;
 	Rational*					rational;
 
 	vector = parse_vector(str);
 	size = vector.size();
-	for (unsigned long long int i = 0; i < size; i++)
+	for (unsigned long int i = 0; i < size; i++)
 	{
 		rational = value_to_rational(vector[i], data);
 		this->_vector.push_back(*rational);
@@ -177,7 +177,7 @@ bool		Vector::operator==(const IType &other) const
 	}
 	if (this->_vector.size() != other_vector._vector.size())
 		return (false);
-	for (unsigned long long int i = 0; i < this->_vector.size(); i++)
+	for (unsigned long int i = 0; i < this->_vector.size(); i++)
 		if (this->_vector[i] != other_vector._vector[i])
 			return (false);
 	return (true);
@@ -242,14 +242,14 @@ bool		Vector::operator>=(const long long int value) const
 	return (*this >= Rational(value));
 }
 
-Rational	Vector::operator[](unsigned long long int index) const
+Rational	Vector::operator[](unsigned long int index) const
 {
 	if (index >= this->_vector.size())
 		throw ERROR_VECTOR_OUT_OF_RANGE;
 	return (this->_vector[index]);
 }
 
-Rational&	Vector::operator[](unsigned long long int index)
+Rational&	Vector::operator[](unsigned long int index)
 {
 	if (index >= this->_vector.size())
 		throw ERROR_VECTOR_OUT_OF_RANGE;
@@ -291,7 +291,7 @@ Vector*		Vector::operator+(const Vector &other) const
 	if (this->_vector.size() != other._vector.size())
 		throw ERROR_VECTOR_DIMENSIONS;
 	result = new Vector(this->_vector.size());
-	for (unsigned long long int i = 0; i < this->_vector.size(); i++)
+	for (unsigned long int i = 0; i < this->_vector.size(); i++)
 	{
 		tmp = this->_vector[i] + other._vector[i];
 		result->_vector[i] = *tmp;
@@ -306,7 +306,7 @@ Vector*		Vector::operator+(const Rational &other) const
 	Rational*	tmp;
 
 	result = new Vector(this->_vector.size());
-	for (unsigned long long int i = 0; i < this->_vector.size(); i++)
+	for (unsigned long int i = 0; i < this->_vector.size(); i++)
 	{
 		tmp = this->_vector[i] + other;
 		result->_vector[i] = *tmp;
@@ -385,7 +385,7 @@ Vector*		Vector::operator-(const Vector &other) const
 	if (this->_vector.size() != other._vector.size())
 		throw ERROR_VECTOR_DIMENSIONS;
 	result = new Vector(this->_vector.size());
-	for (unsigned long long int i = 0; i < this->_vector.size(); i++)
+	for (unsigned long int i = 0; i < this->_vector.size(); i++)
 	{
 		tmp = this->_vector[i] - other._vector[i];
 		result->_vector[i] = *tmp;
@@ -400,7 +400,7 @@ Vector*		Vector::operator-(const Rational &other) const
 	Rational*	tmp;
 
 	result = new Vector(this->_vector.size());
-	for (unsigned long long int i = 0; i < this->_vector.size(); i++)
+	for (unsigned long int i = 0; i < this->_vector.size(); i++)
 	{
 		tmp = this->_vector[i] - other;
 		result->_vector[i] = *tmp;
@@ -480,7 +480,7 @@ Vector*		Vector::operator*(const Vector &other) const
 	if (this->_vector.size() != other._vector.size())
 		throw ERROR_VECTOR_DIMENSIONS;
 	result = new Vector(this->_vector.size());
-	for (unsigned long long int i = 0; i < this->_vector.size(); i++)
+	for (unsigned long int i = 0; i < this->_vector.size(); i++)
 	{
 		tmp = this->_vector[i] + other._vector[i];
 		result->_vector[i] = *tmp;
@@ -495,7 +495,7 @@ Vector*		Vector::operator*(const Rational &other) const
 	Rational*	tmp;
 
 	result = new Vector(this->_vector.size());
-	for (unsigned long long int i = 0; i < this->_vector.size(); i++)
+	for (unsigned long int i = 0; i < this->_vector.size(); i++)
 	{
 		tmp = this->_vector[i] * other;
 		result->_vector[i] = *tmp;
@@ -569,7 +569,7 @@ Vector*		Vector::operator/(const Vector &other) const
 	if (this->_vector.size() != other._vector.size())
 		throw ERROR_VECTOR_DIMENSIONS;
 	result = new Vector(this->_vector.size());
-	for (unsigned long long int i = 0; i < this->_vector.size(); i++)
+	for (unsigned long int i = 0; i < this->_vector.size(); i++)
 	{
 		tmp = this->_vector[i] / other._vector[i];
 		result->_vector[i] = *tmp;
@@ -584,7 +584,7 @@ Vector*		Vector::operator/(const Rational &other) const
 	Rational*	tmp;
 
 	result = new Vector(this->_vector.size());
-	for (unsigned long long int i = 0; i < this->_vector.size(); i++)
+	for (unsigned long int i = 0; i < this->_vector.size(); i++)
 	{
 		tmp = this->_vector[i] / other;
 		result->_vector[i] = *tmp;
@@ -664,7 +664,7 @@ Vector*		Vector::operator%(const Vector &other) const
 	if (this->_vector.size() != other._vector.size())
 		throw ERROR_VECTOR_DIMENSIONS;
 	result = new Vector(this->_vector.size());
-	for (unsigned long long int i = 0; i < this->_vector.size(); i++)
+	for (unsigned long int i = 0; i < this->_vector.size(); i++)
 	{
 		tmp = this->_vector[i] % other._vector[i];
 		result->_vector[i] = *tmp;
@@ -679,7 +679,7 @@ Vector*		Vector::operator%(const Rational &other) const
 	Rational*	tmp;
 
 	result = new Vector(this->_vector.size());
-	for (unsigned long long int i = 0; i < this->_vector.size(); i++)
+	for (unsigned long int i = 0; i < this->_vector.size(); i++)
 	{
 		tmp = this->_vector[i] % other;
 		result->_vector[i] = *tmp;
@@ -775,7 +775,7 @@ Vector*		Vector::operator^(const long long int value) const
 
 // Getters
 
-InfiniteDouble	Vector::getRoundedValue(unsigned long long int index) const
+InfiniteFloat	Vector::getRoundedValue(unsigned long int index) const
 {
 	if (index >= this->_vector.size())
 		throw ERROR_VECTOR_OUT_OF_RANGE;
@@ -788,7 +788,7 @@ InfiniteDouble	Vector::getRoundedValue(unsigned long long int index) const
 std::ostream&	Vector::print(std::ostream &os) const
 {
 	os << "[";
-	for (unsigned long long int i(0); i < this->_vector.size(); i++)
+	for (unsigned long int i(0); i < this->_vector.size(); i++)
 	{
 		os << this->_vector[i];
 		if (i < this->_vector.size() - 1)
@@ -902,7 +902,7 @@ Rational*	Vector::gcd(const Vector &other) const
 	if (other.empty())
 		return (new Rational(1));
 	result = this->gcd(other[0]);
-	for (unsigned long long int i(1); i < other.size(); i++)
+	for (unsigned long int i(1); i < other.size(); i++)
 	{
 		tmp = result;
 		result = result->gcd(other[i]);

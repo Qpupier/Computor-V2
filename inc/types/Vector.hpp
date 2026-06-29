@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:42:16 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 17:08:33 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/29 10:57:58 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ class	Vector: public IType
 {
 	public:
 		// Constructors and destructor
-		Vector(unsigned long long int size): _vector(size, Rational(0)) {};
+		Vector(unsigned long int size): _vector(size, Rational(0)) {};
 		Vector(void): Vector(0) {};
 		Vector(std::string str, t_data &data);
 		Vector(const Token &token, t_data &data): 	\
@@ -48,8 +48,8 @@ class	Vector: public IType
 		bool		operator>(const long long int value) const;
 		bool		operator>=(const IType &other) const;
 		bool		operator>=(const long long int value) const;
-		Rational	operator[](unsigned long long int index) const;
-		Rational&	operator[](unsigned long long int index);
+		Rational	operator[](unsigned long int index) const;
+		Rational&	operator[](unsigned long int index);
 		IType*		operator+(const IType &other) const;
 		Vector*		operator+(const Vector &other) const;
 		Vector*		operator+(const Rational &other) const;
@@ -91,7 +91,7 @@ class	Vector: public IType
 		Vector*		operator^(const long long int value) const;
 
 		// Getters
-		InfiniteDouble	getRoundedValue(unsigned long long int index) const;
+		InfiniteFloat	getRoundedValue(unsigned long int index) const;
 
 		// Methods
 		std::ostream&	print(std::ostream &os) const;

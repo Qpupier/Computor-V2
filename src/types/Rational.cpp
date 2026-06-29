@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 16:37:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/29 10:57:58 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,14 +246,14 @@ Matrix*		Rational::operator+(const Matrix &other) const
 {
 	Matrix*					result;
 	Rational*				tmp;
-	unsigned long long int	width;
-	unsigned long long int	height;
+	unsigned long int	width;
+	unsigned long int	height;
 
 	width = other.getWidth();
 	height = other.getHeight();
 	result = new Matrix(width, height);
-	for (unsigned long long int j(0); j < height; j++)
-		for (unsigned long long int i(0); i < width; i++)
+	for (unsigned long int j(0); j < height; j++)
+		for (unsigned long int i(0); i < width; i++)
 		{
 			tmp = *this + other[j][i];
 			result->setValue(i, j, *tmp);
@@ -264,12 +264,12 @@ Matrix*		Rational::operator+(const Matrix &other) const
 
 Vector*		Rational::operator+(const Vector &other) const
 {
-	unsigned long long int	size(other.size());
+	unsigned long int	size(other.size());
 	Vector*					result;
 	Rational*				tmp;
 
 	result = new Vector(size);
-	for (unsigned long long int i(0); i < size; i++)
+	for (unsigned long int i(0); i < size; i++)
 	{
 		tmp = *this + other[i];
 		result[i] = *tmp;
@@ -332,14 +332,14 @@ Matrix*		Rational::operator-(const Matrix &other) const
 {
 	Matrix*					result;
 	Rational*				tmp;
-	unsigned long long int	width;
-	unsigned long long int	height;
+	unsigned long int	width;
+	unsigned long int	height;
 
 	width = other.getWidth();
 	height = other.getHeight();
 	result = new Matrix(width, height);
-	for (unsigned long long int j(0); j < height; j++)
-		for (unsigned long long int i(0); i < width; i++)
+	for (unsigned long int j(0); j < height; j++)
+		for (unsigned long int i(0); i < width; i++)
 		{
 			tmp = *this - other[j][i];
 			result->setValue(i, j, *tmp);
@@ -350,12 +350,12 @@ Matrix*		Rational::operator-(const Matrix &other) const
 
 Vector*		Rational::operator-(const Vector &other) const
 {
-	unsigned long long int	size(other.size());
+	unsigned long int	size(other.size());
 	Vector*					result;
 	Rational*				tmp;
 
 	result = new Vector(size);
-	for (unsigned long long int i(0); i < size; i++)
+	for (unsigned long int i(0); i < size; i++)
 	{
 		tmp = *this - other[i];
 		result[i] = *tmp;
@@ -418,14 +418,14 @@ Matrix*		Rational::operator*(const Matrix &other) const
 {
 	Matrix*					result;
 	Rational*				tmp;
-	unsigned long long int	width;
-	unsigned long long int	height;
+	unsigned long int	width;
+	unsigned long int	height;
 
 	width = other.getWidth();
 	height = other.getHeight();
 	result = new Matrix(width, height);
-	for (unsigned long long int j(0); j < height; j++)
-		for (unsigned long long int i(0); i < width; i++)
+	for (unsigned long int j(0); j < height; j++)
+		for (unsigned long int i(0); i < width; i++)
 		{
 			tmp = *this * other[j][i];
 			result->setValue(i, j, *tmp);
@@ -436,12 +436,12 @@ Matrix*		Rational::operator*(const Matrix &other) const
 
 Vector*	Rational::operator*(const Vector &other) const
 {
-	unsigned long long int	size(other.size());
+	unsigned long int	size(other.size());
 	Vector*					result;
 	Rational*				tmp;
 
 	result = new Vector(size);
-	for (unsigned long long int i(0); i < size; i++)
+	for (unsigned long int i(0); i < size; i++)
 	{
 		tmp = *this * other[i];
 		result[i] = *tmp;
@@ -497,14 +497,14 @@ Matrix*		Rational::operator/(const Matrix &other) const
 {
 	Matrix*					result;
 	Rational*				tmp;
-	unsigned long long int	width;
-	unsigned long long int	height;
+	unsigned long int	width;
+	unsigned long int	height;
 
 	width = other.getWidth();
 	height = other.getHeight();
 	result = new Matrix(width, height);
-	for (unsigned long long int j(0); j < height; j++)
-		for (unsigned long long int i(0); i < width; i++)
+	for (unsigned long int j(0); j < height; j++)
+		for (unsigned long int i(0); i < width; i++)
 			try
 			{
 				tmp = *this / other[j][i];
@@ -521,12 +521,12 @@ Matrix*		Rational::operator/(const Matrix &other) const
 
 Vector*		Rational::operator/(const Vector &other) const
 {
-	unsigned long long int	size(other.size());
+	unsigned long int	size(other.size());
 	Vector*					result;
 	Rational*				tmp;
 
 	result = new Vector(size);
-	for (unsigned long long int i(0); i < size; i++)
+	for (unsigned long int i(0); i < size; i++)
 		try
 		{
 			tmp = *this / other[i];
@@ -605,14 +605,14 @@ Matrix*		Rational::operator%(const Matrix &other) const
 {
 	Matrix*					result;
 	Rational*				tmp;
-	unsigned long long int	width;
-	unsigned long long int	height;
+	unsigned long int	width;
+	unsigned long int	height;
 
 	width = other.getWidth();
 	height = other.getHeight();
 	result = new Matrix(width, height);
-	for (unsigned long long int j(0); j < height; j++)
-		for (unsigned long long int i(0); i < width; i++)
+	for (unsigned long int j(0); j < height; j++)
+		for (unsigned long int i(0); i < width; i++)
 			try
 			{
 				tmp = *this % other[j][i];
@@ -629,12 +629,12 @@ Matrix*		Rational::operator%(const Matrix &other) const
 
 Vector*		Rational::operator%(const Vector &other) const
 {
-	unsigned long long int	size(other.size());
+	unsigned long int	size(other.size());
 	Vector*					result;
 	Rational*				tmp;
 
 	result = new Vector(size);
-	for (unsigned long long int i(0); i < size; i++)
+	for (unsigned long int i(0); i < size; i++)
 		try
 		{
 			tmp = *this % other[i];
@@ -740,10 +740,10 @@ InfiniteInt		Rational::getDenominator(void) const
 	return (this->_denominator);
 }
 
-InfiniteDouble	Rational::getValue(void) const
+InfiniteFloat	Rational::getValue(void) const
 {
-	return (InfiniteDouble(this->_numerator) 	\
-			/ InfiniteDouble(this->_denominator));
+	return (InfiniteFloat(this->_numerator) 	\
+			/ InfiniteFloat(this->_denominator));
 }
 
 
@@ -806,8 +806,8 @@ Rational*		Rational::gcd(const Matrix &other) const
 	Rational*	tmp;
 
 	gcd = new Rational(*this);
-	for (unsigned long long int i = 0; i < other.getHeight(); i++)
-		for (unsigned long long int j = 0; j < other.getWidth(); j++)
+	for (unsigned long int i = 0; i < other.getHeight(); i++)
+		for (unsigned long int j = 0; j < other.getWidth(); j++)
 		{
 			tmp = gcd;
 			gcd = gcd->gcd(other[i][j]);
@@ -822,7 +822,7 @@ Rational*		Rational::gcd(const Vector &other) const
 	Rational*	tmp;
 
 	gcd = new Rational(*this);
-	for (unsigned long long int i = 0; i < other.size(); i++)
+	for (unsigned long int i = 0; i < other.size(); i++)
 	{
 		tmp = gcd;
 		gcd = gcd->gcd(other[i]);

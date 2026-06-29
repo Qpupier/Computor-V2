@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 17:08:19 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/29 10:54:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ class	Matrix: public IType
 {
 	public:
 		// Constructors and destructor
-		Matrix(unsigned long long int width, unsigned long long int height);
+		Matrix(unsigned long int width, unsigned long int height);
 		Matrix(void): Matrix(0, 0) {};
 		Matrix(std::string str, t_data &data);
 		Matrix(const Token &token, t_data &data): Matrix(token.getValue(), data) {};
@@ -50,8 +50,8 @@ class	Matrix: public IType
 		bool		operator>(const long long int value) const;
 		bool		operator>=(const IType &other) const;
 		bool		operator>=(const long long int value) const;
-		Rational*	operator[](unsigned long long int index) const;
-		Rational*	operator[](unsigned long long int index);
+		Rational*	operator[](unsigned long int index) const;
+		Rational*	operator[](unsigned long int index);
 		IType*		operator+(const IType &other) const;
 		Matrix*		operator+(const Matrix &other) const;
 		Matrix*		operator+(const Rational &other) const;
@@ -93,16 +93,16 @@ class	Matrix: public IType
 		Matrix*		operator^(const long long int value) const;
 
 		// Getters
-		Rational				getValue(unsigned long long int i, 			\
-				unsigned long long int j) const;
-		InfiniteDouble			getRoundedValue(unsigned long long int i, 	\
-				unsigned long long int j) const;
-		unsigned long long int	getWidth(void) const;
-		unsigned long long int	getHeight(void) const;
+		Rational				getValue(unsigned long int i, 			\
+				unsigned long int j) const;
+		InfiniteFloat			getRoundedValue(unsigned long int i, 	\
+				unsigned long int j) const;
+		unsigned long int	getWidth(void) const;
+		unsigned long int	getHeight(void) const;
 
 		// Setters
-		void	setValue(unsigned long long int i, 	\
-				unsigned long long int j, Rational value);
+		void	setValue(unsigned long int i, 	\
+				unsigned long int j, Rational value);
 
 		// Methods
 		IType*			clone(void) const;
@@ -123,13 +123,13 @@ class	Matrix: public IType
 		void			error(const LogicError &e);
 		void			free(void);
 		void			print_rounded(const std::string var = std::string()) const;
-		void			swap_lines(unsigned long long int line1, unsigned long long int line2);
+		void			swap_lines(unsigned long int line1, unsigned long int line2);
 
 	private:
 		// Members
-		unsigned long long int	_width;
-		unsigned long long int	_height;
-		Rational**				_matrix;
+		unsigned long int	_width;
+		unsigned long int	_height;
+		Rational**			_matrix;
 };
 
 // Output stream operator overload

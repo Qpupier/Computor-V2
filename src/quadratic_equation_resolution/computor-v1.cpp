@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:03:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 13:31:16 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/29 10:31:50 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,11 +86,11 @@ static std::vector<Complex*>	cast_coefficients_in_complex(			\
 void							reduce_sqrt(InfiniteInt *factor, 	\
 		InfiniteInt *sqrt)
 {
-	InfiniteDouble	sqrt_rounded;
+	InfiniteFloat	sqrt_rounded;
 	InfiniteInt		perfect_square;
 
-	sqrt_rounded = InfiniteDouble(*sqrt).sqrt();
-	for (InfiniteInt i(2); InfiniteDouble(i) <= sqrt_rounded; i++)
+	sqrt_rounded = InfiniteFloat(*sqrt).sqrt();
+	for (InfiniteInt i(2); InfiniteFloat(i) <= sqrt_rounded; i++)
 	{
 		perfect_square = i * i;
 		while (!(*sqrt % perfect_square))

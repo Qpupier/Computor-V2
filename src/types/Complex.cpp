@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 17:09:46 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/29 10:31:50 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,9 +118,9 @@ static void				from_polynomial(Complex &complex, 				\
 }
 
 static void				print_complex_rounded_value_default(			\
-		const InfiniteDouble& real, const InfiniteDouble& imaginary)
+		const InfiniteFloat& real, const InfiniteFloat& imaginary)
 {
-	InfiniteDouble	tmp;
+	InfiniteFloat	tmp;
 
 	std::cout << real;
 	if (imaginary < 0)
@@ -922,7 +922,7 @@ std::string		Complex::to_string(void) const
 }
 
 void			print_complex_rounded_value(const std::string var, 	\
-		const InfiniteDouble & real, const InfiniteDouble & imaginary)
+		const InfiniteFloat & real, const InfiniteFloat & imaginary)
 {
 	if (!var.empty())
 	{

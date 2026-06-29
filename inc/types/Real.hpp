@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 17:41:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 17:44:55 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/29 10:31:50 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define REAL_HPP
 
 # include "IType.hpp"
-# include "InfiniteDouble.hpp"
+# include "InfiniteFloat.hpp"
 
 class	Real: public IType
 {
@@ -64,7 +64,7 @@ class	Real: public IType
 	
 	private:
 		// Members
-		InfiniteDouble	_value;
+		InfiniteFloat	_value;
 };
 
 #endif
