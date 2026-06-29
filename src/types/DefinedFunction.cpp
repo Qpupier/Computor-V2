@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:35:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 17:19:36 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/29 12:06:05 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,6 +239,38 @@ IType*	DefinedFunction::operator^(const long long int value) const
 
 // Methods
 
+std::string		DefinedFunction::to_string(void) const
+{
+	std::ostringstream	oss;
+
+	this->print(oss);
+	return (oss.str());
+}
+
+bool			DefinedFunction::in_D(void) const
+{
+	return (false);
+}
+
+bool			DefinedFunction::in_Z(void) const
+{
+	return (false);
+}
+
+std::ostream&	DefinedFunction::print(std::ostream &os) const
+{
+	switch (this->_function)
+	{
+		case E_FUNCTION_NORM:
+			return (os << "norm");
+		case E_FUNCTION_ABSOLUTE:
+			return (os << "abs");
+		default:
+			throw ERROR_UNKNOWN_FUNCTION;
+	}
+	return (os);
+}
+
 IType*			DefinedFunction::clone(void) const
 {
 	return (new DefinedFunction(*this));
@@ -275,28 +307,6 @@ Rational*		DefinedFunction::gcd(const IType &other) const
 	throw ERROR_UNEXPECTED;
 	(void)other;
 	return (nullptr);
-}
-
-std::ostream&	DefinedFunction::print(std::ostream &os) const
-{
-	switch (this->_function)
-	{
-		case E_FUNCTION_NORM:
-			return (os << "norm");
-		case E_FUNCTION_ABSOLUTE:
-			return (os << "abs");
-		default:
-			throw ERROR_UNKNOWN_FUNCTION;
-	}
-	return (os);
-}
-
-std::string		DefinedFunction::to_string(void) const
-{
-	std::ostringstream	oss;
-
-	this->print(oss);
-	return (oss.str());
 }
 
 void			DefinedFunction::print_rounded(const std::string var) const

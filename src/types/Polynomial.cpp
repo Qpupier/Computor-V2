@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 17:20:02 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/29 12:04:58 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1261,6 +1261,51 @@ void	Polynomial::setName(const std::string& name)
 
 // Methods
 
+std::ostream&	Polynomial::print(std::ostream &os) const
+{
+	if (this->_dividers.size() == 1 					\
+			&& *this->_dividers[0].coefficient == 1 	\
+			&& !this->_dividers[0].power)
+		print_terms(os, this->_terms, this->_name, true);
+	else
+	{
+		print_terms(os, this->_terms, this->_name);
+		os << " / ";
+		print_terms(os, this->_dividers, this->_name);
+	}
+	return (os);
+}
+
+std::string		Polynomial::to_string(void) const
+{
+	std::ostringstream	oss;
+
+	this->print(oss);
+	return (oss.str());
+}
+
+bool			Polynomial::in_D(void) const
+{
+	for (const auto& term : this->_terms)
+		if (term.coefficient->in_D())
+			return (true);
+	for (const auto& divider : this->_dividers)
+		if (divider.coefficient->in_D())
+			return (true);
+	return (false);
+}
+
+bool			Polynomial::in_Z(void) const
+{
+	for (const auto& term : this->_terms)
+		if (term.coefficient->in_Z())
+			return (true);
+	for (const auto& divider : this->_dividers)
+		if (divider.coefficient->in_Z())
+			return (true);
+	return (false);
+}
+
 IType*			Polynomial::clone(void) const
 {
 	return (new Polynomial(*this));
@@ -1347,29 +1392,6 @@ Rational*		Polynomial::gcd(const IType &other) const
 	throw ERROR_UNEXPECTED;
 	(void)other;
 	return (nullptr);
-}
-
-std::ostream&	Polynomial::print(std::ostream &os) const
-{
-	if (this->_dividers.size() == 1 					\
-			&& *this->_dividers[0].coefficient == 1 	\
-			&& !this->_dividers[0].power)
-		print_terms(os, this->_terms, this->_name, true);
-	else
-	{
-		print_terms(os, this->_terms, this->_name);
-		os << " / ";
-		print_terms(os, this->_dividers, this->_name);
-	}
-	return (os);
-}
-
-std::string		Polynomial::to_string(void) const
-{
-	std::ostringstream	oss;
-
-	this->print(oss);
-	return (oss.str());
 }
 
 void			Polynomial::free(void)

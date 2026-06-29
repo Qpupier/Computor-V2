@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 10:57:58 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/29 17:07:20 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,15 +107,15 @@ static void						print_rounded_vector(const Vector* vector)
 Vector::Vector(std::string str, t_data &data)
 {
 	std::vector<std::string>	vector;
-	unsigned long int		size;
-	Rational*					rational;
+	unsigned long int			size;
+	IType*						rational;
 
 	vector = parse_vector(str);
 	size = vector.size();
 	for (unsigned long int i = 0; i < size; i++)
 	{
 		rational = value_to_rational(vector[i], data);
-		this->_vector.push_back(*rational);
+		this->_vector.push_back(rational);
 		delete rational;
 	}
 }
@@ -144,8 +144,8 @@ Vector::Vector(const IType &other)
 
 Vector::operator bool() const
 {
-	for (const Rational &value : this->_vector)
-		if (value)
+	for (const IType* value : this->_vector)
+		if (value && *value)
 			return (true);
 	return (false);
 }
@@ -242,14 +242,14 @@ bool		Vector::operator>=(const long long int value) const
 	return (*this >= Rational(value));
 }
 
-Rational	Vector::operator[](unsigned long int index) const
+IType*		Vector::operator[](unsigned long int index) const// [ ] Utile de laisser les 2 ?
 {
 	if (index >= this->_vector.size())
 		throw ERROR_VECTOR_OUT_OF_RANGE;
 	return (this->_vector[index]);
 }
 
-Rational&	Vector::operator[](unsigned long int index)
+IType*		Vector::operator[](unsigned long int index)
 {
 	if (index >= this->_vector.size())
 		throw ERROR_VECTOR_OUT_OF_RANGE;
@@ -285,32 +285,32 @@ IType*		Vector::operator+(const IType &other) const
 
 Vector*		Vector::operator+(const Vector &other) const
 {
-	Vector*		result;
-	Rational*	tmp;
+	Vector*	result;
+	IType*	tmp;
 
 	if (this->_vector.size() != other._vector.size())
 		throw ERROR_VECTOR_DIMENSIONS;
 	result = new Vector(this->_vector.size());
 	for (unsigned long int i = 0; i < this->_vector.size(); i++)
 	{
-		tmp = this->_vector[i] + other._vector[i];
-		result->_vector[i] = *tmp;
-		delete tmp;
+		tmp = *this->_vector[i] + *other._vector[i];
+		result->_vector[i] = tmp;
+		// delete tmp;// [ ] Check if this is correct
 	}
 	return (result);
 }
 
 Vector*		Vector::operator+(const Rational &other) const
 {
-	Vector*		result;
-	Rational*	tmp;
+	Vector*	result;
+	IType*	tmp;
 
 	result = new Vector(this->_vector.size());
 	for (unsigned long int i = 0; i < this->_vector.size(); i++)
 	{
-		tmp = this->_vector[i] + other;
-		result->_vector[i] = *tmp;
-		delete tmp;
+		tmp = *this->_vector[i] + other;
+		result->_vector[i] = tmp;
+		// delete tmp;// [ ] Check if this is correct
 	}
 	return (result);
 }
@@ -379,32 +379,32 @@ IType*		Vector::operator-(const IType &other) const
 
 Vector*		Vector::operator-(const Vector &other) const
 {
-	Vector*		result;
-	Rational*	tmp;
+	Vector*	result;
+	IType*	tmp;
 
 	if (this->_vector.size() != other._vector.size())
 		throw ERROR_VECTOR_DIMENSIONS;
 	result = new Vector(this->_vector.size());
 	for (unsigned long int i = 0; i < this->_vector.size(); i++)
 	{
-		tmp = this->_vector[i] - other._vector[i];
-		result->_vector[i] = *tmp;
-		delete tmp;
+		tmp = *this->_vector[i] - *other._vector[i];
+		result->_vector[i] = tmp;
+		// delete tmp;// [ ] Check if this is correct
 	}
 	return (result);
 }
 
 Vector*		Vector::operator-(const Rational &other) const
 {
-	Vector*		result;
-	Rational*	tmp;
+	Vector*	result;
+	IType*	tmp;
 
 	result = new Vector(this->_vector.size());
 	for (unsigned long int i = 0; i < this->_vector.size(); i++)
 	{
-		tmp = this->_vector[i] - other;
-		result->_vector[i] = *tmp;
-		delete tmp;
+		tmp = *this->_vector[i] - other;
+		result->_vector[i] = tmp;
+		// delete tmp;// [ ] Check if this is correct
 	}
 	return (result);
 }
@@ -474,32 +474,32 @@ IType*		Vector::operator*(const IType &other) const
 
 Vector*		Vector::operator*(const Vector &other) const
 {
-	Vector*		result;
-	Rational*	tmp;
+	Vector*	result;
+	IType*	tmp;
 
 	if (this->_vector.size() != other._vector.size())
 		throw ERROR_VECTOR_DIMENSIONS;
 	result = new Vector(this->_vector.size());
 	for (unsigned long int i = 0; i < this->_vector.size(); i++)
 	{
-		tmp = this->_vector[i] + other._vector[i];
-		result->_vector[i] = *tmp;
-		delete tmp;
+		tmp = *this->_vector[i] + *other._vector[i];
+		result->_vector[i] = tmp;
+		// delete tmp;// [ ] Check if this is correct
 	}
 	return (result);
 }
 
 Vector*		Vector::operator*(const Rational &other) const
 {
-	Vector*		result;
-	Rational*	tmp;
+	Vector*	result;
+	IType*	tmp;
 
 	result = new Vector(this->_vector.size());
 	for (unsigned long int i = 0; i < this->_vector.size(); i++)
 	{
-		tmp = this->_vector[i] * other;
-		result->_vector[i] = *tmp;
-		delete tmp;
+		tmp = *this->_vector[i] * other;
+		result->_vector[i] = tmp;
+		// delete tmp;// [ ] Check if this is correct
 	}
 	return (result);
 }
@@ -563,32 +563,32 @@ IType*		Vector::operator/(const IType &other) const
 
 Vector*		Vector::operator/(const Vector &other) const
 {
-	Vector*		result;
-	Rational*	tmp;
+	Vector*	result;
+	IType*	tmp;
 
 	if (this->_vector.size() != other._vector.size())
 		throw ERROR_VECTOR_DIMENSIONS;
 	result = new Vector(this->_vector.size());
 	for (unsigned long int i = 0; i < this->_vector.size(); i++)
 	{
-		tmp = this->_vector[i] / other._vector[i];
-		result->_vector[i] = *tmp;
-		delete tmp;
+		tmp = *this->_vector[i] / *other._vector[i];
+		result->_vector[i] = tmp;
+		// delete tmp;// [ ] Check if this is correct
 	}
 	return (result);
 }
 
 Vector*		Vector::operator/(const Rational &other) const
 {
-	Vector*		result;
-	Rational*	tmp;
+	Vector*	result;
+	IType*	tmp;
 
 	result = new Vector(this->_vector.size());
 	for (unsigned long int i = 0; i < this->_vector.size(); i++)
 	{
-		tmp = this->_vector[i] / other;
-		result->_vector[i] = *tmp;
-		delete tmp;
+		tmp = *this->_vector[i] / other;
+		result->_vector[i] = tmp;
+		// delete tmp;// [ ] Check if this is correct
 	}
 	return (result);
 }
@@ -658,32 +658,32 @@ IType*		Vector::operator%(const IType &other) const
 
 Vector*		Vector::operator%(const Vector &other) const
 {
-	Vector*		result;
-	Rational*	tmp;
+	Vector*	result;
+	IType*	tmp;
 
 	if (this->_vector.size() != other._vector.size())
 		throw ERROR_VECTOR_DIMENSIONS;
 	result = new Vector(this->_vector.size());
 	for (unsigned long int i = 0; i < this->_vector.size(); i++)
 	{
-		tmp = this->_vector[i] % other._vector[i];
-		result->_vector[i] = *tmp;
-		delete tmp;
+		tmp = *this->_vector[i] % *other._vector[i];
+		result->_vector[i] = tmp;
+		// delete tmp;// [ ] Check if this is correct
 	}
 	return (result);
 }
 
 Vector*		Vector::operator%(const Rational &other) const
 {
-	Vector*		result;
-	Rational*	tmp;
+	Vector*	result;
+	IType*	tmp;
 
 	result = new Vector(this->_vector.size());
 	for (unsigned long int i = 0; i < this->_vector.size(); i++)
 	{
-		tmp = this->_vector[i] % other;
-		result->_vector[i] = *tmp;
-		delete tmp;
+		tmp = *this->_vector[i] % other;
+		result->_vector[i] = tmp;
+		// delete tmp;// [ ] Check if this is correct
 	}
 	return (result);
 }
@@ -749,7 +749,7 @@ Vector*		Vector::operator^(const Rational &other) const
 
 	result = new Vector();
 	for (unsigned int i(0); i < this->_vector.size(); i++)
-		result->push_back(1);
+		result->push_back(new Rational(1));
 	for (InfiniteInt i(0); i < other.getNumerator(); i++)
 	{
 		tmp = result;
@@ -779,7 +779,7 @@ InfiniteFloat	Vector::getRoundedValue(unsigned long int index) const
 {
 	if (index >= this->_vector.size())
 		throw ERROR_VECTOR_OUT_OF_RANGE;
-	return (this->_vector[index].getValue());
+	return (dynamic_cast<const Rational*>(this->_vector[index])->getValue());// [ ] Changer ca
 }
 
 
@@ -816,20 +816,20 @@ bool		Vector::empty(void) const
 	return (this->_vector.empty());
 }
 
-bool		Vector::values_in_D(void) const
+bool		Vector::in_D(void) const
 {
-	for (const Rational &value : this->_vector)
-		if (!value.in_D())
+	for (const IType* value : this->_vector)
+		if (!value->in_D())
 			return (false);
 	return (true);
 }
 
-bool		Vector::values_in_Z(void) const
+bool		Vector::in_Z(void) const
 {
-	for (const Rational &value : this->_vector)
-		if (!value.in_Z())
-			return (false);
-	return (true);
+	for (const IType* value : this->_vector)
+		if (value->in_Z())
+			return (true);
+	return (false);
 }
 
 IType*		Vector::clone(void) const
@@ -901,11 +901,11 @@ Rational*	Vector::gcd(const Vector &other) const
 
 	if (other.empty())
 		return (new Rational(1));
-	result = this->gcd(other[0]);
+	result = this->gcd(*dynamic_cast<const Rational*>(other[0]));
 	for (unsigned long int i(1); i < other.size(); i++)
 	{
 		tmp = result;
-		result = result->gcd(other[i]);
+		result = result->gcd(*dynamic_cast<const Rational*>(other[i]));
 		delete tmp;
 	}
 	return (result);
@@ -921,8 +921,8 @@ Rational*	Vector::gcd(const Complex &other) const
 	Rational*	first;
 	Rational*	second;
 
-	first = this->gcd(other.getReal());
-	second = first->gcd(other.getImaginary());
+	first = this->gcd(*dynamic_cast<const Rational*>(other.getReal()));
+	second = first->gcd(*dynamic_cast<const Rational*>(other.getImaginary()));
 	delete first;
 	return (second);
 }
@@ -932,12 +932,12 @@ Rational*	Vector::gcd(const Matrix &other) const
 	Rational*	gcd;
 	Rational*	tmp;
 
-	gcd = this->gcd(other[0][0]);
+	gcd = this->gcd(*dynamic_cast<const Rational*>(other[0][0]));// [ ] Changer ca
 	for (unsigned int i = 0; i < other.getHeight(); i++)
 		for (unsigned int j = 0; j < other.getWidth(); j++)
 		{
 			tmp = gcd;
-			gcd = gcd->gcd(other[i][j]);
+			gcd = gcd->gcd(*dynamic_cast<const Rational*>(other[i][j]));
 			delete tmp;
 		}
 	return (gcd);
@@ -945,12 +945,12 @@ Rational*	Vector::gcd(const Matrix &other) const
 
 void		Vector::print_rounded(const std::string var) const
 {
-	if (this->values_in_Z())
+	if (this->in_Z())
 		return ;
 	std::cout << COLOR_DIM;
 	if (!var.empty())
 	{
-		if (this->values_in_D())
+		if (this->in_D())
 			std::cout << var << " = " << std::endl;
 		else
 			std::cout << var << " ≈ " << std::endl;
@@ -959,7 +959,7 @@ void		Vector::print_rounded(const std::string var) const
 	std::cout << COLOR_RESET << std::endl;
 }
 
-void		Vector::push_back(const Rational value)
+void		Vector::push_back(IType* value)
 {
 	this->_vector.push_back(value);
 }

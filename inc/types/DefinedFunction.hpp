@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:16:29 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 17:44:03 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/29 12:05:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,15 @@ class	DefinedFunction: public IType
 		IType*		operator^(const long long int value) const;
 
 		// Methods
+		std::string		to_string(void) const;
+		bool			in_D(void) const;
+		bool			in_Z(void) const;
+		std::ostream&	print(std::ostream &os) const;
 		IType*			clone(void) const;
 		IType*			function_operator(const IType &other) const;
 		IType*			matrix_inversion(void) const;
 		IType*			matrix_operator(const IType &other) const;
 		Rational*		gcd(const IType &other) const;
-		std::ostream&	print(std::ostream &os) const;
-		std::string		to_string(void) const;
 		void			print_rounded(const std::string var = std::string()) const;
 
 	private:

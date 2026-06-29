@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 10:58:01 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/29 16:08:06 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ static void										print_rounded_matrix(		\
 	}
 }
 
-unsigned long int							line_pivot(					\
+unsigned long int								line_pivot(					\
 		const Matrix& matrix, unsigned long int pivot)
 {
 	for (unsigned long int i(pivot); i < matrix.getHeight(); i++)
@@ -135,18 +135,19 @@ unsigned long int							line_pivot(					\
 static void										elimination(				\
 		Matrix& matrix, unsigned long int pivot, unsigned long int j)
 {
-	Rational	coeff(matrix.getValue(pivot, j));
-	Rational*	tmp;
-	Rational*	tmp2;
+	IType*	coeff;
+	IType*	tmp;
+	IType*	tmp2;
 
-	if (coeff)
+	coeff = matrix.getValue(pivot, j);
+	if (*coeff)
 		for (unsigned long int i(0); i < matrix.getWidth(); i++)
 		{
-			tmp = coeff * matrix.getValue(i, pivot);
-			tmp2 = matrix.getValue(i, j) - *tmp;
-			matrix.setValue(i, j, *tmp2);
+			tmp = *coeff * *matrix.getValue(i, pivot);
+			tmp2 = *matrix.getValue(i, j) - *tmp;
+			matrix.setValue(i, j, tmp2);
 			delete tmp;
-			delete tmp2;
+			// delete tmp2;
 		}
 }
 
@@ -167,16 +168,18 @@ static void										jordan_elimination(			\
 static void										normalize_pivot(			\
 		Matrix& matrix, unsigned long int pivot)
 {
-	Rational	coeff(matrix.getValue(pivot, pivot));
-	Rational*	tmp;
+	IType*	coeff;
+	IType*	tmp;
 
-	if (coeff != 1 && coeff)
+	coeff = matrix.getValue(pivot, pivot);
+	if (*coeff != 1 && *coeff)
 		for (unsigned long int i = 0; i < matrix.getWidth(); i++)
 		{
-			tmp = matrix.getValue(i, pivot) / coeff;
-			matrix.setValue(i, pivot, *tmp);
+			tmp = *matrix.getValue(i, pivot) / *coeff;
+			matrix.setValue(i, pivot, tmp);
 			delete tmp;
 		}
+	delete coeff;
 }
 
 static void										gauss_jordan_elimination(	\
@@ -207,12 +210,12 @@ Matrix::Matrix(unsigned long int width, 	\
 		this->_matrix = nullptr;
 		return ;
 	}
-	this->_matrix = new Rational*[this->_height];
+	this->_matrix = new IType**[this->_height];
 	for (unsigned long int i = 0; i < this->_height; i++)
 	{
-		this->_matrix[i] = new Rational[this->_width];
+		this->_matrix[i] = new IType*[this->_width];
 		for (unsigned long int j = 0; j < this->_width; j++)
-			this->_matrix[i][j] = Rational(i == j);
+			this->_matrix[i][j] = new Rational(i == j);
 	}
 }
 
@@ -220,20 +223,20 @@ Matrix::Matrix(std::string str, t_data &data): _width(0), _height(0)
 {
 	std::vector<std::vector<std::string>>	rows;
 	Rational*								rational;
-	unsigned long int					height;
+	unsigned long int						height;
 
 	rows = parse_matrix(str, &this->_width);
 	height = rows.size();
-	this->_matrix = new Rational*[height];
+	this->_matrix = new IType**[height];
 	for (unsigned long int i = 0; i < height; i++)
 	{
-		this->_matrix[i] = new Rational[this->_width];
+		this->_matrix[i] = new IType*[this->_width];
 		this->_height++;
 		for (unsigned long int j = 0; j < this->_width; j++)
 		{
 			rational = value_to_rational(rows[i][j], data, this);
-			this->_matrix[i][j] = *rational;
-			delete rational;
+			this->_matrix[i][j] = rational;
+			// delete rational;
 		}
 	}
 }
@@ -241,12 +244,12 @@ Matrix::Matrix(std::string str, t_data &data): _width(0), _height(0)
 Matrix::Matrix(const Matrix &other): 			\
 		_width(other._width), _height(other._height)
 {
-	this->_matrix = new Rational*[this->_height];
+	this->_matrix = new IType**[this->_height];
 	for (unsigned long int i = 0; i < this->_height; i++)
 	{
-		this->_matrix[i] = new Rational[this->_width];
+		this->_matrix[i] = new IType*[this->_width];
 		for (unsigned long int j = 0; j < this->_width; j++)
-			this->_matrix[i][j] = other._matrix[i][j];
+			this->_matrix[i][j] = other._matrix[i][j]->clone();
 	}
 }
 
@@ -306,12 +309,12 @@ Matrix&		Matrix::operator=(const Matrix &other)
 	this->free();
 	this->_width = other._width;
 	this->_height = other._height;
-	this->_matrix = new Rational*[other._height];
+	this->_matrix = new IType**[other._height];
 	for (unsigned int i = 0; i < other._height; i++)
 	{
-		this->_matrix[i] = new Rational[other._width];
+		this->_matrix[i] = new IType*[other._width];
 		for (unsigned int j = 0; j < other._width; j++)
-			this->_matrix[i][j] = other._matrix[i][j];
+			this->_matrix[i][j] = other._matrix[i][j]->clone();// [ ] Leak ou pas ?
 	}
 	return (*this);
 }
@@ -403,14 +406,14 @@ bool		Matrix::operator>=(const long long int value) const
 	return (*this >= Rational(value));
 }
 
-Rational*	Matrix::operator[](unsigned long int index) const
+IType**	Matrix::operator[](unsigned long int index) const
 {
 	if (index >= this->_height)
 		throw ERROR_MATRIX_OUT_OF_RANGE;
 	return (this->_matrix[index]);
 }
 
-Rational*	Matrix::operator[](unsigned long int index)
+IType**	Matrix::operator[](unsigned long int index)
 {
 	if (index >= this->_height)
 		throw ERROR_MATRIX_OUT_OF_RANGE;
@@ -426,7 +429,7 @@ Matrix*		Matrix::operator+(const Matrix &other) const
 	result = new Matrix(this->_width, this->_height);
 	for (unsigned long int i = 0; i < this->_height; i++)
 		for (unsigned long int j = 0; j < this->_width; j++)
-			result->_matrix[i][j] = this->_matrix[i][j] + other._matrix[i][j];
+			result->_matrix[i][j] = *this->_matrix[i][j] + *other._matrix[i][j];
 	return (result);
 }
 
@@ -437,7 +440,7 @@ Matrix*		Matrix::operator+(const Rational &other) const
 	result = new Matrix(this->_width, this->_height);
 	for (unsigned long int i = 0; i < this->_height; i++)
 		for (unsigned long int j = 0; j < this->_width; j++)
-			result->_matrix[i][j] = this->_matrix[i][j] + other;
+			result->_matrix[i][j] = *this->_matrix[i][j] + other;
 	return (result);
 }
 
@@ -508,7 +511,7 @@ Matrix*		Matrix::operator-(const Matrix &other) const
 	result = new Matrix(this->_width, this->_height);
 	for (unsigned long int i = 0; i < this->_height; i++)
 		for (unsigned long int j = 0; j < this->_width; j++)
-			result->_matrix[i][j] = this->_matrix[i][j] - other._matrix[i][j];
+			result->_matrix[i][j] = *this->_matrix[i][j] - *other._matrix[i][j];
 	return (result);
 }
 
@@ -519,7 +522,7 @@ Matrix*		Matrix::operator-(const Rational &other) const
 	result = new Matrix(this->_width, this->_height);
 	for (unsigned long int i = 0; i < this->_height; i++)
 		for (unsigned long int j = 0; j < this->_width; j++)
-			result->_matrix[i][j] = this->_matrix[i][j] - other;
+			result->_matrix[i][j] = *this->_matrix[i][j] - other;
 	return (result);
 }
 
@@ -591,7 +594,7 @@ Matrix*		Matrix::operator*(const Matrix &other) const
 	result = new Matrix(this->_width, this->_height);
 	for (unsigned long int i = 0; i < this->_height; i++)
 		for (unsigned long int j = 0; j < this->_width; j++)
-			result->_matrix[i][j] = this->_matrix[i][j] * other._matrix[i][j];
+			result->_matrix[i][j] = *this->_matrix[i][j] * *other._matrix[i][j];
 	return (result);
 }
 
@@ -602,7 +605,7 @@ Matrix*		Matrix::operator*(const Rational &other) const
 	result = new Matrix(this->_width, this->_height);
 	for (unsigned long int i = 0; i < this->_height; i++)
 		for (unsigned long int j = 0; j < this->_width; j++)
-			result->_matrix[i][j] = this->_matrix[i][j] * other;
+			result->_matrix[i][j] = *this->_matrix[i][j] * other;
 	return (result);
 }
 
@@ -670,8 +673,8 @@ Matrix*		Matrix::operator/(const Matrix &other) const
 		for (unsigned long int j = 0; j < this->_width; j++)
 			try
 			{
-				result->_matrix[i][j] = this->_matrix[i][j] 	\
-						/ other._matrix[i][j];
+				result->_matrix[i][j] = *this->_matrix[i][j] 	\
+						/ *other._matrix[i][j];
 			}
 			catch(const LogicError& e)
 			{
@@ -690,7 +693,7 @@ Matrix*		Matrix::operator/(const Rational &other) const
 		for (unsigned long int j = 0; j < this->_width; j++)
 			try
 			{
-				result->_matrix[i][j] = this->_matrix[i][j] / other;
+				result->_matrix[i][j] = *this->_matrix[i][j] / other;
 			}
 			catch(const std::exception &e)
 			{
@@ -772,7 +775,7 @@ Matrix*		Matrix::operator%(const Matrix &other) const
 			try
 			{
 				result->_matrix[i][j] 	\
-						= this->_matrix[i][j] % other._matrix[i][j];
+						= *this->_matrix[i][j] % *other._matrix[i][j];
 			}
 			catch(const LogicError& e)
 			{
@@ -791,7 +794,7 @@ Matrix*		Matrix::operator%(const Rational &other) const
 		for (unsigned long int j = 0; j < this->_width; j++)
 			try
 			{
-				result->_matrix[i][j] = this->_matrix[i][j] % other;
+				result->_matrix[i][j] = *this->_matrix[i][j] % other;
 			}
 			catch(const LogicError& e)
 			{
@@ -909,7 +912,7 @@ Matrix*		Matrix::operator^(const long long int value) const
 
 // Getters
 
-Rational				Matrix::getValue(unsigned long int i, 			\
+IType*				Matrix::getValue(unsigned long int i, 			\
 		unsigned long int j) const
 {
 	if (i >= this->_width || j >= this->_height)
@@ -917,12 +920,12 @@ Rational				Matrix::getValue(unsigned long int i, 			\
 	return (this->_matrix[j][i]);
 }
 
-InfiniteFloat			Matrix::getRoundedValue(unsigned long int i, 	\
+InfiniteFloat		Matrix::getRoundedValue(unsigned long int i, 	\
 		unsigned long int j) const
 {
 	if (i >= this->_width || j >= this->_height)
 		throw ERROR_MATRIX_OUT_OF_RANGE;
-	return (this->_matrix[j][i].getValue());
+	return (dynamic_cast<Rational*>(this->_matrix[j][i])->getValue());// [ ] Changer ca
 }
 
 unsigned long int	Matrix::getWidth(void) const
@@ -939,7 +942,7 @@ unsigned long int	Matrix::getHeight(void) const
 // Setters
 
 void	Matrix::setValue(unsigned long int x, 	\
-		unsigned long int y, Rational value)
+		unsigned long int y, IType* value)
 {
 	if (x >= this->_width || y >= this->_height)
 		throw ERROR_MATRIX_OUT_OF_RANGE;
@@ -963,10 +966,10 @@ IType*			Matrix::function_operator(const IType &other) const
 
 Matrix*			Matrix::matrix_operator(const Matrix &other) const
 {
-	Matrix*		result;
-	Rational*	cell;
-	Rational*	mul;
-	Rational*	tmp;
+	Matrix*	result;
+	IType*	cell;
+	IType*	mul;
+	IType*	tmp;
 
 	if (this->_width != other._height)
 		throw ERROR_MATRIX_DIMENSIONS;
@@ -977,7 +980,7 @@ Matrix*			Matrix::matrix_operator(const Matrix &other) const
 			cell = new Rational();
 			for (unsigned int k = 0; k < this->_width; k++)
 			{
-				mul = this->_matrix[i][k] * other._matrix[k][j];
+				mul = *this->_matrix[i][k] * *other._matrix[k][j];
 				tmp = cell;
 				cell = *cell + *mul;
 				delete tmp;
@@ -1015,7 +1018,7 @@ IType*			Matrix::matrix_inversion(void) const
 		for (unsigned long int i(0); i < this->_width; i++)
 			matrix.setValue(i, j, this->_matrix[j][i]);
 		for (unsigned long int i(0); i < this->_width; i++)
-			matrix.setValue(this->_width + i, j, Rational(i == j));
+			matrix.setValue(this->_width + i, j, new Rational(i == j));
 	}
 	gauss_jordan_elimination(matrix);
 	result = new Matrix(this->_width, this->_height);
@@ -1036,7 +1039,7 @@ IType*			Matrix::norm(void) const
 			Rational*	square;
 			Rational*	tmp;
 
-			square = this->_matrix[j][i] * this->_matrix[j][i];
+			square = dynamic_cast<Rational*>(*this->_matrix[j][i] * *this->_matrix[j][i]);// [ ] Changer ca
 			tmp = result;
 			result = *result + *square;
 			delete square;
@@ -1055,8 +1058,8 @@ Rational*		Matrix::gcd(const Complex &other) const
 	Rational*	first;
 	Rational*	second;
 
-	first = this->gcd(other.getReal());
-	second = first->gcd(other.getImaginary());
+	first = this->gcd(*dynamic_cast<const Rational*>(other.getReal()));
+	second = first->gcd(*dynamic_cast<const Rational*>(other.getImaginary()));
 	delete first;
 	return (second);
 }
@@ -1071,12 +1074,12 @@ Rational*		Matrix::gcd(const Matrix &other) const
 	Rational*	gcd;
 	Rational*	tmp;
 
-	gcd = this->gcd(other[0][0]);
+	gcd = this->gcd(*dynamic_cast<const Rational*>(other[0][0]));// [ ] Changer ca
 	for (unsigned int i = 0; i < other.getHeight(); i++)
 		for (unsigned int j = 0; j < other.getWidth(); j++)
 		{
 			tmp = gcd;
-			gcd = gcd->gcd(other[i][j]);
+			gcd = gcd->gcd(*dynamic_cast<const Rational*>(other[i][j]));
 			delete tmp;
 		}
 	return (gcd);
@@ -1132,22 +1135,22 @@ std::string		Matrix::to_string(void) const
 	return (oss.str());
 }
 
-bool			Matrix::values_in_D(void) const
+bool			Matrix::in_D(void) const
 {
 	for (unsigned int i = 0; i < this->_height; i++)
 		for (unsigned int j = 0; j < this->_width; j++)
-			if (!this->_matrix[i][j].in_D())
+			if (!this->_matrix[i][j]->in_D())
 				return (false);
 	return (true);
 }
 
-bool			Matrix::values_in_Z(void) const
+bool			Matrix::in_Z(void) const
 {
 	for (unsigned int i = 0; i < this->_height; i++)
 		for (unsigned int j = 0; j < this->_width; j++)
-			if (!this->_matrix[i][j].in_Z())
-				return (false);
-	return (true);
+			if (this->_matrix[i][j]->in_Z())
+				return (true);
+	return (false);
 }
 
 void			Matrix::error(const LogicError &e)
@@ -1161,7 +1164,11 @@ void			Matrix::free(void)
 	if (!this->_matrix || !this->_width || !this->_height)
 		return ;
 	for (unsigned int i = 0; i < this->_height; i++)
+	{
+		for (unsigned int j = 0; j < this->_width; j++)
+			delete this->_matrix[i][j];
 		delete[] this->_matrix[i];
+	}
 	delete[] this->_matrix;
 	this->_width = 0;
 	this->_height = 0;
@@ -1170,12 +1177,12 @@ void			Matrix::free(void)
 
 void			Matrix::print_rounded(const std::string var) const
 {
-	if (this->values_in_Z())
+	if (this->in_Z())
 		return ;
 	std::cout << COLOR_DIM;
 	if (!var.empty())
 	{
-		if (this->values_in_D())
+		if (this->in_D())
 			std::cout << var << " = " << std::endl;
 		else
 			std::cout << var << " ≈ " << std::endl;
@@ -1187,7 +1194,7 @@ void			Matrix::print_rounded(const std::string var) const
 void			Matrix::swap_lines(unsigned long int line1, 	\
 		unsigned long int line2)
 {
-	Rational*	tmp;
+	IType**	tmp;
 
 	if (line1 >= this->_height || line2 >= this->_height)
 		throw ERROR_MATRIX_OUT_OF_RANGE;

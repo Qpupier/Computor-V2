@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 16:33:59 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/29 17:17:17 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,12 @@
 # include <cmath>
 # include <utility>
 # include <unistd.h>
+# include <vector>
 # include <readline/readline.h>
 # include <readline/history.h>
 
-# include "IType.hpp"
+class IType;
+// # include "IType.hpp"
 # include "Token.hpp"
 # include "errors.hpp"
 

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 15:46:39 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/12 17:58:18 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/29 12:10:09 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ t_quadratic_solutions	get_solutions_structure(const Complex* a, 	\
 	solutions_structure_init(solutions);
 	sqrt_real_factor = factorize_sqrt(solutions, delta);
 	sqrt_imaginary_factor = sqrt_real_factor 					\
-			* (delta->getImaginary() < 0 ? -1 : 1);
+			* (*delta->getImaginary() < 0 ? -1 : 1);
 	denominator = get_initial_denominator(a);
 	std::vector<Rational> sqrt_factors({sqrt_real_factor, 		\
 			*sqrt_imaginary_factor});

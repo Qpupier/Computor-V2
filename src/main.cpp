@@ -6,11 +6,12 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/16 14:37:15 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/29 17:18:14 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "computor-v2.hpp"
+// #include "computor-v2.hpp"
+#include "IType.hpp"
 
 static void	free_stored(const 	\
 		std::map<std::pair<std::string, std::string>, const IType*> &stored)

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:01:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/25 17:15:54 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/29 17:22:13 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <stdio.h>
 # include "computor-v2.hpp"
+# include "IType.hpp"
 # include "backtracking_possibilities.hpp"
 
 class	AST

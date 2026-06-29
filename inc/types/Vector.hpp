@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:42:16 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 10:57:58 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/29 16:36:14 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,13 @@
 # include "Rational.hpp"
 # include "Complex.hpp"
 # include "Polynomial.hpp"
+# include "computor-v2.hpp"
 
 class	Vector: public IType
 {
 	public:
 		// Constructors and destructor
-		Vector(unsigned long int size): _vector(size, Rational(0)) {};
+		Vector(unsigned long int size): _vector(size, new Rational(0)) {};
 		Vector(void): Vector(0) {};
 		Vector(std::string str, t_data &data);
 		Vector(const Token &token, t_data &data): 	\
@@ -48,8 +49,8 @@ class	Vector: public IType
 		bool		operator>(const long long int value) const;
 		bool		operator>=(const IType &other) const;
 		bool		operator>=(const long long int value) const;
-		Rational	operator[](unsigned long int index) const;
-		Rational&	operator[](unsigned long int index);
+		IType*		operator[](unsigned long int index) const;
+		IType*		operator[](unsigned long int index);
 		IType*		operator+(const IType &other) const;
 		Vector*		operator+(const Vector &other) const;
 		Vector*		operator+(const Rational &other) const;
@@ -91,6 +92,7 @@ class	Vector: public IType
 		Vector*		operator^(const long long int value) const;
 
 		// Getters
+		// InfiniteFloat	getRoundedValue(unsigned long int index) const;
 		InfiniteFloat	getRoundedValue(unsigned long int index) const;
 
 		// Methods
@@ -98,8 +100,8 @@ class	Vector: public IType
 		std::string		to_string(void) const;
 		std::size_t		size(void) const;
 		bool			empty(void) const;
-		bool			values_in_D(void) const;
-		bool			values_in_Z(void) const;
+		bool			in_D(void) const;
+		bool			in_Z(void) const;
 		IType*			clone(void) const;
 		IType*			function_operator(const IType &other) const;
 		IType*			matrix_inversion(void) const;
@@ -112,11 +114,11 @@ class	Vector: public IType
 		Rational*		gcd(const Matrix &other) const;
 		void			print_rounded	\
 				(const std::string var = std::string()) const;
-		void			push_back(const Rational value);
+		void			push_back(IType* value);
 
 	private:
 		// Members
-		std::vector<Rational>	_vector;
+		std::vector<IType*>	_vector;
 };
 
 // Output stream operator overload

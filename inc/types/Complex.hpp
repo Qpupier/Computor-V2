@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:35:43 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 10:31:50 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/29 16:19:17 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ class	Complex: public IType
 {
 	public:
 		// Constructors and destructor
-		Complex(void): _real(Rational(0)), _imaginary(Rational(1)) {};
-		Complex(Rational real, Rational imaginary): _real(real), _imaginary(imaginary) {};
+		Complex(void): _real(new Rational(0)), _imaginary(new Rational(1)) {};
+		Complex(IType* real, IType* imaginary): _real(real), _imaginary(imaginary) {};
 		Complex(const Complex &other): _real(other._real), _imaginary(other._imaginary) {};
 		Complex(const IType &other);
-		~Complex(void) {};
+		~Complex(void);
 
 		// Operator overloads
 		explicit	operator bool() const;
@@ -86,16 +86,18 @@ class	Complex: public IType
 		Complex*	operator^(const long long int value) const;
 
 		// Getters
-		Rational	getReal(void) const;
-		Rational	getImaginary(void) const;
+		IType*	getReal(void) const;
+		IType*	getImaginary(void) const;
 
 		// Setters
-		void	setReal(const Rational &real);
-		void	setImaginary(const Rational &imaginary);
+		void	setReal(IType* real);
+		void	setImaginary(IType* imaginary);
 
 		// Methods
 		std::string		to_string(void) const;
 		std::ostream&	print(std::ostream &os) const;
+		bool			in_D(void) const;
+		bool			in_Z(void) const;
 		IType*			norm(void) const;
 		IType*			clone(void) const;
 		IType*			function_operator(const IType &other) const;
@@ -106,14 +108,12 @@ class	Complex: public IType
 		Rational*		gcd(const Rational &other) const;
 		Rational*		gcd(const Matrix &other) const;
 		Rational*		gcd(const Vector &other) const;
-		bool			values_in_D(void) const;
-		bool			values_in_Z(void) const;
 		void			print_rounded(const std::string var = std::string()) const;
 
 	private:
 		// Members
-		Rational	_real;
-		Rational	_imaginary;
+		IType*	_real;
+		IType*	_imaginary;
 };
 
 // Output stream operator overload

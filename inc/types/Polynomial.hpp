@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 17:08:27 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/29 12:04:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ class	Polynomial: public IType
 		typedef struct	s_term
 		{
 			IType*				coefficient;
-			unsigned short int	power;
+			unsigned short int	power;// [ ] Est-ce le bon type ?
 		}				t_term;
 
 		typedef struct	s_division_result
@@ -105,9 +105,10 @@ class	Polynomial: public IType
 		std::string			getName(void) const;
 		std::vector<t_term>	getTerms(void) const;
 		std::vector<t_term>	getDividers(void) const;
+		// InfiniteFloat		getRoundedValue(void) const;
 
 		// Setters
-		void				setName(const std::string& name);
+		void	setName(const std::string& name);
 
 		// Methods
 		IType*			clone(void) const;
@@ -118,6 +119,8 @@ class	Polynomial: public IType
 		Rational*		gcd(const IType &other) const;
 		std::ostream&	print(std::ostream &os) const;
 		std::string		to_string(void) const;
+		bool			in_D(void) const;
+		bool			in_Z(void) const;
 		void			factorize_constant_factor(void);
 		void			free(void);
 		void			print_rounded(const std::string var = std::string()) const;

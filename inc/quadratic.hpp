@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:43:37 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 14:09:06 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/29 11:59:14 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define QUADRATIC_HPP
 
 # include "Complex.hpp"
+# include "computor-v2.hpp"
 
 typedef struct	s_quadratic_solutions
 {

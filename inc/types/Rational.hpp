@@ -6,14 +6,15 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 10:31:50 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/29 16:17:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RATIONAL_HPP
 # define RATIONAL_HPP
 
-# include "InfiniteFloat.hpp"
+# include "Token.hpp"
+# include "IType.hpp"
 
 class	Complex;
 class	Matrix;

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:38:24 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 10:32:51 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/29 11:49:58 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ class	InfiniteFloat
 		InfiniteFloat		operator+(const InfiniteFloat &other) const;
 		InfiniteFloat		operator+(const InfiniteInt &other) const;
 		InfiniteFloat		operator+(const long long int value) const;
-		IType*				operator+(const IType &other) const;
+		// IType*				operator+(const IType &other) const;
 		void				operator+=(const InfiniteFloat &other);
 		void				operator+=(const InfiniteInt &other);
 		void				operator+=(const long long int value);

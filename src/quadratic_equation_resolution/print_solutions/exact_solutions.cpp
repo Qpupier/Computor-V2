@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:19:13 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 15:02:22 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/06/29 11:14:20 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ void				print_solutions(t_quadratic_solutions& s, 	\
 	data.history_results.push_back(result);
 	if (nb_solutions == 1)
 		assignation(var, data.stored, new Complex(						\
-				Rational(s.real_term1[0], s.real_denominator[0]), 		\
-				Rational(s.imaginary_term1[0], s.imaginary_denominator[0])));
+				new Rational(s.real_term1[0], s.real_denominator[0]), 	\
+				new Rational(s.imaginary_term1[0], s.imaginary_denominator[0])));
 	print_rounded_solutions(s, reduce_sqrt, var, nb_solutions);
 }
