@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:03:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 10:31:50 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/01 18:46:15 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@ static void						find_solutions(							\
 
 	solutions_structure = get_solutions_structure(coefficients[0], 	\
 			coefficients[1], coefficients[3]);
-	set = coefficients[0]->getImaginary() 							\
-				|| coefficients[1]->getImaginary() 					\
-				|| coefficients[2]->getImaginary() 					\
-				|| coefficients[3]->getImaginary() 					\
+	set = *coefficients[0]->getImaginary() 							\
+				|| *coefficients[1]->getImaginary() 				\
+				|| *coefficients[2]->getImaginary() 				\
+				|| *coefficients[3]->getImaginary() 				\
 			? "ℂ" : "ℝ";
 	delete coefficients[0];
 	delete coefficients[1];
@@ -114,6 +114,9 @@ void							solve_trinomial(	\
 			tmp_coefficients[1], tmp_coefficients[2]);
 	coefficients = cast_coefficients_in_complex(tmp_coefficients[0], 	\
 			tmp_coefficients[1], tmp_coefficients[2], discriminant);
-	find_solutions(coefficients, polynomial->getName(), data);
+	if (polynomial->in_Q())
+		find_solutions(coefficients, polynomial->getName(), data);
+	else
+		throw UnsupportedError("Solutions can only be found in ℚ, ℝ or ℂ TODO");// TODO
 	delete discriminant;
 }

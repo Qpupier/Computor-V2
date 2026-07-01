@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 17:07:55 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/01 11:13:51 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ class	Matrix: public IType
 		std::ostream&	print(std::ostream &os) const;
 		std::string		to_string(void) const;
 		bool			in_D(void) const;
+		bool			in_Q(void) const;
 		bool			in_Z(void) const;
 		void			error(const LogicError &e);
 		void			free(void);

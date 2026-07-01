@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 11:05:59 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/01 18:53:23 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,9 @@ Real::Real(const IType &other)
 		*this = *other_rational;
 	else if (other_complex)
 	{
-		if (other_complex->getImaginary())
+		if (*other_complex->getImaginary())
 			throw ERROR_UNEXPECTED;
-		*this = other_complex->getReal();
+		*this = *other_complex->getReal();
 	}
 	else if (other_polynomial)
 		*this = from_polynomial(*other_polynomial);

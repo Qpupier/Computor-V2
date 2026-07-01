@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 14:12:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 14:49:45 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/01 14:42:09 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	monomial(const Polynomial *polynomial, 	\
 {
 	std::string	result;
 
-	if (polynomial->getTerms().empty())
+	if (!*polynomial)
 		result = "True";
 	else
 		result = "False";

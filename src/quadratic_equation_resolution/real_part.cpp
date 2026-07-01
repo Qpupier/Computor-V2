@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:24:12 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 12:14:27 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/01 19:08:55 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static Rational*	get_initial_real_term1(const Complex* a, const Complex* b)
 	Rational*	a_imaginary_b_imaginary;
 	Rational*	result;
 
-	a_real_negative = dynamic_cast<Rational*>(-*a->getReal());// [ ] Changer ca
+	a_real_negative = dynamic_cast<Rational*>(-*a->getReal());
 	minus_a_real_b_real = dynamic_cast<Rational*>(*a_real_negative * *b->getReal());
 	delete a_real_negative;
 	a_imaginary_b_imaginary = dynamic_cast<Rational*>(*a->getImaginary() * *b->getImaginary());
@@ -79,8 +79,8 @@ void				set_terms(								\
 	Rational*	real_gcd;
 
 	real_term1 = get_initial_real_term1(coefficients[0], coefficients[1]);
-	real_term2_factor = dynamic_cast<Rational*>(*coefficients[0]->getReal() * sqrt_factors[0]);// [ ] Changer ca
-	real_term3_factor = dynamic_cast<Rational*>(*coefficients[0]->getImaginary() * sqrt_factors[1]);// [ ] Changer ca
+	real_term2_factor = dynamic_cast<Rational*>(*coefficients[0]->getReal() * sqrt_factors[0]);
+	real_term3_factor = dynamic_cast<Rational*>(*coefficients[0]->getImaginary() * sqrt_factors[1]);
 	real_gcd = get_gcd_terms(real_term1, real_term2_factor, 				\
 			real_term3_factor, denominator);
 	update_real_term1(solutions, real_term1, real_gcd);

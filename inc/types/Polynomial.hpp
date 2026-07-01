@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 12:04:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/01 11:13:59 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ class	Polynomial: public IType
 		std::ostream&	print(std::ostream &os) const;
 		std::string		to_string(void) const;
 		bool			in_D(void) const;
+		bool			in_Q(void) const;
 		bool			in_Z(void) const;
 		void			factorize_constant_factor(void);
 		void			free(void);

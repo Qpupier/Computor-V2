@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 17:07:20 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/01 17:07:46 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static Vector					from_matrix(const Matrix* matrix)
 	if (matrix->getHeight() != 1)
 		throw ERROR_UNEXPECTED;
 	for (unsigned long int i(0); i < matrix->getWidth(); i++)
-		result.push_back(matrix->getValue(i, 0));
+		result.push_back(matrix->getValue(i, 0)->clone());
 	return (result);
 }
 
@@ -104,23 +104,24 @@ static void						print_rounded_vector(const Vector* vector)
 
 // Constructors and destructor
 
+Vector::Vector(unsigned long int size): _vector()
+{
+	for (unsigned long int i = 0; i < size; i++)
+		this->_vector.push_back(new Rational(0));
+}
+
 Vector::Vector(std::string str, t_data &data)
 {
 	std::vector<std::string>	vector;
 	unsigned long int			size;
-	IType*						rational;
 
 	vector = parse_vector(str);
 	size = vector.size();
 	for (unsigned long int i = 0; i < size; i++)
-	{
-		rational = value_to_rational(vector[i], data);
-		this->_vector.push_back(rational);
-		delete rational;
-	}
+		this->_vector.push_back(value_to_rational(vector[i], data));
 }
 
-Vector::Vector(const IType &other)
+Vector::Vector(const IType &other): _vector()
 {
 	const Vector*		other_vector;
 	const Matrix*		other_matrix;
@@ -139,6 +140,13 @@ Vector::Vector(const IType &other)
 		throw ERROR_UNEXPECTED;
 }
 
+Vector::~Vector(void)
+{
+	for (IType* value : this->_vector)
+		delete value;
+	this->_vector.clear();
+}
+
 
 // Operator overloads
 
@@ -153,7 +161,13 @@ Vector::operator bool() const
 Vector&	Vector::operator=(const Vector &other)
 {
 	if (this != &other)
-		this->_vector = other._vector;
+	{
+		for (IType* value : this->_vector)
+			delete value;
+		this->_vector.clear();
+		for (IType* value : other._vector)
+			this->_vector.push_back(value->clone());
+	}
 	return (*this);
 }
 
@@ -286,32 +300,22 @@ IType*		Vector::operator+(const IType &other) const
 Vector*		Vector::operator+(const Vector &other) const
 {
 	Vector*	result;
-	IType*	tmp;
 
 	if (this->_vector.size() != other._vector.size())
 		throw ERROR_VECTOR_DIMENSIONS;
 	result = new Vector(this->_vector.size());
 	for (unsigned long int i = 0; i < this->_vector.size(); i++)
-	{
-		tmp = *this->_vector[i] + *other._vector[i];
-		result->_vector[i] = tmp;
-		// delete tmp;// [ ] Check if this is correct
-	}
+		result->setValue(i, *this->_vector[i] + *other._vector[i]);
 	return (result);
 }
 
 Vector*		Vector::operator+(const Rational &other) const
 {
 	Vector*	result;
-	IType*	tmp;
 
 	result = new Vector(this->_vector.size());
 	for (unsigned long int i = 0; i < this->_vector.size(); i++)
-	{
-		tmp = *this->_vector[i] + other;
-		result->_vector[i] = tmp;
-		// delete tmp;// [ ] Check if this is correct
-	}
+		result->setValue(i, *this->_vector[i] + other);
 	return (result);
 }
 
@@ -380,32 +384,22 @@ IType*		Vector::operator-(const IType &other) const
 Vector*		Vector::operator-(const Vector &other) const
 {
 	Vector*	result;
-	IType*	tmp;
 
 	if (this->_vector.size() != other._vector.size())
 		throw ERROR_VECTOR_DIMENSIONS;
 	result = new Vector(this->_vector.size());
 	for (unsigned long int i = 0; i < this->_vector.size(); i++)
-	{
-		tmp = *this->_vector[i] - *other._vector[i];
-		result->_vector[i] = tmp;
-		// delete tmp;// [ ] Check if this is correct
-	}
+		result->setValue(i, *this->_vector[i] - *other._vector[i]);
 	return (result);
 }
 
 Vector*		Vector::operator-(const Rational &other) const
 {
 	Vector*	result;
-	IType*	tmp;
 
 	result = new Vector(this->_vector.size());
 	for (unsigned long int i = 0; i < this->_vector.size(); i++)
-	{
-		tmp = *this->_vector[i] - other;
-		result->_vector[i] = tmp;
-		// delete tmp;// [ ] Check if this is correct
-	}
+		result->setValue(i, *this->_vector[i] - other);
 	return (result);
 }
 
@@ -475,32 +469,22 @@ IType*		Vector::operator*(const IType &other) const
 Vector*		Vector::operator*(const Vector &other) const
 {
 	Vector*	result;
-	IType*	tmp;
 
 	if (this->_vector.size() != other._vector.size())
 		throw ERROR_VECTOR_DIMENSIONS;
 	result = new Vector(this->_vector.size());
 	for (unsigned long int i = 0; i < this->_vector.size(); i++)
-	{
-		tmp = *this->_vector[i] + *other._vector[i];
-		result->_vector[i] = tmp;
-		// delete tmp;// [ ] Check if this is correct
-	}
+		result->setValue(i, *this->_vector[i] + *other._vector[i]);
 	return (result);
 }
 
 Vector*		Vector::operator*(const Rational &other) const
 {
 	Vector*	result;
-	IType*	tmp;
 
 	result = new Vector(this->_vector.size());
 	for (unsigned long int i = 0; i < this->_vector.size(); i++)
-	{
-		tmp = *this->_vector[i] * other;
-		result->_vector[i] = tmp;
-		// delete tmp;// [ ] Check if this is correct
-	}
+		result->setValue(i, *this->_vector[i] * other);
 	return (result);
 }
 
@@ -564,32 +548,22 @@ IType*		Vector::operator/(const IType &other) const
 Vector*		Vector::operator/(const Vector &other) const
 {
 	Vector*	result;
-	IType*	tmp;
 
 	if (this->_vector.size() != other._vector.size())
 		throw ERROR_VECTOR_DIMENSIONS;
 	result = new Vector(this->_vector.size());
 	for (unsigned long int i = 0; i < this->_vector.size(); i++)
-	{
-		tmp = *this->_vector[i] / *other._vector[i];
-		result->_vector[i] = tmp;
-		// delete tmp;// [ ] Check if this is correct
-	}
+		result->setValue(i, *this->_vector[i] / *other._vector[i]);
 	return (result);
 }
 
 Vector*		Vector::operator/(const Rational &other) const
 {
 	Vector*	result;
-	IType*	tmp;
 
 	result = new Vector(this->_vector.size());
 	for (unsigned long int i = 0; i < this->_vector.size(); i++)
-	{
-		tmp = *this->_vector[i] / other;
-		result->_vector[i] = tmp;
-		// delete tmp;// [ ] Check if this is correct
-	}
+		result->setValue(i, *this->_vector[i] / other);
 	return (result);
 }
 
@@ -659,32 +633,22 @@ IType*		Vector::operator%(const IType &other) const
 Vector*		Vector::operator%(const Vector &other) const
 {
 	Vector*	result;
-	IType*	tmp;
 
 	if (this->_vector.size() != other._vector.size())
 		throw ERROR_VECTOR_DIMENSIONS;
 	result = new Vector(this->_vector.size());
 	for (unsigned long int i = 0; i < this->_vector.size(); i++)
-	{
-		tmp = *this->_vector[i] % *other._vector[i];
-		result->_vector[i] = tmp;
-		// delete tmp;// [ ] Check if this is correct
-	}
+		result->setValue(i, *this->_vector[i] % *other._vector[i]);
 	return (result);
 }
 
 Vector*		Vector::operator%(const Rational &other) const
 {
 	Vector*	result;
-	IType*	tmp;
 
 	result = new Vector(this->_vector.size());
 	for (unsigned long int i = 0; i < this->_vector.size(); i++)
-	{
-		tmp = *this->_vector[i] % other;
-		result->_vector[i] = tmp;
-		// delete tmp;// [ ] Check if this is correct
-	}
+		result->setValue(i, *this->_vector[i] % other);
 	return (result);
 }
 
@@ -783,6 +747,17 @@ InfiniteFloat	Vector::getRoundedValue(unsigned long int index) const
 }
 
 
+// Setters
+
+void			Vector::setValue(unsigned long int index, IType* value)
+{
+	if (index >= this->_vector.size())
+		throw ERROR_VECTOR_OUT_OF_RANGE;
+	delete this->_vector[index];
+	this->_vector[index] = value;
+}
+
+
 // Methods
 
 std::ostream&	Vector::print(std::ostream &os) const
@@ -790,7 +765,9 @@ std::ostream&	Vector::print(std::ostream &os) const
 	os << "[";
 	for (unsigned long int i(0); i < this->_vector.size(); i++)
 	{
-		os << this->_vector[i];
+		if (!this->_vector[i])
+			throw ERROR_UNEXPECTED;
+		os << *this->_vector[i];
 		if (i < this->_vector.size() - 1)
 			os << ", ";
 	}
@@ -824,12 +801,20 @@ bool		Vector::in_D(void) const
 	return (true);
 }
 
+bool		Vector::in_Q(void) const
+{
+	for (const IType* value : this->_vector)
+		if (!value->in_Q())
+			return (false);
+	return (true);
+}
+
 bool		Vector::in_Z(void) const
 {
 	for (const IType* value : this->_vector)
-		if (value->in_Z())
-			return (true);
-	return (false);
+		if (!value->in_Z())
+			return (false);
+	return (true);
 }
 
 IType*		Vector::clone(void) const

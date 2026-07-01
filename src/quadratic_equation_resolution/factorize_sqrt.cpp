@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 13:28:11 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 12:12:24 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/01 19:08:35 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static Rational*	get_small_gcd(t_quadratic_solutions &solutions, 	\
 	Rational*	small_gcd;
 	Rational*	term_2;
 
-	term_2 = dynamic_cast<Rational*>(*delta->getReal() * 2);// [ ] Changer ca
+	term_2 = dynamic_cast<Rational*>(*delta->getReal() * 2);
 	small_gcd = term_1_factor.gcd(*term_2);
 	sqrt_reduce_terms(solutions, term_1_factor, term_2, small_gcd);
 	delete term_2;
@@ -63,7 +63,7 @@ Rational*			get_module_square(const Complex* complex)
 	Rational*	imaginary_square;
 	Rational*	module_square;
 
-	real_square = dynamic_cast<Rational*>(*complex->getReal() * *complex->getReal());// [ ] Changer ca
+	real_square = dynamic_cast<Rational*>(*complex->getReal() * *complex->getReal());
 	imaginary_square = dynamic_cast<Rational*>(*complex->getImaginary() * *complex->getImaginary());
 	module_square = dynamic_cast<Rational*>(*real_square + *imaginary_square);
 	delete real_square;

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 12:05:23 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/01 11:14:48 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,6 +230,11 @@ Operator::t_operator	Operator::getOperator(void) const
 // Methods
 
 bool			Operator::in_D(void) const
+{
+	return (false);
+}
+
+bool			Operator::in_Q(void) const
 {
 	return (false);
 }

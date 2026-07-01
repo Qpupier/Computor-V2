@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:42:16 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 16:36:14 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/01 17:07:49 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,14 @@ class	Vector: public IType
 {
 	public:
 		// Constructors and destructor
-		Vector(unsigned long int size): _vector(size, new Rational(0)) {};
+		Vector(unsigned long int size);
 		Vector(void): Vector(0) {};
 		Vector(std::string str, t_data &data);
 		Vector(const Token &token, t_data &data): 	\
 				Vector(token.getValue(), data) {};
 		Vector(const Vector &other): _vector(other._vector) {};
 		Vector(const IType &other);
-		~Vector(void) {};
+		~Vector(void);
 
 		// Operator overloads
 		explicit	operator bool() const;
@@ -92,8 +92,10 @@ class	Vector: public IType
 		Vector*		operator^(const long long int value) const;
 
 		// Getters
-		// InfiniteFloat	getRoundedValue(unsigned long int index) const;
 		InfiniteFloat	getRoundedValue(unsigned long int index) const;
+
+		// Setters
+		void			setValue(unsigned long int index, IType* value);
 
 		// Methods
 		std::ostream&	print(std::ostream &os) const;
@@ -101,6 +103,7 @@ class	Vector: public IType
 		std::size_t		size(void) const;
 		bool			empty(void) const;
 		bool			in_D(void) const;
+		bool			in_Q(void) const;
 		bool			in_Z(void) const;
 		IType*			clone(void) const;
 		IType*			function_operator(const IType &other) const;

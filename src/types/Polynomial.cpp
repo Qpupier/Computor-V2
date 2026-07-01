@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 12:04:58 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/01 18:58:13 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -280,7 +280,7 @@ static void								print_coefficient(					\
 	if (!first_term)
 		print_coefficient_sign(os, &coefficient);
 	complex = dynamic_cast<Complex*>(coefficient);
-	need_parentheses = complex && complex->getReal() && complex->getImaginary();
+	need_parentheses = complex && *complex->getReal() && *complex->getImaginary();
 	if (need_parentheses)
 		os << "(";
 	if (power && *coefficient == -1)
@@ -289,7 +289,7 @@ static void								print_coefficient(					\
 		os << *coefficient;
 	if (need_parentheses)
 		os << ")";
-	else if (complex && complex->getImaginary() && power)
+	else if (complex && *complex->getImaginary() && power)
 		os << " * ";
 	delete coefficient;
 }
@@ -1287,23 +1287,34 @@ std::string		Polynomial::to_string(void) const
 bool			Polynomial::in_D(void) const
 {
 	for (const auto& term : this->_terms)
-		if (term.coefficient->in_D())
-			return (true);
+		if (!term.coefficient->in_D())
+			return (false);
 	for (const auto& divider : this->_dividers)
-		if (divider.coefficient->in_D())
-			return (true);
-	return (false);
+		if (!divider.coefficient->in_D())
+			return (false);
+	return (true);
+}
+
+bool			Polynomial::in_Q(void) const
+{
+	for (const auto& term : this->_terms)
+		if (!term.coefficient->in_Q())
+			return (false);
+	for (const auto& divider : this->_dividers)
+		if (!divider.coefficient->in_Q())
+			return (false);
+	return (true);
 }
 
 bool			Polynomial::in_Z(void) const
 {
 	for (const auto& term : this->_terms)
-		if (term.coefficient->in_Z())
-			return (true);
+		if (!term.coefficient->in_Z())
+			return (false);
 	for (const auto& divider : this->_dividers)
-		if (divider.coefficient->in_Z())
-			return (true);
-	return (false);
+		if (!divider.coefficient->in_Z())
+			return (false);
+	return (true);
 }
 
 IType*			Polynomial::clone(void) const

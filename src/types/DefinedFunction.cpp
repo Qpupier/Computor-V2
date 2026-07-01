@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:35:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 12:06:05 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/01 11:30:24 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,6 +248,11 @@ std::string		DefinedFunction::to_string(void) const
 }
 
 bool			DefinedFunction::in_D(void) const
+{
+	return (false);
+}
+
+bool			DefinedFunction::in_Q(void) const
 {
 	return (false);
 }

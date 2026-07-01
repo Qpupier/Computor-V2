@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 16:29:05 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/01 11:08:57 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,10 +186,8 @@ std::ostream&	AST::print(std::ostream &os) const
 	return (os);
 }
 
-bool			AST::end_of_tree(void) const
+bool			AST::end_of_tree(void) const// [ ] Static ?
 {
-	// if (!this->_left && !this->_right)
-	// 	throw ERROR_OPERATOR_EXPECTED;// [ ]: Verifier si c'est suffisant comme verif
 	return (!this->_left && !this->_right);
 }
 

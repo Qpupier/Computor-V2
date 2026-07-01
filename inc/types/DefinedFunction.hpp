@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:16:29 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 12:05:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/01 11:12:24 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ class	DefinedFunction: public IType
 		// Methods
 		std::string		to_string(void) const;
 		bool			in_D(void) const;
+		bool			in_Q(void) const;
 		bool			in_Z(void) const;
 		std::ostream&	print(std::ostream &os) const;
 		IType*			clone(void) const;

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:35:43 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 16:19:17 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/01 14:23:15 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ class	Complex: public IType
 		// Constructors and destructor
 		Complex(void): _real(new Rational(0)), _imaginary(new Rational(1)) {};
 		Complex(IType* real, IType* imaginary): _real(real), _imaginary(imaginary) {};
-		Complex(const Complex &other): _real(other._real), _imaginary(other._imaginary) {};
+		Complex(const Complex &other): _real(other._real->clone()), _imaginary(other._imaginary->clone()) {};
 		Complex(const IType &other);
 		~Complex(void);
 
@@ -97,6 +97,7 @@ class	Complex: public IType
 		std::string		to_string(void) const;
 		std::ostream&	print(std::ostream &os) const;
 		bool			in_D(void) const;
+		bool			in_Q(void) const;
 		bool			in_Z(void) const;
 		IType*			norm(void) const;
 		IType*			clone(void) const;

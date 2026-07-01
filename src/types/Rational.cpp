@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 16:27:19 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/01 18:52:41 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ Rational::Rational(const IType &other)
 		*this = *other_rational;
 	else if (other_complex)
 	{
-		if (other_complex->getImaginary())
+		if (*other_complex->getImaginary())
 			throw ERROR_UNEXPECTED;
 		*this = *other_complex->getReal();
 	}
@@ -93,13 +93,12 @@ Rational::operator bool() const
 	return (static_cast<bool>(this->_numerator));
 }
 
-Rational&	Rational::operator=(const Rational * other)
+Rational&	Rational::operator=(const Rational* other)
 {
 	if (this != other)
 	{
 		this->_numerator = other->_numerator;
 		this->_denominator = other->_denominator;
-		delete other;
 	}
 	return (*this);
 }
@@ -245,7 +244,6 @@ Complex*	Rational::operator+(const Complex &other) const
 Matrix*		Rational::operator+(const Matrix &other) const
 {
 	Matrix*				result;
-	IType*				tmp;
 	unsigned long int	width;
 	unsigned long int	height;
 
@@ -254,11 +252,7 @@ Matrix*		Rational::operator+(const Matrix &other) const
 	result = new Matrix(width, height);
 	for (unsigned long int j(0); j < height; j++)
 		for (unsigned long int i(0); i < width; i++)
-		{
-			tmp = *this + *other[j][i];
-			result->setValue(i, j, tmp);
-			delete tmp;
-		}
+			result->setValue(i, j, *this + *other[j][i]);
 	return (result);
 }
 
@@ -266,15 +260,10 @@ Vector*		Rational::operator+(const Vector &other) const
 {
 	unsigned long int	size(other.size());
 	Vector*				result;
-	IType*				tmp;
 
 	result = new Vector(size);
 	for (unsigned long int i(0); i < size; i++)
-	{
-		tmp = *this + *other[i];
-		result[i] = *tmp;
-		delete tmp;
-	}
+		result->setValue(i, *this + *other[i]);
 	return (result);
 }
 
@@ -331,7 +320,6 @@ Complex*	Rational::operator-(const Complex &other) const
 Matrix*		Rational::operator-(const Matrix &other) const
 {
 	Matrix*				result;
-	IType*				tmp;
 	unsigned long int	width;
 	unsigned long int	height;
 
@@ -340,11 +328,7 @@ Matrix*		Rational::operator-(const Matrix &other) const
 	result = new Matrix(width, height);
 	for (unsigned long int j(0); j < height; j++)
 		for (unsigned long int i(0); i < width; i++)
-		{
-			tmp = *this - *other[j][i];
-			result->setValue(i, j, tmp);
-			delete tmp;
-		}
+			result->setValue(i, j, *this - *other[j][i]);
 	return (result);
 }
 
@@ -352,15 +336,10 @@ Vector*		Rational::operator-(const Vector &other) const
 {
 	unsigned long int	size(other.size());
 	Vector*				result;
-	IType*				tmp;
 
 	result = new Vector(size);
 	for (unsigned long int i(0); i < size; i++)
-	{
-		tmp = *this - *other[i];
-		result[i] = *tmp;
-		delete tmp;
-	}
+		result->setValue(i, *this - *other[i]);
 	return (result);
 }
 
@@ -417,7 +396,6 @@ Complex*	Rational::operator*(const Complex &other) const
 Matrix*		Rational::operator*(const Matrix &other) const
 {
 	Matrix*				result;
-	IType*				tmp;
 	unsigned long int	width;
 	unsigned long int	height;
 
@@ -426,11 +404,7 @@ Matrix*		Rational::operator*(const Matrix &other) const
 	result = new Matrix(width, height);
 	for (unsigned long int j(0); j < height; j++)
 		for (unsigned long int i(0); i < width; i++)
-		{
-			tmp = *this * *other[j][i];
-			result->setValue(i, j, tmp);
-			delete tmp;
-		}
+			result->setValue(i, j, *this * *other[j][i]);
 	return (result);
 }
 
@@ -438,15 +412,10 @@ Vector*	Rational::operator*(const Vector &other) const
 {
 	unsigned long int	size(other.size());
 	Vector*				result;
-	IType*				tmp;
 
 	result = new Vector(size);
 	for (unsigned long int i(0); i < size; i++)
-	{
-		tmp = *this * *other[i];
-		result[i] = *tmp;
-		delete tmp;
-	}
+		result->setValue(i, *this * *other[i]);
 	return (result);
 }
 
@@ -496,7 +465,6 @@ Complex*	Rational::operator/(const Complex &other) const
 Matrix*		Rational::operator/(const Matrix &other) const
 {
 	Matrix*				result;
-	IType*				tmp;
 	unsigned long int	width;
 	unsigned long int	height;
 
@@ -507,9 +475,7 @@ Matrix*		Rational::operator/(const Matrix &other) const
 		for (unsigned long int i(0); i < width; i++)
 			try
 			{
-				tmp = *this / *other[j][i];
-				result->setValue(i, j, tmp);
-				// delete tmp;// A laisser ?
+				result->setValue(i, j, *this / *other[j][i]);
 			}
 			catch (const std::exception &e)
 			{
@@ -523,15 +489,12 @@ Vector*		Rational::operator/(const Vector &other) const
 {
 	unsigned long int	size(other.size());
 	Vector*				result;
-	IType*				tmp;
 
 	result = new Vector(size);
 	for (unsigned long int i(0); i < size; i++)
 		try
 		{
-			tmp = *this / *other[i];
-			result[i] = *tmp;
-			delete tmp;
+			result->setValue(i, *this / *other[i]);
 		}
 		catch (const std::exception &e)
 		{
@@ -604,7 +567,6 @@ Rational*	Rational::operator%(const Complex &other) const
 Matrix*		Rational::operator%(const Matrix &other) const
 {
 	Matrix*				result;
-	IType*				tmp;
 	unsigned long int	width;
 	unsigned long int	height;
 
@@ -615,9 +577,7 @@ Matrix*		Rational::operator%(const Matrix &other) const
 		for (unsigned long int i(0); i < width; i++)
 			try
 			{
-				tmp = *this % *other[j][i];
-				result->setValue(i, j, tmp);
-				// delete tmp;// A laisser ?
+				result->setValue(i, j, *this % *other[j][i]);
 			}
 			catch (const std::exception &e)
 			{
@@ -631,15 +591,12 @@ Vector*		Rational::operator%(const Vector &other) const
 {
 	unsigned long int	size(other.size());
 	Vector*				result;
-	IType*				tmp;
 
 	result = new Vector(size);
 	for (unsigned long int i(0); i < size; i++)
 		try
 		{
-			tmp = *this % *other[i];
-			result[i] = *tmp;
-			delete tmp;
+			result->setValue(i, *this % *other[i]);
 		}
 		catch (const std::exception &e)
 		{
@@ -891,6 +848,11 @@ void			Rational::reduce(void)
 bool			Rational::in_D(void) const
 {
 	return (this->getValue().in_D());
+}
+
+bool			Rational::in_Q(void) const
+{
+	return (true);
 }
 
 bool			Rational::in_Z(void) const

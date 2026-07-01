@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 16:17:07 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/01 11:12:35 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ class	Rational: public IType
 		Rational*		gcd(const Matrix & other) const;
 		Rational*		gcd(const Vector & other) const;
 		bool			in_D(void) const;
+		bool			in_Q(void) const;
 		bool			in_Z(void) const;
 		void			print_rounded	\
 				(const std::string var = std::string()) const;

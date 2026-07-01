@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:39:10 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 10:31:50 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/01 14:53:35 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -678,7 +678,7 @@ void		InfiniteInt::reduce(void)
 {
 	if (!this->_isIntegerPart)
 		this->reverse();
-	while (!this->_digits.empty() && this->_digits[0] == 0)
+	while (!this->_digits.empty() && !this->_digits[0])
 		this->_digits.erase(this->_digits.begin());
 	if (this->_digits.empty())
 		this->_isNegative = false;

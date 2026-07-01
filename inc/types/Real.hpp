@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 17:41:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 10:31:50 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/01 11:13:26 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ class	Real: public IType
 {
 	// Constructors and destructor
 	public:
-		Real(void);
-		Real(const Real &other);
+		Real(void): _value(InfiniteFloat()) {};
+		Real(const Real &other);// TODO
 		~Real(void) {};
 
 		// Operator overloads
