@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/01 17:07:46 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/02 17:49:01 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,7 @@ Vector::operator bool() const
 	return (false);
 }
 
-Vector&	Vector::operator=(const Vector &other)
+Vector&		Vector::operator=(const Vector &other)
 {
 	if (this != &other)
 	{
@@ -171,7 +171,7 @@ Vector&	Vector::operator=(const Vector &other)
 	return (*this);
 }
 
-Vector	Vector::operator=(const IType &other)
+Vector		Vector::operator=(const IType &other)
 {
 	*this = Vector(other);
 	return (*this);
@@ -277,6 +277,7 @@ IType*		Vector::operator+(const IType &other) const
 	const Complex*		other_complex;
 	const Matrix*		other_matrix;
 	const Polynomial*	other_polynomial;
+	const Real*			other_real;
 
 	other_vector = dynamic_cast<const Vector*>(&other);
 	if (other_vector)
@@ -293,6 +294,9 @@ IType*		Vector::operator+(const IType &other) const
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
 	if (other_polynomial)
 		return (*this + *other_polynomial);
+	other_real = dynamic_cast<const Real*>(&other);
+	if (other_real)
+		return (*this + *other_real);
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
@@ -339,9 +343,19 @@ Matrix*		Vector::operator+(const Matrix &other) const
 	return (Matrix(*this) + other);
 }
 
-Polynomial*	Vector::operator+(const Polynomial &other) const
+IType*		Vector::operator+(const Polynomial &other) const
 {
 	return (other + *this);
+}
+
+Vector*		Vector::operator+(const Real &other) const
+{
+	Vector*	result;
+
+	result = new Vector(this->_vector.size());
+	for (unsigned long int i = 0; i < this->_vector.size(); i++)
+		result->setValue(i, *this->_vector[i] + other);
+	return (result);
 }
 
 Vector*		Vector::operator+(const long long int value) const
@@ -361,6 +375,7 @@ IType*		Vector::operator-(const IType &other) const
 	const Complex*		other_complex;
 	const Matrix*		other_matrix;
 	const Polynomial*	other_polynomial;
+	const Real*			other_real;
 
 	other_vector = dynamic_cast<const Vector*>(&other);
 	if (other_vector)
@@ -377,6 +392,9 @@ IType*		Vector::operator-(const IType &other) const
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
 	if (other_polynomial)
 		return (*this - *other_polynomial);
+	other_real = dynamic_cast<const Real*>(&other);
+	if (other_real)
+		return (*this - *other_real);
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
@@ -423,14 +441,24 @@ Matrix*		Vector::operator-(const Matrix &other) const
 	return (Matrix(*this) - other);
 }
 
-Polynomial*	Vector::operator-(const Polynomial &other) const
+IType*		Vector::operator-(const Polynomial &other) const
 {
-	Polynomial*	tmp;
-	Polynomial*	result;
+	IType*	tmp;
+	IType*	result;
 
 	tmp = other - *this;
 	result = -*tmp;
 	delete tmp;
+	return (result);
+}
+
+Vector*		Vector::operator-(const Real &other) const
+{
+	Vector*	result;
+
+	result = new Vector(this->_vector.size());
+	for (unsigned long int i = 0; i < this->_vector.size(); i++)
+		result->setValue(i, *this->_vector[i] - other);
 	return (result);
 }
 
@@ -446,6 +474,7 @@ IType*		Vector::operator*(const IType &other) const
 	const Complex*		other_complex;
 	const Matrix*		other_matrix;
 	const Polynomial*	other_polynomial;
+	const Real*			other_real;
 
 	other_vector = dynamic_cast<const Vector*>(&other);
 	if (other_vector)
@@ -462,6 +491,9 @@ IType*		Vector::operator*(const IType &other) const
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
 	if (other_polynomial)
 		return (*this * *other_polynomial);
+	other_real = dynamic_cast<const Real*>(&other);
+	if (other_real)
+		return (*this * *other_real);
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
@@ -508,9 +540,19 @@ Matrix*		Vector::operator*(const Matrix &other) const
 	return (Matrix(*this) * other);
 }
 
-Polynomial*	Vector::operator*(const Polynomial &other) const
+IType*		Vector::operator*(const Polynomial &other) const
 {
 	return (other * *this);
+}
+
+Vector*		Vector::operator*(const Real &other) const
+{
+	Vector*	result;
+
+	result = new Vector(this->_vector.size());
+	for (unsigned long int i = 0; i < this->_vector.size(); i++)
+		result->setValue(i, *this->_vector[i] * other);
+	return (result);
 }
 
 Vector*		Vector::operator*(const long long int value) const
@@ -525,6 +567,7 @@ IType*		Vector::operator/(const IType &other) const
 	const Complex*		other_complex;
 	const Matrix*		other_matrix;
 	const Polynomial*	other_polynomial;
+	const Real*			other_real;
 
 	other_vector = dynamic_cast<const Vector*>(&other);
 	if (other_vector)
@@ -541,6 +584,9 @@ IType*		Vector::operator/(const IType &other) const
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
 	if (other_polynomial)
 		return (*this / *other_polynomial);
+	other_real = dynamic_cast<const Real*>(&other);
+	if (other_real)
+		return (*this / *other_real);
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
@@ -587,14 +633,24 @@ Matrix*		Vector::operator/(const Matrix &other) const
 	return (Matrix(*this) / other);
 }
 
-Polynomial*	Vector::operator/(const Polynomial &other) const
+IType*		Vector::operator/(const Polynomial &other) const
 {
-	Polynomial*	tmp;
-	Polynomial*	result;
+	IType*	tmp;
+	IType*	result;
 
 	tmp = Rational(1) / other;
 	result = *tmp * *this;
 	delete tmp;
+	return (result);
+}
+
+Vector*		Vector::operator/(const Real &other) const
+{
+	Vector*	result;
+
+	result = new Vector(this->_vector.size());
+	for (unsigned long int i = 0; i < this->_vector.size(); i++)
+		result->setValue(i, *this->_vector[i] / other);
 	return (result);
 }
 
@@ -610,6 +666,7 @@ IType*		Vector::operator%(const IType &other) const
 	const Complex*		other_complex;
 	const Matrix*		other_matrix;
 	const Polynomial*	other_polynomial;
+	const Real*			other_real;
 
 	other_vector = dynamic_cast<const Vector*>(&other);
 	if (other_vector)
@@ -626,6 +683,9 @@ IType*		Vector::operator%(const IType &other) const
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
 	if (other_polynomial)
 		return (*this % *other_polynomial);
+	other_real = dynamic_cast<const Real*>(&other);
+	if (other_real)
+		return (*this % *other_real);
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
@@ -681,6 +741,16 @@ Polynomial*	Vector::operator%(const Polynomial &other) const
 			(Polynomial::t_term){this->clone(), 0});
 	result = *tmp % other;
 	delete tmp;
+	return (result);
+}
+
+Vector*		Vector::operator%(const Real &other) const
+{
+	Vector*	result;
+
+	result = new Vector(this->_vector.size());
+	for (unsigned long int i = 0; i < this->_vector.size(); i++)
+		result->setValue(i, *this->_vector[i] % other);
 	return (result);
 }
 

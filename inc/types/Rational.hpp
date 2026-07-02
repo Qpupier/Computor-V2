@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/01 11:12:35 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/02 17:42:31 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@
 
 class	Complex;
 class	Matrix;
-class	Vector;
 class	Polynomial;
+class	Vector;
+class	Real;
 
 class	Rational: public IType
 {
@@ -42,60 +43,65 @@ class	Rational: public IType
 
 		// Operator overloads
 		explicit	operator bool() const;
-		Rational&	operator=(const Rational * other);
-		Rational&	operator=(const Rational & other);
-		Rational	operator=(const IType & other);
-		Rational	operator=(const Complex & other);
-		bool		operator==(const IType & other) const;
+		Rational&	operator=(const Rational* other);
+		Rational&	operator=(const Rational& other);
+		Rational	operator=(const IType& other);
+		Rational	operator=(const Complex& other);
+		bool		operator==(const IType& other) const;
 		bool		operator==(const long long int value) const;
 		bool		operator!=(const IType& other) const;
 		bool		operator!=(const long long int value) const;
-		bool		operator<(const IType & other) const;
+		bool		operator<(const IType& other) const;
 		bool		operator<(const long long int value) const;
-		bool		operator<=(const IType & other) const;
+		bool		operator<=(const IType& other) const;
 		bool		operator<=(const long long int value) const;
-		bool		operator>(const IType & other) const;
+		bool		operator>(const IType& other) const;
 		bool		operator>(const long long int value) const;
-		bool		operator>=(const IType & other) const;
+		bool		operator>=(const IType& other) const;
 		bool		operator>=(const long long int value) const;
-		IType*		operator+(const IType & other) const;
-		Rational*	operator+(const Rational & other) const;
-		Complex*	operator+(const Complex & other) const;
-		Matrix*		operator+(const Matrix & other) const;
-		Vector*		operator+(const Vector & other) const;
-		Polynomial*	operator+(const Polynomial & other) const;
+		IType*		operator+(const IType& other) const;
+		Rational*	operator+(const Rational& other) const;
+		Complex*	operator+(const Complex& other) const;
+		Matrix*		operator+(const Matrix& other) const;
+		IType*		operator+(const Polynomial& other) const;
+		Vector*		operator+(const Vector& other) const;
+		Real*		operator+(const Real& other) const;
 		Rational*	operator+(const long long int value) const;
 		Rational*	operator-(void) const;
-		IType*		operator-(const IType & other) const;
-		Rational*	operator-(const Rational & other) const;
-		Complex*	operator-(const Complex & other) const;
-		Matrix*		operator-(const Matrix & other) const;
-		Vector*		operator-(const Vector & other) const;
-		Polynomial*	operator-(const Polynomial & other) const;
+		IType*		operator-(const IType& other) const;
+		Rational*	operator-(const Rational& other) const;
+		Complex*	operator-(const Complex& other) const;
+		Matrix*		operator-(const Matrix& other) const;
+		IType*		operator-(const Polynomial& other) const;
+		Vector*		operator-(const Vector& other) const;
+		Real*		operator-(const Real& other) const;
 		Rational*	operator-(const long long int value) const;
-		IType*		operator*(const IType & other) const;
-		Rational*	operator*(const Rational & other) const;
-		Complex*	operator*(const Complex & other) const;
-		Matrix*		operator*(const Matrix & other) const;
-		Vector*		operator*(const Vector & other) const;
-		Polynomial*	operator*(const Polynomial & other) const;
+		IType*		operator*(const IType& other) const;
+		Rational*	operator*(const Rational& other) const;
+		Complex*	operator*(const Complex& other) const;
+		Matrix*		operator*(const Matrix& other) const;
+		IType*		operator*(const Polynomial& other) const;
+		Vector*		operator*(const Vector& other) const;
+		Real*		operator*(const Real& other) const;
 		Rational*	operator*(const long long int value) const;
-		IType*		operator/(const IType & other) const;
-		Rational*	operator/(const Rational & other) const;
-		Complex*	operator/(const Complex & other) const;
-		Matrix*		operator/(const Matrix & other) const;
-		Vector*		operator/(const Vector & other) const;
-		Polynomial*	operator/(const Polynomial & other) const;
+		IType*		operator/(const IType& other) const;
+		Rational*	operator/(const Rational& other) const;
+		Complex*	operator/(const Complex& other) const;
+		Matrix*		operator/(const Matrix& other) const;
+		Polynomial*	operator/(const Polynomial& other) const;
+		Vector*		operator/(const Vector& other) const;
+		Real*		operator/(const Real& other) const;
 		Rational*	operator/(const long long int value) const;
-		IType*		operator%(const IType & other) const;
-		Rational*	operator%(const Rational & other) const;
-		Rational*	operator%(const Complex & other) const;
-		Matrix*		operator%(const Matrix & other) const;
-		Vector*		operator%(const Vector & other) const;
-		Polynomial*	operator%(const Polynomial & other) const;
+		IType*		operator%(const IType& other) const;
+		Rational*	operator%(const Rational& other) const;
+		Complex*	operator%(const Complex& other) const;
+		Matrix*		operator%(const Matrix& other) const;
+		Polynomial*	operator%(const Polynomial& other) const;
+		Vector*		operator%(const Vector& other) const;
+		IType*		operator%(const Real& other) const;
 		Rational*	operator%(const long long int value) const;
-		IType*		operator^(const IType & other) const;
-		Rational*	operator^(const Rational & other) const;
+		IType*		operator^(const IType& other) const;
+		Rational*	operator^(const Rational& other) const;
 		Rational*	operator^(const long long int value) const;
 
 		// Getters
@@ -111,11 +117,11 @@ class	Rational: public IType
 		IType*			function_operator(const IType &other) const;
 		IType*			matrix_operator(const IType &other) const;
 		IType*			matrix_inversion(void) const;
-		Rational*		gcd(const IType & other) const;
-		Rational*		gcd(const Rational & other) const;
-		Rational*		gcd(const Complex & other) const;
-		Rational*		gcd(const Matrix & other) const;
-		Rational*		gcd(const Vector & other) const;
+		Rational*		gcd(const IType& other) const;
+		Rational*		gcd(const Rational& other) const;
+		Rational*		gcd(const Complex& other) const;
+		Rational*		gcd(const Matrix& other) const;
+		Rational*		gcd(const Vector& other) const;
 		bool			in_D(void) const;
 		bool			in_Q(void) const;
 		bool			in_Z(void) const;
@@ -139,7 +145,8 @@ Rational*	get_gcd_terms(const Rational* term1, const Rational* term2, 	\
 
 # include "Complex.hpp"
 # include "Matrix.hpp"
-# include "Vector.hpp"
 # include "Polynomial.hpp"
+# include "Vector.hpp"
+# include "Real.hpp"
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/01 11:13:51 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/02 17:40:03 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,37 +56,42 @@ class	Matrix: public IType
 		Matrix*		operator+(const Matrix &other) const;
 		Matrix*		operator+(const Rational &other) const;
 		Matrix*		operator+(const Complex &other) const;
+		IType*		operator+(const Polynomial &other) const;
 		Matrix*		operator+(const Vector &other) const;
-		Polynomial*	operator+(const Polynomial &other) const;
+		Matrix*		operator+(const Real &other) const;
 		Matrix*		operator+(const long long int value) const;
 		Matrix*		operator-(void) const;
 		IType*		operator-(const IType &other) const;
 		Matrix*		operator-(const Matrix &other) const;
 		Matrix*		operator-(const Rational &other) const;
 		Matrix*		operator-(const Complex &other) const;
+		IType*		operator-(const Polynomial &other) const;
 		Matrix*		operator-(const Vector &other) const;
-		Polynomial*	operator-(const Polynomial &other) const;
+		Matrix*		operator-(const Real &other) const;
 		Matrix*		operator-(const long long int value) const;
 		IType*		operator*(const IType &other) const;
 		Matrix*		operator*(const Matrix &other) const;
 		Matrix*		operator*(const Rational &other) const;
 		Matrix*		operator*(const Complex &other) const;
+		IType*		operator*(const Polynomial &other) const;
 		Matrix*		operator*(const Vector &other) const;
-		Polynomial*	operator*(const Polynomial &other) const;
+		Matrix*		operator*(const Real &other) const;
 		Matrix*		operator*(const long long int value) const;
 		IType*		operator/(const IType &other) const;
 		Matrix*		operator/(const Matrix &other) const;
 		Matrix*		operator/(const Rational &other) const;
 		Matrix*		operator/(const Complex &other) const;
-		Matrix*		operator/(const Vector &other) const;
 		Polynomial*	operator/(const Polynomial &other) const;
+		Matrix*		operator/(const Vector &other) const;
+		Matrix*		operator/(const Real &other) const;
 		Matrix*		operator/(const long long int value) const;
 		IType*		operator%(const IType &other) const;
 		Matrix*		operator%(const Matrix &other) const;
 		Matrix*		operator%(const Rational &other) const;
 		Matrix*		operator%(const Complex &other) const;
-		Matrix*		operator%(const Vector &other) const;
 		Polynomial*	operator%(const Polynomial &other) const;
+		Matrix*		operator%(const Vector &other) const;
+		Matrix*		operator%(const Real &other) const;
 		Matrix*		operator%(const long long int value) const;
 		IType*		operator^(const IType &other) const;
 		Matrix*		operator^(const Rational &other) const;

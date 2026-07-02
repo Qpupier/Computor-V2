@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/02 16:04:41 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/02 16:13:24 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -424,7 +424,7 @@ std::string		Real::to_string(void) const
 
 bool			Real::in_D(void) const
 {
-	return (false);// [ ]: pas sur de ca dans  on contexte
+	return (false);// [ ]: pas sur de ca dans mon contexte
 }
 
 bool			Real::in_Q(void) const

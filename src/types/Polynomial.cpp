@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/02 14:18:21 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/02 17:38:20 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -613,99 +613,30 @@ Polynomial*	Polynomial::operator+(const Polynomial &other) const
 	return (result);
 }
 
-Polynomial*	Polynomial::operator+(const Rational &other) const
-{
-	std::vector<t_term>	distributivity;
-	Polynomial*			result;
-
-	result = new Polynomial(*this);
-	distributivity = vector_term_coeff_multiplication(	\
-			dynamic_cast<const IType*>(&other), 0, this->_dividers);
-	add_terms_to_vector(distributivity, result->_terms);
-	free_vector_terms(distributivity);
-	result->reduce();
-	return (result);
-}
-
-Polynomial*	Polynomial::operator+(const Complex &other) const
-{
-	std::vector<t_term>	distributivity;
-	Polynomial*			result;
-
-	result = new Polynomial(*this);
-	distributivity = vector_term_coeff_multiplication(	\
-			dynamic_cast<const IType*>(&other), 0, this->_dividers);
-	add_terms_to_vector(distributivity, result->_terms);
-	free_vector_terms(distributivity);
-	result->reduce();
-	return (result);
-}
-
-Polynomial*	Polynomial::operator+(const Matrix &other) const
-{
-	std::vector<t_term>	distributivity;
-	Polynomial*			result;
-
-	result = new Polynomial(*this);
-	distributivity = vector_term_coeff_multiplication(	\
-			dynamic_cast<const IType*>(&other), 0, this->_dividers);
-	add_terms_to_vector(distributivity, result->_terms);
-	free_vector_terms(distributivity);
-	result->reduce();
-	return (result);
-}
-
-Polynomial*	Polynomial::operator+(const Vector &other) const
-{
-	std::vector<t_term>	distributivity;
-	Polynomial*			result;
-
-	result = new Polynomial(*this);
-	distributivity = vector_term_coeff_multiplication(	\
-			dynamic_cast<const IType*>(&other), 0, this->_dividers);
-	add_terms_to_vector(distributivity, result->_terms);
-	free_vector_terms(distributivity);
-	result->reduce();
-	return (result);
-}
-
 IType*		Polynomial::operator+(const IType &other) const
 {
 	const Polynomial*	other_polynomial;
-	const Rational*		other_rational;
-	const Complex*		other_complex;
-	const Matrix*		other_matrix;
 
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
 	if (other_polynomial)
 		return (*this + *other_polynomial);
-	other_rational = dynamic_cast<const Rational*>(&other);
-	if (other_rational)
-		return (*this + *other_rational);
-	other_complex = dynamic_cast<const Complex*>(&other);
-	if (other_complex)
-		return (*this + *other_complex);
-	other_matrix = dynamic_cast<const Matrix*>(&other);
-	if (other_matrix)
-		return (*this + *other_matrix);
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
+	return (*this + Polynomial(other));
 }
 
-Polynomial*	Polynomial::operator+(const long long int value) const
+IType*		Polynomial::operator+(const long long int value) const
 {
 	return (*this + Rational(value));
 }
 
-Polynomial*	Polynomial::operator-(void) const
+IType*		Polynomial::operator-(void) const
 {
 	return (*this * (-1));
 }
 
-Polynomial*	Polynomial::operator-(const Polynomial &other) const
+IType*		Polynomial::operator-(const Polynomial &other) const
 {
-	Polynomial*	sub;
-	Polynomial*	result;
+	IType*	sub;
+	IType*	result;
 
 	sub = -other;
 	result = *this + *sub;
@@ -713,94 +644,17 @@ Polynomial*	Polynomial::operator-(const Polynomial &other) const
 	return (result);
 }
 
-Polynomial*	Polynomial::operator-(const Rational &other) const
-{
-	std::vector<t_term>	distributivity;
-	Polynomial*			result;
-	IType*				sub;
-
-	result = new Polynomial(*this);
-	sub = -other;
-	distributivity = vector_term_coeff_multiplication(sub, 0, this->_dividers);
-	delete sub;
-	add_terms_to_vector(distributivity, result->_terms);
-	free_vector_terms(distributivity);
-	result->reduce();
-	return (result);
-}
-
-Polynomial*	Polynomial::operator-(const Complex &other) const
-{
-	std::vector<t_term>	distributivity;
-	Polynomial*			result;
-	IType*				sub;
-
-	result = new Polynomial(*this);
-	sub = -other;
-	distributivity = vector_term_coeff_multiplication(sub, 0, this->_dividers);
-	delete sub;
-	add_terms_to_vector(distributivity, result->_terms);
-	free_vector_terms(distributivity);
-	result->reduce();
-	return (result);
-}
-
-Polynomial*	Polynomial::operator-(const Matrix &other) const
-{
-	std::vector<t_term>	distributivity;
-	Polynomial*			result;
-	IType*				sub;
-
-	result = new Polynomial(*this);
-	sub = -other;
-	distributivity = vector_term_coeff_multiplication(sub, 0, this->_dividers);
-	delete sub;
-	add_terms_to_vector(distributivity, result->_terms);
-	free_vector_terms(distributivity);
-	result->reduce();
-	return (result);
-}
-
-Polynomial*	Polynomial::operator-(const Vector &other) const
-{
-	std::vector<t_term>	distributivity;
-	Polynomial*			result;
-	IType*				sub;
-
-	result = new Polynomial(*this);
-	sub = -other;
-	distributivity = vector_term_coeff_multiplication(sub, 0, this->_dividers);
-	delete sub;
-	add_terms_to_vector(distributivity, result->_terms);
-	free_vector_terms(distributivity);
-	result->reduce();
-	return (result);
-}
-
 IType*		Polynomial::operator-(const IType &other) const
 {
 	const Polynomial*	other_polynomial;
-	const Rational*		other_rational;
-	const Complex*		other_complex;
-	const Matrix*		other_matrix;
 
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
 	if (other_polynomial)
 		return (*this - *other_polynomial);
-	other_rational = dynamic_cast<const Rational*>(&other);
-	if (other_rational)
-		return (*this - *other_rational);
-	other_complex = dynamic_cast<const Complex*>(&other);
-	if (other_complex)
-		return (*this - *other_complex);
-	other_matrix = dynamic_cast<const Matrix*>(&other);
-	if (other_matrix)
-		return (*this - *other_matrix);
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
+	return (*this - Polynomial(other));
 }
 
-Polynomial*	Polynomial::operator-(const long long int value) const
+IType*		Polynomial::operator-(const long long int value) const
 {
 	return (*this - Rational(value));
 }
@@ -820,102 +674,17 @@ Polynomial*	Polynomial::operator*(const Polynomial &other) const
 	return (result);
 }
 
-Polynomial*	Polynomial::operator*(const Rational &other) const
-{
-	Polynomial*	result;
-	IType*		new_coefficient;
-
-	result = new Polynomial(*this);
-	free_vector_terms(result->_terms);
-	for (std::vector<t_term>::const_iterator it(this->_terms.begin()); 	\
-			it != this->_terms.end(); it++)
-	{
-		new_coefficient = *it->coefficient * other;
-		add_term_to_vector(new_coefficient, it->power, result->_terms);
-		delete new_coefficient;
-	}
-	result->reduce();
-	return (result);
-}
-
-Polynomial*	Polynomial::operator*(const Complex &other) const
-{
-	Polynomial*	result;
-	IType*		new_coefficient;
-
-	result = new Polynomial(*this);
-	free_vector_terms(result->_terms);
-	for (std::vector<t_term>::const_iterator it(this->_terms.begin()); 	\
-			it != this->_terms.end(); it++)
-	{
-		new_coefficient = *it->coefficient * other;
-		add_term_to_vector(new_coefficient, it->power, result->_terms);
-		delete new_coefficient;
-	}
-	result->reduce();
-	return (result);
-}
-
-Polynomial*	Polynomial::operator*(const Matrix &other) const
-{
-	Polynomial*	result;
-	IType*		new_coefficient;
-
-	result = new Polynomial(*this);
-	free_vector_terms(result->_terms);
-	for (std::vector<t_term>::const_iterator it(this->_terms.begin()); 	\
-			it != this->_terms.end(); it++)
-	{
-		new_coefficient = *it->coefficient * other;
-		add_term_to_vector(new_coefficient, it->power, result->_terms);
-		delete new_coefficient;
-	}
-	result->reduce();
-	return (result);
-}
-
-Polynomial*	Polynomial::operator*(const Vector &other) const
-{
-	Polynomial*	result;
-	IType*		new_coefficient;
-
-	result = new Polynomial(*this);
-	free_vector_terms(result->_terms);
-	for (std::vector<t_term>::const_iterator it(this->_terms.begin()); 	\
-			it != this->_terms.end(); it++)
-	{
-		new_coefficient = *it->coefficient * other;
-		add_term_to_vector(new_coefficient, it->power, result->_terms);
-		delete new_coefficient;
-	}
-	result->reduce();
-	return (result);
-}
-
 IType*		Polynomial::operator*(const IType &other) const
 {
 	const Polynomial*	other_polynomial;
-	const Rational*		other_rational;
-	const Complex*		other_complex;
-	const Matrix*		other_matrix;
 
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
 	if (other_polynomial)
 		return (*this * *other_polynomial);
-	other_rational = dynamic_cast<const Rational*>(&other);
-	if (other_rational)
-		return (*this * *other_rational);
-	other_complex = dynamic_cast<const Complex*>(&other);
-	if (other_complex)
-		return (*this * *other_complex);
-	other_matrix = dynamic_cast<const Matrix*>(&other);
-	if (other_matrix)
-		return (*this * *other_matrix);
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
+	return (*this * Polynomial(other));
 }
 
-Polynomial*	Polynomial::operator*(const long long int value) const
+IType*		Polynomial::operator*(const long long int value) const
 {
 	return (*this * Rational(value));
 }
@@ -942,134 +711,17 @@ Polynomial*	Polynomial::operator/(const Polynomial &other) const
 	return (result);
 }
 
-Polynomial*	Polynomial::operator/(const Rational &other) const
-{
-	Polynomial*	result;
-	IType*		new_coefficient;
-
-	result = new Polynomial(*this);
-	free_vector_terms(result->_dividers);
-	for (std::vector<t_term>::const_iterator it(this->_dividers.begin()); 	\
-			it != this->_dividers.end(); it++)
-	{
-		new_coefficient = *it->coefficient * other;
-		add_term_to_vector(new_coefficient, it->power, result->_dividers);
-		delete new_coefficient;
-	}
-	try
-	{
-		result->reduce();
-	}
-	catch (...)
-	{
-		delete result;
-		throw;
-	}
-	return (result);
-}
-
-Polynomial*	Polynomial::operator/(const Complex &other) const
-{
-	Polynomial*	result;
-	IType*		new_coefficient;
-
-	result = new Polynomial(*this);
-	free_vector_terms(result->_dividers);
-	for (std::vector<t_term>::const_iterator it(this->_dividers.begin()); 	\
-			it != this->_dividers.end(); it++)
-	{
-		new_coefficient = *it->coefficient * other;
-		add_term_to_vector(new_coefficient, it->power, result->_dividers);
-		delete new_coefficient;
-	}
-	try
-	{
-		result->reduce();
-	}
-	catch (...)
-	{
-		delete result;
-		throw;
-	}
-	return (result);
-}
-
-Polynomial*	Polynomial::operator/(const Matrix &other) const
-{
-	Polynomial*	result;
-	IType*		new_coefficient;
-
-	result = new Polynomial(*this);
-	free_vector_terms(result->_dividers);
-	for (std::vector<t_term>::const_iterator it(this->_dividers.begin()); 	\
-			it != this->_dividers.end(); it++)
-	{
-		new_coefficient = *it->coefficient * other;
-		add_term_to_vector(new_coefficient, it->power, result->_dividers);
-		delete new_coefficient;
-	}
-	try
-	{
-		result->reduce();
-	}
-	catch (...)
-	{
-		delete result;
-		throw;
-	}
-	return (result);
-}
-
-Polynomial*	Polynomial::operator/(const Vector &other) const
-{
-	Polynomial*	result;
-	IType*		new_coefficient;
-
-	result = new Polynomial(*this);
-	free_vector_terms(result->_dividers);
-	for (std::vector<t_term>::const_iterator it(this->_dividers.begin()); 	\
-			it != this->_dividers.end(); it++)
-	{
-		new_coefficient = *it->coefficient * other;
-		add_term_to_vector(new_coefficient, it->power, result->_dividers);
-		delete new_coefficient;
-	}
-	try
-	{
-		result->reduce();
-	}
-	catch (...)
-	{
-		delete result;
-		throw;
-	}
-	return (result);
-}
-
 IType*		Polynomial::operator/(const IType &other) const
 {
 	const Polynomial*	other_polynomial;
-	const Rational*		other_rational;
-	const Complex*		other_complex;
-	const Matrix*		other_matrix;
 
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
 	if (other_polynomial)
 		return (*this / *other_polynomial);
-	other_rational = dynamic_cast<const Rational*>(&other);
-	if (other_rational)
-		return (*this / *other_rational);
-	other_complex = dynamic_cast<const Complex*>(&other);
-	if (other_complex)
-		return (*this / *other_complex);
-	other_matrix = dynamic_cast<const Matrix*>(&other);
-	if (other_matrix)
-		return (*this / *other_matrix);
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
+	return (*this / Polynomial(other));
 }
 
-Polynomial*	Polynomial::operator/(const long long int value) const
+IType*		Polynomial::operator/(const long long int value) const
 {
 	return (*this / Rational(value));
 }
@@ -1089,58 +741,17 @@ Polynomial*	Polynomial::operator%(const Polynomial &other) const
 	return (result);
 }
 
-Polynomial*	Polynomial::operator%(const Rational &other) const
-{
-	return (*this 							\
-			% Polynomial(this->getName(), 	\
-				(Polynomial::t_term){other.clone(), 0}));
-}
-
-Polynomial*	Polynomial::operator%(const Complex &other) const
-{
-	return (*this 							\
-			% Polynomial(this->getName(), 	\
-				(Polynomial::t_term){other.clone(), 0}));
-}
-
-Polynomial*	Polynomial::operator%(const Matrix &other) const
-{
-	return (*this 							\
-			% Polynomial(this->getName(), 	\
-				(Polynomial::t_term){other.clone(), 0}));
-}
-
-Polynomial*	Polynomial::operator%(const Vector &other) const
-{
-	return (*this 							\
-			% Polynomial(this->getName(), 	\
-				(Polynomial::t_term){other.clone(), 0}));
-}
-
 IType*		Polynomial::operator%(const IType &other) const
 {
 	const Polynomial*	other_polynomial;
-	const Rational*		other_rational;
-	const Complex*		other_complex;
-	const Matrix*		other_matrix;
 
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
 	if (other_polynomial)
 		return (*this % *other_polynomial);
-	other_rational = dynamic_cast<const Rational*>(&other);
-	if (other_rational)
-		return (*this % *other_rational);
-	other_complex = dynamic_cast<const Complex*>(&other);
-	if (other_complex)
-		return (*this % *other_complex);
-	other_matrix = dynamic_cast<const Matrix*>(&other);
-	if (other_matrix)
-		return (*this % *other_matrix);
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
+	return (*this % Polynomial(other));
 }
 
-Polynomial*	Polynomial::operator%(const long long int value) const
+IType*		Polynomial::operator%(const long long int value) const
 {
 	return (*this % Rational(value));
 }

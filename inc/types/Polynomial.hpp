@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/02 14:19:11 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/02 17:38:02 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,40 +63,20 @@ class	Polynomial: public IType
 		bool		operator>=(const long long int value) const;
 		IType*		operator+(const IType &other) const;
 		Polynomial*	operator+(const Polynomial &other) const;
-		Polynomial*	operator+(const Rational &other) const;
-		Polynomial*	operator+(const Complex &other) const;
-		Polynomial*	operator+(const Matrix &other) const;
-		Polynomial*	operator+(const Vector &other) const;
-		Polynomial*	operator+(const long long int value) const;
-		Polynomial*	operator-(void) const;
+		IType*		operator+(const long long int value) const;
+		IType*		operator-(void) const;
 		IType*		operator-(const IType &other) const;
-		Polynomial*	operator-(const Polynomial &other) const;
-		Polynomial*	operator-(const Rational &other) const;
-		Polynomial*	operator-(const Complex &other) const;
-		Polynomial*	operator-(const Matrix &other) const;
-		Polynomial*	operator-(const Vector &other) const;
-		Polynomial*	operator-(const long long int value) const;
+		IType*		operator-(const Polynomial &other) const;
+		IType*		operator-(const long long int value) const;
 		IType*		operator*(const IType &other) const;
 		Polynomial*	operator*(const Polynomial &other) const;
-		Polynomial*	operator*(const Rational &other) const;
-		Polynomial*	operator*(const Complex &other) const;
-		Polynomial*	operator*(const Matrix &other) const;
-		Polynomial*	operator*(const Vector &other) const;
-		Polynomial*	operator*(const long long int value) const;
+		IType*		operator*(const long long int value) const;
 		IType*		operator/(const IType &other) const;
 		Polynomial*	operator/(const Polynomial &other) const;
-		Polynomial*	operator/(const Rational &other) const;
-		Polynomial*	operator/(const Complex &other) const;
-		Polynomial*	operator/(const Matrix &other) const;
-		Polynomial*	operator/(const Vector &other) const;
-		Polynomial*	operator/(const long long int value) const;
+		IType*		operator/(const long long int value) const;
 		IType*		operator%(const IType &other) const;
 		Polynomial*	operator%(const Polynomial &other) const;
-		Polynomial*	operator%(const Rational &other) const;
-		Polynomial*	operator%(const Complex &other) const;
-		Polynomial*	operator%(const Matrix &other) const;
-		Polynomial*	operator%(const Vector &other) const;
-		Polynomial*	operator%(const long long int value) const;
+		IType*		operator%(const long long int value) const;
 		IType*		operator^(const IType &other) const;
 		Polynomial*	operator^(const Rational &other) const;
 		Polynomial*	operator^(const long long int value) const;
@@ -105,7 +85,6 @@ class	Polynomial: public IType
 		std::string			getName(void) const;
 		std::vector<t_term>	getTerms(void) const;
 		std::vector<t_term>	getDividers(void) const;
-		// InfiniteFloat		getRoundedValue(void) const;
 
 		// Setters
 		void	setName(const std::string& name);
