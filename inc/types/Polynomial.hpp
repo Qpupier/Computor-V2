@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/01 11:13:59 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/02 14:19:11 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,5 +137,15 @@ class	Polynomial: public IType
 
 // Output stream operator overload
 std::ostream	&operator<<(std::ostream &os, const Polynomial &num);
+
+// Functions
+std::vector<Polynomial::t_term>	vector_term_coeff_multiplication(	\
+		const IType *coefficient, const unsigned short int power, 	\
+		const std::vector<Polynomial::t_term> &vector);
+void							add_terms_to_vector(				\
+		const std::vector<Polynomial::t_term> &terms, 				\
+		std::vector<Polynomial::t_term> &vector);
+void							free_vector_terms(					\
+		std::vector<Polynomial::t_term> &vector);
 
 #endif

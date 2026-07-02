@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/01 18:58:13 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/02 14:18:21 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,50 +47,6 @@ static void								add_term_to_vector(					\
 		it++;
 	}
 	vector.push_back((Polynomial::t_term){coefficient->clone(), power});
-}
-
-static void								add_terms_to_vector(				\
-		const std::vector<Polynomial::t_term> &terms, 						\
-		std::vector<Polynomial::t_term> &vector)
-{
-	std::vector<Polynomial::t_term>::const_iterator	it(terms.begin());
-
-	while (it != terms.end())
-	{
-		add_term_to_vector(it->coefficient, it->power, vector);
-		it++;
-	}
-}
-
-static std::vector<Polynomial::t_term>	vector_term_coeff_multiplication(	\
-		const IType *coefficient, const unsigned short int power, 			\
-		const std::vector<Polynomial::t_term> &vector)
-{
-	std::vector<Polynomial::t_term>					result;
-	std::vector<Polynomial::t_term>::const_iterator	it(vector.begin());
-	IType*											new_coefficient;
-
-	while (it != vector.end())
-	{
-		new_coefficient = *coefficient * *it->coefficient;
-		add_term_to_vector(new_coefficient, power + it->power, result);
-		delete new_coefficient;
-		it++;
-	}
-	return (result);
-}
-
-static void								free_vector_terms(					\
-		std::vector<Polynomial::t_term> &vector)
-{
-	std::vector<Polynomial::t_term>::iterator	it(vector.begin());
-
-	while (it != vector.end())
-	{
-		delete it->coefficient;
-		it++;
-	}
-	vector.clear();
 }
 
 static void								add_blank_terms(					\
@@ -1464,4 +1420,51 @@ void			Polynomial::reduce(void)
 std::ostream	&operator<<(std::ostream &os, const Polynomial &var)
 {
 	return (var.print(os));
+}
+
+
+// Functions
+
+void							add_terms_to_vector(				\
+		const std::vector<Polynomial::t_term> &terms, 				\
+		std::vector<Polynomial::t_term> &vector)
+{
+	std::vector<Polynomial::t_term>::const_iterator	it(terms.begin());
+
+	while (it != terms.end())
+	{
+		add_term_to_vector(it->coefficient, it->power, vector);
+		it++;
+	}
+}
+
+std::vector<Polynomial::t_term>	vector_term_coeff_multiplication(	\
+		const IType *coefficient, const unsigned short int power, 	\
+		const std::vector<Polynomial::t_term> &vector)
+{
+	std::vector<Polynomial::t_term>					result;
+	std::vector<Polynomial::t_term>::const_iterator	it(vector.begin());
+	IType*											new_coefficient;
+
+	while (it != vector.end())
+	{
+		new_coefficient = *coefficient * *it->coefficient;
+		add_term_to_vector(new_coefficient, power + it->power, result);
+		delete new_coefficient;
+		it++;
+	}
+	return (result);
+}
+
+void							free_vector_terms(					\
+		std::vector<Polynomial::t_term> &vector)
+{
+	std::vector<Polynomial::t_term>::iterator	it(vector.begin());
+
+	while (it != vector.end())
+	{
+		delete it->coefficient;
+		it++;
+	}
+	vector.clear();
 }
