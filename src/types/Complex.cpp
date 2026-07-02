@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/02 17:41:21 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/02 17:52:04 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -684,23 +684,21 @@ Complex*	Complex::operator/(const long long int value) const
 	return (*this / Rational(value));
 }
 
-Complex*	Complex::operator%(const Complex &other) const// TODO: REvoir tout ca
+Complex*	Complex::operator%(const Complex &other) const// TODO: Refaire avec les entiers de Gauss
 {
-	// Rational	rational;
-	// Rational	other_rational;
+	Rational	rational;
+	Rational	other_rational;
 
-	// try
-	// {
-	// 	rational = *this;
-	// 	other_rational = other;
-	// }
-	// catch (const LogicError &e)
-	// {
-	// 	throw ERROR_MODULO_COMPLEX;
-	// }
-	// return (rational % other_rational);
-	return (new Complex(*this));
-	(void)other;
+	try
+	{
+		rational = *this;
+		other_rational = other;
+	}
+	catch (const LogicError &e)
+	{
+		throw ERROR_MODULO_COMPLEX;
+	}
+	return (new Complex(rational % other_rational, new Rational()));
 }
 
 Complex*	Complex::operator%(const Rational &other) const
