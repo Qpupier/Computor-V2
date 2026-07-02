@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 17:41:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/02 15:19:21 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/02 16:04:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ class	Real: public IType
 
 		// Operator overloads
 		explicit	operator bool() const;
+		Real&		operator=(const Real& other);
 		Real&		operator=(const Real* other);
 		bool		operator==(const IType& other) const;
 		bool		operator==(const long long int value) const;

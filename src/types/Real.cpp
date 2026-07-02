@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/02 15:19:48 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/02 16:04:41 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ Real::Real(const IType& other)
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
 	other_real = dynamic_cast<const Real*>(&other);
 	if (other_real)
-		*this = other_real;
+		*this = *other_real;
 	else if (other_rational)
 		*this = from_rational(*other_rational);
 	else if (other_complex)
@@ -72,10 +72,17 @@ inline	Real::operator bool() const
 	return (static_cast<bool>(this->_value));
 }
 
+Real&	Real::operator=(const Real& other)
+{
+	if (this != &other)
+		this->_value = other.getValue();
+	return (*this);
+}
+
 Real&	Real::operator=(const Real* other)
 {
 	if (this != other)
-		this->_value = other->_value;
+		this->_value = other->getValue();
 	return (*this);
 }
 
@@ -464,9 +471,10 @@ IType*			Real::matrix_operator(const IType &other) const
 Rational*		Real::gcd(const IType &other) const
 {
 	return (new Rational(1));// [ ]: pas sur de ca
+	(void)other;
 }
 
-void			Real::print_rounded(const std::string var = std::string()) const
+void			Real::print_rounded(const std::string var) const
 {
 	if (!var.empty())
 		std::cout << var << " = ";
