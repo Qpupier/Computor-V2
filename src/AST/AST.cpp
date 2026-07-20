@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/01 11:08:57 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/20 13:26:13 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static IType*	find_function(IType *node, std::map<std::pair<std::string, 	\
 		if (to_lower(it->first.first) == to_lower(var_key.first) 		\
 				&& !it->first.second.empty())
 			return (const_cast<IType*>(it->second));
-	throw UnexpectedError("Function not found: " + var_name);
+	throw UnexpectedError("Function not found (" + var_name + ")");
 	return (nullptr);
 }
 

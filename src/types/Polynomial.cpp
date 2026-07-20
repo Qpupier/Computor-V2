@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/20 13:08:43 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/20 13:34:23 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -961,6 +961,7 @@ IType*			Polynomial::norm(void) const
 		delete square;
 		delete tmp;
 	}
+	denominator_sum = new Rational();
 	for (const auto& divider : this->_dividers)
 	{
 		tmp = denominator_sum;

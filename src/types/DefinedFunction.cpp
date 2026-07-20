@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:35:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/01 11:30:24 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/20 13:37:59 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,33 @@
 
 // Utils
 
+static IType*	function_absolute(const IType &other)
+{
+	try
+	{
+		Rational	other_rational;
+
+		other_rational = other;
+		return (other_rational < 0 ? -other_rational : other_rational.clone());
+	}
+	catch(...)
+	{
+		throw LogicError("Absolute function only exists for Rational types");
+	}
+	return (nullptr);
+}
+
 static IType*	function_norm(const IType &other)
 {
+	const Rational*		other_rational;
 	const Complex*		other_complex;
 	const Matrix*		other_matrix;
 	const Polynomial*	other_polynomial;
 	const Vector*		other_vector;
 
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (function_absolute(*other_rational));
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
 		return (other_complex->norm());
@@ -40,17 +60,6 @@ static IType*	function_norm(const IType &other)
 	if (other_vector)
 		return (other_vector->norm());
 	throw LogicError("Norm function not exists for rationals");
-	return (nullptr);
-}
-
-static IType*	function_absolute(const IType &other)
-{
-	const Rational*	other_rational;
-
-	other_rational = dynamic_cast<const Rational*>(&other);
-	if (other_rational)
-		return (other < 0 ? -other : other.clone());
-	throw LogicError("Absolute function only exists for Rational types");
 	return (nullptr);
 }
 
