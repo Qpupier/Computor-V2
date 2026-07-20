@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/02 17:42:33 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/20 20:26:06 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -796,6 +796,19 @@ IType*			Rational::matrix_inversion(void) const
 	return (nullptr);
 }
 
+IType*			Rational::sqrt(void) const
+{
+	InfiniteFloat	sqrt_value(1);
+	InfiniteFloat	test(42);
+
+	for (int i(0); i < 5; i++)
+	{
+		sqrt_value = (sqrt_value + test / sqrt_value) / 2;
+		std::cout << "sqrt_value: " << sqrt_value << std::endl;
+	}
+	return (new Real(sqrt_value));
+}
+
 Rational*		Rational::gcd(const Rational &other) const
 {
 	InfiniteInt	gcd_numerator;
@@ -901,6 +914,8 @@ void			Rational::reduce(void)
 		this->_denominator = InfiniteInt(1);
 		return ;
 	}
+	if (gcd == 1)
+		return ;
 	this->_numerator /= gcd;
 	this->_denominator /= gcd;
 	if (this->_denominator < 0)

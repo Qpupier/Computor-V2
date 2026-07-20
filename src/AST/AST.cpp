@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/20 13:26:13 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/20 20:20:41 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ static IType*	find_function(IType *node, std::map<std::pair<std::string, 	\
 		if (to_lower(it->first.first) == to_lower(var_key.first) 		\
 				&& !it->first.second.empty())
 			return (const_cast<IType*>(it->second));
+	return (dynamic_cast<Rational*>(node)->sqrt());
 	throw UnexpectedError("Function not found (" + var_name + ")");
 	return (nullptr);
 }
@@ -69,7 +70,8 @@ static IType*	get_result(IType *left_entity, IType *right_entity, 	\
 		case Operator::E_POWER:
 			return (*left_entity ^ *right_entity);
 		case Operator::E_FUNCTION:
-			return (find_function(left_entity, stored)->function_operator(*right_entity));
+			return (find_function(left_entity, stored)	\
+					->function_operator(*right_entity));
 		case Operator::E_INVERSE:
 			return (right_entity->matrix_inversion());
 		case Operator::E_UNKNOWN:
