@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:39:10 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/01 14:53:35 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/20 20:11:23 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,35 +110,17 @@ static std::vector<InfiniteInt>		multiplication_part(	\
 	return (result);
 }
 
-static void							division_sub(			\
-		InfiniteInt tmp_remainder, InfiniteInt &dividend, 	\
-		std::size_t nb, InfiniteInt &result)
+static void							division(InfiniteInt &dividend, 	\
+		InfiniteInt &tmp_dividend, const InfiniteInt &divisor, 			\
+		InfiniteInt &result)
 {
-	for (std::size_t i = nb; i < dividend.getDigits().size(); i++)
-		if (!tmp_remainder && !dividend.getDigits()[i])
-			result.push_back(0);
-		else
-			tmp_remainder.push_back(dividend.getDigits()[i]);
-	dividend = tmp_remainder;
-}
-
-static bool							division(InfiniteInt &dividend, 	\
-		const InfiniteInt &divisor, InfiniteInt &result)
-{
-	InfiniteInt		tmp_dividend;
 	InfiniteInt		factor;
 	InfiniteInt		last_good_quotient;
-	std::size_t		nb(0);
 	unsigned char	result_digit(0);
 	unsigned char	last_good_factor(0);
 
-	while (tmp_dividend < divisor && nb < dividend.getDigits().size())
-	{
-		tmp_dividend.push_back(dividend.getDigits()[nb]);
-		nb++;
-	}
-	if (tmp_dividend < divisor)
-		return (false);
+	tmp_dividend.push_back(dividend[0]);
+	dividend.pop_front();
 	factor = InfiniteInt();
 	while (factor <= tmp_dividend)
 	{
@@ -148,8 +130,7 @@ static bool							division(InfiniteInt &dividend, 	\
 		result_digit++;
 	}
 	result.push_back(last_good_factor);
-	division_sub(tmp_dividend - last_good_quotient, dividend, nb, result);
-	return (true);
+	tmp_dividend -= last_good_quotient;
 }
 
 
@@ -450,8 +431,8 @@ InfiniteInt			InfiniteInt::operator*(const InfiniteInt &other) const
 			multiplication_part(this->_digits, other._digits));
 	std::size_t					offset(0);
 
-	for (std::vector<InfiniteInt>::iterator it 	\
-				= intermediate_results.begin(); 	\
+	for (std::vector<InfiniteInt>::iterator it 			\
+				= intermediate_results.begin(); 		\
 			it != intermediate_results.end(); it++)
 	{
 		for (std::size_t i = 0; i < offset; i++)
@@ -487,14 +468,14 @@ void				InfiniteInt::operator*=(const long long int value)
 InfiniteInt			InfiniteInt::operator/(const InfiniteInt &other) const
 {
 	InfiniteInt	dividend(*this);
+	InfiniteInt	tmp_dividend;
 	InfiniteInt	divisor(other);
 	InfiniteInt	result;
 
 	dividend.setIsNegative(false);
 	divisor.setIsNegative(false);
 	while (!dividend.getDigits().empty())
-		if (!division(dividend, divisor, result))
-			break ;
+		division(dividend, tmp_dividend, divisor, result);
 	result.setIsNegative(this->_isNegative != other._isNegative);
 	result.reduce();
 	return (result);
@@ -645,6 +626,13 @@ InfiniteInt	InfiniteInt::sqrt(void) const
 		padding /= InfiniteInt(10);
 	}
 	return (result);
+}
+
+void	InfiniteInt::pop_front(void)
+{
+	if (this->_digits.empty())
+		throw std::out_of_range("Cannot pop from an empty InfiniteInt");
+	this->_digits.erase(this->_digits.begin());
 }
 
 void		InfiniteInt::push_back(unsigned char digit)
