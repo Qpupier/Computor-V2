@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/02 17:38:20 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/20 13:08:43 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -345,7 +345,8 @@ static void								divide_constant_factor(				\
 static bool								is_it_different_variables(			\
 		const Polynomial& p1, const Polynomial& p2)
 {
-	if (p1.getTerms().size() <= 1 || p2.getTerms().size() <= 1)
+	if ((p1.getTerms().size() <= 1 && p1.getDividers().size() <= 1) 	\
+			|| (p2.getTerms().size() <= 1 && p2.getDividers().size() <= 1))
 		return (false);
 	return (p1.getName() != p2.getName());
 }
@@ -599,11 +600,14 @@ bool		Polynomial::operator>=(const long long int value) const
 Polynomial*	Polynomial::operator+(const Polynomial &other) const
 {
 	std::vector<t_term>	distributivity;
+	std::string			name(this->_name);
 	Polynomial*			result;
 
-	if (this->_name != other._name)
+	if (is_it_different_variables(*this, other))
 		throw UNSUPPORTED_MULTI_POLYNOMIALS;
-	result = new Polynomial(this->_name);
+	if (this->getName().empty())
+		name = other.getName();
+	result = new Polynomial(name);
 	free_vector_terms(result->_dividers);
 	result->_dividers 	\
 			= vector_term_multiplication(this->_dividers, other._dividers);
@@ -661,11 +665,14 @@ IType*		Polynomial::operator-(const long long int value) const
 
 Polynomial*	Polynomial::operator*(const Polynomial &other) const
 {
+	std::string	name(this->_name);
 	Polynomial*	result;
 
 	if (is_it_different_variables(*this, other))
 		throw UNSUPPORTED_MULTI_POLYNOMIALS;
-	result = new Polynomial(this->_name);
+	if (this->getName().empty())
+		name = other.getName();
+	result = new Polynomial(name);
 	free_vector_terms(result->_terms);
 	free_vector_terms(result->_dividers);
 	result->_terms = multiply_vectors(this->_terms, other._terms);
@@ -691,11 +698,14 @@ IType*		Polynomial::operator*(const long long int value) const
 
 Polynomial*	Polynomial::operator/(const Polynomial &other) const
 {
+	std::string	name(this->_name);
 	Polynomial*	result;
 
 	if (is_it_different_variables(*this, other))
 		throw UNSUPPORTED_MULTI_POLYNOMIALS;
-	result = new Polynomial(this->_name);
+	if (this->getName().empty())
+		name = other.getName();
+	result = new Polynomial(name);
 	result->free();
 	result->_terms = multiply_vectors(this->_terms, other._dividers);
 	result->_dividers = multiply_vectors(this->_dividers, other._terms);
