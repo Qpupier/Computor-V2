@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 17:17:17 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/21 16:52:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ class IType;
 # define ERROR_MATRIX_INVERSION_SQUARE		LogicError("Matrix inversion is only possible for square matrices")
 # define ERROR_MATRIX_OPERATOR				LogicError("Matrix operator (**) can only be applied to matrices")
 # define ERROR_MATRIX_OUT_OF_RANGE			LogicError("Matrix index out of range")
+# define ERROR_MATRIX_SQRT_SQUARE			LogicError("Matrix square root is only possible for square matrices")
 # define ERROR_MODULO_COMPLEX				LogicError("Modulo operator (%) cannot be applied to complex numbers")
 # define ERROR_NON_DETERMINISTIC_EXPRESSION	LogicError("Multiple possibilities to compute the expression, the expression is non-deterministic")
 # define ERROR_OPERATION_MATRIX_COMPLEX		LogicError("Impossible operation between matrix and complex number")

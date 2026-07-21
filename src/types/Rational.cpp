@@ -4,10 +4,10 @@
 /*   Rational.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
-/*                                             +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/24 19:46:50 by qpupier         +#    #+#             */
-/*   Updated: 2026/07/21 14:23:43 by qpupier         #   ########lyon.fr   */
-/*                                                                         */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
+/*   Updated: 2026/07/21 18:45:21 by qpupier          ###   ########lyon.fr   */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "Rational.hpp"
@@ -178,18 +178,17 @@ bool		Rational::operator!=(const long long int value) const
 
 bool		Rational::operator<(const IType &other) const
 {
-	Rational	other_rational;
+	Real	other_real;
 
 	try
 	{
-		other_rational = Rational(other);
+		other_real = Real(other);
 	}
 	catch(const UnexpectedError &e)
 	{
 		throw UNSUPPORTED_EXPONENT;
 	}
-	return (this->_numerator * other_rational._denominator 	\
-			< other_rational._numerator * this->_denominator);
+	return (Real(*this) < Real(other_real));
 }
 
 bool		Rational::operator<(const long long int value) const

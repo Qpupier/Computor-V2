@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/21 11:53:44 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/21 19:28:47 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,54 @@ static void										gauss_jordan_elimination(	\
 		gauss_elimination(matrix, pivot);
 		jordan_elimination(matrix, pivot);
 	}
+}
+
+static IType*									sqrt_final_value(			\
+		Matrix* sqrt_value, const Matrix& value)
+{
+	Matrix*	copy;
+	Matrix				test_exact_value;
+	std::vector<unsigned char>	decimal_part;
+
+	copy = new Matrix(*sqrt_value);
+	for (unsigned long int j(0); j < copy->getHeight(); j++)
+		for (unsigned long int i(0); i < copy->getWidth(); i++)
+		{
+			IType*		cell = copy->getValue(i, j);
+			InfiniteFloat	cell_float;
+
+			if (dynamic_cast<Rational*>(cell))
+				cell_float = dynamic_cast<Rational*>(cell)->getValue();
+			else
+				cell_float = dynamic_cast<Real*>(cell)->getValue();
+			decimal_part = cell_float.getDecimalPart().getDigits();
+			for (std::size_t k(InfiniteFloat::PRINT_PRECISION); 	\
+					k < decimal_part.size() && k < InfiniteFloat::MAX_PRECISION; k++)// [ ] Ajouter la meme limite pour les rationals
+				decimal_part[k] = 0;
+			if (!InfiniteInt(decimal_part))
+				copy->setValue(i, j, new Rational(cell_float.getIntegerPart()));
+			else
+				copy->setValue(i, j, new Real(InfiniteFloat(cell_float.getIntegerPart(), InfiniteInt(decimal_part))));
+		}
+	Matrix* tmp = *copy ^ 2;
+	if (*tmp == value)
+	{
+		delete tmp;
+		return (copy);
+	}
+	delete tmp;
+	delete copy;
+	for (unsigned long int j(0); j < sqrt_value->getHeight(); j++)
+		for (unsigned long int i(0); i < sqrt_value->getWidth(); i++)
+		{
+			IType*		cell = sqrt_value->getValue(i, j);
+
+			if (cell->in_Q())
+				sqrt_value->setValue(i, j, new Rational(*cell));
+			else
+				sqrt_value->setValue(i, j, new Real(*cell));
+		}
+	return (sqrt_value);
 }
 
 
@@ -1146,12 +1194,43 @@ IType*			Matrix::norm(void) const
 			delete square;
 			delete tmp;
 		}
-	return (result);// TODO: SQRT
+	return (result->sqrt());// TODO
 }
 
 IType*			Matrix::sqrt(void) const
 {
-	throw ERROR_UNEXPECTED;
+	Matrix*			sqrt_value;
+	InfiniteFloat	epsilon(1);
+	IType*			delta;
+
+	if (this->_width != this->_height)
+		throw ERROR_MATRIX_SQRT_SQUARE;
+	for (int i(0); i < InfiniteFloat::CALCULATION_PRECISION; i++)
+		epsilon /= InfiniteFloat(10);
+	sqrt_value = new Matrix(this->_width, this->_height);
+	for (int i(0); i < 8; i++)// [ ] Definir un nombre d'iterations max
+	{
+		Matrix*	tmp = dynamic_cast<Matrix*>(sqrt_value->matrix_inversion());
+		Matrix*	tmp2 = this->matrix_operator(*tmp);
+		delete tmp;
+		Matrix*	tmp3 = *sqrt_value + *tmp2;
+		delete tmp2;
+		delete sqrt_value;
+		sqrt_value = *tmp3 / 2;
+		delete tmp3;
+		Matrix*	tmp4 = *sqrt_value ^ 2;
+		Matrix*	tmp5 = *tmp4 - *this;
+		delete tmp4;
+		delta = tmp5->norm();
+		delete tmp5;
+		if (*delta < Real(epsilon))
+		{
+			delete delta;
+			return (sqrt_final_value(sqrt_value, *this));
+		}
+		delete delta;
+	}
+	throw ERROR_UNEXPECTED;// [ ] Ameliorer erreur
 	return (nullptr);
 }
 
