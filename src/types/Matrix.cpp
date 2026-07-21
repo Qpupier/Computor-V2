@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/02 17:40:04 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/21 11:53:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1147,6 +1147,12 @@ IType*			Matrix::norm(void) const
 			delete tmp;
 		}
 	return (result);// TODO: SQRT
+}
+
+IType*			Matrix::sqrt(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
 }
 
 Rational*		Matrix::gcd(const Rational &other) const

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:35:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/20 13:50:06 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/21 14:17:17 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,26 +66,31 @@ static IType*	function_norm(const IType &other)
 static IType*	function_sqrt(const IType &other)
 {
 	const Rational*		other_rational;
-	// const Complex*		other_complex;
-	// const Matrix*		other_matrix;
-	// const Polynomial*	other_polynomial;
-	// const Vector*		other_vector;
+	const Complex*		other_complex;
+	const Matrix*		other_matrix;
+	const Polynomial*	other_polynomial;
+	const Vector*		other_vector;
+	const Real*			other_real;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
 		return (other_rational->sqrt());
-	// other_complex = dynamic_cast<const Complex*>(&other);
-	// if (other_complex)
-	// 	return (other_complex->sqrt());
-	// other_matrix = dynamic_cast<const Matrix*>(&other);
-	// if (other_matrix)
-	// 	return (other_matrix->sqrt());
-	// other_polynomial = dynamic_cast<const Polynomial*>(&other);
-	// if (other_polynomial)
-	// 	return (other_polynomial->sqrt());
-	// other_vector = dynamic_cast<const Vector*>(&other);
-	// if (other_vector)
-	// 	return (other_vector->sqrt());
+	other_complex = dynamic_cast<const Complex*>(&other);
+	if (other_complex)
+		return (other_complex->sqrt());
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (other_matrix->sqrt());
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	if (other_polynomial)
+		return (other_polynomial->sqrt());
+	other_vector = dynamic_cast<const Vector*>(&other);
+	if (other_vector)
+		return (other_vector->sqrt());
+	other_real = dynamic_cast<const Real*>(&other);
+	if (other_real)
+		return (other_real->sqrt());
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -343,6 +348,12 @@ IType*			DefinedFunction::matrix_operator(const IType &other) const
 {
 	throw ERROR_UNEXPECTED;
 	(void)other;
+	return (nullptr);
+}
+
+IType*			DefinedFunction::sqrt(void) const
+{
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/02 17:49:01 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/21 11:54:52 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -924,6 +924,12 @@ IType*		Vector::matrix_operator(const IType &other) const
 IType*		Vector::norm(void) const
 {
 	return (Matrix(*this).norm());
+}
+
+IType*		Vector::sqrt(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
 }
 
 Rational*	Vector::gcd(const IType &other) const

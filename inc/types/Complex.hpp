@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:35:43 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/02 17:41:18 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/21 11:49:42 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ class	Complex: public IType
 		IType*			function_operator(const IType &other) const;
 		IType*			matrix_operator(const IType &other) const;
 		IType*			matrix_inversion(void) const;
+		IType*			sqrt(void) const;
 		Rational*		gcd(const IType &ther) const;
 		Rational*		gcd(const Complex &other) const;
 		Rational*		gcd(const Rational &other) const;

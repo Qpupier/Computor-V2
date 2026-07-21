@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/02 17:38:02 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/21 11:50:33 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ class	Polynomial: public IType
 		IType*			matrix_operator(const IType &other) const;
 		IType*			matrix_inversion(void) const;
 		IType*			norm(void) const;
+		IType*			sqrt(void) const;
 		Rational*		gcd(const IType &other) const;
 		std::ostream&	print(std::ostream &os) const;
 		std::string		to_string(void) const;

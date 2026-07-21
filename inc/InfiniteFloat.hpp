@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:38:24 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 11:49:58 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/21 11:41:45 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,8 @@ class	InfiniteFloat
 
 		//Constants
 		static constexpr unsigned char	MAX_PRECISION = 32;
-		static constexpr unsigned char	PRECISION = 8;
+		static constexpr unsigned char	CALCULATION_PRECISION = 16;
+		static constexpr unsigned char	PRINT_PRECISION = 8;
 
 	private:
 		// Members

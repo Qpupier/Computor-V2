@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/01 11:14:48 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/21 11:54:28 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,6 +264,12 @@ IType*			Operator::matrix_operator(const IType &other) const
 }
 
 IType*			Operator::matrix_inversion(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Operator::sqrt(void) const
 {
 	throw ERROR_UNEXPECTED;
 	return (nullptr);

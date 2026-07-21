@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/02 16:13:24 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/21 14:06:40 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -468,6 +468,12 @@ IType*			Real::matrix_operator(const IType &other) const
 	return (nullptr);
 }
 
+IType*			Real::sqrt(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
 Rational*		Real::gcd(const IType &other) const
 {
 	return (new Rational(1));// [ ]: pas sur de ca
@@ -476,10 +482,7 @@ Rational*		Real::gcd(const IType &other) const
 
 void			Real::print_rounded(const std::string var) const
 {
-	if (!var.empty())
-		std::cout << var << " = ";
-	this->print(std::cout);
-	std::cout << std::endl;
+	(void)var;
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 17:41:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/02 16:04:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/21 11:50:41 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ class	Real: public IType
 		IType*			function_operator(const IType &other) const;
 		IType*			matrix_inversion(void) const;
 		IType*			matrix_operator(const IType &other) const;
+		IType*			sqrt(void) const;
 		Rational*		gcd(const IType &other) const;
 		void			print_rounded(const std::string var = std::string()) const;
 

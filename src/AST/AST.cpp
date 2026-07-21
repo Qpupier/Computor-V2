@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/20 20:20:41 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/21 13:02:11 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "Complex.hpp"
 #include "Matrix.hpp"
 #include "Polynomial.hpp"
+#include "DefinedFunction.hpp"
 
 // Utils
 
@@ -30,6 +31,8 @@ static IType*	find_function(IType *node, std::map<std::pair<std::string, 	\
 	if (!polynomial)
 		throw UnexpectedError(											\
 				"Left side of function operator must be a variable");
+	if (polynomial->getName() == "sqrt")
+		return (new DefinedFunction(DefinedFunction::E_FUNCTION_SQRT));
 	var_name = to_lower(polynomial->getName());
 	var_key.first = var_name;
 	for (std::map<std::pair<std::string, std::string>, const IType*>	\
@@ -37,7 +40,6 @@ static IType*	find_function(IType *node, std::map<std::pair<std::string, 	\
 		if (to_lower(it->first.first) == to_lower(var_key.first) 		\
 				&& !it->first.second.empty())
 			return (const_cast<IType*>(it->second));
-	return (dynamic_cast<Rational*>(node)->sqrt());
 	throw UnexpectedError("Function not found (" + var_name + ")");
 	return (nullptr);
 }

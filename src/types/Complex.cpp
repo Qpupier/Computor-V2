@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/02 17:52:04 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/21 11:52:57 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -912,6 +912,12 @@ IType*			Complex::norm(void) const
 	result = new Rational(*sum);
 	delete sum;// TODO: SQRT
 	return (result);
+}
+
+IType*			Complex::sqrt(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
 }
 
 Rational*		Complex::gcd(const Rational &other) const

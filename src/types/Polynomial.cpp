@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/20 13:34:23 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/21 11:54:40 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -974,6 +974,12 @@ IType*			Polynomial::norm(void) const
 	delete numerator_sum;
 	delete denominator_sum;
 	return (result);// TODO: SQRT
+}
+
+IType*			Polynomial::sqrt(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
 }
 
 Rational*		Polynomial::gcd(const IType &other) const

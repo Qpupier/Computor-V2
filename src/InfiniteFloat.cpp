@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:46:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/21 11:29:39 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/21 11:41:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -660,7 +660,7 @@ InfiniteFloat	InfiniteFloat::sqrt(void) const
 
 bool			InfiniteFloat::in_D(void) const
 {
-	return (this->_decimal_part.size() < InfiniteFloat::PRECISION);
+	return (this->_decimal_part.size() < InfiniteFloat::PRINT_PRECISION);
 }
 
 void			InfiniteFloat::push_back_decimal(unsigned char digit)
@@ -691,16 +691,16 @@ std::ostream&	operator<<(std::ostream &os, const InfiniteFloat &num)
 
 	if (num_copy.getIsNegative())
 		os << "-";
-	if (num_copy.getDecimalPart().size() > InfiniteFloat::PRECISION)
+	if (num_copy.getDecimalPart().size() > InfiniteFloat::PRINT_PRECISION)
 	{
-		if (num_copy.getDecimalPart()[InfiniteFloat::PRECISION] >= 5)
+		if (num_copy.getDecimalPart()[InfiniteFloat::PRINT_PRECISION] >= 5)
 		{
-			for (unsigned char i(0); i < InfiniteFloat::PRECISION; i++)
+			for (unsigned char i(0); i < InfiniteFloat::PRINT_PRECISION; i++)
 				factor /= 10;
 			num_copy += factor;
 		}
 		decimal_digits = num_copy.getDecimalPart().getDigits();
-		decimal_digits.resize(InfiniteFloat::PRECISION);
+		decimal_digits.resize(InfiniteFloat::PRINT_PRECISION);
 		num_copy.setDecimalPart(InfiniteInt(decimal_digits, false, false));
 		num_copy.reduce();
 		rounded = "...";
@@ -709,7 +709,7 @@ std::ostream&	operator<<(std::ostream &os, const InfiniteFloat &num)
 	if (num_copy.getDecimalPart())
 	{
 		os << ".";
-		for (unsigned char i(0); i < InfiniteFloat::PRECISION && i < num_copy.getDecimalPart().size(); i++)
+		for (unsigned char i(0); i < InfiniteFloat::PRINT_PRECISION && i < num_copy.getDecimalPart().size(); i++)
 			os << static_cast<char>(num_copy.getDecimalPart()[i] + '0');
 	}
 	os << rounded;

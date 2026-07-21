@@ -4,10 +4,10 @@
 /*   Rational.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/20 20:26:06 by qpupier          ###   ########lyon.fr   */
-/*                                                                            */
+/*                                             +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/24 19:46:50 by qpupier         +#    #+#             */
+/*   Updated: 2026/07/21 14:23:43 by qpupier         #   ########lyon.fr   */
+/*                                                                         */
 /* ************************************************************************** */
 
 #include "Rational.hpp"
@@ -30,6 +30,24 @@ static Rational		from_polynomial(const Polynomial &polynomial)
 static InfiniteInt	compute_lcm(InfiniteInt a, InfiniteInt b)
 {
 	return (a / compute_gcd(a, b) * b);
+}
+
+static IType*		sqrt_final_value(InfiniteFloat sqrt_value, 	\
+		InfiniteFloat value)
+{
+	InfiniteFloat				test_exact_value;
+	std::vector<unsigned char>	decimal_part;
+
+	decimal_part = sqrt_value.getDecimalPart().getDigits();
+	for (std::size_t i(InfiniteFloat::PRINT_PRECISION); 	\
+			i < InfiniteFloat::MAX_PRECISION; i++)
+		decimal_part[i] = 0;
+	if (!InfiniteInt(decimal_part))
+		return (new Rational(sqrt_value.getIntegerPart()));
+	test_exact_value = InfiniteFloat(sqrt_value.getIntegerPart(), decimal_part);
+	if ((test_exact_value ^ 2) == value)
+		return (new Real(test_exact_value));
+	return (new Real(sqrt_value));
 }
 
 
@@ -799,14 +817,20 @@ IType*			Rational::matrix_inversion(void) const
 IType*			Rational::sqrt(void) const
 {
 	InfiniteFloat	sqrt_value(1);
-	InfiniteFloat	test(42);
+	InfiniteFloat	value(this->getValue());
+	InfiniteFloat	epsilon(1);
+	InfiniteFloat	delta(1);
 
-	for (int i(0); i < 5; i++)
+	for (int i(0); i < InfiniteFloat::CALCULATION_PRECISION; i++)
+		epsilon /= InfiniteFloat(10);
+	while (delta >= epsilon)
 	{
-		sqrt_value = (sqrt_value + test / sqrt_value) / 2;
-		std::cout << "sqrt_value: " << sqrt_value << std::endl;
+		sqrt_value = (sqrt_value + value / sqrt_value) / 2;
+		delta = sqrt_value * sqrt_value - value;
+		if (delta < 0)
+			delta *= -1;
 	}
-	return (new Real(sqrt_value));
+	return (sqrt_final_value(sqrt_value, value));
 }
 
 Rational*		Rational::gcd(const Rational &other) const

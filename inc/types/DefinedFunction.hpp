@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:16:29 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/20 13:47:04 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/21 11:49:51 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ class	DefinedFunction: public IType
 		IType*			function_operator(const IType &other) const;
 		IType*			matrix_inversion(void) const;
 		IType*			matrix_operator(const IType &other) const;
+		IType*			sqrt(void) const;
 		Rational*		gcd(const IType &other) const;
 		void			print_rounded(const std::string var = std::string()) const;
 

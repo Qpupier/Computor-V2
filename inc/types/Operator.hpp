@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 14:55:07 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/01 11:14:29 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/21 12:57:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ class	Operator: public IType
 		IType*			function_operator(const IType &other) const;
 		IType*			matrix_operator(const IType &other) const;
 		IType*			matrix_inversion(void) const;
+		IType*			sqrt(void) const;
 		Rational*		gcd(const IType &other) const;
 		void			print_rounded(const std::string var = std::string()) const;
 
