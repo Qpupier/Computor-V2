@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:46:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/20 16:10:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/21 11:29:39 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -459,7 +459,6 @@ InfiniteFloat	InfiniteFloat::operator*(const InfiniteFloat &other) const
 			(this->getDecimalPart().size() + other.getDecimalPart().size());
 	InfiniteInt								int_result;
 
-	std::cout << "Multiplying: " << *this << " * " << other << std::endl;
 	int_result = mul_integer_parts(*this, other);
 	return (place_floating_point(int_result, decimal_size, 	\
 			this->_isNegative != other._isNegative));
