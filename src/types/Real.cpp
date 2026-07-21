@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/21 14:06:40 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/21 14:31:57 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -470,8 +470,21 @@ IType*			Real::matrix_operator(const IType &other) const
 
 IType*			Real::sqrt(void) const
 {
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
+	InfiniteFloat	sqrt_value(1);
+	InfiniteFloat	value(this->getValue());
+	InfiniteFloat	epsilon(1);
+	InfiniteFloat	delta(1);
+
+	for (int i(0); i < InfiniteFloat::CALCULATION_PRECISION; i++)
+		epsilon /= InfiniteFloat(10);
+	while (delta >= epsilon)
+	{
+		sqrt_value = (sqrt_value + value / sqrt_value) / 2;
+		delta = sqrt_value * sqrt_value - value;
+		if (delta < 0)
+			delta *= -1;
+	}
+	return (new Real(sqrt_value));
 }
 
 Rational*		Real::gcd(const IType &other) const
