@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/21 19:28:47 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/22 15:20:51 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,9 +230,9 @@ static IType*									sqrt_final_value(			\
 		{
 			IType*		cell = sqrt_value->getValue(i, j);
 
-			if (cell->in_Q())
-				sqrt_value->setValue(i, j, new Rational(*cell));
-			else
+			// if (cell->in_Q())
+			// 	sqrt_value->setValue(i, j, new Rational(*cell));
+			// else
 				sqrt_value->setValue(i, j, new Real(*cell));
 		}
 	return (sqrt_value);
@@ -1199,16 +1199,27 @@ IType*			Matrix::norm(void) const
 
 IType*			Matrix::sqrt(void) const
 {
-	Matrix*			sqrt_value;
 	InfiniteFloat	epsilon(1);
 	IType*			delta;
+	Matrix*			sqrt_value;
 
 	if (this->_width != this->_height)
 		throw ERROR_MATRIX_SQRT_SQUARE;
+	sqrt_value = new Matrix(this->_width, this->_height);
+	bool is_null = true;
+	for (unsigned long int i(0); i < this->_width; i++)
+		for (unsigned long int j(0); j < this->_height; j++)
+			if (*this->_matrix[j][i])
+				is_null = false;
+	if (is_null)
+	{
+		for (unsigned long int i(0); i < this->_width; i++)
+			sqrt_value->setValue(i, i, new Rational());
+		return (sqrt_value);
+	}
 	for (int i(0); i < InfiniteFloat::CALCULATION_PRECISION; i++)
 		epsilon /= InfiniteFloat(10);
-	sqrt_value = new Matrix(this->_width, this->_height);
-	for (int i(0); i < 8; i++)// [ ] Definir un nombre d'iterations max
+	for (int i(0); i < 6; i++)// [ ] Definir un nombre d'iterations max
 	{
 		Matrix*	tmp = dynamic_cast<Matrix*>(sqrt_value->matrix_inversion());
 		Matrix*	tmp2 = this->matrix_operator(*tmp);
@@ -1230,6 +1241,7 @@ IType*			Matrix::sqrt(void) const
 		}
 		delete delta;
 	}
+	delete sqrt_value;
 	throw ERROR_UNEXPECTED;// [ ] Ameliorer erreur
 	return (nullptr);
 }
@@ -1374,7 +1386,7 @@ void			Matrix::free(void)
 
 void			Matrix::print_rounded(const std::string var) const
 {
-	if (this->in_Z())
+	if (this->in_Z() || !this->in_Q())
 		return ;
 	std::cout << COLOR_DIM;
 	if (!var.empty())
