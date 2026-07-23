@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/21 18:45:21 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/23 14:19:34 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static IType*		sqrt_final_value(InfiniteFloat sqrt_value, 	\
 
 	decimal_part = sqrt_value.getDecimalPart().getDigits();
 	for (std::size_t i(InfiniteFloat::PRINT_PRECISION); 	\
-			i < InfiniteFloat::MAX_PRECISION; i++)
+			i < decimal_part.size() && i < InfiniteFloat::MAX_PRECISION; i++)
 		decimal_part[i] = 0;
 	if (!InfiniteInt(decimal_part))
 		return (new Rational(sqrt_value.getIntegerPart()));
@@ -299,7 +299,7 @@ IType*		Rational::operator+(const IType &other) const
 	const Rational*		other_rational;
 	const Complex*		other_complex;
 	const Matrix*		other_matrix;
-	const Polynomial*	other_polynomial;// TODO: Ajouter partout les Vectors
+	const Polynomial*	other_polynomial;
 	const Vector*		other_vector;
 	const Real*			other_real;
 

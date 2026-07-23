@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/21 11:50:15 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/23 13:27:20 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,10 +113,10 @@ class	Matrix: public IType
 		IType*			clone(void) const;
 		IType*			function_operator(const IType &other) const;
 		IType*			matrix_operator(const IType &other) const;
-		Matrix*			matrix_operator(const Matrix &other) const;
 		IType*			matrix_inversion(void) const;
 		IType*			norm(void) const;
 		IType*			sqrt(void) const;
+		Matrix*			matrix_operator(const Matrix &other) const;
 		Rational*		gcd(const IType &ther) const;
 		Rational*		gcd(const Matrix &other) const;
 		Rational*		gcd(const Rational &other) const;
@@ -127,10 +127,14 @@ class	Matrix: public IType
 		bool			in_D(void) const;
 		bool			in_Q(void) const;
 		bool			in_Z(void) const;
+		bool			is_null(void) const;
+		bool			is_square(void) const;
 		void			error(const LogicError &e);
 		void			free(void);
-		void			print_rounded(const std::string var = std::string()) const;
-		void			swap_lines(unsigned long int line1, unsigned long int line2);
+		void			print_rounded(							\
+				const std::string var = std::string()) const;
+		void			swap_lines(unsigned long int line1, 	\
+				unsigned long int line2);
 
 	private:
 		// Members
@@ -144,5 +148,6 @@ std::ostream&	operator<<(std::ostream &os, const Matrix &matrix);
 
 // Functions
 bool	is_matrix(const IType& type);
+Matrix*	matrix_null(unsigned long int width, unsigned long int height);
 
 #endif

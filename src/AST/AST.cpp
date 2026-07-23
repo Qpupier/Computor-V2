@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/21 13:02:11 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/23 14:18:12 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static IType*	find_function(IType *node, std::map<std::pair<std::string, 	\
 			::iterator it(stored.begin()); it != stored.end(); it++)
 		if (to_lower(it->first.first) == to_lower(var_key.first) 		\
 				&& !it->first.second.empty())
-			return (const_cast<IType*>(it->second));
+			return (it->second->clone());
 	throw UnexpectedError("Function not found (" + var_name + ")");
 	return (nullptr);
 }
@@ -72,8 +72,13 @@ static IType*	get_result(IType *left_entity, IType *right_entity, 	\
 		case Operator::E_POWER:
 			return (*left_entity ^ *right_entity);
 		case Operator::E_FUNCTION:
-			return (find_function(left_entity, stored)	\
-					->function_operator(*right_entity));
+			IType*	function;
+			IType*	result;
+
+			function = find_function(left_entity, stored);
+			result = function->function_operator(*right_entity);
+			delete function;
+			return (result);
 		case Operator::E_INVERSE:
 			return (right_entity->matrix_inversion());
 		case Operator::E_UNKNOWN:

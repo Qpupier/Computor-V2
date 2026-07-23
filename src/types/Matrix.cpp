@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/22 15:20:51 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/23 16:07:25 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,52 +190,110 @@ static void										gauss_jordan_elimination(	\
 	}
 }
 
-static IType*									sqrt_final_value(			\
-		Matrix* sqrt_value, const Matrix& value)
+static IType*																\
+		sqrt_final_value_approx_reduce_precision(							\
+			const InfiniteFloat& cell_float)
 {
-	Matrix*	copy;
-	Matrix				test_exact_value;
+	InfiniteInt					decimal;
 	std::vector<unsigned char>	decimal_part;
+
+	decimal_part = cell_float.getDecimalPart().getDigits();
+	for (std::size_t k(InfiniteFloat::PRINT_PRECISION); 	\
+			k < decimal_part.size() && k < InfiniteFloat::MAX_PRECISION; k++)
+		decimal_part[k] = 0;
+	decimal = InfiniteInt(decimal_part, false, false);
+	if (decimal)
+		return (new Real(InfiniteFloat(cell_float.getIntegerPart(), decimal)));
+	return (new Rational(cell_float.getIntegerPart()));
+}
+
+static Matrix*									sqrt_final_value_approx(	\
+		Matrix* sqrt_value)
+{
+	InfiniteFloat				cell_float;
+	std::vector<unsigned char>	decimal_part;
+	IType*						cell;
+	Matrix*						copy;
 
 	copy = new Matrix(*sqrt_value);
 	for (unsigned long int j(0); j < copy->getHeight(); j++)
 		for (unsigned long int i(0); i < copy->getWidth(); i++)
 		{
-			IType*		cell = copy->getValue(i, j);
-			InfiniteFloat	cell_float;
-
-			if (dynamic_cast<Rational*>(cell))
+			cell = copy->getValue(i, j);
+			try
+			{
 				cell_float = dynamic_cast<Rational*>(cell)->getValue();
-			else
+			}
+			catch (...)
+			{
 				cell_float = dynamic_cast<Real*>(cell)->getValue();
-			decimal_part = cell_float.getDecimalPart().getDigits();
-			for (std::size_t k(InfiniteFloat::PRINT_PRECISION); 	\
-					k < decimal_part.size() && k < InfiniteFloat::MAX_PRECISION; k++)// [ ] Ajouter la meme limite pour les rationals
-				decimal_part[k] = 0;
-			if (!InfiniteInt(decimal_part))
-				copy->setValue(i, j, new Rational(cell_float.getIntegerPart()));
-			else
-				copy->setValue(i, j, new Real(InfiniteFloat(cell_float.getIntegerPart(), InfiniteInt(decimal_part))));
+			}
+			copy->setValue(i, j, 	\
+					sqrt_final_value_approx_reduce_precision(cell_float));
 		}
-	Matrix* tmp = *copy ^ 2;
-	if (*tmp == value)
+	return (copy);
+}
+
+static Matrix*									sqrt_final_value(			\
+		Matrix* sqrt_value, const Matrix& value)
+{
+	Matrix	test_exact_value;
+	Matrix*	approx;
+	Matrix*	square;
+
+	approx = sqrt_final_value_approx(sqrt_value);
+	square = *approx ^ 2;
+	if (*square == value)
 	{
-		delete tmp;
-		return (copy);
+		delete square;
+		delete sqrt_value;
+		return (approx);
 	}
-	delete tmp;
-	delete copy;
+	delete square;
+	delete approx;
 	for (unsigned long int j(0); j < sqrt_value->getHeight(); j++)
 		for (unsigned long int i(0); i < sqrt_value->getWidth(); i++)
-		{
-			IType*		cell = sqrt_value->getValue(i, j);
-
-			// if (cell->in_Q())
-			// 	sqrt_value->setValue(i, j, new Rational(*cell));
-			// else
-				sqrt_value->setValue(i, j, new Real(*cell));
-		}
+			sqrt_value->setValue(i, j, new Real(*sqrt_value->getValue(i, j)));
 	return (sqrt_value);
+}
+
+static bool																	\
+		sqrt_newton_iteration_converged(const Matrix& reference, 			\
+			const Matrix& current_sqrt, const Real& epsilon)
+{
+	bool	result;
+	IType*	delta;
+	Matrix*	square;
+	Matrix*	matrix_delta;
+
+	square = current_sqrt ^ 2;
+	matrix_delta = *square - reference;
+	delete square;
+	delta = matrix_delta->norm();
+	delete matrix_delta;
+	result = *delta < epsilon;
+	delete delta;
+	return (result);
+}
+
+static Matrix*									sqrt_newton_iteration(		\
+		const Matrix& reference, Matrix** current_sqrt, const Real epsilon)
+{
+	Matrix*	inversed;
+	Matrix*	tmp_mul;
+	Matrix*	tmp_add;
+
+	inversed = dynamic_cast<Matrix*>((*current_sqrt)->matrix_inversion());
+	tmp_mul = reference.matrix_operator(*inversed);
+	delete inversed;
+	tmp_add = **current_sqrt + *tmp_mul;
+	delete tmp_mul;
+	delete *current_sqrt;
+	*current_sqrt = *tmp_add / 2;
+	delete tmp_add;
+	if (sqrt_newton_iteration_converged(reference, **current_sqrt, epsilon))
+		return (sqrt_final_value(*current_sqrt, reference));
+	return (nullptr);
 }
 
 
@@ -280,7 +338,7 @@ Matrix::Matrix(std::string str, t_data &data): _width(0), _height(0)
 			this->setValue(i, j, value_to_rational(rows[j][i], data, this));
 }
 
-Matrix::Matrix(const Matrix &other): 			\
+Matrix::Matrix(const Matrix &other): 		\
 		_width(other._width), _height(other._height)
 {
 	this->_matrix = new IType**[this->_height];
@@ -1113,33 +1171,6 @@ IType*			Matrix::function_operator(const IType &other) const
 	return (nullptr);
 }
 
-Matrix*			Matrix::matrix_operator(const Matrix &other) const
-{
-	Matrix*	result;
-	IType*	cell;
-	IType*	mul;
-	IType*	tmp;
-
-	if (this->_width != other._height)
-		throw ERROR_MATRIX_DIMENSIONS;
-	result = new Matrix(other._width, this->_height);
-	for (unsigned int i = 0; i < result->_height; i++)
-		for (unsigned int j = 0; j < result->_width; j++)
-		{
-			cell = new Rational();
-			for (unsigned int k = 0; k < this->_width; k++)
-			{
-				mul = *this->_matrix[i][k] * *other._matrix[k][j];
-				tmp = cell;
-				cell = *cell + *mul;
-				delete tmp;
-				delete mul;
-			}
-			result->setValue(j, i, cell);
-		}
-	return (result);
-}
-
 IType*			Matrix::matrix_operator(const IType &other) const
 {
 	Matrix	other_matrix;
@@ -1180,6 +1211,7 @@ IType*			Matrix::matrix_inversion(void) const
 IType*			Matrix::norm(void) const
 {
 	IType*	result;
+	IType*	sqrt;
 
 	result = new Rational();
 	for (unsigned long int j(0); j < this->_height; j++)
@@ -1194,56 +1226,60 @@ IType*			Matrix::norm(void) const
 			delete square;
 			delete tmp;
 		}
-	return (result->sqrt());// TODO
+	sqrt = result->sqrt();
+	delete result;
+	return (sqrt);
 }
 
 IType*			Matrix::sqrt(void) const
 {
 	InfiniteFloat	epsilon(1);
-	IType*			delta;
 	Matrix*			sqrt_value;
+	Matrix*			result;
 
-	if (this->_width != this->_height)
+	if (!this->is_square())
 		throw ERROR_MATRIX_SQRT_SQUARE;
-	sqrt_value = new Matrix(this->_width, this->_height);
-	bool is_null = true;
-	for (unsigned long int i(0); i < this->_width; i++)
-		for (unsigned long int j(0); j < this->_height; j++)
-			if (*this->_matrix[j][i])
-				is_null = false;
-	if (is_null)
-	{
-		for (unsigned long int i(0); i < this->_width; i++)
-			sqrt_value->setValue(i, i, new Rational());
-		return (sqrt_value);
-	}
+	if (this->is_null())
+		return (matrix_null(this->_width, this->_height));
 	for (int i(0); i < InfiniteFloat::CALCULATION_PRECISION; i++)
 		epsilon /= InfiniteFloat(10);
+	sqrt_value = new Matrix(this->_width, this->_height);
 	for (int i(0); i < 6; i++)// [ ] Definir un nombre d'iterations max
 	{
-		Matrix*	tmp = dynamic_cast<Matrix*>(sqrt_value->matrix_inversion());
-		Matrix*	tmp2 = this->matrix_operator(*tmp);
-		delete tmp;
-		Matrix*	tmp3 = *sqrt_value + *tmp2;
-		delete tmp2;
-		delete sqrt_value;
-		sqrt_value = *tmp3 / 2;
-		delete tmp3;
-		Matrix*	tmp4 = *sqrt_value ^ 2;
-		Matrix*	tmp5 = *tmp4 - *this;
-		delete tmp4;
-		delta = tmp5->norm();
-		delete tmp5;
-		if (*delta < Real(epsilon))
-		{
-			delete delta;
-			return (sqrt_final_value(sqrt_value, *this));
-		}
-		delete delta;
+		result = sqrt_newton_iteration(*this, &sqrt_value, Real(epsilon));
+		if (result)
+			return (result);
 	}
 	delete sqrt_value;
-	throw ERROR_UNEXPECTED;// [ ] Ameliorer erreur
+	throw ERROR_MATRIX_SQRT;
 	return (nullptr);
+}
+
+Matrix*			Matrix::matrix_operator(const Matrix &other) const
+{
+	Matrix*	result;
+	IType*	cell;
+	IType*	mul;
+	IType*	tmp;
+
+	if (this->_width != other._height)
+		throw ERROR_MATRIX_DIMENSIONS;
+	result = new Matrix(other._width, this->_height);
+	for (unsigned int i = 0; i < result->_height; i++)
+		for (unsigned int j = 0; j < result->_width; j++)
+		{
+			cell = new Rational();
+			for (unsigned int k = 0; k < this->_width; k++)
+			{
+				mul = *this->_matrix[i][k] * *other._matrix[k][j];
+				tmp = cell;
+				cell = *cell + *mul;
+				delete tmp;
+				delete mul;
+			}
+			result->setValue(j, i, cell);
+		}
+	return (result);
 }
 
 Rational*		Matrix::gcd(const Rational &other) const
@@ -1362,6 +1398,20 @@ bool			Matrix::in_Z(void) const
 	return (true);
 }
 
+bool			Matrix::is_null(void) const
+{
+	for (unsigned int j = 0; j < this->_height; j++)
+		for (unsigned int i = 0; i < this->_width; i++)
+			if (*this->_matrix[j][i])
+				return (false);
+	return (true);
+}
+
+bool			Matrix::is_square(void) const
+{
+	return (this->_width == this->_height);
+}
+
 void			Matrix::error(const LogicError &e)
 {
 	this->free();
@@ -1436,4 +1486,15 @@ bool	is_matrix(const IType& type)
 		return (false);
 	}
 	return (true);
+}
+
+Matrix*	matrix_null(unsigned long int width, unsigned long int height)
+{
+	Matrix*	result;
+
+	result = new Matrix(width, height);
+	for (unsigned long int j(0); j < height; j++)
+		for (unsigned long int i(0); i < width; i++)
+			result->setValue(i, j, new Rational());
+	return (result);
 }
