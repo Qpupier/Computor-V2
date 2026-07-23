@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/23 18:56:49 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/23 20:21:54 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,66 +14,70 @@
 
 // Utils
 
+static std::ostream&	print_value_rational(std::ostream& os, bool negative, const std::string& i, Rational* copy_rational)
+{
+	if (negative)
+	{
+		IType*	tmp;
+
+		tmp = copy_rational;
+		copy_rational = dynamic_cast<Rational*>(-*copy_rational);
+		delete tmp;
+	}
+	if (i.empty() || *copy_rational != 1)
+		os << copy_rational->getNumerator();
+	if (!i.empty())
+		os << i;
+	if (copy_rational->getDenominator() != 1)
+		os << "/" << copy_rational->getDenominator();
+	delete copy_rational;
+	return (os);
+}
+
+static std::ostream&	print_value_real(std::ostream& os, bool negative, const std::string& i, Real* copy_real)
+{
+	if (negative)
+	{
+		IType*	tmp;
+
+		tmp = copy_real;
+		copy_real = dynamic_cast<Real*>(-*copy_real);
+		delete tmp;
+	}
+	if (i.empty() || *copy_real != 1)
+		os << *copy_real;
+	if (!i.empty())
+		os << i;
+	delete copy_real;
+	return (os);
+}
+
 static std::ostream&	print_value(std::ostream &os, IType* value, 	\
 		const std::string &i, bool is_first)
 {
 	IType*	copy;
 	bool	negative_between(false);
-
+	
 	if (!*value)
 		return (os);
 	copy = value->clone();
-	try
+	Rational *copy_rational = dynamic_cast<Rational*>(copy);
+	Real *copy_real = dynamic_cast<Real*>(copy);
+	if (!is_first)
 	{
-		Rational *copy_rational = dynamic_cast<Rational*>(copy);
-
-		if (!is_first)
-		{
-			if (*value < 0)
-				negative_between = true;
-			else
-				os << " + ";
-		}
-		if (negative_between || (is_first && *value < 0 && !i.empty()))
-		{
-			os << (negative_between ? " - " : "-");
-			// delete copy_rational;
-			IType* tmp = copy_rational;
-			copy_rational = dynamic_cast<Rational*>(-*value);
-			delete tmp;
-		}
-		if (i.empty() || *copy_rational != 1)
-			os << copy_rational->getNumerator();
-		if (!i.empty())
-			os << i;
-		if (copy_rational->getDenominator() != 1)
-			os << "/" << copy_rational->getDenominator();
-		delete copy_rational;
+		if (*value < 0)
+			negative_between = true;
+		else
+			os << " + ";
 	}
-	catch (...)
-	{
-		Real* copy_real = dynamic_cast<Real*>(copy);
-		if (!is_first)
-		{
-			if (*value < 0)
-				negative_between = true;
-			else
-				os << " + ";
-		}
-		if (negative_between || (is_first && *value < 0 && !i.empty()))
-		{
-			os << (negative_between ? " - " : "-");
-			// delete copy_real;
-			IType* tmp = copy_real;
-			copy_real = dynamic_cast<Real*>(-*value);
-			delete tmp;
-		}
-		if (i.empty() || *copy_real != 1)
-			os << *copy_real;
-		if (!i.empty())
-			os << i;
-		delete copy_real;
-	}
+	bool negative = negative_between || (is_first && *value < 0 && !i.empty());
+	if (negative)
+		os << (negative_between ? " - " : "-");
+	if (copy_rational)
+		return (print_value_rational(os, negative, i, copy_rational));
+	if (copy_real)
+		return (print_value_real(os, negative, i, copy_real));
+	throw ERROR_UNEXPECTED;
 	return (os);
 }
 
