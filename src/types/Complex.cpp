@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/21 11:52:57 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/23 18:56:49 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,66 @@
 
 // Utils
 
-static std::ostream&	print_value(std::ostream &os, Rational value, 	\
+static std::ostream&	print_value(std::ostream &os, IType* value, 	\
 		const std::string &i, bool is_first)
 {
-	Rational*	copy;
-	bool		negative_between(false);
+	IType*	copy;
+	bool	negative_between(false);
 
-	if (!value)
+	if (!*value)
 		return (os);
-	copy = new Rational(value);
-	if (!is_first)
+	copy = value->clone();
+	try
 	{
-		if (value < 0)
-			negative_between = true;
-		else
-			os << " + ";
+		Rational *copy_rational = dynamic_cast<Rational*>(copy);
+
+		if (!is_first)
+		{
+			if (*value < 0)
+				negative_between = true;
+			else
+				os << " + ";
+		}
+		if (negative_between || (is_first && *value < 0 && !i.empty()))
+		{
+			os << (negative_between ? " - " : "-");
+			// delete copy_rational;
+			IType* tmp = copy_rational;
+			copy_rational = dynamic_cast<Rational*>(-*value);
+			delete tmp;
+		}
+		if (i.empty() || *copy_rational != 1)
+			os << copy_rational->getNumerator();
+		if (!i.empty())
+			os << i;
+		if (copy_rational->getDenominator() != 1)
+			os << "/" << copy_rational->getDenominator();
+		delete copy_rational;
 	}
-	if (negative_between || (is_first && value < 0 && !i.empty()))
+	catch (...)
 	{
-		os << (negative_between ? " - " : "-");
-		delete copy;
-		copy = -value;
+		Real* copy_real = dynamic_cast<Real*>(copy);
+		if (!is_first)
+		{
+			if (*value < 0)
+				negative_between = true;
+			else
+				os << " + ";
+		}
+		if (negative_between || (is_first && *value < 0 && !i.empty()))
+		{
+			os << (negative_between ? " - " : "-");
+			// delete copy_real;
+			IType* tmp = copy_real;
+			copy_real = dynamic_cast<Real*>(-*value);
+			delete tmp;
+		}
+		if (i.empty() || *copy_real != 1)
+			os << *copy_real;
+		if (!i.empty())
+			os << i;
+		delete copy_real;
 	}
-	if (i.empty() || *copy != 1)
-		os << copy->getNumerator();
-	if (!i.empty())
-		os << i;
-	if (copy->getDenominator() != 1)
-		os << "/" << copy->getDenominator();
-	delete copy;
 	return (os);
 }
 
@@ -909,13 +940,44 @@ IType*			Complex::norm(void) const
 	sum = *real_squared + *imaginary_squared;
 	delete real_squared;
 	delete imaginary_squared;
-	result = new Rational(*sum);
-	delete sum;// TODO: SQRT
+	result = sum->sqrt();
+	delete sum;
 	return (result);
 }
 
 IType*			Complex::sqrt(void) const
 {
+	IType*	norm;
+	IType*	real;
+	IType*	imaginary;
+	IType*	tmp;
+	IType*	tmp2;
+
+	norm = this->norm();
+	tmp = *norm + *this->_real;
+	tmp2 = *tmp / 2;
+	delete tmp;
+	real = tmp2->sqrt();
+	std::cout << "real: " << *real << std::endl;
+	delete tmp2;
+	tmp = *norm - *this->_real;
+	tmp2 = *tmp / 2;
+	delete tmp;
+	imaginary = tmp2->sqrt();
+	delete tmp2;
+	if (*this->_imaginary < 0)
+	{
+		tmp = imaginary;
+		imaginary = -*imaginary;
+		delete tmp;
+	}
+	std::cout << "imaginary: " << *imaginary << std::endl;
+	delete norm;
+	std::cout << "sqrt: " << *real << " + " << *imaginary << "i" << std::endl;
+	IType* test = new Complex(real, imaginary);
+	std::cout << "OK" << std::endl;
+	std::cout << "complex: " << *test << std::endl;
+	return (new Complex(real, imaginary));
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
@@ -985,13 +1047,13 @@ std::ostream&	Complex::print(std::ostream &os) const
 		return (os << "0");
 	else if ((!*this->_real || *this->_real < 0) && *this->_imaginary > 0)
 	{
-		print_value(os, *this->_imaginary, "i", true);
-		print_value(os, *this->_real, "", false);
+		print_value(os, this->_imaginary, "i", true);
+		print_value(os, this->_real, "", false);
 	}
 	else
 	{
-		print_value(os, *this->_real, "", true);
-		print_value(os, *this->_imaginary, "i", !this->_real);
+		print_value(os, this->_real, "", true);
+		print_value(os, this->_imaginary, "i", !this->_real);
 	}
 	return (os);
 }

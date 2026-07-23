@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/21 11:50:33 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/23 16:32:04 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ class	Polynomial: public IType
 
 		// Setters
 		void	setName(const std::string& name);
+		void	setTerms(const std::vector<t_term>& terms);
 
 		// Methods
 		IType*			clone(void) const;
