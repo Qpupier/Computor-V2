@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/23 13:30:40 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/23 16:10:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ class IType;
 # define ERROR_SQRT_NEGATIVE				LogicError("Cannot compute square root of a negative number")
 # define ERROR_VECTOR_DIMENSIONS			LogicError("Vector operation: incompatible dimensions")
 # define ERROR_VECTOR_OUT_OF_RANGE			LogicError("Vector index out of range")
+# define ERROR_VECTOR_SQRT					LogicError("Vector square root is impossible")
 # define ERROR_OPERATOR_EXPECTED			UnexpectedError("Invalid expression: operator expected")
 # define ERROR_UNEXPECTED					UnexpectedError("Impossible to complete operation")
 # define ERROR_UNKNOWN_BRACKET				UnexpectedError("Unknown bracket type")

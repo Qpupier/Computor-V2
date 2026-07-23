@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/23 14:18:12 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/23 16:13:24 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,15 @@ static IType*	get_result(IType *left_entity, IType *right_entity, 	\
 			IType*	result;
 
 			function = find_function(left_entity, stored);
-			result = function->function_operator(*right_entity);
+			try
+			{
+				result = function->function_operator(*right_entity);
+			}
+			catch (...)
+			{
+				delete function;
+				throw;
+			}
 			delete function;
 			return (result);
 		case Operator::E_INVERSE:

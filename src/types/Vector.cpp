@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/21 11:54:52 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/23 16:11:00 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -928,7 +928,7 @@ IType*		Vector::norm(void) const
 
 IType*		Vector::sqrt(void) const
 {
-	throw ERROR_UNEXPECTED;
+	throw ERROR_VECTOR_SQRT;
 	return (nullptr);
 }
 
