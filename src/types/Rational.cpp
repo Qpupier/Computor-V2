@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/23 14:19:34 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/24 14:00:01 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,22 @@ static Rational		from_polynomial(const Polynomial &polynomial)
 			|| polynomial.getTerms()[0].power)
 		throw ERROR_UNEXPECTED;
 	return (Rational(*polynomial.getTerms()[0].coefficient));
+}
+
+static Rational		from_real(const Real &real)
+{
+	Rational	result;
+	std::vector<unsigned char>	all_digits(real.getValue().getIntegerPart().getDigits());
+	std::vector<unsigned char>	decimal_digits;
+
+	decimal_digits = real.getValue().getDecimalPart().getDigits();
+	all_digits.insert(all_digits.end(), decimal_digits.begin(), decimal_digits.end());
+	result = Rational(InfiniteInt(all_digits, real.getValue().getIsNegative(), true));
+	Rational* divider;
+	divider = Rational(10) ^ static_cast<long long int>(decimal_digits.size());
+	result = result / *divider;
+	delete divider;
+	return (result);
 }
 
 static InfiniteInt	compute_lcm(InfiniteInt a, InfiniteInt b)
@@ -85,10 +101,12 @@ Rational::Rational(const IType &other)
 	const Rational*		other_rational;
 	const Complex*		other_complex;
 	const Polynomial*	other_polynomial;// [ ]: Tout ajouter dans chaque classe (Vector et Real)
+	const Real*			other_real;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	other_complex = dynamic_cast<const Complex*>(&other);
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	other_real = dynamic_cast<const Real*>(&other);
 	if (other_rational)
 		*this = *other_rational;
 	else if (other_complex)
@@ -99,6 +117,8 @@ Rational::Rational(const IType &other)
 	}
 	else if (other_polynomial)
 		*this = from_polynomial(*other_polynomial);
+	else if (other_real)
+		*this = from_real(*other_real);
 	else
 		throw ERROR_UNEXPECTED;
 }
@@ -820,6 +840,8 @@ IType*			Rational::sqrt(void) const
 	InfiniteFloat	epsilon(1);
 	InfiniteFloat	delta(1);
 
+	if (value.getIsNegative())
+		throw ERROR_SQRT_NEGATIVE;
 	for (int i(0); i < InfiniteFloat::CALCULATION_PRECISION; i++)
 		epsilon /= InfiniteFloat(10);
 	while (delta >= epsilon)
@@ -962,7 +984,7 @@ bool			Rational::in_Z(void) const
 {
 	Rational	copy(*this);
 
-	copy.reduce();
+	// copy.reduce();// [ ] Useful?
 	return (copy.getDenominator() == InfiniteInt(1));
 }
 

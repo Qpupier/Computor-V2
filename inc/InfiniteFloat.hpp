@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:38:24 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/21 11:41:45 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/24 13:59:00 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,28 +20,25 @@ class	InfiniteFloat
 	public:
 		// Constructors and destructor
 		InfiniteFloat(const InfiniteInt integer_part, 						\
-				const InfiniteInt decimal_part = InfiniteInt(0, false), 	\
-				bool is_negative = false);
+				const InfiniteInt decimal_part = InfiniteInt(0, false));
 		InfiniteFloat(void): InfiniteFloat(InfiniteInt()) {};
 		InfiniteFloat(const std::vector<unsigned char> integer_digits, 		\
 				const std::vector<unsigned char> decimal_digits 			\
 					= std::vector<unsigned char>(), 						\
 				bool is_negative = false): 									\
-					InfiniteFloat(InfiniteInt(integer_digits), 				\
-						InfiniteInt(decimal_digits, false, false), 			\
-						is_negative) {};
+					InfiniteFloat(InfiniteInt(integer_digits, is_negative), 	\
+						InfiniteInt(decimal_digits, false, false)) {};
 		InfiniteFloat(const long long int value, 							\
 				bool is_integer_part = true): 								\
 					InfiniteFloat(InfiniteInt(value, is_integer_part)) {};
 		InfiniteFloat(const InfiniteFloat &other): 							\
 				InfiniteFloat(other.getIntegerPart(), 						\
-				other.getDecimalPart(), other.getIsNegative()) {};
+				other.getDecimalPart()) {};
 		InfiniteFloat(const std::string integer_part, 						\
 				const std::string decimal_part = "0", 						\
 				bool is_negative = false): 									\
-					InfiniteFloat(InfiniteInt(integer_part, false), 		\
-						InfiniteInt(decimal_part, false, false), 			\
-						is_negative) {};
+					InfiniteFloat(InfiniteInt(integer_part, is_negative), 	\
+						InfiniteInt(decimal_part, false, false)) {};
 		~InfiniteFloat(void) {};
 
 		// Operator overloads
@@ -136,7 +133,7 @@ class	InfiniteFloat
 		// Members
 		InfiniteInt	_integer_part;
 		InfiniteInt	_decimal_part;
-		bool		_isNegative;
+		// bool		_isNegative;
 };
 
 // Output stream operator overload
