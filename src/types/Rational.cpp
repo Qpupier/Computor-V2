@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/27 12:00:15 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/27 15:22:15 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static Rational		from_real(const Real &real)
 
 	decimal_digits = real.getValue().getDecimalPart().getDigits();
 	all_digits.insert(all_digits.end(), decimal_digits.begin(), decimal_digits.end());
-	result = Rational(InfiniteInt(all_digits, real.getValue().isNegative(), true));
+	result = Rational(InfiniteInt(all_digits, real.getValue().getIsNegative(), true));
 	Rational* divider;
 	divider = Rational(10) ^ static_cast<long long int>(decimal_digits.size());
 	result = result / *divider;
@@ -476,7 +476,7 @@ IType*		Rational::operator*(const Polynomial &other) const
 	return (other * *this);
 }
 
-Vector*	Rational::operator*(const Vector &other) const
+Vector*		Rational::operator*(const Vector &other) const
 {
 	unsigned long int	size(other.size());
 	Vector*				result;
@@ -840,7 +840,7 @@ IType*			Rational::sqrt(void) const
 	InfiniteFloat	epsilon(1);
 	InfiniteFloat	delta(1);
 
-	if (value.isNegative())
+	if (value.getIsNegative())// TODO: Negative = complex
 		throw ERROR_SQRT_NEGATIVE;
 	for (int i(0); i < InfiniteFloat::CALCULATION_PRECISION; i++)
 		epsilon /= InfiniteFloat(10);

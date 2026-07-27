@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:46:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/27 11:54:59 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/27 15:28:23 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,7 @@ static InfiniteFloat	place_floating_point(							\
 			integer_digits_sub.begin(), floating_point_position);
 	vector_decimal = std::vector<unsigned char>(						\
 			floating_point_position, integer_digits_sub.end());
-	result.setIntegerPart(InfiniteInt(vector_integer, is_negative));
-	result.setDecimalPart(InfiniteInt(vector_decimal, false, false));
+	result = InfiniteFloat(InfiniteInt(vector_integer), InfiniteInt(vector_decimal, false, false), is_negative);
 	result.reduce();
 	return (result);
 }
@@ -192,12 +191,15 @@ static void				insert_new_digit(const InfiniteFloat num, 	\
 
 // Constructors
 
-InfiniteFloat::InfiniteFloat(const InfiniteInt integer_part, 	\
-		const InfiniteInt decimal_part):						\
-			_integer_part(integer_part), _decimal_part(decimal_part)
+InfiniteFloat::InfiniteFloat(const InfiniteInt integer_part, 			\
+		const InfiniteInt decimal_part, const bool is_negative): 		\
+			_integer_part(integer_part), _decimal_part(decimal_part), 	\
+			_isNegative(is_negative)
 {
 	this->_integer_part.setIsIntegerPart(true);
+	this->_integer_part.setIsNegative(false);
 	this->_decimal_part.setIsIntegerPart(false);
+	this->_decimal_part.setIsNegative(false);
 	this->reduce();
 }
 
@@ -215,6 +217,7 @@ InfiniteFloat&	InfiniteFloat::operator=(const InfiniteFloat &other)
 	{
 		this->_integer_part = other._integer_part;
 		this->_decimal_part = other._decimal_part;
+		this->_isNegative = other._isNegative;
 	}
 	return (*this);
 }
@@ -231,8 +234,9 @@ InfiniteFloat&	InfiniteFloat::operator=(const long long int value)
 
 bool			InfiniteFloat::operator==(const InfiniteFloat &other) const
 {
-	return (this->getIntegerPart() == other.getIntegerPart() 	\
-			&& this->getDecimalPart() == other.getDecimalPart());
+	return (this->getIntegerPart() == other.getIntegerPart() 		\
+			&& this->getDecimalPart() == other.getDecimalPart() 	\
+			&& this->getIsNegative() == other.getIsNegative());
 }
 
 bool			InfiniteFloat::operator==(const InfiniteInt &other) const
@@ -262,8 +266,8 @@ bool			InfiniteFloat::operator!=(const long long int value) const
 
 bool			InfiniteFloat::operator<(const InfiniteFloat &other) const
 {
-	if (this->isNegative() != other.isNegative())
-		return (this->isNegative());
+	if (this->getIsNegative() != other.getIsNegative())
+		return (this->getIsNegative());
 	return (this->getIntegerPart() < other.getIntegerPart() 		\
 			|| (this->getIntegerPart() == other.getIntegerPart() 	\
 				&& this->getDecimalPart() < other.getDecimalPart()));
@@ -331,12 +335,13 @@ InfiniteFloat	InfiniteFloat::operator+(const InfiniteFloat &other) const
 				other.getDecimalPart().size()));
 	InfiniteInt								int_result;
 
-	if (this->isNegative() && !other.isNegative())
+	if (this->getIsNegative() && !other.getIsNegative())
 		return (other - (-*this));
-	if (!this->isNegative() && other.isNegative())
+	if (!this->getIsNegative() && other.getIsNegative())
 		return (*this - (-other));
 	int_result = add_integer_parts(*this, other, decimal_size);
-	return (place_floating_point(int_result, decimal_size, this->isNegative()));
+	return (place_floating_point(int_result, decimal_size, 	\
+			this->getIsNegative()));
 }
 
 InfiniteFloat	InfiniteFloat::operator+(const InfiniteInt &other) const
@@ -383,8 +388,7 @@ InfiniteFloat	InfiniteFloat::operator-(void) const
 	InfiniteFloat	result;
 
 	result = *this;
-	if (result)
-		result.setSign(!this->isNegative());
+	result.setIsNegative(result ? !this->getIsNegative() : false);
 	return (result);
 }
 
@@ -395,9 +399,9 @@ InfiniteFloat	InfiniteFloat::operator-(const InfiniteFloat &other) const
 				other.getDecimalPart().size()));
 	InfiniteInt								int_result;
 
-	if (this->isNegative() && other.isNegative())
+	if (this->getIsNegative() && other.getIsNegative())
 		return (-other - (-*this));
-	if (this->isNegative() != other.isNegative())
+	if (this->getIsNegative() != other.getIsNegative())
 		return (*this + (-other));
 	if (*this < other)
 		return (-(other - *this));
@@ -452,7 +456,7 @@ InfiniteFloat	InfiniteFloat::operator*(const InfiniteFloat &other) const
 
 	int_result = mul_integer_parts(*this, other);
 	return (place_floating_point(int_result, decimal_size, 	\
-			this->isNegative() != other.isNegative()));
+			this->getIsNegative() != other.getIsNegative()));
 }
 
 InfiniteFloat	InfiniteFloat::operator*(const InfiniteInt &other) const
@@ -488,10 +492,11 @@ InfiniteFloat	InfiniteFloat::operator/(const InfiniteFloat &other) const
 	std::vector<unsigned char>	result_decimal;
 
 	remove_decimal_part_in_divisor(dividend, divisor);
-	division_loop(dividend, divisor.getIntegerPart(), result_integer, 	\
-			result_decimal);
-	return (InfiniteFloat(InfiniteInt(result_integer, this->isNegative() != other.isNegative()), 				\
-			InfiniteInt(result_decimal, false, false)));
+	division_loop(dividend.abs(), divisor.getIntegerPart(), 	\
+			result_integer, result_decimal);
+	return (InfiniteFloat(InfiniteInt(result_integer), 			\
+			InfiniteInt(result_decimal, false, false), 			\
+			this->getIsNegative() != other.getIsNegative()));
 }
 
 InfiniteFloat	InfiniteFloat::operator/(const InfiniteInt &other) const
@@ -556,7 +561,7 @@ InfiniteFloat	InfiniteFloat::operator^(const InfiniteFloat &other) const
 	InfiniteFloat	result(1);
 	InfiniteFloat	power(other.getIntegerPart());
 
-	if (other.getDecimalPart() || other.isNegative())
+	if (other.getDecimalPart() || other.getIsNegative())
 		throw ERROR_EXPONENT_INTEGER;
 	while (power--)
 		result *= *this;
@@ -601,6 +606,11 @@ InfiniteInt	InfiniteFloat::getIntegerPart(void) const
 	return (this->_integer_part);
 }
 
+bool		InfiniteFloat::getIsNegative(void) const
+{
+	return (this->_isNegative);
+}
+
 
 // Setters
 
@@ -612,6 +622,11 @@ void	InfiniteFloat::setDecimalPart(const InfiniteInt &decimal_part)
 void	InfiniteFloat::setIntegerPart(const InfiniteInt &integer_part)
 {
 	this->_integer_part = integer_part;
+}
+
+void	InfiniteFloat::setIsNegative(bool is_negative)
+{
+	this->_isNegative = is_negative;
 }
 
 
@@ -627,7 +642,7 @@ InfiniteFloat	InfiniteFloat::sqrt(void) const
 			(this->_integer_part 							\
 				? (this->getIntegerPart().size() - 1) / 2 + 1 : 0);
 
-	if (this->isNegative())
+	if (this->getIsNegative())
 		throw ERROR_SQRT_NEGATIVE;
 	if (!*this)
 		return (InfiniteInt());
@@ -638,16 +653,18 @@ InfiniteFloat	InfiniteFloat::sqrt(void) const
 	return (InfiniteFloat(result_integer, result_decimal));
 }
 
+InfiniteFloat	InfiniteFloat::abs(void) const
+{
+	InfiniteFloat	result;
+
+	result = *this;
+	result.setIsNegative(false);
+	return (result);
+}
+
 bool			InfiniteFloat::in_D(void) const
 {
 	return (this->_decimal_part.size() < InfiniteFloat::PRINT_PRECISION);
-}
-
-bool		InfiniteFloat::isNegative(void) const
-{
-	if (this->_decimal_part.getIsNegative())
-		throw ERROR_UNEXPECTED;
-	return (this->_integer_part.getIsNegative());
 }
 
 void			InfiniteFloat::push_back_decimal(unsigned char digit)
@@ -666,11 +683,6 @@ void			InfiniteFloat::reduce(void)
 	this->_decimal_part.reduce();
 }
 
-void	InfiniteFloat::setSign(bool sign)
-{
-	this->_integer_part.setIsNegative(sign);
-}
-
 
 // Output stream operator overload
 
@@ -681,6 +693,8 @@ std::ostream&	operator<<(std::ostream &os, const InfiniteFloat &num)// TODO
 	std::vector<unsigned char>	decimal_digits;
 	std::string					rounded;
 
+	if (num_copy.getIsNegative())
+		os << "-";
 	if (num_copy.getDecimalPart().size() > InfiniteFloat::PRINT_PRECISION)
 	{
 		if (num_copy.getDecimalPart()[InfiniteFloat::PRINT_PRECISION] >= 5)

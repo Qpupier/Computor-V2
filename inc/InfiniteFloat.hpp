@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:38:24 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/27 11:53:39 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/27 15:17:04 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,26 +19,31 @@ class	InfiniteFloat
 {
 	public:
 		// Constructors and destructor
-		InfiniteFloat(const InfiniteInt integer_part, 						\
-				const InfiniteInt decimal_part = InfiniteInt(0, false));
+		InfiniteFloat(const InfiniteInt integer_part, 					\
+				const InfiniteInt decimal_part, const bool is_negative = false);
+		InfiniteFloat(const InfiniteInt integer): 						\
+				InfiniteFloat(integer, InfiniteInt(), 					\
+					integer.getIsNegative()) {};
 		InfiniteFloat(void): InfiniteFloat(InfiniteInt()) {};
-		InfiniteFloat(const std::vector<unsigned char> integer_digits, 		\
-				const std::vector<unsigned char> decimal_digits 			\
-					= std::vector<unsigned char>(), 						\
-				bool is_negative = false): 									\
-					InfiniteFloat(InfiniteInt(integer_digits, is_negative), 	\
-						InfiniteInt(decimal_digits, false, false)) {};
-		InfiniteFloat(const long long int value, 							\
-				bool is_integer_part = true): 								\
+		InfiniteFloat(const std::vector<unsigned char> integer_digits, 	\
+				const std::vector<unsigned char> decimal_digits 		\
+					= std::vector<unsigned char>(), 					\
+				bool is_negative = false): 								\
+					InfiniteFloat(InfiniteInt(integer_digits), 			\
+						InfiniteInt(decimal_digits, false, false), 		\
+						is_negative) {};
+		InfiniteFloat(const long long int value, 						\
+				bool is_integer_part = true): 							\
 					InfiniteFloat(InfiniteInt(value, is_integer_part)) {};
-		InfiniteFloat(const InfiniteFloat &other): 							\
-				InfiniteFloat(other.getIntegerPart(), 						\
-				other.getDecimalPart()) {};
-		InfiniteFloat(const std::string integer_part, 						\
-				const std::string decimal_part = "0", 						\
-				bool is_negative = false): 									\
-					InfiniteFloat(InfiniteInt(integer_part, is_negative), 	\
-						InfiniteInt(decimal_part, false, false)) {};
+		InfiniteFloat(const InfiniteFloat &other): 						\
+				InfiniteFloat(other.getIntegerPart(), 					\
+				other.getDecimalPart(), other.getIsNegative()) {};
+		InfiniteFloat(const std::string integer_part, 					\
+				const std::string decimal_part = "0", 					\
+				bool is_negative = false): 								\
+					InfiniteFloat(InfiniteInt(integer_part), 			\
+						InfiniteInt(decimal_part, false, false), 		\
+						is_negative) {};
 		~InfiniteFloat(void) {};
 
 		// Operator overloads
@@ -110,21 +115,22 @@ class	InfiniteFloat
 		// Getters
 		InfiniteInt	getDecimalPart(void) const;
 		InfiniteInt	getIntegerPart(void) const;
+		bool		getIsNegative(void) const;
 
 		// Setters
 		void	setDecimalPart(const InfiniteInt &decimal_part);
 		void	setIntegerPart(const InfiniteInt &integer_part);
-		
+		void	setIsNegative(bool is_negative);
+
 		// Methods
 		InfiniteFloat	sqrt(void) const;
+		InfiniteFloat	abs(void) const;
 		bool			in_D(void) const;
-		bool			isNegative(void) const;
 		void			push_back_decimal(unsigned char digit);
 		void			push_back_integer(unsigned char digit);
 		void			reduce(void);
-		void			setSign(bool sign);
 
-		// Constants
+		//Constants
 		static constexpr unsigned char	MAX_PRECISION = 32;
 		static constexpr unsigned char	CALCULATION_PRECISION = 16;
 		static constexpr unsigned char	PRINT_PRECISION = 8;
@@ -133,7 +139,7 @@ class	InfiniteFloat
 		// Members
 		InfiniteInt	_integer_part;
 		InfiniteInt	_decimal_part;
-		// bool		_isNegative;
+		bool		_isNegative;
 };
 
 // Output stream operator overload
