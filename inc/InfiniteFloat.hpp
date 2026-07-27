@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:38:24 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/24 13:59:00 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/27 11:53:39 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,21 +110,21 @@ class	InfiniteFloat
 		// Getters
 		InfiniteInt	getDecimalPart(void) const;
 		InfiniteInt	getIntegerPart(void) const;
-		bool		getIsNegative(void) const;
 
 		// Setters
 		void	setDecimalPart(const InfiniteInt &decimal_part);
 		void	setIntegerPart(const InfiniteInt &integer_part);
-		void	setIsNegative(bool is_negative);
-
+		
 		// Methods
 		InfiniteFloat	sqrt(void) const;
 		bool			in_D(void) const;
+		bool			isNegative(void) const;
 		void			push_back_decimal(unsigned char digit);
 		void			push_back_integer(unsigned char digit);
 		void			reduce(void);
+		void			setSign(bool sign);
 
-		//Constants
+		// Constants
 		static constexpr unsigned char	MAX_PRECISION = 32;
 		static constexpr unsigned char	CALCULATION_PRECISION = 16;
 		static constexpr unsigned char	PRINT_PRECISION = 8;
