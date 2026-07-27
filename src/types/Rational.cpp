@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/27 15:32:36 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/27 16:37:52 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static Rational		from_polynomial(const Polynomial &polynomial)
 	return (Rational(*polynomial.getTerms()[0].coefficient));
 }
 
-static Rational		from_real(const Real &real)
+static Rational		from_real(const Real &real)// TODO
 {
 	Rational	result;
 	std::vector<unsigned char>	all_digits(real.getValue().getIntegerPart().getDigits());

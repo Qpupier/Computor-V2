@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/24 14:00:27 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/27 17:40:33 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -953,14 +953,12 @@ IType*			Complex::norm(void) const
 static Complex*	test_exact_value(Complex* sqrt, const Complex& value)
 {
 	std::vector<unsigned char>	decimal_part;
-	Complex						*test;
+	Complex*					test;
 	Complex*					square;
 	InfiniteFloat				part;
 
-	test = new Complex();
-	if (dynamic_cast<Rational*>(sqrt->getReal()))
-		test->setReal(sqrt->getReal()->clone());
-	else
+	test = new Complex(*sqrt);
+	if (!dynamic_cast<Rational*>(sqrt->getReal()))
 	{
 		part = dynamic_cast<Real*>(sqrt->getReal())->getValue();
 		decimal_part = part.getDecimalPart().getDigits();
@@ -970,13 +968,9 @@ static Complex*	test_exact_value(Complex* sqrt, const Complex& value)
 		if (!InfiniteInt(decimal_part))
 			test->setReal(new Rational(part.getIntegerPart()));
 		else
-			test->setReal(new Real(InfiniteFloat(part.getIntegerPart(), decimal_part)));
-		// if (*sqrt->getReal() < 0)// TODO: Verifier ca de partout dans les autres types
-		// 	test->setReal(-*test->getReal());
+			test->setReal(new Real(InfiniteFloat(part.getIntegerPart(), decimal_part, part.getIsNegative())));
 	}
-	if (dynamic_cast<Rational*>(sqrt->getImaginary()))
-		test->setImaginary(sqrt->getImaginary()->clone());
-	else
+	if (!dynamic_cast<Rational*>(sqrt->getImaginary()))
 	{
 		part = dynamic_cast<Real*>(sqrt->getImaginary())->getValue();
 		decimal_part = part.getDecimalPart().getDigits();
@@ -986,13 +980,15 @@ static Complex*	test_exact_value(Complex* sqrt, const Complex& value)
 		if (!InfiniteInt(decimal_part))
 			test->setImaginary(new Rational(part.getIntegerPart()));
 		else
-			test->setImaginary(new Real(InfiniteFloat(part.getIntegerPart(), decimal_part)));
-		// if (*sqrt->getImaginary() < 0)
-		// 	test->setImaginary(-*test->getImaginary());
+			test->setImaginary(new Real(InfiniteFloat(part.getIntegerPart(), decimal_part, part.getIsNegative())));
 	}
-	square = *test ^ 2;
+	square = *test ^ 2;// TODO: Tester toutes les operations sur les Reals
+	std::cout << COLOR_PINK << "Testing exact value (" << *test << ")^2 : " << *square << " == ";// [ ] LAST: sqrt(0.5 + 3.74i)
+	value.print_rounded();
+	std::cout << COLOR_RESET << std::endl;
 	if (*square == value)
 	{
+		std::cout << "Exact value found!" << std::endl;
 		delete square;
 		delete sqrt;
 		return (test);
