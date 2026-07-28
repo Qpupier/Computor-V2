@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/28 16:07:36 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/28 16:31:28 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -383,6 +383,25 @@ static void								vectors_multiplication(				\
 		add_terms_to_vector(distributivity, result);
 		free_vector_terms(distributivity);
 	}
+}
+
+static IType*							sum_square_coefficient_terms(		\
+		const std::vector<Polynomial::t_term>& terms)
+{
+	IType*	square;
+	IType*	sum;
+	IType*	tmp;
+
+	sum = new Rational();
+	for (const auto& term : terms)
+	{
+		tmp = sum;
+		square = *term.coefficient * *term.coefficient;
+		sum = *sum + *square;
+		delete square;
+		delete tmp;
+	}
+	return (sum);
 }
 
 
@@ -952,34 +971,19 @@ IType*			Polynomial::matrix_inversion(void) const
 
 IType*			Polynomial::norm(void) const
 {
-	IType*	numerator_sum;
 	IType*	denominator_sum;
+	IType*	numerator_sum;
 	IType*	result;
-	IType*	square;
-	IType*	tmp;
+	IType*	sum;
 
-	numerator_sum = new Rational();
-	for (const auto& term : this->_terms)
-	{
-		tmp = numerator_sum;
-		square = *term.coefficient * *term.coefficient;
-		numerator_sum = *numerator_sum + *square;
-		delete square;
-		delete tmp;
-	}
-	denominator_sum = new Rational();
-	for (const auto& divider : this->_dividers)
-	{
-		tmp = denominator_sum;
-		square = *divider.coefficient * *divider.coefficient;
-		denominator_sum = *denominator_sum + *square;
-		delete square;
-		delete tmp;
-	}
-	result = *numerator_sum / *denominator_sum;
+	numerator_sum = sum_square_coefficient_terms(this->_terms);
+	denominator_sum = sum_square_coefficient_terms(this->_dividers);
+	sum = *numerator_sum / *denominator_sum;
 	delete numerator_sum;
 	delete denominator_sum;
-	return (result);// TODO: SQRT
+	result = sum->sqrt();
+	delete sum;
+	return (result);
 }
 
 IType*			Polynomial::sqrt(void) const
