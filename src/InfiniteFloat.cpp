@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:46:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/27 17:21:33 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/28 14:09:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,11 +266,14 @@ bool			InfiniteFloat::operator!=(const long long int value) const
 
 bool			InfiniteFloat::operator<(const InfiniteFloat &other) const
 {
+	bool	result;
+
 	if (this->getIsNegative() != other.getIsNegative())
 		return (this->getIsNegative());
-	return (this->getIntegerPart() < other.getIntegerPart() 		\
+	result = this->getIntegerPart() < other.getIntegerPart() 		\
 			|| (this->getIntegerPart() == other.getIntegerPart() 	\
-				&& this->getDecimalPart() < other.getDecimalPart()));
+				&& this->getDecimalPart() < other.getDecimalPart());
+	return (this->getIsNegative() ? !result : result);
 }
 
 bool			InfiniteFloat::operator<(const InfiniteInt &other) const
@@ -340,8 +343,7 @@ InfiniteFloat	InfiniteFloat::operator+(const InfiniteFloat &other) const
 	if (!this->getIsNegative() && other.getIsNegative())
 		return (*this - (-other));
 	int_result = add_integer_parts(*this, other, decimal_size);
-	return (place_floating_point(int_result, decimal_size, 	\
-			this->getIsNegative()));
+	return (place_floating_point(int_result, decimal_size, this->getIsNegative()));
 }
 
 InfiniteFloat	InfiniteFloat::operator+(const InfiniteInt &other) const

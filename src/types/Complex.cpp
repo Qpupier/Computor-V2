@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/27 17:40:33 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/28 15:12:52 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 // Utils
 
-static std::ostream&	print_value_rational(std::ostream& os, 	\
+static std::ostream&	print_value_rational(std::ostream& os, 				\
 		bool negative, const std::string& i, Rational* copy_rational)
 {
 	if (negative)
@@ -35,7 +35,8 @@ static std::ostream&	print_value_rational(std::ostream& os, 	\
 	return (os);
 }
 
-static std::ostream&	print_value_real(std::ostream& os, bool negative, const std::string& i, Real* copy_real)
+static std::ostream&	print_value_real(std::ostream& os, bool negative, 	\
+		const std::string& i, Real* copy_real)
 {
 	if (negative)
 	{
@@ -53,7 +54,7 @@ static std::ostream&	print_value_real(std::ostream& os, bool negative, const std
 	return (os);
 }
 
-static std::ostream&	print_value(std::ostream &os, IType* value, 	\
+static std::ostream&	print_value(std::ostream &os, IType* value, 		\
 		const std::string &i, bool is_first)
 {
 	IType*	copy;
@@ -82,7 +83,7 @@ static std::ostream&	print_value(std::ostream &os, IType* value, 	\
 	return (os);
 }
 
-static IType*		division_real_part(const Complex& a, 				\
+static IType*		division_real_part(const Complex& a, 					\
 		const Complex& b, const Rational& denominator)
 {
 	IType*	part1;
@@ -100,7 +101,7 @@ static IType*		division_real_part(const Complex& a, 				\
 	return (real);
 }
 
-static IType*		division_imaginary_part(const Complex& a, 			\
+static IType*		division_imaginary_part(const Complex& a, 				\
 		const Complex& b, const Rational& denominator)
 {
 	IType*	part1;
@@ -118,7 +119,7 @@ static IType*		division_imaginary_part(const Complex& a, 			\
 	return (imaginary);
 }
 
-static Complex*			division(const Complex& a, const Complex& b, 	\
+static Complex*			division(const Complex& a, const Complex& b, 		\
 		const Rational& denominator)
 {
 	IType*		real;
@@ -133,7 +134,7 @@ static Complex*			division(const Complex& a, const Complex& b, 	\
 	return (result);
 }
 
-static void				from_polynomial(Complex &complex, 				\
+static void				from_polynomial(Complex &complex, 					\
 		const Polynomial &polynomial)
 {
 	if (polynomial.getTerms().empty())
@@ -154,7 +155,7 @@ static void				from_polynomial(Complex &complex, 				\
 	}
 }
 
-static void				print_complex_rounded_value_default(			\
+static void				print_complex_rounded_value_default(				\
 		const InfiniteFloat& real, const InfiniteFloat& imaginary)
 {
 	InfiniteFloat	tmp;
@@ -171,6 +172,46 @@ static void				print_complex_rounded_value_default(			\
 		tmp = imaginary;
 	}
 	std::cout << tmp << "i";
+}
+
+static IType*			test_exact_value_round_part(const Real* part)
+{
+	std::vector<unsigned char>	decimal_part;
+	InfiniteFloat				inf_part;
+
+	inf_part = part->getValue();
+	decimal_part = inf_part.getDecimalPart().getDigits();
+	for (std::size_t i(InfiniteFloat::PRINT_PRECISION); 			\
+			i < decimal_part.size() && i < InfiniteFloat::MAX_PRECISION; i++)
+		decimal_part[i] = 0;
+	if (InfiniteInt(decimal_part))
+		return (new Real(InfiniteFloat(inf_part.getIntegerPart(), 	\
+				decimal_part, inf_part.getIsNegative())));
+	return (new Rational(inf_part.getIntegerPart()));
+}
+
+static Complex*			test_exact_value(Complex* sqrt, const Complex& value)
+{
+	Complex*	square;
+	Complex*	test;
+
+	test = new Complex(*sqrt);
+	if (!dynamic_cast<Rational*>(sqrt->getReal()))
+		test->setReal(test_exact_value_round_part(		\
+				dynamic_cast<Real*>(sqrt->getReal())));
+	if (!dynamic_cast<Rational*>(sqrt->getImaginary()))
+		test->setImaginary(test_exact_value_round_part(	\
+				dynamic_cast<Real*>(sqrt->getImaginary())));
+	square = *test ^ 2;
+	if (*square == value)
+	{
+		delete square;
+		delete sqrt;
+		return (test);
+	}
+	delete square;
+	delete test;
+	return (sqrt);
 }
 
 
@@ -242,8 +283,8 @@ bool		Complex::operator==(const IType &other) const
 	{
 		return (false);
 	}
-	return (this->_real == other_complex._real 	\
-			&& this->_imaginary == other_complex._imaginary);
+	return (*this->_real == *other_complex._real 	\
+			&& *this->_imaginary == *other_complex._imaginary);
 }
 
 bool		Complex::operator==(const long long int value) const
@@ -950,54 +991,6 @@ IType*			Complex::norm(void) const
 	return (result);
 }
 
-static Complex*	test_exact_value(Complex* sqrt, const Complex& value)
-{
-	std::vector<unsigned char>	decimal_part;
-	Complex*					test;
-	Complex*					square;
-	InfiniteFloat				part;
-
-	test = new Complex(*sqrt);
-	if (!dynamic_cast<Rational*>(sqrt->getReal()))
-	{
-		part = dynamic_cast<Real*>(sqrt->getReal())->getValue();
-		decimal_part = part.getDecimalPart().getDigits();
-		for (std::size_t i(InfiniteFloat::PRINT_PRECISION); 	\
-				i < decimal_part.size() && i < InfiniteFloat::MAX_PRECISION; i++)
-			decimal_part[i] = 0;
-		if (!InfiniteInt(decimal_part))
-			test->setReal(new Rational(part.getIntegerPart()));
-		else
-			test->setReal(new Real(InfiniteFloat(part.getIntegerPart(), decimal_part, part.getIsNegative())));
-	}
-	if (!dynamic_cast<Rational*>(sqrt->getImaginary()))
-	{
-		part = dynamic_cast<Real*>(sqrt->getImaginary())->getValue();
-		decimal_part = part.getDecimalPart().getDigits();
-		for (std::size_t i(InfiniteFloat::PRINT_PRECISION); 	\
-				i < decimal_part.size() && i < InfiniteFloat::MAX_PRECISION; i++)
-			decimal_part[i] = 0;
-		if (!InfiniteInt(decimal_part))
-			test->setImaginary(new Rational(part.getIntegerPart()));
-		else
-			test->setImaginary(new Real(InfiniteFloat(part.getIntegerPart(), decimal_part, part.getIsNegative())));
-	}
-	square = *test ^ 2;// TODO: Tester toutes les operations sur les Reals
-	std::cout << COLOR_PINK << "Testing exact value (" << *test << ")^2 : " << *square << " == ";// [ ] LAST: sqrt(0.5 + 3.74i)
-	value.print_rounded();
-	std::cout << COLOR_RESET << std::endl;
-	if (*square == value)
-	{
-		std::cout << "Exact value found!" << std::endl;
-		delete square;
-		delete sqrt;
-		return (test);
-	}
-	delete square;
-	delete test;
-	return (sqrt);
-}
-
 IType*			Complex::sqrt(void) const
 {
 	IType*	norm;
@@ -1111,8 +1104,29 @@ std::string		Complex::to_string(void) const
 	return (oss.str());
 }
 
-void			print_complex_rounded_value(const std::string var, 	\
-		const InfiniteFloat & real, const InfiniteFloat & imaginary)
+void			Complex::print_rounded(const std::string var) const
+{
+	if (!this->in_Q() || this->in_Z())
+		return ;
+	std::cout << COLOR_DIM;
+	print_complex_rounded_value(var, Rational(*this->_real).getValue(), 	\
+			Rational(*this->_imaginary).getValue());
+	std::cout << COLOR_RESET << std::endl;
+}
+
+
+// Output stream operator overload
+
+std::ostream	&operator<<(std::ostream &os, const Complex &num)
+{
+	return (num.print(os));
+}
+
+
+// Functions
+
+void	print_complex_rounded_value(const std::string var, 	\
+		const InfiniteFloat& real, const InfiniteFloat& imaginary)
 {
 	if (!var.empty())
 	{
@@ -1132,22 +1146,4 @@ void			print_complex_rounded_value(const std::string var, 	\
 		std::cout << imaginary << "i - " << -real;
 	else
 		print_complex_rounded_value_default(real, imaginary);
-}
-
-void			Complex::print_rounded(const std::string var) const
-{
-	if (!this->in_Q() || this->in_Z())
-		return ;
-	std::cout << COLOR_DIM;
-	print_complex_rounded_value(var, Rational(*this->_real).getValue(), 	\
-			Rational(*this->_imaginary).getValue());
-	std::cout << COLOR_RESET << std::endl;
-}
-
-
-// Output stream operator overload
-
-std::ostream	&operator<<(std::ostream &os, const Complex &num)
-{
-	return (num.print(os));
 }

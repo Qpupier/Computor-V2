@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/24 14:00:10 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/28 14:06:51 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,7 @@ IType*	Real::operator-(const IType& other) const
 
 	other_real = dynamic_cast<const Real*>(&other);
 	if (other_real)
-		return (*this + *other_real);
+		return (*this - *other_real);
 	neg = other - *this;
 	result = -*neg;
 	delete neg;
