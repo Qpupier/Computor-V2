@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/20 13:51:23 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/28 16:13:06 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ class	Rational: public IType
 		IType*			matrix_operator(const IType &other) const;
 		IType*			matrix_inversion(void) const;
 		IType*			sqrt(void) const;
+		Rational*		abs(void) const;
 		Rational*		gcd(const IType& other) const;
 		Rational*		gcd(const Rational& other) const;
 		Rational*		gcd(const Complex& other) const;

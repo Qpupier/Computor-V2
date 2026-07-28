@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:46:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/28 14:09:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/28 16:17:41 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -634,6 +634,14 @@ void	InfiniteFloat::setIsNegative(bool is_negative)
 
 // Methods
 
+InfiniteFloat	InfiniteFloat::abs(void) const
+{
+	InfiniteFloat	result(*this);
+
+	result.setIsNegative(false);
+	return (result);
+}
+
 InfiniteFloat	InfiniteFloat::sqrt(void) const
 {
 	InfiniteFloat							padding(1);
@@ -653,15 +661,6 @@ InfiniteFloat	InfiniteFloat::sqrt(void) const
 	while (padding)
 		insert_new_digit(*this, padding, result_integer, result_decimal);
 	return (InfiniteFloat(result_integer, result_decimal));
-}
-
-InfiniteFloat	InfiniteFloat::abs(void) const
-{
-	InfiniteFloat	result;
-
-	result = *this;
-	result.setIsNegative(false);
-	return (result);
 }
 
 bool			InfiniteFloat::in_D(void) const

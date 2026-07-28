@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 17:41:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/21 11:50:41 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/28 16:13:43 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ class	Real: public IType
 		IType*			matrix_operator(const IType &other) const;
 		IType*			sqrt(void) const;
 		Rational*		gcd(const IType &other) const;
+		Real*			abs(void) const;
 		void			print_rounded(const std::string var = std::string()) const;
 
 	private:

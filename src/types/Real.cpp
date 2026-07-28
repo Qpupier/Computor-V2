@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/28 14:06:51 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/28 16:16:43 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -491,6 +491,11 @@ Rational*		Real::gcd(const IType &other) const
 {
 	return (new Rational(1));// [ ]: pas sur de ca
 	(void)other;
+}
+
+Real*			Real::abs(void) const
+{
+	return (new Real(this->_value.abs()));
 }
 
 void			Real::print_rounded(const std::string var) const

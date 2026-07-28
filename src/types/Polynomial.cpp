@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/23 16:32:58 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/28 16:07:36 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -984,7 +984,7 @@ IType*			Polynomial::norm(void) const
 
 IType*			Polynomial::sqrt(void) const
 {
-	throw ERROR_UNEXPECTED;
+	throw ERROR_UNEXPECTED;// TODO: SQRT polynomials
 	return (nullptr);
 }
 

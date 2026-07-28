@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:35:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/21 14:17:17 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/28 16:12:36 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,31 +22,26 @@
 
 static IType*	function_absolute(const IType &other)
 {
-	try
-	{
-		Rational	other_rational;
+	const Rational*	other_rational;
+	const Real*		other_real;
 
-		other_rational = other;
-		return (other_rational < 0 ? -other_rational : other_rational.clone());
-	}
-	catch(...)
-	{
-		throw LogicError("Absolute function only exists for Rational types");
-	}
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (other_rational->abs());
+	other_real = dynamic_cast<const Real*>(&other);
+	if (other_real)
+		return (other_real->abs());
+	throw LogicError("Absolute function only exists for rational or real numbers: use norm function instead");
 	return (nullptr);
 }
 
 static IType*	function_norm(const IType &other)
 {
-	const Rational*		other_rational;
 	const Complex*		other_complex;
 	const Matrix*		other_matrix;
 	const Polynomial*	other_polynomial;
 	const Vector*		other_vector;
 
-	other_rational = dynamic_cast<const Rational*>(&other);
-	if (other_rational)
-		return (function_absolute(*other_rational));
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
 		return (other_complex->norm());
@@ -59,7 +54,7 @@ static IType*	function_norm(const IType &other)
 	other_vector = dynamic_cast<const Vector*>(&other);
 	if (other_vector)
 		return (other_vector->norm());
-	throw LogicError("Norm function not exists for rationals");
+	throw LogicError("Norm function not exists for rational or real numbers: use absolute function instead");
 	return (nullptr);
 }
 

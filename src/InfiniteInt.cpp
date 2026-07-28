@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:39:10 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/24 14:16:02 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/28 16:16:28 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -598,6 +598,14 @@ void	InfiniteInt::setIsNegative(bool is_negative)
 
 
 // Methods
+
+InfiniteInt	InfiniteInt::abs(void) const
+{
+	InfiniteInt	result(*this);
+
+	result.setIsNegative(false);
+	return (result);
+}
 
 InfiniteInt	InfiniteInt::sqrt(void) const
 {

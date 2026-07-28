@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:38:24 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/27 15:17:04 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/28 16:17:00 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,8 @@ class	InfiniteFloat
 		void	setIsNegative(bool is_negative);
 
 		// Methods
-		InfiniteFloat	sqrt(void) const;
 		InfiniteFloat	abs(void) const;
+		InfiniteFloat	sqrt(void) const;
 		bool			in_D(void) const;
 		void			push_back_decimal(unsigned char digit);
 		void			push_back_integer(unsigned char digit);
