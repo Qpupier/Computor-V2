@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/28 16:31:28 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/28 17:52:50 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -988,6 +988,8 @@ IType*			Polynomial::norm(void) const
 
 IType*			Polynomial::sqrt(void) const
 {
+	if ((this->_terms.size() > 1 && this->_terms.size() % 2 == 0) || (this->_dividers.size() > 1 && this->_dividers.size() % 2 == 0))
+		throw LogicError("This polynomial does not have a square root");
 	throw ERROR_UNEXPECTED;// TODO: SQRT polynomials
 	return (nullptr);
 }
