@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:35:43 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/21 11:49:42 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/29 17:30:23 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,9 @@ class	Complex: public IType
 		// Methods
 		std::string		to_string(void) const;
 		std::ostream&	print(std::ostream &os) const;
+		bool			in_C(void) const;
 		bool			in_D(void) const;
+		bool			in_M(void) const;
 		bool			in_Q(void) const;
 		bool			in_Z(void) const;
 		IType*			norm(void) const;

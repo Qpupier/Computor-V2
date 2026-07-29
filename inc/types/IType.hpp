@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 17:42:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/21 11:49:32 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/29 17:30:09 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,9 @@ class	IType
 		virtual Rational*		gcd(const IType &other) const = 0;
 		virtual std::ostream	&print(std::ostream &os) const = 0;
 		virtual std::string		to_string(void) const = 0;
+		virtual bool			in_C(void) const = 0;
 		virtual bool			in_D(void) const = 0;
+		virtual bool			in_M(void) const = 0;
 		virtual bool			in_Q(void) const = 0;
 		virtual bool			in_Z(void) const = 0;
 		virtual void			print_rounded(const std::string var = std::string()) const = 0;

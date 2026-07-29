@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 17:41:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/28 16:13:43 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/29 17:35:01 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,9 @@ class	Real: public IType
 
 		// Methods
 		std::string		to_string(void) const;
+		bool			in_C(void) const;
 		bool			in_D(void) const;
+		bool			in_M(void) const;
 		bool			in_Q(void) const;
 		bool			in_Z(void) const;
 		std::ostream&	print(std::ostream &os) const;

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/28 16:22:00 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/29 17:36:47 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -863,11 +863,21 @@ bool		Vector::empty(void) const
 	return (this->_vector.empty());
 }
 
+bool		Vector::in_C(void) const
+{
+	return (false);
+}
+
 bool		Vector::in_D(void) const
 {
 	for (const IType* value : this->_vector)
 		if (!value->in_D())
 			return (false);
+	return (true);
+}
+
+bool		Vector::in_M(void) const
+{
 	return (true);
 }
 

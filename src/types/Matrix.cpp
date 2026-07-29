@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/23 16:07:25 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/29 17:33:03 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1371,12 +1371,22 @@ std::string		Matrix::to_string(void) const
 	return (oss.str());
 }
 
+bool			Matrix::in_C(void) const
+{
+	return (false);
+}
+
 bool			Matrix::in_D(void) const
 {
 	for (unsigned int i = 0; i < this->_height; i++)
 		for (unsigned int j = 0; j < this->_width; j++)
 			if (!this->_matrix[i][j]->in_D())
 				return (false);
+	return (true);
+}
+
+bool			Matrix::in_M(void) const
+{
 	return (true);
 }
 

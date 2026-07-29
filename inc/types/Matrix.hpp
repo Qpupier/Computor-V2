@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/23 13:27:20 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/29 17:32:33 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,9 @@ class	Matrix: public IType
 		Rational*		gcd(const Vector &other) const;
 		std::ostream&	print(std::ostream &os) const;
 		std::string		to_string(void) const;
+		bool			in_C(void) const;
 		bool			in_D(void) const;
+		bool			in_M(void) const;
 		bool			in_Q(void) const;
 		bool			in_Z(void) const;
 		bool			is_null(void) const;

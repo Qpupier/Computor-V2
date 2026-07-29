@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:35:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/28 16:12:36 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/29 17:32:22 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,7 +282,17 @@ std::string		DefinedFunction::to_string(void) const
 	return (oss.str());
 }
 
+bool			DefinedFunction::in_C(void) const
+{
+	return (false);
+}
+
 bool			DefinedFunction::in_D(void) const
+{
+	return (false);
+}
+
+bool			DefinedFunction::in_M(void) const
 {
 	return (false);
 }

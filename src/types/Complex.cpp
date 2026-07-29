@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/28 15:12:52 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/29 17:31:49 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -934,9 +934,19 @@ void	Complex::setImaginary(IType* imaginary)
 
 // Methods
 
+bool			Complex::in_C(void) const
+{
+	return (true);
+}
+
 bool			Complex::in_D(void) const
 {
 	return (this->_real->in_D() && this->_imaginary->in_D());
+}
+
+bool			Complex::in_M(void) const
+{
+	return (false);
 }
 
 bool			Complex::in_Q(void) const

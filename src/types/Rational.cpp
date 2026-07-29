@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/28 16:15:19 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/29 17:34:50 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -915,11 +915,22 @@ Rational*		Rational::gcd(const Vector &other) const
 	return (gcd);
 }
 
+// TODO: Polynomial
+
+Rational*		Rational::gcd(const Real &other) const
+{
+	return (new Rational(1));
+	(void)other;
+}
+
 Rational*		Rational::gcd(const IType &other) const
 {
-	const Rational*	other_rational;
-	const Complex*	other_complex;
-	const Matrix*	other_matrix;
+	const Rational*		other_rational;
+	const Complex*		other_complex;
+	const Matrix*		other_matrix;// TODO
+	// const Polynomial*	other_polynomial;
+	const Vector*		other_vector;
+	// const Real*			other_real;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
@@ -930,6 +941,15 @@ Rational*		Rational::gcd(const IType &other) const
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (this->gcd(*other_matrix));
+	// other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	// if (other_polynomial)
+	// 	return (this->gcd(*other_polynomial));
+	other_vector = dynamic_cast<const Vector*>(&other);
+	if (other_vector)
+		return (this->gcd(*other_vector));
+	// other_real = dynamic_cast<const Real*>(&other);
+	// if (other_real)
+	// 	return (this->gcd(*other_real));
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
@@ -975,9 +995,19 @@ void			Rational::reduce(void)
 	}
 }
 
+bool			Rational::in_C(void) const
+{
+	return (true);
+}
+
 bool			Rational::in_D(void) const
 {
 	return (this->getValue().in_D());
+}
+
+bool			Rational::in_M(void) const
+{
+	return (false);
 }
 
 bool			Rational::in_Q(void) const
