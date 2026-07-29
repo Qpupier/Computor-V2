@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/29 17:41:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/29 19:02:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 static Polynomial::t_term				get_term_result(					\
 		const Polynomial::t_term &dividend, const Polynomial::t_term &divisor)
 {
-	unsigned short int	new_power;
+	unsigned long int	new_power;
 
 	if (divisor.power > dividend.power)
 		throw ERROR_UNEXPECTED;
@@ -29,7 +29,7 @@ static Polynomial::t_term				get_term_result(					\
 }
 
 static void								add_term_to_vector(					\
-		IType *coefficient, unsigned short int power, 						\
+		IType *coefficient, unsigned long int power, 						\
 		std::vector<Polynomial::t_term> &vector)
 {
 	std::vector<Polynomial::t_term>::iterator	it(vector.begin());
@@ -50,11 +50,11 @@ static void								add_term_to_vector(					\
 }
 
 static void								add_blank_terms(					\
-		std::vector<Polynomial::t_term> &terms, unsigned short int max_power)
+		std::vector<Polynomial::t_term> &terms, unsigned long int max_power)
 {
 	IType*	tmp;
 
-	for (unsigned short int i = 0; i <= max_power; i++)
+	for (unsigned long int i = 0; i <= max_power; i++)
 	{
 		tmp = new Rational(0);
 		add_term_to_vector(tmp, i, terms);
@@ -66,7 +66,7 @@ static void								clean_terms(						\
 		std::vector<Polynomial::t_term> &terms)
 {
 	std::vector<Polynomial::t_term>::const_iterator	it(terms.begin());
-	unsigned short int								max_power(0);
+	unsigned long int								max_power(0);
 	bool											is_empty(true);
 
 	if (terms.empty())
@@ -173,7 +173,7 @@ static std::vector<Polynomial::t_term>	vector_term_multiplication(			\
 		it2 = terms2.begin();
 		while (it2 != terms2.end())
 		{
-			unsigned short int	new_power = it1->power + it2->power;
+			unsigned long int	new_power = it1->power + it2->power;
 			result.push_back((Polynomial::t_term)	\
 					{*it1->coefficient * *it2->coefficient, new_power});
 			it2++;
@@ -227,7 +227,7 @@ static void								print_coefficient_sign(				\
 }
 
 static void								print_coefficient(					\
-		std::ostream &os, IType *coefficient, unsigned short int power, 	\
+		std::ostream &os, IType *coefficient, unsigned long int power, 	\
 		bool first_term)
 {
 	Complex*	complex;
@@ -309,7 +309,7 @@ static IType*							function_operator_term(				\
 	for (std::vector<Polynomial::t_term>::const_iterator 	\
 			it(terms.begin()); it != terms.end(); it++)
 	{
-		power = other ^ Rational(it->power);
+		power = other ^ Rational(static_cast<long long int>(it->power));
 		term = *it->coefficient * *power;
 		delete power;
 		tmp = result;
@@ -1009,36 +1009,40 @@ IType*			Polynomial::norm(void) const
 	return (result);
 }
 
-static IType*		terms_sqrt(const Polynomial& ref, const std::vector<Polynomial::t_term>& terms)
+static IType*			terms_sqrt_sub_pairs(IType* result_coefficient_num, const std::vector<Polynomial::t_term>& terms, unsigned long int sqrt_degree, unsigned long int i)
 {
-	unsigned long int	size(terms.size());
-	unsigned long int	sqrt_size;
-	Polynomial*			result;
-
-	if (size == 1)
-		return (terms[0].coefficient->sqrt());
-	if (size % 2 == 0)
-		throw UnsupportedError("This polynomial does not have a square root with coefficients in ℕ");
-	sqrt_size = (size - 1) / 2 + 1;
-	result = new Polynomial(ref.getName(), (Polynomial::t_term){terms[size - 1].coefficient->sqrt(), static_cast<unsigned short int>((size - 1) / 2)});// [ ] Attention au type de power
-	for (unsigned long int i(1); i < sqrt_size; i++)
+	for (unsigned long int j(1); j <= i - 1; j++)
 	{
-		IType*	result_coefficient_num = terms[size - 1 - i].coefficient->clone();
-		for (unsigned long int j(1); j <= i - 1; j++)
-		{
-			IType*	pair = *result->getTerms()[sqrt_size - 1 - j].coefficient * *result->getTerms()[sqrt_size - 1 - i + j].coefficient;
-			IType*	ptr = result_coefficient_num;
-			result_coefficient_num = *result_coefficient_num - *pair;
-			delete ptr;
-			delete pair;
-		}
-		IType*	result_coefficient_den = *result->getTerms()[sqrt_size - 1].coefficient * 2;
-		IType*	tmp = result;
-		result = *result + Polynomial(ref.getName(), (Polynomial::t_term){*result_coefficient_num / *result_coefficient_den, static_cast<unsigned short int>((size - 1) / 2 - i)});// [ ] Attention au type de power
-		delete result_coefficient_num;
-		delete result_coefficient_den;
-		delete tmp;
+		IType*	pair = *terms[sqrt_degree - j].coefficient 	\
+				* *terms[sqrt_degree - i + j].coefficient;
+		IType*	ptr = result_coefficient_num;
+		result_coefficient_num = *result_coefficient_num - *pair;
+		delete ptr;
+		delete pair;
 	}
+	return (result_coefficient_num);
+}
+
+// static IType*			terms_sqrt_loop(const std::string& name, const std::vector<Polynomial::t_term>& terms, unsigned long int sqrt_degree, Polynomial*& result)
+// {
+// 	IType*	result_coefficient_num;
+// 	IType*	result_coefficient_den;
+// 	IType*	tmp;
+
+// 	for (unsigned long int i(1); i < sqrt_degree + 1; i++)
+// 	{
+// 		result_coefficient_num = terms_sqrt_sub_pairs(terms[size - 1 - i].coefficient->clone(), result->getTerms(), sqrt_degree, i);
+// 		result_coefficient_den = *result->getTerms()[sqrt_degree].coefficient * 2;
+// 		tmp = result;
+// 		result = *result + Polynomial(name, (Polynomial::t_term){*result_coefficient_num / *result_coefficient_den, sqrt_degree - i});// [ ] Attention au type de power
+// 		delete result_coefficient_num;
+// 		delete result_coefficient_den;
+// 		delete tmp;
+// 	}
+// }
+
+static IType*			terms_sqrt_verification(const Polynomial& ref, Polynomial* result)
+{
 	IType*	square;
 
 	square = *result ^ 2;
@@ -1050,6 +1054,34 @@ static IType*		terms_sqrt(const Polynomial& ref, const std::vector<Polynomial::t
 	}
 	delete square;
 	return (result);
+}
+
+static IType*		terms_sqrt(const Polynomial& ref, const std::vector<Polynomial::t_term>& terms)
+{
+	unsigned long int	size(terms.size());
+	unsigned long int	sqrt_degree;
+	Polynomial*			result;
+	IType*	result_coefficient_num;
+	IType*	result_coefficient_den;
+	IType*	tmp;
+
+	if (size == 1)
+		return (terms[0].coefficient->sqrt());
+	if (size % 2 == 0)
+		throw UnsupportedError("This polynomial does not have a square root with coefficients in ℕ");
+	sqrt_degree = (size - 1) / 2;
+	result = new Polynomial(ref.getName(), (Polynomial::t_term){terms[size - 1].coefficient->sqrt(), sqrt_degree});// [ ] Attention au type de power
+	for (unsigned long int i(1); i < sqrt_degree + 1; i++)
+	{
+		result_coefficient_num = terms_sqrt_sub_pairs(terms[size - 1 - i].coefficient->clone(), result->getTerms(), sqrt_degree, i);
+		result_coefficient_den = *result->getTerms()[sqrt_degree].coefficient * 2;
+		tmp = result;
+		result = *result + Polynomial(ref.getName(), (Polynomial::t_term){*result_coefficient_num / *result_coefficient_den, sqrt_degree - i});// [ ] Attention au type de power
+		delete result_coefficient_num;
+		delete result_coefficient_den;
+		delete tmp;
+	}
+	return (terms_sqrt_verification(ref, result));
 }
 
 IType*			Polynomial::sqrt(void) const
@@ -1152,7 +1184,7 @@ void							add_terms_to_vector(				\
 }
 
 std::vector<Polynomial::t_term>	vector_term_coeff_multiplication(	\
-		const IType *coefficient, const unsigned short int power, 	\
+		const IType *coefficient, const unsigned long int power, 	\
 		const std::vector<Polynomial::t_term> &vector)
 {
 	std::vector<Polynomial::t_term>					result;

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/29 17:33:53 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/29 18:54:33 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ class	Polynomial: public IType
 		typedef struct	s_term
 		{
 			IType*				coefficient;
-			unsigned short int	power;// [ ] Est-ce le bon type ?
+			unsigned long int	power;// [ ] Est-ce le bon type ?
 		}				t_term;
 
 		typedef struct	s_division_result
@@ -123,7 +123,7 @@ std::ostream	&operator<<(std::ostream &os, const Polynomial &num);
 
 // Functions
 std::vector<Polynomial::t_term>	vector_term_coeff_multiplication(	\
-		const IType *coefficient, const unsigned short int power, 	\
+		const IType *coefficient, const unsigned long int power, 	\
 		const std::vector<Polynomial::t_term> &vector);
 void							add_terms_to_vector(				\
 		const std::vector<Polynomial::t_term> &terms, 				\
