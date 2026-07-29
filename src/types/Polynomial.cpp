@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/28 17:52:50 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/29 11:50:08 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -986,12 +986,32 @@ IType*			Polynomial::norm(void) const
 	return (result);
 }
 
-IType*			Polynomial::sqrt(void) const
+static IType*		terms_sqrt(const std::vector<Polynomial::t_term> &terms)
 {
-	if ((this->_terms.size() > 1 && this->_terms.size() % 2 == 0) || (this->_dividers.size() > 1 && this->_dividers.size() % 2 == 0))
-		throw LogicError("This polynomial does not have a square root");
+	unsigned long int	size(terms.size());
+	unsigned long int	sqrt_size;
+
+	if (size == 1)
+		return (terms[0].coefficient->sqrt());
+	if (size % 2 == 0)
+		throw UnsupportedError("This polynomial does not have a square root with coefficients in ℕ");
+	sqrt_size = (size + 1) / 2 + 1;
 	throw ERROR_UNEXPECTED;// TODO: SQRT polynomials
 	return (nullptr);
+}
+
+IType*			Polynomial::sqrt(void) const
+{
+	IType*	numerator_sqrt;
+	IType*	denominator_sqrt;
+	IType*	result;
+
+	numerator_sqrt = terms_sqrt(this->_terms);
+	denominator_sqrt = terms_sqrt(this->_dividers);
+	result = *numerator_sqrt / *denominator_sqrt;
+	delete numerator_sqrt;
+	delete denominator_sqrt;
+	return (result);
 }
 
 Rational*		Polynomial::gcd(const IType &other) const
