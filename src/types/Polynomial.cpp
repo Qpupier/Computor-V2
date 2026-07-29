@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/29 11:50:08 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/29 15:35:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -986,18 +986,50 @@ IType*			Polynomial::norm(void) const
 	return (result);
 }
 
-static IType*		terms_sqrt(const std::vector<Polynomial::t_term> &terms)
+static IType*		terms_sqrt(const std::string& name, const std::vector<Polynomial::t_term>& terms)
 {
 	unsigned long int	size(terms.size());
 	unsigned long int	sqrt_size;
+	std::vector<IType*>	result_coefficients;
+	Polynomial*			result;
 
 	if (size == 1)
 		return (terms[0].coefficient->sqrt());
 	if (size % 2 == 0)
 		throw UnsupportedError("This polynomial does not have a square root with coefficients in ℕ");
-	sqrt_size = (size + 1) / 2 + 1;
-	throw ERROR_UNEXPECTED;// TODO: SQRT polynomials
-	return (nullptr);
+	sqrt_size = (size - 1) / 2 + 1;
+	IType*	result_coefficient;
+	for (unsigned long int i(0); i < sqrt_size; i++)
+	{
+		if (!i)
+		{
+			result_coefficient = terms[size - 1].coefficient->sqrt();
+			result = new Polynomial(name, (Polynomial::t_term){result_coefficient->clone(), static_cast<unsigned short int>((size - 1) / 2)});// [ ] Attention au type de power
+		}
+		else
+		{
+			// IType*	pair = *result->getTerms()[sqrt_size - 1 - j].coefficient * *result->getTerms()[sqrt_size - 1 - i + j].coefficient;
+			IType*	result_coefficient_num = terms[size - 1 - i].coefficient->clone();
+			for (unsigned long int j(1); j <= i - 1; j++)
+			{
+				IType*	pair = *result_coefficients[j] * *result_coefficients[i - j];
+				IType*	ptr = result_coefficient_num;
+				result_coefficient_num = *result_coefficient_num - *pair;
+				delete ptr;
+				delete pair;
+			}
+			// IType*	result_coefficient_den = *result->getTerms()[sqrt_size - 1].coefficient * 2;
+			IType*	result_coefficient_den = *result_coefficients[0] * 2;
+			result_coefficient = *result_coefficient_num / *result_coefficient_den;
+			delete result_coefficient_num;
+			delete result_coefficient_den;
+			IType*	tmp = result;
+			result = *result + Polynomial(name, (Polynomial::t_term){result_coefficient->clone(), static_cast<unsigned short int>((size - 1) / 2 - i)});// [ ] Attention au type de power
+			delete tmp;
+		}
+		result_coefficients.push_back(result_coefficient);
+	}
+	return (result);
 }
 
 IType*			Polynomial::sqrt(void) const
@@ -1006,8 +1038,8 @@ IType*			Polynomial::sqrt(void) const
 	IType*	denominator_sqrt;
 	IType*	result;
 
-	numerator_sqrt = terms_sqrt(this->_terms);
-	denominator_sqrt = terms_sqrt(this->_dividers);
+	numerator_sqrt = terms_sqrt(this->_name, this->_terms);
+	denominator_sqrt = terms_sqrt(this->_name, this->_dividers);
 	result = *numerator_sqrt / *denominator_sqrt;
 	delete numerator_sqrt;
 	delete denominator_sqrt;
