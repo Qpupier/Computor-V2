@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/29 17:36:03 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/30 11:53:28 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -453,9 +453,39 @@ std::ostream&	Real::print(std::ostream &os) const
 	return (os);
 }
 
+IType*			Real::arccos(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Real::arcsin(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Real::arctan(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
 IType*			Real::clone(void) const
 {
 	return (new Real(*this));
+}
+
+IType*			Real::cos(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Real::e(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
 }
 
 IType*			Real::function_operator(const IType &other) const
@@ -478,6 +508,12 @@ IType*			Real::matrix_operator(const IType &other) const
 	return (nullptr);
 }
 
+IType*			Real::sin(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
 IType*			Real::sqrt(void) const
 {
 	InfiniteFloat	sqrt_value(1);
@@ -495,6 +531,12 @@ IType*			Real::sqrt(void) const
 			delta *= -1;
 	}
 	return (new Real(sqrt_value));
+}
+
+IType*			Real::tan(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
 }
 
 Rational*		Real::gcd(const IType &other) const

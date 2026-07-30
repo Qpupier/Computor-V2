@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/30 10:52:45 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/30 11:45:51 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -941,21 +941,6 @@ void	Polynomial::setTerms(const std::vector<t_term>& terms)
 
 // Methods
 
-std::ostream&	Polynomial::print(std::ostream &os) const
-{
-	if (this->_dividers.size() == 1 					\
-			&& *this->_dividers[0].coefficient == 1 	\
-			&& !this->_dividers[0].power)
-		print_terms(os, this->_terms, this->_name, true);
-	else
-	{
-		print_terms(os, this->_terms, this->_name);
-		os << " / ";
-		print_terms(os, this->_dividers, this->_name);
-	}
-	return (os);
-}
-
 std::string		Polynomial::to_string(void) const
 {
 	std::ostringstream	oss;
@@ -1019,9 +1004,54 @@ bool			Polynomial::in_Z(void) const
 	return (true);
 }
 
+std::ostream&	Polynomial::print(std::ostream &os) const
+{
+	if (this->_dividers.size() == 1 					\
+			&& *this->_dividers[0].coefficient == 1 	\
+			&& !this->_dividers[0].power)
+		print_terms(os, this->_terms, this->_name, true);
+	else
+	{
+		print_terms(os, this->_terms, this->_name);
+		os << " / ";
+		print_terms(os, this->_dividers, this->_name);
+	}
+	return (os);
+}
+
+IType*			Polynomial::arccos(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Polynomial::arcsin(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Polynomial::arctan(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
 IType*			Polynomial::clone(void) const
 {
 	return (new Polynomial(*this));
+}
+
+IType*			Polynomial::cos(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Polynomial::e(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
 }
 
 IType*			Polynomial::function_operator(const IType &other) const
@@ -1086,6 +1116,12 @@ IType*			Polynomial::norm(void) const
 	return (result);
 }
 
+IType*			Polynomial::sin(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
 IType*			Polynomial::sqrt(void) const
 {
 	IType*	numerator_sqrt;
@@ -1098,6 +1134,12 @@ IType*			Polynomial::sqrt(void) const
 	delete numerator_sqrt;
 	delete denominator_sqrt;
 	return (result);
+}
+
+IType*			Polynomial::tan(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
 }
 
 Rational*		Polynomial::gcd(const IType &other) const

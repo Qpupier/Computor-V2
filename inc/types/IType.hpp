@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 17:42:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/29 17:30:09 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/30 11:19:11 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,24 +53,29 @@ class	IType
 		virtual IType*		operator^(const IType &other) const = 0;
 		virtual IType*		operator^(const long long int value) const = 0;
 
-		// Getters
-		// virtual InfiniteFloat	getRoundedValue(void) const = 0;
-
 		// Methods
-		virtual IType*			clone(void) const = 0;
-		virtual IType*			function_operator(const IType &other) const = 0;
-		virtual IType*			matrix_inversion(void) const = 0;
-		virtual IType*			matrix_operator(const IType &other) const = 0;
-		virtual IType*			sqrt(void) const = 0;
-		virtual Rational*		gcd(const IType &other) const = 0;
-		virtual std::ostream	&print(std::ostream &os) const = 0;
 		virtual std::string		to_string(void) const = 0;
 		virtual bool			in_C(void) const = 0;
 		virtual bool			in_D(void) const = 0;
 		virtual bool			in_M(void) const = 0;
 		virtual bool			in_Q(void) const = 0;
 		virtual bool			in_Z(void) const = 0;
-		virtual void			print_rounded(const std::string var = std::string()) const = 0;
+		virtual std::ostream&	print(std::ostream &os) const = 0;
+		virtual IType*			arccos(void) const = 0;
+		virtual IType*			arcsin(void) const = 0;
+		virtual IType*			arctan(void) const = 0;
+		virtual IType*			clone(void) const = 0;
+		virtual IType*			cos(void) const = 0;
+		virtual IType*			e(void) const = 0;
+		virtual IType*			function_operator(const IType &other) const = 0;
+		virtual IType*			matrix_inversion(void) const = 0;
+		virtual IType*			matrix_operator(const IType &other) const = 0;
+		virtual IType*			sin(void) const = 0;
+		virtual IType*			sqrt(void) const = 0;
+		virtual IType*			tan(void) const = 0;
+		virtual Rational*		gcd(const IType &other) const = 0;
+		virtual void			print_rounded(const std::string var 	\
+				= std::string()) const = 0;
 
 	protected:
 		// Constructor

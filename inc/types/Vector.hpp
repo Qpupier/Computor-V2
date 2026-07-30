@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:42:16 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/29 17:36:19 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/30 11:54:32 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ class	Vector: public IType
 		void			setValue(unsigned long int index, IType* value);
 
 		// Methods
-		std::ostream&	print(std::ostream &os) const;
 		std::string		to_string(void) const;
 		std::size_t		size(void) const;
 		bool			empty(void) const;
@@ -112,12 +111,20 @@ class	Vector: public IType
 		bool			in_M(void) const;
 		bool			in_Q(void) const;
 		bool			in_Z(void) const;
+		std::ostream&	print(std::ostream &os) const;
+		IType*			arccos(void) const;
+		IType*			arcsin(void) const;
+		IType*			arctan(void) const;
 		IType*			clone(void) const;
+		IType*			cos(void) const;
+		IType*			e(void) const;
 		IType*			function_operator(const IType &other) const;
 		IType*			matrix_inversion(void) const;
 		IType*			matrix_operator(const IType &other) const;
 		IType*			norm(void) const;
+		IType*			sin(void) const;
 		IType*			sqrt(void) const;
+		IType*			tan(void) const;
 		Rational*		gcd(const IType &ther) const;
 		Rational*		gcd(const Vector &other) const;
 		Rational*		gcd(const Rational &other) const;

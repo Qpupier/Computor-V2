@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/29 17:33:03 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/30 11:35:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1159,9 +1159,123 @@ void	Matrix::setValue(unsigned long int x, 	\
 
 // Methods
 
+std::string		Matrix::to_string(void) const
+{
+	std::ostringstream	oss;
+
+	this->print(oss);
+	return (oss.str());
+}
+
+bool			Matrix::in_C(void) const
+{
+	return (false);
+}
+
+bool			Matrix::in_D(void) const
+{
+	for (unsigned int i = 0; i < this->_height; i++)
+		for (unsigned int j = 0; j < this->_width; j++)
+			if (!this->_matrix[i][j]->in_D())
+				return (false);
+	return (true);
+}
+
+bool			Matrix::in_M(void) const
+{
+	return (true);
+}
+
+bool			Matrix::in_Q(void) const
+{
+	for (unsigned int i = 0; i < this->_height; i++)
+		for (unsigned int j = 0; j < this->_width; j++)
+			if (!this->_matrix[i][j]->in_Q())
+				return (false);
+	return (true);
+}
+
+bool			Matrix::in_Z(void) const
+{
+	for (unsigned int i = 0; i < this->_height; i++)
+		for (unsigned int j = 0; j < this->_width; j++)
+			if (!this->_matrix[i][j]->in_Z())
+				return (false);
+	return (true);
+}
+
+bool			Matrix::is_null(void) const
+{
+	for (unsigned int j = 0; j < this->_height; j++)
+		for (unsigned int i = 0; i < this->_width; i++)
+			if (*this->_matrix[j][i])
+				return (false);
+	return (true);
+}
+
+bool			Matrix::is_square(void) const
+{
+	return (this->_width == this->_height);
+}
+
+std::ostream&	Matrix::print(std::ostream &os) const
+{
+	unsigned long	width;
+	unsigned long	height;
+
+	width = this->_width;
+	height = this->_height;
+	for (unsigned int i = 0; i < height; i++)
+	{
+		os << "[ ";
+		for (unsigned int j = 0; j < width; j++)
+		{
+			if (!this->_matrix[i][j])
+				throw ERROR_UNEXPECTED;
+			os << *this->_matrix[i][j];
+			if (j < width - 1)
+				os << " , ";
+		}
+		os << " ]";
+		if (i < height - 1)
+			os << std::endl;
+	}
+	return (os);
+}
+
+IType*			Matrix::arccos(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Matrix::arcsin(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Matrix::arctan(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
 IType*			Matrix::clone(void) const
 {
 	return (new Matrix(*this));
+}
+
+IType*			Matrix::cos(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Matrix::e(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
 }
 
 IType*			Matrix::function_operator(const IType &other) const
@@ -1231,6 +1345,12 @@ IType*			Matrix::norm(void) const
 	return (sqrt);
 }
 
+IType*			Matrix::sin(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
 IType*			Matrix::sqrt(void) const
 {
 	InfiniteFloat	epsilon(1);
@@ -1252,6 +1372,12 @@ IType*			Matrix::sqrt(void) const
 	}
 	delete sqrt_value;
 	throw ERROR_MATRIX_SQRT;
+	return (nullptr);
+}
+
+IType*			Matrix::tan(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -1336,90 +1462,6 @@ Rational*		Matrix::gcd(const IType &other) const
 		return (this->gcd(*other_matrix));
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
-}
-
-std::ostream&	Matrix::print(std::ostream &os) const
-{
-	unsigned long	width;
-	unsigned long	height;
-
-	width = this->_width;
-	height = this->_height;
-	for (unsigned int i = 0; i < height; i++)
-	{
-		os << "[ ";
-		for (unsigned int j = 0; j < width; j++)
-		{
-			if (!this->_matrix[i][j])
-				throw ERROR_UNEXPECTED;
-			os << *this->_matrix[i][j];
-			if (j < width - 1)
-				os << " , ";
-		}
-		os << " ]";
-		if (i < height - 1)
-			os << std::endl;
-	}
-	return (os);
-}
-
-std::string		Matrix::to_string(void) const
-{
-	std::ostringstream	oss;
-
-	this->print(oss);
-	return (oss.str());
-}
-
-bool			Matrix::in_C(void) const
-{
-	return (false);
-}
-
-bool			Matrix::in_D(void) const
-{
-	for (unsigned int i = 0; i < this->_height; i++)
-		for (unsigned int j = 0; j < this->_width; j++)
-			if (!this->_matrix[i][j]->in_D())
-				return (false);
-	return (true);
-}
-
-bool			Matrix::in_M(void) const
-{
-	return (true);
-}
-
-bool			Matrix::in_Q(void) const
-{
-	for (unsigned int i = 0; i < this->_height; i++)
-		for (unsigned int j = 0; j < this->_width; j++)
-			if (!this->_matrix[i][j]->in_Q())
-				return (false);
-	return (true);
-}
-
-bool			Matrix::in_Z(void) const
-{
-	for (unsigned int i = 0; i < this->_height; i++)
-		for (unsigned int j = 0; j < this->_width; j++)
-			if (!this->_matrix[i][j]->in_Z())
-				return (false);
-	return (true);
-}
-
-bool			Matrix::is_null(void) const
-{
-	for (unsigned int j = 0; j < this->_height; j++)
-		for (unsigned int i = 0; i < this->_width; i++)
-			if (*this->_matrix[j][i])
-				return (false);
-	return (true);
-}
-
-bool			Matrix::is_square(void) const
-{
-	return (this->_width == this->_height);
 }
 
 void			Matrix::error(const LogicError &e)

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/29 17:32:33 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/30 11:34:57 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,19 +110,6 @@ class	Matrix: public IType
 				unsigned long int j, IType* value);
 
 		// Methods
-		IType*			clone(void) const;
-		IType*			function_operator(const IType &other) const;
-		IType*			matrix_operator(const IType &other) const;
-		IType*			matrix_inversion(void) const;
-		IType*			norm(void) const;
-		IType*			sqrt(void) const;
-		Matrix*			matrix_operator(const Matrix &other) const;
-		Rational*		gcd(const IType &ther) const;
-		Rational*		gcd(const Matrix &other) const;
-		Rational*		gcd(const Rational &other) const;
-		Rational*		gcd(const Complex &other) const;
-		Rational*		gcd(const Vector &other) const;
-		std::ostream&	print(std::ostream &os) const;
 		std::string		to_string(void) const;
 		bool			in_C(void) const;
 		bool			in_D(void) const;
@@ -131,6 +118,26 @@ class	Matrix: public IType
 		bool			in_Z(void) const;
 		bool			is_null(void) const;
 		bool			is_square(void) const;
+		std::ostream&	print(std::ostream &os) const;
+		IType*			arccos(void) const;
+		IType*			arcsin(void) const;
+		IType*			arctan(void) const;
+		IType*			clone(void) const;
+		IType*			cos(void) const;
+		IType*			e(void) const;
+		IType*			function_operator(const IType &other) const;
+		IType*			matrix_operator(const IType &other) const;
+		IType*			matrix_inversion(void) const;
+		IType*			norm(void) const;
+		IType*			sin(void) const;
+		IType*			sqrt(void) const;
+		IType*			tan(void) const;
+		Matrix*			matrix_operator(const Matrix &other) const;
+		Rational*		gcd(const IType &ther) const;
+		Rational*		gcd(const Matrix &other) const;
+		Rational*		gcd(const Rational &other) const;
+		Rational*		gcd(const Complex &other) const;
+		Rational*		gcd(const Vector &other) const;
 		void			error(const LogicError &e);
 		void			free(void);
 		void			print_rounded(							\

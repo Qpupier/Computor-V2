@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/29 17:31:49 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/30 11:24:19 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -934,6 +934,14 @@ void	Complex::setImaginary(IType* imaginary)
 
 // Methods
 
+std::string		Complex::to_string(void) const
+{
+	std::ostringstream	oss;
+
+	this->print(oss);
+	return (oss.str());
+}
+
 bool			Complex::in_C(void) const
 {
 	return (true);
@@ -959,9 +967,58 @@ bool			Complex::in_Z(void) const
 	return (this->_real->in_Z() && this->_imaginary->in_Z());
 }
 
+std::ostream&	Complex::print(std::ostream &os) const
+{
+	if (!this->_real || !this->_imaginary)
+		throw ERROR_UNEXPECTED;
+	if (!*this->_real && !*this->_imaginary)
+		return (os << "0");
+	if ((!*this->_real || *this->_real < 0) && *this->_imaginary > 0)
+	{
+		print_value(os, this->_imaginary, "i", true);
+		print_value(os, this->_real, "", false);
+	}
+	else
+	{
+		print_value(os, this->_real, "", true);
+		print_value(os, this->_imaginary, "i", !this->_real);
+	}
+	return (os);
+}
+
+IType*			Complex::arccos(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Complex::arcsin(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Complex::arctan(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
 IType*			Complex::clone(void) const
 {
 	return (new Complex(*this));
+}
+
+IType*			Complex::cos(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Complex::e(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
 }
 
 IType*			Complex::function_operator(const IType &other) const
@@ -1001,6 +1058,12 @@ IType*			Complex::norm(void) const
 	return (result);
 }
 
+IType*			Complex::sin(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
 IType*			Complex::sqrt(void) const
 {
 	IType*	norm;
@@ -1028,6 +1091,12 @@ IType*			Complex::sqrt(void) const
 	}
 	delete norm;
 	return (test_exact_value(new Complex(real, imaginary), *this));
+}
+
+IType*			Complex::tan(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
 }
 
 Rational*		Complex::gcd(const Rational &other) const
@@ -1085,33 +1154,6 @@ Rational*		Complex::gcd(const IType &other) const
 		return (this->gcd(*other_matrix));
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
-}
-
-std::ostream&	Complex::print(std::ostream &os) const
-{
-	if (!this->_real || !this->_imaginary)
-		throw ERROR_UNEXPECTED;
-	if (!*this->_real && !*this->_imaginary)
-		return (os << "0");
-	if ((!*this->_real || *this->_real < 0) && *this->_imaginary > 0)
-	{
-		print_value(os, this->_imaginary, "i", true);
-		print_value(os, this->_real, "", false);
-	}
-	else
-	{
-		print_value(os, this->_real, "", true);
-		print_value(os, this->_imaginary, "i", !this->_real);
-	}
-	return (os);
-}
-
-std::string		Complex::to_string(void) const
-{
-	std::ostringstream	oss;
-
-	this->print(oss);
-	return (oss.str());
 }
 
 void			Complex::print_rounded(const std::string var) const

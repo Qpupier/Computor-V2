@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/30 10:54:37 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/30 11:56:14 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -830,21 +830,6 @@ void			Vector::setValue(unsigned long int index, IType* value)
 
 // Methods
 
-std::ostream&	Vector::print(std::ostream &os) const
-{
-	os << "[";
-	for (unsigned long int i(0); i < this->_vector.size(); i++)
-	{
-		if (!this->_vector[i])
-			throw ERROR_UNEXPECTED;
-		os << *this->_vector[i];
-		if (i < this->_vector.size() - 1)
-			os << ", ";
-	}
-	os << "]";
-	return (os);
-}
-
 std::string	Vector::to_string(void) const
 {
 	std::ostringstream	oss;
@@ -897,9 +882,54 @@ bool		Vector::in_Z(void) const
 	return (true);
 }
 
+std::ostream&	Vector::print(std::ostream &os) const
+{
+	os << "[";
+	for (unsigned long int i(0); i < this->_vector.size(); i++)
+	{
+		if (!this->_vector[i])
+			throw ERROR_UNEXPECTED;
+		os << *this->_vector[i];
+		if (i < this->_vector.size() - 1)
+			os << ", ";
+	}
+	os << "]";
+	return (os);
+}
+
+IType*		Vector::arccos(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*		Vector::arcsin(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*		Vector::arctan(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
 IType*		Vector::clone(void) const
 {
 	return (new Vector(*this));
+}
+
+IType*		Vector::cos(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*		Vector::e(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
 }
 
 IType*		Vector::function_operator(const IType &other) const
@@ -936,9 +966,21 @@ IType*		Vector::norm(void) const
 	return (Matrix(*this).norm());
 }
 
+IType*		Vector::sin(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
 IType*		Vector::sqrt(void) const
 {
 	throw ERROR_VECTOR_SQRT;
+	return (nullptr);
+}
+
+IType*		Vector::tan(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 

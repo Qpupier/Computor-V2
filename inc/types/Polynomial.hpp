@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/29 18:54:33 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/30 11:44:39 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,23 +91,31 @@ class	Polynomial: public IType
 		void	setTerms(const std::vector<t_term>& terms);
 
 		// Methods
-		IType*			clone(void) const;
-		IType*			function_operator(const IType &other) const;
-		IType*			matrix_operator(const IType &other) const;
-		IType*			matrix_inversion(void) const;
-		IType*			norm(void) const;
-		IType*			sqrt(void) const;
-		Rational*		gcd(const IType &other) const;
-		std::ostream&	print(std::ostream &os) const;
 		std::string		to_string(void) const;
 		bool			in_C(void) const;
 		bool			in_D(void) const;
 		bool			in_M(void) const;
 		bool			in_Q(void) const;
 		bool			in_Z(void) const;
+		std::ostream&	print(std::ostream &os) const;
+		IType*			arccos(void) const;
+		IType*			arcsin(void) const;
+		IType*			arctan(void) const;
+		IType*			clone(void) const;
+		IType*			cos(void) const;
+		IType*			e(void) const;
+		IType*			function_operator(const IType &other) const;
+		IType*			matrix_operator(const IType &other) const;
+		IType*			matrix_inversion(void) const;
+		IType*			norm(void) const;
+		IType*			sin(void) const;
+		IType*			sqrt(void) const;
+		IType*			tan(void) const;
+		Rational*		gcd(const IType &other) const;
 		void			factorize_constant_factor(void);
 		void			free(void);
-		void			print_rounded(const std::string var = std::string()) const;
+		void			print_rounded(const std::string var 	\
+				= std::string()) const;
 		void			reduce(void);
 		void			sort_powers(void);
 

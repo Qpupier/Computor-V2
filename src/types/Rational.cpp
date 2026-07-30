@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/29 17:34:50 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/30 11:50:12 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -808,9 +808,91 @@ InfiniteFloat	Rational::getValue(void) const
 
 // Methods
 
+InfiniteInt		Rational::integer_part(void) const
+{
+	return (this->_numerator / this->_denominator);
+}
+
+std::string		Rational::to_string(void) const
+{
+	std::ostringstream	oss;
+
+	this->print(oss);
+	return (oss.str());
+}
+
+bool			Rational::in_C(void) const
+{
+	return (true);
+}
+
+bool			Rational::in_D(void) const
+{
+	return (this->getValue().in_D());
+}
+
+bool			Rational::in_M(void) const
+{
+	return (false);
+}
+
+bool			Rational::in_Q(void) const
+{
+	return (true);
+}
+
+bool			Rational::in_Z(void) const
+{
+	Rational	copy(*this);
+
+	// copy.reduce();// [ ] Useful?
+	return (copy.getDenominator() == InfiniteInt(1));
+}
+
+std::ostream&	Rational::print(std::ostream &os) const
+{
+	Rational	copy(*this);
+	InfiniteInt	numerator;
+
+	numerator = copy.getNumerator();
+	if (copy.in_Z())
+		return (os << numerator);
+	return (os << numerator << "/" << copy.getDenominator());
+}
+
+IType*			Rational::arccos(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Rational::arcsin(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Rational::arctan(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
 IType*			Rational::clone(void) const
 {
 	return (new Rational(*this));
+}
+
+IType*			Rational::cos(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Rational::e(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
 }
 
 IType*			Rational::function_operator(const IType &other) const
@@ -833,6 +915,12 @@ IType*			Rational::matrix_inversion(void) const
 	return (nullptr);
 }
 
+IType*			Rational::sin(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
 IType*			Rational::sqrt(void) const
 {
 	InfiniteFloat	sqrt_value(1);
@@ -852,6 +940,12 @@ IType*			Rational::sqrt(void) const
 			delta *= -1;
 	}
 	return (sqrt_final_value(sqrt_value, value));
+}
+
+IType*			Rational::tan(void) const// TODO
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
 }
 
 Rational*		Rational::abs(void) const
@@ -954,25 +1048,6 @@ Rational*		Rational::gcd(const IType &other) const
 	return (nullptr);
 }
 
-std::ostream&	Rational::print(std::ostream &os) const
-{
-	Rational	copy(*this);
-	InfiniteInt	numerator;
-
-	numerator = copy.getNumerator();
-	if (copy.in_Z())
-		return (os << numerator);
-	return (os << numerator << "/" << copy.getDenominator());
-}
-
-std::string		Rational::to_string(void) const
-{
-	std::ostringstream	oss;
-
-	this->print(oss);
-	return (oss.str());
-}
-
 void			Rational::reduce(void)
 {
 	InfiniteInt	gcd;
@@ -993,39 +1068,6 @@ void			Rational::reduce(void)
 		this->_numerator = -this->_numerator;
 		this->_denominator = -this->_denominator;
 	}
-}
-
-bool			Rational::in_C(void) const
-{
-	return (true);
-}
-
-bool			Rational::in_D(void) const
-{
-	return (this->getValue().in_D());
-}
-
-bool			Rational::in_M(void) const
-{
-	return (false);
-}
-
-bool			Rational::in_Q(void) const
-{
-	return (true);
-}
-
-bool			Rational::in_Z(void) const
-{
-	Rational	copy(*this);
-
-	// copy.reduce();// [ ] Useful?
-	return (copy.getDenominator() == InfiniteInt(1));
-}
-
-InfiniteInt		Rational::integer_part(void) const
-{
-	return (this->_numerator / this->_denominator);
 }
 
 void			Rational::print_rounded(const std::string var) const

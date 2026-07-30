@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:35:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/29 17:32:22 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/30 13:10:03 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 // Utils
 
-static IType*	function_absolute(const IType &other)
+static IType*	function_absolute(const IType &other)// [ ] Inclure dans l'interface ?
 {
 	const Rational*	other_rational;
 	const Real*		other_real;
@@ -35,7 +35,7 @@ static IType*	function_absolute(const IType &other)
 	return (nullptr);
 }
 
-static IType*	function_norm(const IType &other)
+static IType*	function_norm(const IType &other)// [ ] Inclure dans l'interface ?
 {
 	const Complex*		other_complex;
 	const Matrix*		other_matrix;
@@ -55,37 +55,6 @@ static IType*	function_norm(const IType &other)
 	if (other_vector)
 		return (other_vector->norm());
 	throw LogicError("Norm function not exists for rational or real numbers: use absolute function instead");
-	return (nullptr);
-}
-
-static IType*	function_sqrt(const IType &other)
-{
-	const Rational*		other_rational;
-	const Complex*		other_complex;
-	const Matrix*		other_matrix;
-	const Polynomial*	other_polynomial;
-	const Vector*		other_vector;
-	const Real*			other_real;
-
-	other_rational = dynamic_cast<const Rational*>(&other);
-	if (other_rational)
-		return (other_rational->sqrt());
-	other_complex = dynamic_cast<const Complex*>(&other);
-	if (other_complex)
-		return (other_complex->sqrt());
-	other_matrix = dynamic_cast<const Matrix*>(&other);
-	if (other_matrix)
-		return (other_matrix->sqrt());
-	other_polynomial = dynamic_cast<const Polynomial*>(&other);
-	if (other_polynomial)
-		return (other_polynomial->sqrt());
-	other_vector = dynamic_cast<const Vector*>(&other);
-	if (other_vector)
-		return (other_vector->sqrt());
-	other_real = dynamic_cast<const Real*>(&other);
-	if (other_real)
-		return (other_real->sqrt());
-	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
@@ -317,15 +286,59 @@ std::ostream&	DefinedFunction::print(std::ostream &os) const
 			return (os << "abs");
 		case E_FUNCTION_SQRT:
 			return (os << "sqrt");
+		case E_FUNCTION_ARCCOS:
+			return (os << "arccos");
+		case E_FUNCTION_ARCSIN:
+			return (os << "arcsin");
+		case E_FUNCTION_ARCTAN:
+			return (os << "arctan");
+		case E_FUNCTION_COS:
+			return (os << "cos");
+		case E_FUNCTION_SIN:
+			return (os << "sin");
+		case E_FUNCTION_TAN:
+			return (os << "tan");
+		case E_FUNCTION_E:
+			return (os << "e");
 		default:
 			throw ERROR_UNKNOWN_FUNCTION;
 	}
 	return (os);
 }
 
+IType*			DefinedFunction::arccos(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			DefinedFunction::arcsin(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			DefinedFunction::arctan(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
 IType*			DefinedFunction::clone(void) const
 {
 	return (new DefinedFunction(*this));
+}
+
+IType*			DefinedFunction::cos(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			DefinedFunction::e(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
 }
 
 IType*			DefinedFunction::function_operator(const IType &other) const
@@ -337,7 +350,21 @@ IType*			DefinedFunction::function_operator(const IType &other) const
 		case E_FUNCTION_ABSOLUTE:
 			return (function_absolute(other));
 		case E_FUNCTION_SQRT:
-			return (function_sqrt(other));
+			return (other.sqrt());
+		case E_FUNCTION_ARCCOS:
+			return (other.arccos());
+		case E_FUNCTION_ARCSIN:
+			return (other.arcsin());
+		case E_FUNCTION_ARCTAN:
+			return (other.arctan());
+		case E_FUNCTION_COS:
+			return (other.cos());
+		case E_FUNCTION_SIN:
+			return (other.sin());
+		case E_FUNCTION_TAN:
+			return (other.tan());
+		case E_FUNCTION_E:
+			return (other.e());
 		default:
 			throw ERROR_UNKNOWN_FUNCTION;
 	}
@@ -356,7 +383,19 @@ IType*			DefinedFunction::matrix_operator(const IType &other) const
 	return (nullptr);
 }
 
+IType*			DefinedFunction::sin(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
 IType*			DefinedFunction::sqrt(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			DefinedFunction::tan(void) const
 {
 	throw ERROR_UNEXPECTED;
 	return (nullptr);

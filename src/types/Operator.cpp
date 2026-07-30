@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/29 17:33:43 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/30 11:42:21 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,6 +229,14 @@ Operator::t_operator	Operator::getOperator(void) const
 
 // Methods
 
+std::string		Operator::to_string(void) const
+{
+	std::ostringstream	oss;
+
+	this->print(oss);
+	return (oss.str());
+}
+
 bool			Operator::in_C(void) const
 {
 	return (false);
@@ -252,44 +260,6 @@ bool			Operator::in_Q(void) const
 bool			Operator::in_Z(void) const
 {
 	return (false);
-}
-
-IType*			Operator::clone(void) const
-{
-	return (new Operator(*this));
-}
-
-IType*			Operator::function_operator(const IType &other) const
-{
-	throw ERROR_UNEXPECTED;
-	(void)other;
-	return (nullptr);
-}
-
-IType*			Operator::matrix_operator(const IType &other) const
-{
-	throw ERROR_UNEXPECTED;
-	(void)other;
-	return (nullptr);
-}
-
-IType*			Operator::matrix_inversion(void) const
-{
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
-}
-
-IType*			Operator::sqrt(void) const
-{
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
-}
-
-Rational*		Operator::gcd(const IType &other) const
-{
-	throw ERROR_UNEXPECTED;
-	(void)other;
-	return (nullptr);
 }
 
 std::ostream&	Operator::print(std::ostream &os) const
@@ -320,12 +290,84 @@ std::ostream&	Operator::print(std::ostream &os) const
 	return (os);
 }
 
-std::string		Operator::to_string(void) const
+IType*			Operator::arccos(void) const
 {
-	std::ostringstream	oss;
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
 
-	this->print(oss);
-	return (oss.str());
+IType*			Operator::arcsin(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Operator::arctan(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Operator::clone(void) const
+{
+	return (new Operator(*this));
+}
+
+IType*			Operator::cos(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Operator::e(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Operator::function_operator(const IType &other) const
+{
+	throw ERROR_UNEXPECTED;
+	(void)other;
+	return (nullptr);
+}
+
+IType*			Operator::matrix_operator(const IType &other) const
+{
+	throw ERROR_UNEXPECTED;
+	(void)other;
+	return (nullptr);
+}
+
+IType*			Operator::matrix_inversion(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Operator::sin(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Operator::sqrt(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Operator::tan(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+Rational*		Operator::gcd(const IType &other) const
+{
+	throw ERROR_UNEXPECTED;
+	(void)other;
+	return (nullptr);
 }
 
 void			Operator::print_rounded(const std::string var) const

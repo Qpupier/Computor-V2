@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:35:43 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/29 17:30:23 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/30 11:20:45 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,19 +101,26 @@ class	Complex: public IType
 
 		// Methods
 		std::string		to_string(void) const;
-		std::ostream&	print(std::ostream &os) const;
 		bool			in_C(void) const;
 		bool			in_D(void) const;
 		bool			in_M(void) const;
 		bool			in_Q(void) const;
 		bool			in_Z(void) const;
-		IType*			norm(void) const;
+		std::ostream&	print(std::ostream &os) const;
+		IType*			arccos(void) const;
+		IType*			arcsin(void) const;
+		IType*			arctan(void) const;
 		IType*			clone(void) const;
+		IType*			cos(void) const;
+		IType*			e(void) const;
 		IType*			function_operator(const IType &other) const;
-		IType*			matrix_operator(const IType &other) const;
 		IType*			matrix_inversion(void) const;
+		IType*			matrix_operator(const IType &other) const;
+		IType*			norm(void) const;
+		IType*			sin(void) const;
 		IType*			sqrt(void) const;
-		Rational*		gcd(const IType &ther) const;
+		IType*			tan(void) const;
+		Rational*		gcd(const IType &other) const;
 		Rational*		gcd(const Complex &other) const;
 		Rational*		gcd(const Rational &other) const;
 		Rational*		gcd(const Matrix &other) const;
