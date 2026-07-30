@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 17:41:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/30 11:52:01 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/30 14:50:06 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ class	Real: public IType
 		IType*		operator%(const Polynomial& other) const;
 		IType*		operator%(const Vector& other) const;
 		IType*		operator%(const long long int value) const;
+		IType*		operator^(const Rational& other) const;
 		IType*		operator^(const IType& other) const;
 		IType*		operator^(const long long int value) const;
 

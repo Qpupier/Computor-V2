@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/30 14:10:14 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/30 19:25:01 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,26 @@ static IType*		sqrt_final_value(InfiniteFloat sqrt_value, 	\
 	if ((test_exact_value ^ 2) == value)
 		return (new Real(test_exact_value));
 	return (new Real(sqrt_value));
+}
+
+static Rational*	cos_get_new_term(const Rational& number, long long int k)
+{
+	Rational*	power1;
+	Rational*	power2;
+	Rational*	num_product;
+	Rational*	factorial;
+	Rational*	new_term;
+
+	power1 = Rational(-1) ^ k;
+	power2 = number ^ (2 * k);
+	num_product = *power1 * *power2;
+	delete power1;
+	delete power2;
+	factorial = Rational(2 * k).factorial();
+	new_term = *num_product / *factorial;
+	delete num_product;
+	delete factorial;
+	return (new_term);
 }
 
 
@@ -890,24 +910,17 @@ IType*			Rational::clone(void) const
 
 IType*			Rational::cos(void) const// TODO
 {
-	long long int	k;// [ ]: Verifier type
+	long long int	k(0);
 	Rational*		result;
+	Rational*		new_term;
+	Rational*		tmp;
 	Real*			real_result;
 
-	k = 0;
 	result = new Rational(0);
 	while (true)
 	{
-		Rational* power1 = Rational(-1) ^ k;
-		Rational* power2 = *this ^ (2 * k);
-		Rational* num_product = *power1 * *power2;
-		delete power1;
-		delete power2;
-		Rational* factorial = Rational(2 * k).factorial();
-		Rational* new_term = *num_product / *factorial;
-		delete num_product;
-		delete factorial;
-		Rational* tmp = result;
+		new_term  = cos_get_new_term(*this, k++);
+		tmp = result;
 		result = *result + *new_term;
 		delete new_term;
 		if (result->getValue() == tmp->getValue())
@@ -920,7 +933,6 @@ IType*			Rational::cos(void) const// TODO
 			return (real_result);
 		}
 		delete tmp;
-		k++;
 	}
 	return (nullptr);
 }

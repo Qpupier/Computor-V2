@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/30 11:53:28 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/30 15:00:00 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,7 +258,7 @@ IType*	Real::operator/(const Real& other) const
 
 IType*	Real::operator/(const Rational& other) const
 {
-	return (Rational(*this) / other);
+	return (*this / Real(other));
 }
 
 IType*	Real::operator/(const Complex& other) const
@@ -340,7 +340,7 @@ IType*	Real::operator%(const Real& other) const
 
 IType*	Real::operator%(const Rational& other) const
 {
-	return (Rational(*this) % other);
+	return (*this % Real(other));
 }
 
 IType*	Real::operator%(const Complex& other) const
@@ -383,6 +383,23 @@ IType*	Real::operator%(const Vector& other) const
 IType*	Real::operator%(const long long int value) const
 {
 	return (new Real(this->_value % value));
+}
+
+IType*	Real::operator^(const Rational& other) const
+{
+	IType*	result;
+	IType*	tmp;
+
+	if (!other.in_N())
+		throw UNSUPPORTED_EXPONENT;
+	result = new Rational(1);
+	for (InfiniteInt i(0); i < other.getNumerator(); i++)
+	{
+		tmp = result;
+		result = *result * *this;
+		delete tmp;
+	}
+	return (result);
 }
 
 IType*	Real::operator^(const IType& other) const
@@ -478,7 +495,37 @@ IType*			Real::clone(void) const
 
 IType*			Real::cos(void) const// TODO
 {
-	throw ERROR_UNEXPECTED;
+	long long int	k;
+	IType*		result;
+
+	k = 0;
+	result = new Real(0);
+	while (true)
+	{
+		Rational* power1 = Rational(-1) ^ k;
+		IType* power2 = *this ^ (2 * k);
+		IType* num_product = *power1 * *power2;
+		delete power1;
+		delete power2;
+		Rational* factorial = Rational(2 * k).factorial();
+		IType* new_term = *num_product / *factorial;
+		delete num_product;
+		delete factorial;
+		IType* tmp = result;
+		result = *result + *new_term;
+		delete new_term;
+		if (*result == *tmp)
+		{
+			delete result;
+			if (!tmp->in_Z())
+				return (tmp);
+			result = new Real(*tmp);
+			delete tmp;
+			return (result);
+		}
+		delete tmp;
+		k++;
+	}
 	return (nullptr);
 }
 
