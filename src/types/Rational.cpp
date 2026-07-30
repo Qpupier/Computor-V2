@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/30 11:50:12 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/30 14:10:14 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -836,6 +836,11 @@ bool			Rational::in_M(void) const
 	return (false);
 }
 
+bool			Rational::in_N(void) const
+{
+	return (this->in_Z() && *this >= 0);
+}
+
 bool			Rational::in_Q(void) const
 {
 	return (true);
@@ -885,7 +890,38 @@ IType*			Rational::clone(void) const
 
 IType*			Rational::cos(void) const// TODO
 {
-	throw ERROR_UNEXPECTED;
+	long long int	k;// [ ]: Verifier type
+	Rational*		result;
+	Real*			real_result;
+
+	k = 0;
+	result = new Rational(0);
+	while (true)
+	{
+		Rational* power1 = Rational(-1) ^ k;
+		Rational* power2 = *this ^ (2 * k);
+		Rational* num_product = *power1 * *power2;
+		delete power1;
+		delete power2;
+		Rational* factorial = Rational(2 * k).factorial();
+		Rational* new_term = *num_product / *factorial;
+		delete num_product;
+		delete factorial;
+		Rational* tmp = result;
+		result = *result + *new_term;
+		delete new_term;
+		if (result->getValue() == tmp->getValue())
+		{
+			delete result;
+			if (tmp->in_Z())
+				return (tmp);
+			real_result = new Real(*tmp);
+			delete tmp;
+			return (real_result);
+		}
+		delete tmp;
+		k++;
+	}
 	return (nullptr);
 }
 
@@ -951,6 +987,24 @@ IType*			Rational::tan(void) const// TODO
 Rational*		Rational::abs(void) const
 {
 	return (new Rational(this->_numerator.abs(), this->_denominator.abs()));
+}
+
+Rational*		Rational::factorial(void) const// TODO: Implementer le parsing correspondant (!)
+{
+	Rational*	result;
+	Rational*	next_number;
+	Rational*	next_factorial;
+	
+	if (!this->in_N())
+		throw LogicError("Factorial is only defined for natural numbers (ℕ)");
+	if (!*this)
+		return (new Rational(1));
+	next_number = *this - 1;
+	next_factorial = Rational(*next_number).factorial();
+	delete next_number;
+	result = *this * *next_factorial;
+	delete next_factorial;
+	return (result);
 }
 
 Rational*		Rational::gcd(const Rational &other) const

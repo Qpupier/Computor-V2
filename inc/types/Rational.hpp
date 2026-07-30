@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/30 11:46:49 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/07/30 13:39:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ class	Rational: public IType
 		bool			in_C(void) const;
 		bool			in_D(void) const;
 		bool			in_M(void) const;
+		bool			in_N(void) const;
 		bool			in_Q(void) const;
 		bool			in_Z(void) const;
 		std::ostream&	print(std::ostream &os) const;
@@ -131,6 +132,7 @@ class	Rational: public IType
 		IType*			sqrt(void) const;
 		IType*			tan(void) const;
 		Rational*		abs(void) const;
+		Rational*		factorial(void) const;
 		Rational*		gcd(const IType& other) const;
 		Rational*		gcd(const Rational& other) const;
 		Rational*		gcd(const Complex& other) const;
