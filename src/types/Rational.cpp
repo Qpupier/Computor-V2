@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 14:04:58 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 14:30:32 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,20 @@ static Rational*	sin_get_new_term(const Rational& number, long long int k)
 	factorial = Rational(2 * k + 1).factorial();
 	new_term = *num_product / *factorial;
 	delete num_product;
+	delete factorial;
+	return (new_term);
+}
+
+static Rational*	exp_get_new_term(const Rational& number, long long int k)
+{
+	Rational*	power;
+	Rational*	factorial;
+	Rational*	new_term;
+
+	power = number ^ k;
+	factorial = Rational(k).factorial();
+	new_term = *power / *factorial;
+	delete power;
 	delete factorial;
 	return (new_term);
 }
@@ -939,9 +953,32 @@ IType*			Rational::cos(void) const// TODO
 	return (nullptr);
 }
 
-IType*			Rational::e(void) const// TODO
+IType*			Rational::exp(void) const// TODO
 {
-	throw ERROR_UNEXPECTED;
+	long long int	k(0);
+	Rational*		result;
+	Rational*		new_term;
+	Rational*		tmp;
+	Real*			real_result;
+
+	result = new Rational(0);
+	while (true)
+	{
+		new_term  = exp_get_new_term(*this, k++);
+		tmp = result;
+		result = *result + *new_term;
+		delete new_term;
+		if (result->getValue() == tmp->getValue())
+		{
+			delete result;
+			if (tmp->in_Z())
+				return (tmp);
+			real_result = new Real(*tmp);
+			delete tmp;
+			return (real_result);
+		}
+		delete tmp;
+	}
 	return (nullptr);
 }
 

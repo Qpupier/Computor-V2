@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:35:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 12:59:06 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 14:31:33 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,7 +293,7 @@ std::ostream&	DefinedFunction::print(std::ostream &os) const
 		case E_FUNCTION_TAN:
 			return (os << "tan");
 		case E_FUNCTION_E:
-			return (os << "e");
+			return (os << "exp");
 		default:
 			throw ERROR_UNKNOWN_FUNCTION;
 	}
@@ -311,7 +311,7 @@ IType*			DefinedFunction::cos(void) const
 	return (nullptr);
 }
 
-IType*			DefinedFunction::e(void) const
+IType*			DefinedFunction::exp(void) const
 {
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
@@ -334,7 +334,7 @@ IType*			DefinedFunction::function_operator(const IType &other) const
 		case E_FUNCTION_TAN:
 			return (other.tan());
 		case E_FUNCTION_E:
-			return (other.e());
+			return (other.exp());
 		default:
 			throw ERROR_UNKNOWN_FUNCTION;
 	}

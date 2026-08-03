@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 12:59:19 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 14:30:04 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1254,7 +1254,7 @@ IType*			Matrix::cos(void) const// TODO
 	return (nullptr);
 }
 
-IType*			Matrix::e(void) const// TODO
+IType*			Matrix::exp(void) const// TODO
 {
 	throw ERROR_UNEXPECTED;
 	return (nullptr);

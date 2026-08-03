@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 13:00:27 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 14:28:54 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -908,7 +908,7 @@ IType*			Vector::cos(void) const// TODO
 	return (nullptr);
 }
 
-IType*			Vector::e(void) const// TODO
+IType*			Vector::exp(void) const// TODO
 {
 	throw ERROR_UNEXPECTED;
 	return (nullptr);

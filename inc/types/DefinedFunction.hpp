@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:16:29 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 12:58:25 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 14:26:46 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ class	DefinedFunction: public IType
 		std::ostream&	print(std::ostream &os) const;
 		IType*			clone(void) const;
 		IType*			cos(void) const;
-		IType*			e(void) const;
+		IType*			exp(void) const;
 		IType*			function_operator(const IType &other) const;
 		IType*			matrix_inversion(void) const;
 		IType*			matrix_operator(const IType &other) const;

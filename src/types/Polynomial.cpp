@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 12:59:31 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 14:30:23 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1030,7 +1030,7 @@ IType*			Polynomial::cos(void) const// TODO
 	return (nullptr);
 }
 
-IType*			Polynomial::e(void) const// TODO
+IType*			Polynomial::exp(void) const// TODO
 {
 	throw ERROR_UNEXPECTED;
 	return (nullptr);

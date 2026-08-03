@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 14:55:07 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 12:57:44 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 14:27:05 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ class	Operator: public IType
 		std::ostream&	print(std::ostream &os) const;
 		IType*			clone(void) const;
 		IType*			cos(void) const;
-		IType*			e(void) const;
+		IType*			exp(void) const;
 		IType*			function_operator(const IType &other) const;
 		IType*			matrix_operator(const IType &other) const;
 		IType*			matrix_inversion(void) const;

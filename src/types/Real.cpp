@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 14:11:48 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 14:30:37 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -540,7 +540,7 @@ IType*			Real::cos(void) const
 	return (nullptr);
 }
 
-IType*			Real::e(void) const// TODO
+IType*			Real::exp(void) const// TODO
 {
 	throw ERROR_UNEXPECTED;
 	return (nullptr);

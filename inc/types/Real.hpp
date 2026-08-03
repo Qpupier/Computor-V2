@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 17:41:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 12:57:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 14:27:24 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ class	Real: public IType
 		std::ostream&	print(std::ostream &os) const;
 		IType*			clone(void) const;
 		IType*			cos(void) const;
-		IType*			e(void) const;
+		IType*			exp(void) const;
 		IType*			function_operator(const IType &other) const;
 		IType*			matrix_inversion(void) const;
 		IType*			matrix_operator(const IType &other) const;
