@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/30 11:24:19 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 12:58:39 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -984,24 +984,6 @@ std::ostream&	Complex::print(std::ostream &os) const
 		print_value(os, this->_imaginary, "i", !this->_real);
 	}
 	return (os);
-}
-
-IType*			Complex::arccos(void) const// TODO
-{
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
-}
-
-IType*			Complex::arcsin(void) const// TODO
-{
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
-}
-
-IType*			Complex::arctan(void) const// TODO
-{
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
 }
 
 IType*			Complex::clone(void) const

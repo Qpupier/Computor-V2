@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/30 11:45:51 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 12:59:31 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1017,24 +1017,6 @@ std::ostream&	Polynomial::print(std::ostream &os) const
 		print_terms(os, this->_dividers, this->_name);
 	}
 	return (os);
-}
-
-IType*			Polynomial::arccos(void) const// TODO
-{
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
-}
-
-IType*			Polynomial::arcsin(void) const// TODO
-{
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
-}
-
-IType*			Polynomial::arctan(void) const// TODO
-{
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
 }
 
 IType*			Polynomial::clone(void) const

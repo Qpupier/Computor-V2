@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 17:42:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/30 11:19:11 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 12:57:34 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,6 @@ class	IType
 		virtual bool			in_Q(void) const = 0;
 		virtual bool			in_Z(void) const = 0;
 		virtual std::ostream&	print(std::ostream &os) const = 0;
-		virtual IType*			arccos(void) const = 0;
-		virtual IType*			arcsin(void) const = 0;
-		virtual IType*			arctan(void) const = 0;
 		virtual IType*			clone(void) const = 0;
 		virtual IType*			cos(void) const = 0;
 		virtual IType*			e(void) const = 0;

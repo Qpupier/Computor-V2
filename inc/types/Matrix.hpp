@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/30 11:34:57 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 12:57:39 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,9 +119,6 @@ class	Matrix: public IType
 		bool			is_null(void) const;
 		bool			is_square(void) const;
 		std::ostream&	print(std::ostream &os) const;
-		IType*			arccos(void) const;
-		IType*			arcsin(void) const;
-		IType*			arctan(void) const;
 		IType*			clone(void) const;
 		IType*			cos(void) const;
 		IType*			e(void) const;

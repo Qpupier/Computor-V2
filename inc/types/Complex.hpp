@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:35:43 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/30 11:20:45 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 12:57:13 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,6 @@ class	Complex: public IType
 		bool			in_Q(void) const;
 		bool			in_Z(void) const;
 		std::ostream&	print(std::ostream &os) const;
-		IType*			arccos(void) const;
-		IType*			arcsin(void) const;
-		IType*			arctan(void) const;
 		IType*			clone(void) const;
 		IType*			cos(void) const;
 		IType*			e(void) const;

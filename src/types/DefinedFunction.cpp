@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:35:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/30 13:10:03 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 12:59:06 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,12 +286,6 @@ std::ostream&	DefinedFunction::print(std::ostream &os) const
 			return (os << "abs");
 		case E_FUNCTION_SQRT:
 			return (os << "sqrt");
-		case E_FUNCTION_ARCCOS:
-			return (os << "arccos");
-		case E_FUNCTION_ARCSIN:
-			return (os << "arcsin");
-		case E_FUNCTION_ARCTAN:
-			return (os << "arctan");
 		case E_FUNCTION_COS:
 			return (os << "cos");
 		case E_FUNCTION_SIN:
@@ -304,24 +298,6 @@ std::ostream&	DefinedFunction::print(std::ostream &os) const
 			throw ERROR_UNKNOWN_FUNCTION;
 	}
 	return (os);
-}
-
-IType*			DefinedFunction::arccos(void) const
-{
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
-}
-
-IType*			DefinedFunction::arcsin(void) const
-{
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
-}
-
-IType*			DefinedFunction::arctan(void) const
-{
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
 }
 
 IType*			DefinedFunction::clone(void) const
@@ -351,12 +327,6 @@ IType*			DefinedFunction::function_operator(const IType &other) const
 			return (function_absolute(other));
 		case E_FUNCTION_SQRT:
 			return (other.sqrt());
-		case E_FUNCTION_ARCCOS:
-			return (other.arccos());
-		case E_FUNCTION_ARCSIN:
-			return (other.arcsin());
-		case E_FUNCTION_ARCTAN:
-			return (other.arctan());
 		case E_FUNCTION_COS:
 			return (other.cos());
 		case E_FUNCTION_SIN:

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/30 11:42:21 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 12:59:25 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,24 +288,6 @@ std::ostream&	Operator::print(std::ostream &os) const
 			break;
 	}
 	return (os);
-}
-
-IType*			Operator::arccos(void) const
-{
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
-}
-
-IType*			Operator::arcsin(void) const
-{
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
-}
-
-IType*			Operator::arctan(void) const
-{
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
 }
 
 IType*			Operator::clone(void) const

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/30 19:25:01 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 11:48:18 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -883,24 +883,6 @@ std::ostream&	Rational::print(std::ostream &os) const
 	if (copy.in_Z())
 		return (os << numerator);
 	return (os << numerator << "/" << copy.getDenominator());
-}
-
-IType*			Rational::arccos(void) const// TODO
-{
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
-}
-
-IType*			Rational::arcsin(void) const// TODO
-{
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
-}
-
-IType*			Rational::arctan(void) const// TODO
-{
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
 }
 
 IType*			Rational::clone(void) const

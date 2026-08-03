@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/30 11:35:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 12:59:19 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1241,24 +1241,6 @@ std::ostream&	Matrix::print(std::ostream &os) const
 			os << std::endl;
 	}
 	return (os);
-}
-
-IType*			Matrix::arccos(void) const// TODO
-{
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
-}
-
-IType*			Matrix::arcsin(void) const// TODO
-{
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
-}
-
-IType*			Matrix::arctan(void) const// TODO
-{
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
 }
 
 IType*			Matrix::clone(void) const

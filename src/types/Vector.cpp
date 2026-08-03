@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/30 11:56:14 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 13:00:27 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -830,7 +830,7 @@ void			Vector::setValue(unsigned long int index, IType* value)
 
 // Methods
 
-std::string	Vector::to_string(void) const
+std::string		Vector::to_string(void) const
 {
 	std::ostringstream	oss;
 
@@ -838,22 +838,22 @@ std::string	Vector::to_string(void) const
 	return (oss.str());
 }
 
-std::size_t	Vector::size(void) const
+std::size_t		Vector::size(void) const
 {
 	return (this->_vector.size());
 }
 
-bool		Vector::empty(void) const
+bool			Vector::empty(void) const
 {
 	return (this->_vector.empty());
 }
 
-bool		Vector::in_C(void) const
+bool			Vector::in_C(void) const
 {
 	return (false);
 }
 
-bool		Vector::in_D(void) const
+bool			Vector::in_D(void) const
 {
 	for (const IType* value : this->_vector)
 		if (!value->in_D())
@@ -861,12 +861,12 @@ bool		Vector::in_D(void) const
 	return (true);
 }
 
-bool		Vector::in_M(void) const
+bool			Vector::in_M(void) const
 {
 	return (true);
 }
 
-bool		Vector::in_Q(void) const
+bool			Vector::in_Q(void) const
 {
 	for (const IType* value : this->_vector)
 		if (!value->in_Q())
@@ -874,7 +874,7 @@ bool		Vector::in_Q(void) const
 	return (true);
 }
 
-bool		Vector::in_Z(void) const
+bool			Vector::in_Z(void) const
 {
 	for (const IType* value : this->_vector)
 		if (!value->in_Z())
@@ -897,55 +897,37 @@ std::ostream&	Vector::print(std::ostream &os) const
 	return (os);
 }
 
-IType*		Vector::arccos(void) const// TODO
-{
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
-}
-
-IType*		Vector::arcsin(void) const// TODO
-{
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
-}
-
-IType*		Vector::arctan(void) const// TODO
-{
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
-}
-
-IType*		Vector::clone(void) const
+IType*			Vector::clone(void) const
 {
 	return (new Vector(*this));
 }
 
-IType*		Vector::cos(void) const// TODO
+IType*			Vector::cos(void) const// TODO
 {
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
-IType*		Vector::e(void) const// TODO
+IType*			Vector::e(void) const// TODO
 {
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
-IType*		Vector::function_operator(const IType &other) const
+IType*			Vector::function_operator(const IType &other) const
 {
 	throw ERROR_UNEXPECTED;
 	(void)other;
 	return (nullptr);
 }
 
-IType*		Vector::matrix_inversion(void) const
+IType*			Vector::matrix_inversion(void) const
 {
 	throw ERROR_MATRIX_INVERSION_SQUARE;
 	return (nullptr);
 }
 
-IType*		Vector::matrix_operator(const IType &other) const
+IType*			Vector::matrix_operator(const IType &other) const
 {
 	Matrix	this_matrix(*this);
 	Matrix	other_matrix;
@@ -961,30 +943,30 @@ IType*		Vector::matrix_operator(const IType &other) const
 	return (this_matrix.matrix_operator(other_matrix));
 }
 
-IType*		Vector::norm(void) const
+IType*			Vector::norm(void) const
 {
 	return (Matrix(*this).norm());
 }
 
-IType*		Vector::sin(void) const// TODO
+IType*			Vector::sin(void) const// TODO
 {
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
-IType*		Vector::sqrt(void) const
+IType*			Vector::sqrt(void) const
 {
 	throw ERROR_VECTOR_SQRT;
 	return (nullptr);
 }
 
-IType*		Vector::tan(void) const// TODO
+IType*			Vector::tan(void) const// TODO
 {
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 
-Rational*	Vector::gcd(const IType &other) const
+Rational*		Vector::gcd(const IType &other) const
 {
 	const Vector*	other_vector;
 	const Rational*	other_rational;
@@ -1007,7 +989,7 @@ Rational*	Vector::gcd(const IType &other) const
 	return (nullptr);
 }
 
-Rational*	Vector::gcd(const Vector &other) const
+Rational*		Vector::gcd(const Vector &other) const
 {
 	Rational*	result;
 	Rational*	tmp;
@@ -1024,12 +1006,12 @@ Rational*	Vector::gcd(const Vector &other) const
 	return (result);
 }
 
-Rational*	Vector::gcd(const Rational &other) const
+Rational*		Vector::gcd(const Rational &other) const
 {
 	return (other.gcd(*this));
 }
 
-Rational*	Vector::gcd(const Complex &other) const
+Rational*		Vector::gcd(const Complex &other) const
 {
 	Rational*	first;
 	Rational*	second;
@@ -1040,7 +1022,7 @@ Rational*	Vector::gcd(const Complex &other) const
 	return (second);
 }
 
-Rational*	Vector::gcd(const Matrix &other) const
+Rational*		Vector::gcd(const Matrix &other) const
 {
 	Rational*	gcd;
 	Rational*	tmp;
@@ -1056,7 +1038,7 @@ Rational*	Vector::gcd(const Matrix &other) const
 	return (gcd);
 }
 
-void		Vector::print_rounded(const std::string var) const
+void			Vector::print_rounded(const std::string var) const
 {
 	if (this->in_Z())
 		return ;
@@ -1072,7 +1054,7 @@ void		Vector::print_rounded(const std::string var) const
 	std::cout << COLOR_RESET << std::endl;
 }
 
-void		Vector::push_back(IType* value)
+void			Vector::push_back(IType* value)
 {
 	this->_vector.push_back(value);
 }

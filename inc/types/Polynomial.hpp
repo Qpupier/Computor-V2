@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/30 11:44:39 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 12:57:47 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,6 @@ class	Polynomial: public IType
 		bool			in_Q(void) const;
 		bool			in_Z(void) const;
 		std::ostream&	print(std::ostream &os) const;
-		IType*			arccos(void) const;
-		IType*			arcsin(void) const;
-		IType*			arctan(void) const;
 		IType*			clone(void) const;
 		IType*			cos(void) const;
 		IType*			e(void) const;

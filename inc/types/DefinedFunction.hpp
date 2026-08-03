@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:16:29 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/30 11:57:43 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 12:58:25 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,6 @@ class	DefinedFunction: public IType
 		{
 			E_FUNCTION_NOTHING,
 			E_FUNCTION_ABSOLUTE,
-			E_FUNCTION_ARCCOS,
-			E_FUNCTION_ARCSIN,
-			E_FUNCTION_ARCTAN,
 			E_FUNCTION_COS,
 			E_FUNCTION_E,
 			E_FUNCTION_NORM,
@@ -75,9 +72,6 @@ class	DefinedFunction: public IType
 		bool			in_Q(void) const;
 		bool			in_Z(void) const;
 		std::ostream&	print(std::ostream &os) const;
-		IType*			arccos(void) const;
-		IType*			arcsin(void) const;
-		IType*			arctan(void) const;
 		IType*			clone(void) const;
 		IType*			cos(void) const;
 		IType*			e(void) const;
