@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 14:30:04 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 18:47:53 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -816,7 +816,7 @@ Matrix*		Matrix::operator*(const long long int value) const
 	return (*this * Rational(value));
 }
 
-Matrix*		Matrix::operator/(const Matrix &other) const
+Matrix*		Matrix::operator/(const Matrix &other) const// [ ]: Changer pour que ce ne soit pas terme a terme ?
 {
 	Matrix*	result;
 
@@ -1254,9 +1254,40 @@ IType*			Matrix::cos(void) const// TODO
 	return (nullptr);
 }
 
-IType*			Matrix::exp(void) const// TODO
+static bool		is_round_equal(const Matrix &a, const Matrix &b)
 {
-	throw ERROR_UNEXPECTED;
+	if (a.getWidth() != b.getWidth() || a.getHeight() != b.getHeight())
+		return (false);
+	for (unsigned long int j(0); j < a.getHeight(); j++)
+		for (unsigned long int i(0); i < a.getWidth(); i++)
+			if (Real(*a[j][i]) != Real(*b[j][i]))
+				return (false);
+	return (true);
+}
+
+IType*			Matrix::exp(void) const// [ ]: Tester exp([[3.14, 0];[0, 3.14/2]])
+{
+	long long int	k(0);
+	IType*			result;
+	IType*			tmp;
+	Matrix*			new_term;
+
+	result = new Matrix(this->_width, this->_height);
+	dynamic_cast<Matrix*>(result)->empty();
+	while (true)
+	{
+		new_term = *this ^ k;
+		tmp = result;
+		result = *result + *new_term;
+		delete new_term;
+		if (is_round_equal(*result, *tmp))
+		{
+			delete tmp;
+			return (result);
+		}
+		delete tmp;
+		k++;
+	}
 	return (nullptr);
 }
 
@@ -1444,6 +1475,13 @@ Rational*		Matrix::gcd(const IType &other) const
 		return (this->gcd(*other_matrix));
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
+}
+
+void			Matrix::empty(void)
+{
+	for (unsigned int j(0); j < this->_height; j++)
+		for (unsigned int i(0); i < this->_width; i++)
+			this->setValue(i, j, new Rational());
 }
 
 void			Matrix::error(const LogicError &e)
