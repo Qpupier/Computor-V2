@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 16:52:51 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 17:09:03 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -991,10 +991,25 @@ IType*			Complex::clone(void) const
 	return (new Complex(*this));
 }
 
-IType*			Complex::cos(void) const// TODO
+IType*			Complex::cos(void) const
 {
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
+	IType*	product;
+	IType*	e1;
+	IType*	e2;
+	IType*	numerator;
+	IType*	result;
+
+	product = Complex(new Rational(0), new Rational(1)) * *this;
+	e1 = product->exp();
+	product = Complex(new Rational(0), new Rational(-1)) * *this;
+	e2 = product->exp();
+	delete product;
+	numerator = *e1 + *e2;
+	delete e1;
+	delete e2;
+	result = *numerator / 2;
+	delete numerator;
+	return (result);
 }
 
 IType*			Complex::exp(void) const// TODO
