@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 13:50:45 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 14:04:58 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1017,8 +1017,18 @@ IType*			Rational::sqrt(void) const
 
 IType*			Rational::tan(void) const// TODO
 {
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
+	IType*	cosine;
+	IType*	result;
+	IType*	sine;
+
+	cosine = this->cos();
+	if (!*cosine)
+		throw LogicError("Tangent is undefined for this value");
+	sine = this->sin();
+	result = *sine / *cosine;
+	delete sine;
+	delete cosine;
+	return (result);
 }
 
 Rational*		Rational::abs(void) const
