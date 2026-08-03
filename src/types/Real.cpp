@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 12:59:38 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 13:29:45 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,20 @@
 
 // Utils
 
-static Real	from_rational(const Rational& rational)
+static Real		from_rational(const Rational& rational)
 {
 	return (Real(InfiniteFloat(rational.getNumerator()) 	\
 			/ InfiniteFloat(rational.getDenominator())));
 }
 
-static Real	from_complex(const Complex& complex)
+static Real		from_complex(const Complex& complex)
 {
 	if (*complex.getImaginary())
 		throw ERROR_UNEXPECTED;
 	return (Real(*complex.getReal()));
 }
 
-static Real	from_polynomial(const Polynomial& polynomial)
+static Real		from_polynomial(const Polynomial& polynomial)
 {
 	if (polynomial.getDividers().size() != 1 					\
 			|| *polynomial.getDividers()[0].coefficient != 1 	\
@@ -36,6 +36,26 @@ static Real	from_polynomial(const Polynomial& polynomial)
 			|| polynomial.getTerms()[0].power)
 		throw ERROR_UNEXPECTED;
 	return (Real(*polynomial.getTerms()[0].coefficient));
+}
+
+static IType*	cos_get_new_term(const Real& number, long long int k)
+{
+	IType*		new_term;
+	IType*		num_product;
+	IType*		power2;
+	Rational*	factorial;
+	Rational*	power1;
+
+	power1 = Rational(-1) ^ k;
+	power2 = number ^ (2 * k);
+	num_product = *power1 * *power2;
+	delete power1;
+	delete power2;
+	factorial = Rational(2 * k).factorial();
+	new_term = *num_product / *factorial;
+	delete num_product;
+	delete factorial;
+	return (new_term);
 }
 
 
@@ -475,33 +495,22 @@ IType*			Real::clone(void) const
 	return (new Real(*this));
 }
 
-IType*			Real::cos(void) const// TODO
+IType*			Real::cos(void) const
 {
-	long long int	k;
-	IType*		result;
+	long long int	k(0);
+	IType*			new_term;
+	IType*			result;
+	IType*			tmp;
 
-	k = 0;
 	result = new Real(0);
 	while (true)
 	{
-		Rational* power1 = Rational(-1) ^ k;
-		IType* power2 = *this ^ (2 * k);
-		IType* num_product = *power1 * *power2;
-		delete power1;
-		delete power2;
-		Rational* factorial = Rational(2 * k).factorial();
-		IType* new_term = *num_product / *factorial;
-		delete num_product;
-		delete factorial;
-		IType* tmp = result;
+		new_term = cos_get_new_term(*this, k);
+		tmp = result;
 		result = *result + *new_term;
 		delete new_term;
 		if (*result == *tmp)
 		{
-			delete result;
-			if (!tmp->in_Z())
-				return (tmp);
-			result = new Real(*tmp);
 			delete tmp;
 			return (result);
 		}

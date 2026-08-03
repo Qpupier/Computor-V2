@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 11:48:18 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 13:50:45 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,26 @@ static Rational*	cos_get_new_term(const Rational& number, long long int k)
 	return (new_term);
 }
 
+static Rational*	sin_get_new_term(const Rational& number, long long int k)
+{
+	Rational*	power1;
+	Rational*	power2;
+	Rational*	num_product;
+	Rational*	factorial;
+	Rational*	new_term;
+
+	power1 = Rational(-1) ^ k;
+	power2 = number ^ (2 * k + 1);// [ ] Attention overflow ?
+	num_product = *power1 * *power2;
+	delete power1;
+	delete power2;
+	factorial = Rational(2 * k + 1).factorial();
+	new_term = *num_product / *factorial;
+	delete num_product;
+	delete factorial;
+	return (new_term);
+}
+
 
 // Constructors
 
@@ -97,7 +117,7 @@ Rational::Rational(InfiniteInt numerator, InfiniteInt denominator): 	\
 	this->reduce();
 }
 
-Rational::Rational(std::string str)
+Rational::Rational(std::string str)// BUG: 3.14159265359 a un resultat incoherent : 314159265359/-2147483648 (int min ?)
 {
 	std::size_t	slash_pos;
 
@@ -947,7 +967,30 @@ IType*			Rational::matrix_inversion(void) const
 
 IType*			Rational::sin(void) const// TODO
 {
-	throw ERROR_UNEXPECTED;
+	long long int	k(0);
+	Rational*		result;
+	Rational*		new_term;
+	Rational*		tmp;
+	Real*			real_result;
+
+	result = new Rational(0);
+	while (true)
+	{
+		new_term = sin_get_new_term(*this, k++);
+		tmp = result;
+		result = *result + *new_term;
+		delete new_term;
+		if (result->getValue() == tmp->getValue())
+		{
+			delete result;
+			if (tmp->in_Z())
+				return (tmp);
+			real_result = new Real(*tmp);
+			delete tmp;
+			return (real_result);
+		}
+		delete tmp;
+	}
 	return (nullptr);
 }
 
