@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 14:30:37 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 16:30:25 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,20 @@ static IType*	sin_get_new_term(const Real& number, long long int k)
 	factorial = Rational(2 * k + 1).factorial();
 	new_term = *num_product / *factorial;
 	delete num_product;
+	delete factorial;
+	return (new_term);
+}
+
+static IType*	exp_get_new_term(const Real& number, long long int k)
+{
+	IType*		new_term;
+	IType*		power;
+	Rational*	factorial;
+
+	power = number ^ k;
+	factorial = Rational(k).factorial();
+	new_term = *power / *factorial;
+	delete power;
 	delete factorial;
 	return (new_term);
 }
@@ -542,7 +556,26 @@ IType*			Real::cos(void) const
 
 IType*			Real::exp(void) const// TODO
 {
-	throw ERROR_UNEXPECTED;
+	long long int	k(0);
+	IType*			new_term;
+	IType*			result;
+	IType*			tmp;
+
+	result = new Real(0);
+	while (true)
+	{
+		new_term = exp_get_new_term(*this, k);
+		tmp = result;
+		result = *result + *new_term;
+		delete new_term;
+		if (*result == *tmp)
+		{
+			delete tmp;
+			return (result);
+		}
+		delete tmp;
+		k++;
+	}
 	return (nullptr);
 }
 
