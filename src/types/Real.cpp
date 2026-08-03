@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 13:29:45 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 13:54:55 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,26 @@ static IType*	cos_get_new_term(const Real& number, long long int k)
 	delete power1;
 	delete power2;
 	factorial = Rational(2 * k).factorial();
+	new_term = *num_product / *factorial;
+	delete num_product;
+	delete factorial;
+	return (new_term);
+}
+
+static IType*	sin_get_new_term(const Real& number, long long int k)
+{
+	IType*		new_term;
+	IType*		num_product;
+	IType*		power2;
+	Rational*	factorial;
+	Rational*	power1;
+
+	power1 = Rational(-1) ^ k;
+	power2 = number ^ (2 * k + 1);// [ ] Overflow ?
+	num_product = *power1 * *power2;
+	delete power1;
+	delete power2;
+	factorial = Rational(2 * k + 1).factorial();
 	new_term = *num_product / *factorial;
 	delete num_product;
 	delete factorial;
@@ -548,7 +568,26 @@ IType*			Real::matrix_operator(const IType &other) const
 
 IType*			Real::sin(void) const// TODO
 {
-	throw ERROR_UNEXPECTED;
+	long long int	k(0);
+	IType*			new_term;
+	IType*			result;
+	IType*			tmp;
+
+	result = new Real(0);
+	while (true)
+	{
+		new_term = sin_get_new_term(*this, k);
+		tmp = result;
+		result = *result + *new_term;
+		delete new_term;
+		if (*result == *tmp)
+		{
+			delete tmp;
+			return (result);
+		}
+		delete tmp;
+		k++;
+	}
 	return (nullptr);
 }
 
