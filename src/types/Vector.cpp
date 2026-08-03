@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 14:28:54 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 18:44:51 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -902,15 +902,15 @@ IType*			Vector::clone(void) const
 	return (new Vector(*this));
 }
 
-IType*			Vector::cos(void) const// TODO
+IType*			Vector::cos(void) const
 {
-	throw ERROR_UNEXPECTED;
+	throw LogicError("Cosine of a vector is impossible");
 	return (nullptr);
 }
 
-IType*			Vector::exp(void) const// TODO
+IType*			Vector::exp(void) const
 {
-	throw ERROR_UNEXPECTED;
+	throw LogicError("Exponential of a vector is impossible");
 	return (nullptr);
 }
 
@@ -948,9 +948,9 @@ IType*			Vector::norm(void) const
 	return (Matrix(*this).norm());
 }
 
-IType*			Vector::sin(void) const// TODO
+IType*			Vector::sin(void) const
 {
-	throw ERROR_UNEXPECTED;
+	throw LogicError("Sine of a vector is impossible");
 	return (nullptr);
 }
 
@@ -960,9 +960,9 @@ IType*			Vector::sqrt(void) const
 	return (nullptr);
 }
 
-IType*			Vector::tan(void) const// TODO
+IType*			Vector::tan(void) const
 {
-	throw ERROR_UNEXPECTED;
+	throw LogicError("Tangent of a vector is impossible");
 	return (nullptr);
 }
 
