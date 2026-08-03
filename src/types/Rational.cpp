@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 14:30:32 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 16:48:33 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -924,7 +924,7 @@ IType*			Rational::clone(void) const
 	return (new Rational(*this));
 }
 
-IType*			Rational::cos(void) const// TODO
+IType*			Rational::cos(void) const
 {
 	long long int	k(0);
 	Rational*		result;
@@ -953,7 +953,7 @@ IType*			Rational::cos(void) const// TODO
 	return (nullptr);
 }
 
-IType*			Rational::exp(void) const// TODO
+IType*			Rational::exp(void) const
 {
 	long long int	k(0);
 	Rational*		result;
@@ -1002,7 +1002,7 @@ IType*			Rational::matrix_inversion(void) const
 	return (nullptr);
 }
 
-IType*			Rational::sin(void) const// TODO
+IType*			Rational::sin(void) const
 {
 	long long int	k(0);
 	Rational*		result;
@@ -1052,7 +1052,7 @@ IType*			Rational::sqrt(void) const
 	return (sqrt_final_value(sqrt_value, value));
 }
 
-IType*			Rational::tan(void) const// TODO
+IType*			Rational::tan(void) const
 {
 	IType*	cosine;
 	IType*	result;

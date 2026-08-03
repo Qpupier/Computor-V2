@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 16:30:25 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 16:47:20 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -554,7 +554,7 @@ IType*			Real::cos(void) const
 	return (nullptr);
 }
 
-IType*			Real::exp(void) const// TODO
+IType*			Real::exp(void) const
 {
 	long long int	k(0);
 	IType*			new_term;
@@ -599,7 +599,7 @@ IType*			Real::matrix_operator(const IType &other) const
 	return (nullptr);
 }
 
-IType*			Real::sin(void) const// TODO
+IType*			Real::sin(void) const
 {
 	long long int	k(0);
 	IType*			new_term;
@@ -643,7 +643,7 @@ IType*			Real::sqrt(void) const
 	return (new Real(sqrt_value));
 }
 
-IType*			Real::tan(void) const// TODO
+IType*			Real::tan(void) const
 {
 	IType*	cosine;
 	IType*	result;
