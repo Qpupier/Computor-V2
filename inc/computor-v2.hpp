@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/23 16:10:44 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 17:55:28 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ class IType;
 # define ERROR_NON_DETERMINISTIC_EXPRESSION	LogicError("Multiple possibilities to compute the expression, the expression is non-deterministic")
 # define ERROR_OPERATION_MATRIX_COMPLEX		LogicError("Impossible operation between matrix and complex number")
 # define ERROR_SQRT_NEGATIVE				LogicError("Cannot compute square root of a negative number")
+# define ERROR_TANGENT_UNDEFINED			LogicError("Tangent is undefined for this value")
 # define ERROR_VECTOR_DIMENSIONS			LogicError("Vector operation: incompatible dimensions")
 # define ERROR_VECTOR_OUT_OF_RANGE			LogicError("Vector index out of range")
 # define ERROR_VECTOR_SQRT					LogicError("Vector square root is impossible")

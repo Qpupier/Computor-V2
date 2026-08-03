@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 16:48:33 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 18:01:01 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1060,11 +1060,14 @@ IType*			Rational::tan(void) const
 
 	cosine = this->cos();
 	if (!*cosine)
-		throw LogicError("Tangent is undefined for this value");
+	{
+		delete cosine;
+		throw ERROR_TANGENT_UNDEFINED;
+	}
 	sine = this->sin();
 	result = *sine / *cosine;
-	delete sine;
 	delete cosine;
+	delete sine;
 	return (result);
 }
 

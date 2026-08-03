@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 17:49:35 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/03 18:01:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1116,10 +1116,23 @@ IType*			Complex::sqrt(void) const
 	return (test_exact_value(new Complex(real, imaginary), *this));
 }
 
-IType*			Complex::tan(void) const// TODO
+IType*			Complex::tan(void) const
 {
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
+	IType*	cosine;
+	IType*	result;
+	IType*	sine;
+
+	cosine = this->cos();
+	if (!*cosine)
+	{
+		delete cosine;
+		throw ERROR_TANGENT_UNDEFINED;
+	}
+	sine = this->sin();
+	result = *sine / *cosine;
+	delete cosine;
+	delete sine;
+	return (result);
 }
 
 Rational*		Complex::gcd(const Rational &other) const
