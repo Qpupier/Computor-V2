@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 17:41:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 14:27:24 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/04 16:39:04 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,34 +47,34 @@ class	Real: public IType
 		bool		operator>=(const IType& other) const;
 		bool		operator>=(const long long int value) const;
 		IType*		operator+(const IType& other) const;
-		IType*		operator+(const Real& other) const;
-		IType*		operator+(const long long int value) const;
+		Real*		operator+(const Real& other) const;
+		Real*		operator+(const long long int value) const;
 		IType*		operator-(void) const;
 		IType*		operator-(const IType& other) const;
-		IType*		operator-(const Real& other) const;
-		IType*		operator-(const long long int value) const;
+		Real*		operator-(const Real& other) const;
+		Real*		operator-(const long long int value) const;
 		IType*		operator*(const IType& other) const;
-		IType*		operator*(const Real& other) const;
-		IType*		operator*(const long long int value) const;
+		Real*		operator*(const Real& other) const;
+		Real*		operator*(const long long int value) const;
 		IType*		operator/(const IType& other) const;
-		IType*		operator/(const Real& other) const;
-		IType*		operator/(const Rational& other) const;
-		IType*		operator/(const Complex& other) const;
-		IType*		operator/(const Matrix& other) const;
-		IType*		operator/(const Polynomial& other) const;
-		IType*		operator/(const Vector& other) const;
-		IType*		operator/(const long long int value) const;
+		Real*		operator/(const Real& other) const;
+		Real*		operator/(const Rational& other) const;
+		Complex*	operator/(const Complex& other) const;
+		Matrix*		operator/(const Matrix& other) const;
+		Polynomial*	operator/(const Polynomial& other) const;
+		Vector*		operator/(const Vector& other) const;
+		Real*		operator/(const long long int value) const;
 		IType*		operator%(const IType& other) const;
-		IType*		operator%(const Real& other) const;
-		IType*		operator%(const Rational& other) const;
-		IType*		operator%(const Complex& other) const;
-		IType*		operator%(const Matrix& other) const;
-		IType*		operator%(const Polynomial& other) const;
-		IType*		operator%(const Vector& other) const;
-		IType*		operator%(const long long int value) const;
-		IType*		operator^(const Rational& other) const;
+		Real*		operator%(const Real& other) const;
+		Real*		operator%(const Rational& other) const;
+		Complex*	operator%(const Complex& other) const;
+		Matrix*		operator%(const Matrix& other) const;
+		Polynomial*	operator%(const Polynomial& other) const;
+		Vector*		operator%(const Vector& other) const;
+		Real*		operator%(const long long int value) const;
 		IType*		operator^(const IType& other) const;
-		IType*		operator^(const long long int value) const;
+		Real*		operator^(const Rational& other) const;
+		Real*		operator^(const long long int value) const;
 
 		// Getters
 		InfiniteFloat&	getValue(void) const;
@@ -98,6 +98,7 @@ class	Real: public IType
 		IType*			tan(void) const;
 		Rational*		gcd(const IType &other) const;
 		Real*			abs(void) const;
+		Real*			rad(void) const;
 		void			print_rounded(const std::string var = std::string()) const;
 
 	private:

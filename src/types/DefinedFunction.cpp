@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:35:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 14:31:33 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/04 15:45:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static IType*	function_absolute(const IType &other)// [ ] Inclure dans l'interfa
 	const Rational*	other_rational;
 	const Real*		other_real;
 
-	other_rational = dynamic_cast<const Rational*>(&other);
+	other_rational = dynamic_cast<const Rational*>(&other);// TODO: Verifier dans tous les cas possibles (autres fonctions) si on peut passer sur un autre type
 	if (other_rational)
 		return (other_rational->abs());
 	other_real = dynamic_cast<const Real*>(&other);
@@ -286,14 +286,16 @@ std::ostream&	DefinedFunction::print(std::ostream &os) const
 			return (os << "abs");
 		case E_FUNCTION_SQRT:
 			return (os << "sqrt");
-		case E_FUNCTION_COS:
-			return (os << "cos");
-		case E_FUNCTION_SIN:
-			return (os << "sin");
-		case E_FUNCTION_TAN:
-			return (os << "tan");
-		case E_FUNCTION_E:
+		case E_FUNCTION_EXPONENTIAL:
 			return (os << "exp");
+		case E_FUNCTION_COSINE:
+			return (os << "cos");
+		case E_FUNCTION_SINE:
+			return (os << "sin");
+		case E_FUNCTION_TANGENT:
+			return (os << "tan");
+		case E_FUNCTION_RADIAN:
+			return (os << "rad");
 		default:
 			throw ERROR_UNKNOWN_FUNCTION;
 	}
@@ -327,14 +329,16 @@ IType*			DefinedFunction::function_operator(const IType &other) const
 			return (function_absolute(other));
 		case E_FUNCTION_SQRT:
 			return (other.sqrt());
-		case E_FUNCTION_COS:
-			return (other.cos());
-		case E_FUNCTION_SIN:
-			return (other.sin());
-		case E_FUNCTION_TAN:
-			return (other.tan());
-		case E_FUNCTION_E:
+		case E_FUNCTION_EXPONENTIAL:
 			return (other.exp());
+		case E_FUNCTION_COSINE:
+			return (other.cos());
+		case E_FUNCTION_SINE:
+			return (other.sin());
+		case E_FUNCTION_TANGENT:
+			return (other.tan());
+		case E_FUNCTION_RADIAN:
+			return (other.rad());
 		default:
 			throw ERROR_UNKNOWN_FUNCTION;
 	}
@@ -375,6 +379,12 @@ Rational*		DefinedFunction::gcd(const IType &other) const
 {
 	throw ERROR_UNEXPECTED;
 	(void)other;
+	return (nullptr);
+}
+
+Real*			DefinedFunction::rad(void) const
+{
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 

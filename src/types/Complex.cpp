@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 18:01:07 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/04 15:44:26 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static std::ostream&	print_value(std::ostream &os, IType* value, 		\
 	return (os);
 }
 
-static IType*		division_real_part(const Complex& a, 					\
+static IType*			division_real_part(const Complex& a, 				\
 		const Complex& b, const Rational& denominator)
 {
 	IType*	part1;
@@ -101,7 +101,7 @@ static IType*		division_real_part(const Complex& a, 					\
 	return (real);
 }
 
-static IType*		division_imaginary_part(const Complex& a, 				\
+static IType*			division_imaginary_part(const Complex& a, 			\
 		const Complex& b, const Rational& denominator)
 {
 	IType*	part1;
@@ -1189,6 +1189,24 @@ Rational*		Complex::gcd(const IType &other) const
 	if (other_matrix)
 		return (this->gcd(*other_matrix));
 	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+Real*			Complex::rad(void) const
+{
+	if (this->in_Q())
+		try
+		{
+			return (Rational(*this).rad());
+		}
+		catch (...) {}
+	else
+		try
+		{
+			return (Real(*this).rad());
+		}
+		catch (...) {}
+	throw ERROR_RADIAN_FUNCTION;
 	return (nullptr);
 }
 

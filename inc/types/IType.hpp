@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 17:42:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 14:26:52 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/04 16:26:54 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include "InfiniteFloat.hpp"
 
 class	Rational;
+class	Real;
 
 class	IType
 {
@@ -71,6 +72,7 @@ class	IType
 		virtual IType*			sqrt(void) const = 0;
 		virtual IType*			tan(void) const = 0;
 		virtual Rational*		gcd(const IType &other) const = 0;
+		virtual Real*			rad(void) const = 0;
 		virtual void			print_rounded(const std::string var 	\
 				= std::string()) const = 0;
 

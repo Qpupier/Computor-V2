@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:16:29 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 14:26:46 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/04 15:27:15 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,13 @@ class	DefinedFunction: public IType
 		{
 			E_FUNCTION_NOTHING,
 			E_FUNCTION_ABSOLUTE,
-			E_FUNCTION_COS,
-			E_FUNCTION_E,
 			E_FUNCTION_NORM,
 			E_FUNCTION_SQRT,
-			E_FUNCTION_SIN,
-			E_FUNCTION_TAN
+			E_FUNCTION_EXPONENTIAL,
+			E_FUNCTION_COSINE,
+			E_FUNCTION_SINE,
+			E_FUNCTION_TANGENT,
+			E_FUNCTION_RADIAN
 		}				t_function;
 
 		// Constructors and destructor
@@ -82,6 +83,7 @@ class	DefinedFunction: public IType
 		IType*			sqrt(void) const;
 		IType*			tan(void) const;
 		Rational*		gcd(const IType &other) const;
+		Real*			rad(void) const;
 		void			print_rounded(const std::string var = std::string()) const;
 
 	private:

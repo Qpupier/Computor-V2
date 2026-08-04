@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 16:47:20 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/04 16:41:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,26 +121,26 @@ Real::Real(const IType& other)
 
 // Operator overloads
 
-inline	Real::operator bool() const
+inline		Real::operator bool() const
 {
 	return (static_cast<bool>(this->_value));
 }
 
-Real&	Real::operator=(const Real& other)
+Real&		Real::operator=(const Real& other)
 {
 	if (this != &other)
 		this->_value = other.getValue();
 	return (*this);
 }
 
-Real&	Real::operator=(const Real* other)
+Real&		Real::operator=(const Real* other)
 {
 	if (this != other)
 		this->_value = other->getValue();
 	return (*this);
 }
 
-bool	Real::operator==(const IType &other) const
+bool		Real::operator==(const IType &other) const
 {
 	try
 	{
@@ -150,62 +150,62 @@ bool	Real::operator==(const IType &other) const
 	return (false);
 }
 
-bool	Real::operator==(const long long int value) const
+bool		Real::operator==(const long long int value) const
 {
 	return (*this == Real(value));
 }
 
-bool	Real::operator!=(const IType &other) const
+bool		Real::operator!=(const IType &other) const
 {
 	return (!(*this == other));
 }
 
-bool	Real::operator!=(const long long int value) const
+bool		Real::operator!=(const long long int value) const
 {
 	return (*this != Real(value));
 }
 
-bool	Real::operator<(const IType &other) const
+bool		Real::operator<(const IType &other) const
 {
 	return (this->_value < Real(other).getValue());
 }
 
-bool	Real::operator<(const long long int value) const
+bool		Real::operator<(const long long int value) const
 {
 	return (*this < Real(value));
 }
 
-bool	Real::operator<=(const IType &other) const
+bool		Real::operator<=(const IType &other) const
 {
 	return (*this < other || *this == other);
 }
 
-bool	Real::operator<=(const long long int value) const
+bool		Real::operator<=(const long long int value) const
 {
 	return (*this <= Real(value));
 }
 
-bool	Real::operator>(const IType &other) const
+bool		Real::operator>(const IType &other) const
 {
 	return (!(*this <= other));
 }
 
-bool	Real::operator>(const long long int value) const
+bool		Real::operator>(const long long int value) const
 {
 	return (*this > Real(value));
 }
 
-bool	Real::operator>=(const IType &other) const
+bool		Real::operator>=(const IType &other) const
 {
 	return (!(*this < other));
 }
 
-bool	Real::operator>=(const long long int value) const
+bool		Real::operator>=(const long long int value) const
 {
 	return (*this >= Real(value));
 }
 
-IType*	Real::operator+(const IType &other) const
+IType*		Real::operator+(const IType &other) const
 {
 	const Real*	other_real;
 
@@ -215,22 +215,22 @@ IType*	Real::operator+(const IType &other) const
 	return (other + *this);
 }
 
-IType*	Real::operator+(const Real& other) const
+Real*		Real::operator+(const Real& other) const
 {
 	return (new Real(this->_value + other.getValue()));
 }
 
-IType*	Real::operator+(const long long int value) const
+Real*		Real::operator+(const long long int value) const
 {
 	return (new Real(this->_value + InfiniteFloat(value)));
 }
 
-IType*	Real::operator-(void) const
+IType*		Real::operator-(void) const
 {
 	return (new Real(-this->_value));
 }
 
-IType*	Real::operator-(const IType& other) const
+IType*		Real::operator-(const IType& other) const
 {
 	const Real*	other_real;
 	IType*		neg;
@@ -245,17 +245,17 @@ IType*	Real::operator-(const IType& other) const
 	return (result);
 }
 
-IType*	Real::operator-(const Real& other) const
+Real*		Real::operator-(const Real& other) const
 {
 	return (new Real(this->_value - other.getValue()));
 }
 
-IType*	Real::operator-(const long long int value) const
+Real*		Real::operator-(const long long int value) const
 {
 	return (new Real(this->_value - InfiniteFloat(value)));
 }
 
-IType*	Real::operator*(const IType& other) const
+IType*		Real::operator*(const IType& other) const
 {
 	const Real*	other_real;
 
@@ -265,17 +265,17 @@ IType*	Real::operator*(const IType& other) const
 	return (other * *this);
 }
 
-IType*	Real::operator*(const Real& other) const
+Real*		Real::operator*(const Real& other) const
 {
 	return (new Real(this->_value * other.getValue()));
 }
 
-IType*	Real::operator*(const long long int value) const
+Real*		Real::operator*(const long long int value) const
 {
 	return (new Real(this->_value * InfiniteFloat(value)));
 }
 
-IType*	Real::operator/(const IType& other) const
+IType*		Real::operator/(const IType& other) const
 {
 	const Real*			other_real;
 	const Rational*		other_rational;
@@ -305,22 +305,22 @@ IType*	Real::operator/(const IType& other) const
 	return (nullptr);
 }
 
-IType*	Real::operator/(const Real& other) const
+Real*		Real::operator/(const Real& other) const
 {
 	return (new Real(this->_value / other.getValue()));
 }
 
-IType*	Real::operator/(const Rational& other) const
+Real*		Real::operator/(const Rational& other) const
 {
 	return (*this / Real(other));
 }
 
-IType*	Real::operator/(const Complex& other) const
+Complex*	Real::operator/(const Complex& other) const
 {
 	return (Complex(*this) / other);
 }
 
-IType*	Real::operator/(const Matrix& other) const
+Matrix*		Real::operator/(const Matrix& other) const
 {
 	Matrix*	result;
 
@@ -334,12 +334,12 @@ IType*	Real::operator/(const Matrix& other) const
 	return (result);
 }
 
-IType*	Real::operator/(const Polynomial& other) const
+Polynomial*	Real::operator/(const Polynomial& other) const
 {
 	return (Polynomial(*this) / other);
 }
 
-IType*	Real::operator/(const Vector& other) const
+Vector*		Real::operator/(const Vector& other) const
 {
 	Vector*	result;
 
@@ -352,12 +352,12 @@ IType*	Real::operator/(const Vector& other) const
 	return (result);
 }
 
-IType*	Real::operator/(const long long int value) const
+Real*		Real::operator/(const long long int value) const
 {
 	return (new Real(this->_value / value));
 }
 
-IType*	Real::operator%(const IType& other) const
+IType*		Real::operator%(const IType& other) const
 {
 	const Real*			other_real;
 	const Rational*		other_rational;
@@ -387,22 +387,22 @@ IType*	Real::operator%(const IType& other) const
 	return (nullptr);
 }
 
-IType*	Real::operator%(const Real& other) const
+Real*		Real::operator%(const Real& other) const
 {
 	return (new Real(this->_value % other.getValue()));
 }
 
-IType*	Real::operator%(const Rational& other) const
+Real*		Real::operator%(const Rational& other) const
 {
 	return (*this % Real(other));
 }
 
-IType*	Real::operator%(const Complex& other) const
+Complex*	Real::operator%(const Complex& other) const
 {
 	return (Complex(*this) % other);
 }
 
-IType*	Real::operator%(const Matrix& other) const
+Matrix*		Real::operator%(const Matrix& other) const
 {
 	Matrix*	result;
 
@@ -416,12 +416,12 @@ IType*	Real::operator%(const Matrix& other) const
 	return (result);
 }
 
-IType*	Real::operator%(const Polynomial& other) const
+Polynomial*	Real::operator%(const Polynomial& other) const
 {
 	return (Polynomial(*this) % other);
 }
 
-IType*	Real::operator%(const Vector& other) const
+Vector*		Real::operator%(const Vector& other) const
 {
 	Vector*	result;
 
@@ -434,19 +434,19 @@ IType*	Real::operator%(const Vector& other) const
 	return (result);
 }
 
-IType*	Real::operator%(const long long int value) const
+Real*		Real::operator%(const long long int value) const
 {
 	return (new Real(this->_value % value));
 }
 
-IType*	Real::operator^(const Rational& other) const
+Real*		Real::operator^(const Rational& other) const
 {
-	IType*	result;
-	IType*	tmp;
+	Real*	result;
+	Real*	tmp;
 
 	if (!other.in_N())
 		throw UNSUPPORTED_EXPONENT;
-	result = new Rational(1);
+	result = new Real(Rational(1));
 	for (InfiniteInt i(0); i < other.getNumerator(); i++)
 	{
 		tmp = result;
@@ -456,7 +456,7 @@ IType*	Real::operator^(const Rational& other) const
 	return (result);
 }
 
-IType*	Real::operator^(const IType& other) const
+IType*		Real::operator^(const IType& other) const
 {
 	try
 	{
@@ -469,7 +469,7 @@ IType*	Real::operator^(const IType& other) const
 	return (nullptr);
 }
 
-IType*	Real::operator^(const long long int value) const
+Real*		Real::operator^(const long long int value) const
 {
 	return (*this ^ Rational(value));
 }
@@ -668,6 +668,25 @@ Rational*		Real::gcd(const IType &other) const
 Real*			Real::abs(void) const
 {
 	return (new Real(this->_value.abs()));
+}
+
+Real*			Real::rad(void) const
+{
+	InfiniteInt	pi_denominator(1);
+	double		pi_integer_part(M_PI);
+	Real*		product;
+	Real*		result;
+
+	while (std::floor(pi_integer_part) != pi_integer_part)
+	{
+		pi_integer_part *= 10;
+		pi_denominator *= 10;
+	}
+	product = *this * Rational(static_cast<long long int>(pi_integer_part), 	\
+			pi_denominator).getValue();
+	result = *product / Real(180);
+	delete product;
+	return (result);
 }
 
 void			Real::print_rounded(const std::string var) const

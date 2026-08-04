@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 18:44:51 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/04 16:26:31 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1036,6 +1036,12 @@ Rational*		Vector::gcd(const Matrix &other) const
 			delete tmp;
 		}
 	return (gcd);
+}
+
+Real*			Vector::rad(void) const
+{
+	throw ERROR_RADIAN_FUNCTION;
+	return (nullptr);
 }
 
 void			Vector::print_rounded(const std::string var) const

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 14:27:12 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/04 15:28:55 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ class	Polynomial: public IType
 		IType*			sqrt(void) const;
 		IType*			tan(void) const;
 		Rational*		gcd(const IType &other) const;
+		Real*			rad(void) const;
 		void			factorize_constant_factor(void);
 		void			free(void);
 		void			print_rounded(const std::string var 	\
