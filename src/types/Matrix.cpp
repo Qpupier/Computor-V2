@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/04 14:12:54 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/04 14:21:10 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -322,6 +322,26 @@ static Matrix*	cos_get_new_term(const Matrix& matrix, long long int k)
 	factorial = Rational(2 * k).factorial();// [ ] Verifier overflow
 	coeff = *coeff_num / *factorial;
 	matrix_power = matrix ^ (2 * k);
+	delete coeff_num;
+	delete factorial;
+	new_term = *coeff * *matrix_power;
+	delete coeff;
+	delete matrix_power;
+	return (new_term);
+}
+
+static Matrix*	sin_get_new_term(const Matrix& matrix, long long int k)
+{
+	Matrix*		matrix_power;
+	Matrix*		new_term;
+	Rational*	coeff;
+	Rational*	coeff_num;
+	Rational*	factorial;
+
+	coeff_num = Rational(-1) ^ k;
+	factorial = Rational(2 * k + 1).factorial();// [ ] Verifier overflow
+	coeff = *coeff_num / *factorial;
+	matrix_power = matrix ^ (2 * k + 1);
 	delete coeff_num;
 	delete factorial;
 	new_term = *coeff * *matrix_power;
@@ -1293,7 +1313,7 @@ IType*			Matrix::clone(void) const
 	return (new Matrix(*this));
 }
 
-IType*			Matrix::cos(void) const// TODO
+IType*			Matrix::cos(void) const
 {
 	long long int	k(0);
 	Matrix*			result;
@@ -1416,10 +1436,32 @@ IType*			Matrix::norm(void) const
 	return (sqrt);
 }
 
-IType*			Matrix::sin(void) const// TODO
+IType*			Matrix::sin(void) const
 {
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
+	long long int	k(0);
+	Matrix*			result;
+	Matrix*			tmp;
+	Matrix*			new_term;
+
+	result = Matrix(this->_width, this->_height) * 0;
+	while (true)
+	{
+		new_term = sin_get_new_term(*this, k++);
+		if (!*new_term)
+		{
+			delete new_term;
+			return (result);
+		}
+		tmp = result;
+		result = *result + *new_term;
+		delete new_term;
+		if (is_round_equal(*result, *tmp))
+			break;
+		delete tmp;
+	}
+	delete tmp;
+	result->round();
+	return (result);
 }
 
 IType*			Matrix::sqrt(void) const
