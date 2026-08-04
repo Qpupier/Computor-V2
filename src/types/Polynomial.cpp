@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 14:30:23 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/04 15:00:49 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1024,15 +1024,15 @@ IType*			Polynomial::clone(void) const
 	return (new Polynomial(*this));
 }
 
-IType*			Polynomial::cos(void) const// TODO
+IType*			Polynomial::cos(void) const
 {
-	throw ERROR_UNEXPECTED;
+	throw UnsupportedError("Cosine of a vector is a formal power serie, which is not supported");
 	return (nullptr);
 }
 
-IType*			Polynomial::exp(void) const// TODO
+IType*			Polynomial::exp(void) const
 {
-	throw ERROR_UNEXPECTED;
+	throw UnsupportedError("Exponential of a vector is a formal power serie, which is not supported");
 	return (nullptr);
 }
 
@@ -1098,9 +1098,9 @@ IType*			Polynomial::norm(void) const
 	return (result);
 }
 
-IType*			Polynomial::sin(void) const// TODO
+IType*			Polynomial::sin(void) const
 {
-	throw ERROR_UNEXPECTED;
+	throw UnsupportedError("Sine of a vector is a formal power serie, which is not supported");
 	return (nullptr);
 }
 
@@ -1118,9 +1118,9 @@ IType*			Polynomial::sqrt(void) const
 	return (result);
 }
 
-IType*			Polynomial::tan(void) const// TODO
+IType*			Polynomial::tan(void) const
 {
-	throw ERROR_UNEXPECTED;
+	throw UnsupportedError("Tangent of a vector is a formal power serie, which is not supported");
 	return (nullptr);
 }
 
