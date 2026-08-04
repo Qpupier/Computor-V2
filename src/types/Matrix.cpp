@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/04 14:21:10 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/04 14:48:28 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1488,10 +1488,29 @@ IType*			Matrix::sqrt(void) const
 	return (nullptr);
 }
 
-IType*			Matrix::tan(void) const// TODO
+IType*			Matrix::tan(void) const
 {
-	throw ERROR_UNEXPECTED;
-	return (nullptr);
+	IType*	cosine;
+	IType*	inversed;
+	IType*	result;
+	IType*	sine;
+
+	cosine = this->cos();
+	try
+	{
+		inversed = cosine->matrix_inversion();
+	}
+	catch (const LogicError &e)
+	{
+		delete cosine;
+		throw ERROR_TANGENT_UNDEFINED;
+	}
+	delete cosine;
+	sine = this->sin();
+	result = sine->matrix_operator(*inversed);
+	delete sine;
+	delete inversed;
+	return (result);
 }
 
 Matrix*			Matrix::matrix_operator(const Matrix &other) const
