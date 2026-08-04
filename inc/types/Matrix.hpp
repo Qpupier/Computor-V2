@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 18:29:00 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/04 13:50:45 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ class	Matrix: public IType
 		Matrix(unsigned long int width, unsigned long int height);
 		Matrix(void): Matrix(0, 0) {};
 		Matrix(std::string str, t_data &data);
-		Matrix(const Token &token, t_data &data): Matrix(token.getValue(), data) {};
+		Matrix(const Token &token, t_data &data): 	\
+				Matrix(token.getValue(), data) {};
 		Matrix(const Matrix &other);
 		Matrix(const IType &other);
 		Matrix(const Vector &other);
@@ -140,6 +141,7 @@ class	Matrix: public IType
 		void			free(void);
 		void			print_rounded(							\
 				const std::string var = std::string()) const;
+		void			round(void);
 		void			swap_lines(unsigned long int line1, 	\
 				unsigned long int line2);
 

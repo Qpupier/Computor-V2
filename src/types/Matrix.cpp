@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/03 18:47:53 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/04 14:03:04 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,6 +294,31 @@ static Matrix*									sqrt_newton_iteration(		\
 	if (sqrt_newton_iteration_converged(reference, **current_sqrt, epsilon))
 		return (sqrt_final_value(*current_sqrt, reference));
 	return (nullptr);
+}
+
+static Matrix*	exp_get_new_term(const Matrix& matrix, long long int k)
+{
+	Matrix*		new_term;
+	Matrix*		power;
+	Rational*	factorial;
+
+	power = matrix ^ k;
+	factorial = Rational(k).factorial();
+	new_term = *power / *factorial;
+	delete power;
+	delete factorial;
+	return (new_term);
+}
+
+static bool		is_round_equal(const Matrix &a, const Matrix &b)
+{
+	if (a.getWidth() != b.getWidth() || a.getHeight() != b.getHeight())
+		return (false);
+	for (unsigned long int j(0); j < a.getHeight(); j++)
+		for (unsigned long int i(0); i < a.getWidth(); i++)
+			if (Real(*a[j][i]) != Real(*b[j][i]))
+				return (false);
+	return (true);
 }
 
 
@@ -1254,41 +1279,32 @@ IType*			Matrix::cos(void) const// TODO
 	return (nullptr);
 }
 
-static bool		is_round_equal(const Matrix &a, const Matrix &b)
-{
-	if (a.getWidth() != b.getWidth() || a.getHeight() != b.getHeight())
-		return (false);
-	for (unsigned long int j(0); j < a.getHeight(); j++)
-		for (unsigned long int i(0); i < a.getWidth(); i++)
-			if (Real(*a[j][i]) != Real(*b[j][i]))
-				return (false);
-	return (true);
-}
-
-IType*			Matrix::exp(void) const// [ ]: Tester exp([[3.14, 0];[0, 3.14/2]])
+IType*			Matrix::exp(void) const
 {
 	long long int	k(0);
-	IType*			result;
-	IType*			tmp;
+	Matrix*			result;
+	Matrix*			tmp;
 	Matrix*			new_term;
 
-	result = new Matrix(this->_width, this->_height);
-	dynamic_cast<Matrix*>(result)->empty();
+	result = Matrix(this->_width, this->_height) * 0;
 	while (true)
 	{
-		new_term = *this ^ k;
+		new_term = exp_get_new_term(*this, k++);
+		if (!*new_term)
+		{
+			delete new_term;
+			return (result);
+		}
 		tmp = result;
 		result = *result + *new_term;
 		delete new_term;
 		if (is_round_equal(*result, *tmp))
-		{
-			delete tmp;
-			return (result);
-		}
+			break;
 		delete tmp;
-		k++;
 	}
-	return (nullptr);
+	delete tmp;
+	result->round();
+	return (result);
 }
 
 IType*			Matrix::function_operator(const IType &other) const
@@ -1520,6 +1536,13 @@ void			Matrix::print_rounded(const std::string var) const
 	}
 	print_rounded_matrix(this);
 	std::cout << COLOR_RESET << std::endl;
+}
+
+void			Matrix::round(void)
+{
+	for (unsigned int j(0); j < this->_height; j++)
+		for (unsigned int i(0); i < this->_width; i++)
+			this->setValue(i, j, new Real(*(*this)[j][i]));
 }
 
 void			Matrix::swap_lines(unsigned long int line1, 	\
