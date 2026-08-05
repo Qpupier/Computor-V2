@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/04 15:48:05 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/05 14:38:35 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,9 +131,11 @@ Rational::Rational(InfiniteInt numerator, InfiniteInt denominator): 	\
 	this->reduce();
 }
 
-Rational::Rational(std::string str)// BUG: 3.14159265359 a un resultat incoherent : 314159265359/-2147483648 (int min ?)
+Rational::Rational(std::string str)
 {
 	std::size_t	slash_pos;
+	Rational*	result;
+	Rational*	tmp;
 
 	slash_pos = str.find('.');
 	if (slash_pos == std::string::npos)
@@ -143,9 +145,16 @@ Rational::Rational(std::string str)// BUG: 3.14159265359 a un resultat incoheren
 	}
 	else
 	{
-		_numerator = InfiniteInt(str.erase(slash_pos, 1));
-		_denominator = InfiniteInt(std::to_string(	\
-				static_cast<int>(std::pow(10, str.size() - slash_pos))));
+		result = new Rational(InfiniteInt(str.erase(slash_pos, 1)));
+		for (std::size_t i(0); i < str.size() - slash_pos; i++)
+		{
+			tmp = result;
+			result = *result / 10;
+			delete tmp;
+		}
+		_numerator = result->getNumerator();
+		_denominator = result->getDenominator();
+		delete result;
 	}
 	this->reduce();
 }
