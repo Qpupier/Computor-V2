@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/05 10:02:24 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/05 10:14:42 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ static IType*	defined_functions(std::string function_name)
 		return (new DefinedFunction(DefinedFunction::E_FUNCTION_TANGENT));
 	if (function_name == "rad")
 		return (new DefinedFunction(DefinedFunction::E_FUNCTION_RADIAN));
+	return (nullptr);
 }
 
 static IType*	find_function(IType *node, std::map<std::pair<std::string, 	\

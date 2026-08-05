@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/25 17:04:19 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 16:31:39 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/05 12:23:13 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,12 +97,15 @@ AST*				get_the_only_possibility(							\
 	AST*				ast(nullptr);
 	AST*				tmp;
 
+	if (possibilities.empty())
+		throw LogicError("Brackets (parentheses, absolute values or norms) \
+				cannot be empty");
 	if (possibilities.size() == 1)
 		return (compute_possibility(possibilities[0], data, is_right_side, 	\
 				eval));
 	for (t_possibility &possibility : possibilities)
 		try
-		{// TODO: Enlever les possibilites ou il y a des brackets ouvrants et fermants consecutifs
+		{
 			tmp = compute_possibility(possibility, data, is_right_side, eval);
 			if (tmp)
 			{

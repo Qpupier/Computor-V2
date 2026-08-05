@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 15:53:13 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 16:22:44 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/05 12:21:14 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,16 @@ std::vector<t_possibility>	all_possibilities(	\
 {
 	std::vector<t_possibility>	results;
 	t_list_brackets_pairs		possibilities;
+	bool						empty_brackets(false);
 
 	possibilities = backtracking_possibilities(initial_tokens);
 	for (const auto& pairs : possibilities)
-		results.push_back(get_possibility(initial_tokens, pairs));
+	{
+		for (const auto& pair : pairs)
+			if (pair.second.first == pair.second.second - 1)
+				empty_brackets = true;
+		if (!empty_brackets)
+			results.push_back(get_possibility(initial_tokens, pairs));
+	}
 	return (results);
 }
