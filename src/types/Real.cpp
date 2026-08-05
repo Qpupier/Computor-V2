@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/04 16:41:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/04 16:53:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -682,8 +682,9 @@ Real*			Real::rad(void) const
 		pi_integer_part *= 10;
 		pi_denominator *= 10;
 	}
-	product = *this * Rational(static_cast<long long int>(pi_integer_part), 	\
-			pi_denominator).getValue();
+	product = *this 													\
+			* Rational(static_cast<long long int>(pi_integer_part), 	\
+				pi_denominator).getValue();
 	result = *product / Real(180);
 	delete product;
 	return (result);

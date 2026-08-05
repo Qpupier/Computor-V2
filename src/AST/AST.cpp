@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/04 15:23:52 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/05 10:02:24 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,29 +20,37 @@
 
 // Utils
 
+static IType*	defined_functions(std::string function_name)
+{
+	if (function_name == "sqrt")
+		return (new DefinedFunction(DefinedFunction::E_FUNCTION_SQRT));
+	if (function_name == "exp")
+		return (new DefinedFunction(DefinedFunction::E_FUNCTION_EXPONENTIAL));
+	if (function_name == "cos")
+		return (new DefinedFunction(DefinedFunction::E_FUNCTION_COSINE));
+	if (function_name == "sin")
+		return (new DefinedFunction(DefinedFunction::E_FUNCTION_SINE));
+	if (function_name == "tan")
+		return (new DefinedFunction(DefinedFunction::E_FUNCTION_TANGENT));
+	if (function_name == "rad")
+		return (new DefinedFunction(DefinedFunction::E_FUNCTION_RADIAN));
+}
+
 static IType*	find_function(IType *node, std::map<std::pair<std::string, 	\
 		std::string>, const IType*> &stored)
 {
 	std::pair<std::string, std::string>	var_key;
 	std::string							var_name;
+	IType*								already_defined;
 	const Polynomial*					polynomial;
 
 	polynomial = dynamic_cast<const Polynomial*>(node);
 	if (!polynomial)
 		throw UnexpectedError(											\
 				"Left side of function operator must be a variable");
-	if (polynomial->getName() == "sqrt")// [ ] Ameliorer
-		return (new DefinedFunction(DefinedFunction::E_FUNCTION_SQRT));
-	if (polynomial->getName() == "exp")
-		return (new DefinedFunction(DefinedFunction::E_FUNCTION_EXPONENTIAL));
-	if (polynomial->getName() == "cos")
-		return (new DefinedFunction(DefinedFunction::E_FUNCTION_COSINE));
-	if (polynomial->getName() == "sin")
-		return (new DefinedFunction(DefinedFunction::E_FUNCTION_SINE));
-	if (polynomial->getName() == "tan")
-		return (new DefinedFunction(DefinedFunction::E_FUNCTION_TANGENT));
-	if (polynomial->getName() == "rad")
-		return (new DefinedFunction(DefinedFunction::E_FUNCTION_RADIAN));
+	already_defined = defined_functions(polynomial->getName());
+	if (already_defined)
+		return (already_defined);
 	var_name = to_lower(polynomial->getName());
 	var_key.first = var_name;
 	for (std::map<std::pair<std::string, std::string>, const IType*>	\
@@ -213,7 +221,7 @@ std::ostream&	AST::print(std::ostream &os) const
 	return (os);
 }
 
-bool			AST::end_of_tree(void) const// [ ] Static ?
+bool			AST::end_of_tree(void) const
 {
 	return (!this->_left && !this->_right);
 }

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:10:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 16:10:23 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/05 09:55:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 # define TOKEN_MATRIX			"\\[" TOKEN_MATRIX_LINE "(?:;" TOKEN_MATRIX_LINE ")*\\]"
 # define TOKEN_VECTOR			"\\[" TOKEN_MATRIX_ELEMENT "(?:," TOKEN_MATRIX_ELEMENT ")*\\]"
 # define TOKEN					"(?:" TOKEN_MATRIX "|" TOKEN_VECTOR "|[\\(\\)\\|]|" TOKEN_NUMBER "|" TOKEN_VARIABLE "|" TOKEN_IMAGINARY "|" TOKEN_OPERATOR "|\\s+)"
-# define TOKEN_NEXT				"^(" TOKEN "|\\?)"// [ ] token end??
+# define TOKEN_NEXT				TOKEN_BEGIN "(" TOKEN "|\\?)" TOKEN_END
 # define TOKEN_FULL_EXPRESSION	TOKEN_BEGIN "(?:" TOKEN "+\\??|" TOKEN_QUESTION ")" TOKEN_END
 # define TOKEN_QUIT				TOKEN_BEGIN TOKEN_WHITESPACE "quit" TOKEN_WHITESPACE TOKEN_END
 # define TOKEN_HISTORY			TOKEN_BEGIN TOKEN_WHITESPACE "history" TOKEN_WHITESPACE "(\\d*)" TOKEN_WHITESPACE TOKEN_END
