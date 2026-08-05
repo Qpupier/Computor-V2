@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/04 15:46:46 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/05 12:33:20 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1172,6 +1172,8 @@ void			Polynomial::factorize_constant_factor(void)
 	Rational*	gcd_divisor;
 	Rational*	gcd;
 
+	if (!this->in_Q())
+		return ;
 	gcd_dividend = vector_gcd(this->_terms);
 	gcd_divisor = vector_gcd(this->_dividers);
 	gcd = gcd_dividend->gcd(*gcd_divisor);

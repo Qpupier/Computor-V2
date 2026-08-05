@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:43:37 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 11:59:14 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/05 13:24:20 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,10 @@ std::string				get_sqrt_real(const t_quadratic_solutions &solutions);
 std::string				print_imaginary_part(const t_quadratic_solutions &solutions, const unsigned char index, const bool reduce_sqrt);
 std::string				print_real_part(const t_quadratic_solutions &solutions, const unsigned char index, const bool reduce_sqrt);
 bool					parentheses_needed(const InfiniteInt term1, const InfiniteInt term2, const InfiniteInt term3);
+std::vector<Complex*>	cast_coefficients_in_complex(const IType* tmp_a, const IType* tmp_b, const IType* tmp_c, const IType* tmp_delta);
 Rational*				get_module_square(const Complex* complex);
 void					display_result(const Polynomial *polynomial, t_data &data);
+void					find_solutions(const std::vector<Complex*> &coefficients, std::string var, t_data &data);
 void					print_rounded_solutions(const t_quadratic_solutions &solutions, const bool reduce_sqrt, const std::string var, const unsigned char nb_solutions);
 void					print_solutions(t_quadratic_solutions& solutions, const std::string set, const std::string var, t_data &data);
 void					reduce_sqrt(InfiniteInt *factor, InfiniteInt *sqrt);

@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/07/02 11:45:33 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/08/05 13:25:26 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ LST_SRC		=	AST/AST.cpp																			\
 				quadratic_equation_resolution/print_solutions/utils.cpp								\
 				quadratic_equation_resolution/complex_solutions_structure.cpp						\
 				quadratic_equation_resolution/computor-v1.cpp										\
+				quadratic_equation_resolution/computor-v1_bonus.cpp									\
 				quadratic_equation_resolution/factorize_sqrt.cpp									\
 				quadratic_equation_resolution/imaginary_part.cpp									\
 				quadratic_equation_resolution/real_part.cpp											\

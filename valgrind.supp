@@ -12,10 +12,16 @@
 	fun:calloc
 }
 
-
 {
 	Readline - Realloc
 	Memcheck:Leak
 	match-leak-kinds:reachable
 	fun:realloc
+}
+
+{
+	Readline - Error
+	Memcheck:Leak
+	match-leak-kinds:definite
+	fun:malloc
 }
