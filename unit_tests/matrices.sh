@@ -38,7 +38,7 @@ run_test "[[0, 1, 2]] / 2" "[ 0 , 1/2 , 1 ]
 run_test "[[0, 1, 2]] % 2" "[ 0 , 1 , 0 ]" $1 ; status=$((status | $?))
 
 run_error "[[0, 1, 2]] ^ 3" "Matrix operation: incompatible dimensions" $1 ; status=$((status | $?))
-run_error "[[1, 2];[3, 4]] ^ [[5, 6];[7, 8]]" "Unsupported: Exponentiation can only be positive integers" $1 ; status=$((status | $?))
+run_error "[[1, 2];[3, 4]] ^ [[5, 6];[7, 8]]" "Unsupported: Exponentiation can only be natural numbers (ℕ)" $1 ; status=$((status | $?))
 run_error "[[1,2];[3]]" "Invalid matrix format: inconsistent row sizes" $1 ; status=$((status | $?))
 run_error "[[42*]]" "Invalid matrix format: Operator cannot be at the beginning or end of an expression" $1 ; status=$((status | $?))
 run_error "[[6];[7];[8]] ** [[0, 1, 2];[3, 4, 5]]" "Matrix operation: incompatible dimensions" $1 ; status=$((status | $?))
