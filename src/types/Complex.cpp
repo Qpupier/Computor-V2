@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/04 15:44:26 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/05 13:58:58 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -898,7 +898,7 @@ IType*		Complex::operator^(const IType &other) const
 	return (*this ^ power);
 }
 
-Complex*	Complex::operator^(const long long int value) const// TODO: Voir si je gere les puissances reelles
+Complex*	Complex::operator^(const long long int value) const
 {
 	return (*this ^ Rational(value));
 }
@@ -1145,7 +1145,9 @@ Rational*		Complex::gcd(const Complex &other) const
 	Rational*	first;
 	Rational*	second;
 
-	first = this->gcd(*dynamic_cast<const Rational*>(other.getReal()));// [ ] Changer ca
+	if (!this->in_Q() || !other.in_Q())
+		return (new Rational(1));
+	first = this->gcd(*dynamic_cast<const Rational*>(other.getReal()));
 	second = first->gcd(*dynamic_cast<const Rational*>(other.getImaginary()));
 	delete first;
 	return (second);
@@ -1156,7 +1158,9 @@ Rational*		Complex::gcd(const Matrix &other) const
 	Rational*	first;
 	Rational*	second;
 
-	first = other.gcd(*dynamic_cast<const Rational*>(this->getReal()));// [ ] Changer ca
+	if (!this->in_Q() || !other.in_Q())
+		return (new Rational(1));
+	first = other.gcd(*dynamic_cast<const Rational*>(this->getReal()));
 	second = first->gcd(*dynamic_cast<const Rational*>(this->getImaginary()));
 	delete first;
 	return (second);
@@ -1167,7 +1171,9 @@ Rational*		Complex::gcd(const Vector &other) const
 	Rational*	first;
 	Rational*	second;
 
-	first = other.gcd(*dynamic_cast<const Rational*>(this->getReal()));// [ ] Changer ca
+	if (!this->in_Q() || !other.in_Q())
+		return (new Rational(1));
+	first = other.gcd(*dynamic_cast<const Rational*>(this->getReal()));
 	second = first->gcd(*dynamic_cast<const Rational*>(this->getImaginary()));
 	delete first;
 	return (second);

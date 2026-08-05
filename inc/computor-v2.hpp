@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/04 15:44:11 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/05 13:54:38 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ class IType;
 # define ERROR_UNKNOWN_BRACKET				UnexpectedError("Unknown bracket type")
 # define ERROR_UNKNOWN_FUNCTION				UnexpectedError("Unknown function")
 # define UNSUPPORTED_DIVISION				UnsupportedError("Division not supported between polynomials with these powers")
-# define UNSUPPORTED_EXPONENT				UnsupportedError("Exponentiation can only be positive integers")
+# define UNSUPPORTED_EXPONENT				UnsupportedError("Exponentiation can only be natural numbers (ℕ)")
 # define UNSUPPORTED_MULTI_POLYNOMIALS		UnsupportedError("Multiple unknown polynomials are not supported")
 # define CONTINUE							2
 # define NOTHING							3
