@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:42:16 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/04 15:29:32 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/05 14:46:48 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ class	Vector: public IType
 		bool		operator>=(const IType &other) const;
 		bool		operator>=(const long long int value) const;
 		IType*		operator[](unsigned long int index) const;
-		IType*		operator[](unsigned long int index);
 		IType*		operator+(const IType &other) const;
 		Vector*		operator+(const Vector &other) const;
 		Vector*		operator+(const Rational &other) const;

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/04 16:26:31 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/05 14:46:37 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,14 +256,7 @@ bool		Vector::operator>=(const long long int value) const
 	return (*this >= Rational(value));
 }
 
-IType*		Vector::operator[](unsigned long int index) const// [ ] Utile de laisser les 2 ?
-{
-	if (index >= this->_vector.size())
-		throw ERROR_VECTOR_OUT_OF_RANGE;
-	return (this->_vector[index]);
-}
-
-IType*		Vector::operator[](unsigned long int index)
+IType*		Vector::operator[](unsigned long int index) const
 {
 	if (index >= this->_vector.size())
 		throw ERROR_VECTOR_OUT_OF_RANGE;

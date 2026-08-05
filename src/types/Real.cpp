@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/04 16:53:44 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/05 14:46:02 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -495,17 +495,17 @@ std::string		Real::to_string(void) const
 
 bool			Real::in_C(void) const
 {
-	return (false);// [ ]: pas sur de ca dans mon contexte
+	return (false);
 }
 
 bool			Real::in_D(void) const
 {
-	return (false);// [ ]: pas sur de ca dans mon contexte
+	return (false);
 }
 
 bool			Real::in_M(void) const
 {
-	return (false);// [ ]: pas sur de ca dans mon contexte
+	return (false);
 }
 
 bool			Real::in_Q(void) const
@@ -661,7 +661,7 @@ IType*			Real::tan(void) const
 
 Rational*		Real::gcd(const IType &other) const
 {
-	return (new Rational(1));// [ ]: pas sur de ca, peut-etre tous les supprimer
+	return (new Rational(1));
 	(void)other;
 }
 

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:39:10 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/28 16:16:28 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/05 14:41:46 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -636,7 +636,7 @@ InfiniteInt	InfiniteInt::sqrt(void) const
 	return (result);
 }
 
-void	InfiniteInt::pop_front(void)// [ ] Still used?
+void	InfiniteInt::pop_front(void)
 {
 	if (this->_digits.empty())
 		throw std::out_of_range("Cannot pop from an empty InfiniteInt");

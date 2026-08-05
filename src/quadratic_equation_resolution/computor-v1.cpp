@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:03:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/05 13:28:18 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/05 18:45:20 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void		print_real_solutions(std::string var, 					\
 		nb_solutions = 1;
 	std::cout << COLOR_GREEN 											\
 			<< (nb_solutions == 1 ? "One solution" : "Two solutions") 	\
-			<< "in ℝ:" << COLOR_RESET << std::endl;
+			<< " in ℝ:" << COLOR_RESET << std::endl;
 	std::cout << var << (nb_solutions > 1 ? "1" : "") << " ≈ " 			\
 			<< solution1 << std::endl;
 	if (nb_solutions == 2)

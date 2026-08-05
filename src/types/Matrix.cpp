@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/04 15:45:46 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/05 18:43:32 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -310,20 +310,31 @@ static Matrix*	exp_get_new_term(const Matrix& matrix, long long int k)
 	return (new_term);
 }
 
-static Matrix*	cos_get_new_term(const Matrix& matrix, long long int k)
+static Rational*	get_matrix_new_term_coeff(long long int k, const Rational& k2)
 {
-	Matrix*		matrix_power;
-	Matrix*		new_term;
 	Rational*	coeff;
 	Rational*	coeff_num;
 	Rational*	factorial;
 
 	coeff_num = Rational(-1) ^ k;
-	factorial = Rational(2 * k).factorial();// [ ] Verifier overflow
+	factorial = k2.factorial();
 	coeff = *coeff_num / *factorial;
-	matrix_power = matrix ^ (2 * k);
 	delete coeff_num;
 	delete factorial;
+	return (coeff);
+}
+
+static Matrix*	cos_get_new_term(const Matrix& matrix, long long int k)
+{
+	Matrix*		matrix_power;
+	Matrix*		new_term;
+	Rational*	coeff;
+	Rational*	k2;
+
+	k2 = Rational(k) * 2;
+	coeff = get_matrix_new_term_coeff(k, *k2);
+	matrix_power = matrix ^ *k2;
+	delete k2;
 	new_term = *coeff * *matrix_power;
 	delete coeff;
 	delete matrix_power;
@@ -335,15 +346,16 @@ static Matrix*	sin_get_new_term(const Matrix& matrix, long long int k)
 	Matrix*		matrix_power;
 	Matrix*		new_term;
 	Rational*	coeff;
-	Rational*	coeff_num;
-	Rational*	factorial;
+	Rational*	k2;
+	Rational*	tmp;
 
-	coeff_num = Rational(-1) ^ k;
-	factorial = Rational(2 * k + 1).factorial();// [ ] Verifier overflow
-	coeff = *coeff_num / *factorial;
-	matrix_power = matrix ^ (2 * k + 1);
-	delete coeff_num;
-	delete factorial;
+	k2 = Rational(k) * 2;
+	tmp = k2;
+	k2 = *tmp + 1;
+	delete tmp;
+	coeff = get_matrix_new_term_coeff(k, *k2);
+	matrix_power = matrix ^ *k2;
+	delete k2;
 	new_term = *coeff * *matrix_power;
 	delete coeff;
 	delete matrix_power;
@@ -461,7 +473,7 @@ Matrix::~Matrix(void)
 
 Matrix::operator bool() const
 {
-	return (this->_width && this->_height);
+	return (this->_width && this->_height);// [ ] Matrice vide = matrice nulle
 }
 
 Matrix&		Matrix::operator=(const Matrix &other)
@@ -569,13 +581,6 @@ bool		Matrix::operator>=(const long long int value) const
 }
 
 IType**		Matrix::operator[](unsigned long int index) const
-{
-	if (index >= this->_height)
-		throw ERROR_MATRIX_OUT_OF_RANGE;
-	return (this->_matrix[index]);
-}
-
-IType**		Matrix::operator[](unsigned long int index)// [ ]: Utile ?
 {
 	if (index >= this->_height)
 		throw ERROR_MATRIX_OUT_OF_RANGE;
@@ -1566,7 +1571,9 @@ Rational*		Matrix::gcd(const Matrix &other) const
 	Rational*	gcd;
 	Rational*	tmp;
 
-	gcd = this->gcd(*dynamic_cast<const Rational*>(other[0][0]));// [ ] Changer ca
+	if (!this->in_Q() || !other.in_Q())
+		return (new Rational(1));
+	gcd = this->gcd(*dynamic_cast<const Rational*>(other[0][0]));// [ ] changer ca par un constructeur en Rational
 	for (unsigned int i = 0; i < other.getHeight(); i++)
 		for (unsigned int j = 0; j < other.getWidth(); j++)
 		{
