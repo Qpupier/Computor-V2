@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/04 15:46:03 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 11:37:41 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,6 +290,12 @@ std::ostream&	Operator::print(std::ostream &os) const
 	return (os);
 }
 
+IType*			Operator::abs(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
 IType*			Operator::clone(void) const
 {
 	return (new Operator(*this));
@@ -322,6 +328,12 @@ IType*			Operator::matrix_operator(const IType &other) const
 }
 
 IType*			Operator::matrix_inversion(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+IType*			Operator::norm(void) const
 {
 	throw ERROR_UNEXPECTED;
 	return (nullptr);

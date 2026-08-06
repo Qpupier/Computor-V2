@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/05 18:43:32 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 11:49:37 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -473,7 +473,11 @@ Matrix::~Matrix(void)
 
 Matrix::operator bool() const
 {
-	return (this->_width && this->_height);// [ ] Matrice vide = matrice nulle
+	for (unsigned long int j = 0; j < this->_height; j++)
+		for (unsigned long int i = 0; i < this->_width; i++)
+			if (*this->_matrix[j][i])
+				return (true);
+	return (false);
 }
 
 Matrix&		Matrix::operator=(const Matrix &other)
@@ -1311,6 +1315,15 @@ std::ostream&	Matrix::print(std::ostream &os) const
 			os << std::endl;
 	}
 	return (os);
+}
+
+IType*			Matrix::abs(void) const
+{
+	if (!*this)
+		return (new Rational(0));
+	throw LogicError("Absolute function is not defined for matrices, "
+			"use the norm function instead");
+	return (nullptr);
 }
 
 IType*			Matrix::clone(void) const

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:35:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/04 15:45:07 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 11:48:42 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,47 +17,6 @@
 #include "Matrix.hpp"
 #include "Polynomial.hpp"
 #include "Vector.hpp"
-
-// Utils
-
-static IType*	function_absolute(const IType &other)// [ ] Inclure dans l'interface ?
-{
-	const Rational*	other_rational;
-	const Real*		other_real;
-
-	other_rational = dynamic_cast<const Rational*>(&other);// TODO: Verifier dans tous les cas possibles (autres fonctions) si on peut passer sur un autre type
-	if (other_rational)
-		return (other_rational->abs());
-	other_real = dynamic_cast<const Real*>(&other);
-	if (other_real)
-		return (other_real->abs());
-	throw LogicError("Absolute function only exists for rational or real numbers: use norm function instead");
-	return (nullptr);
-}
-
-static IType*	function_norm(const IType &other)// [ ] Inclure dans l'interface ?
-{
-	const Complex*		other_complex;
-	const Matrix*		other_matrix;
-	const Polynomial*	other_polynomial;
-	const Vector*		other_vector;
-
-	other_complex = dynamic_cast<const Complex*>(&other);
-	if (other_complex)
-		return (other_complex->norm());
-	other_matrix = dynamic_cast<const Matrix*>(&other);
-	if (other_matrix)
-		return (other_matrix->norm());
-	other_polynomial = dynamic_cast<const Polynomial*>(&other);
-	if (other_polynomial)
-		return (other_polynomial->norm());
-	other_vector = dynamic_cast<const Vector*>(&other);
-	if (other_vector)
-		return (other_vector->norm());
-	throw LogicError("Norm function not exists for rational or real numbers: use absolute function instead");
-	return (nullptr);
-}
-
 
 // Operator overloads
 
@@ -302,6 +261,12 @@ std::ostream&	DefinedFunction::print(std::ostream &os) const
 	return (os);
 }
 
+IType*			DefinedFunction::abs(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
 IType*			DefinedFunction::clone(void) const
 {
 	return (new DefinedFunction(*this));
@@ -324,9 +289,9 @@ IType*			DefinedFunction::function_operator(const IType &other) const
 	switch (this->_function)
 	{
 		case E_FUNCTION_NORM:
-			return (function_norm(other));
+			return (other.norm());
 		case E_FUNCTION_ABSOLUTE:
-			return (function_absolute(other));
+			return (other.abs());
 		case E_FUNCTION_SQRT:
 			return (other.sqrt());
 		case E_FUNCTION_EXPONENTIAL:
@@ -354,6 +319,12 @@ IType*			DefinedFunction::matrix_operator(const IType &other) const
 {
 	throw ERROR_UNEXPECTED;
 	(void)other;
+	return (nullptr);
+}
+
+IType*			DefinedFunction::norm(void) const
+{
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 

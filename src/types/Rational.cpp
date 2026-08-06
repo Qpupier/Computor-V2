@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/05 14:38:35 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 11:48:40 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -928,6 +928,11 @@ std::ostream&	Rational::print(std::ostream &os) const
 	return (os << numerator << "/" << copy.getDenominator());
 }
 
+IType*			Rational::abs(void) const
+{
+	return (new Rational(this->_numerator.abs(), this->_denominator.abs()));
+}
+
 IType*			Rational::clone(void) const
 {
 	return (new Rational(*this));
@@ -1011,6 +1016,13 @@ IType*			Rational::matrix_inversion(void) const
 	return (nullptr);
 }
 
+IType*			Rational::norm(void) const
+{
+	throw LogicError("Norm is not defined for rational numbers, "
+			"use the absolute function instead");
+	return (nullptr);
+}
+
 IType*			Rational::sin(void) const
 {
 	long long int	k(0);
@@ -1078,11 +1090,6 @@ IType*			Rational::tan(void) const
 	delete cosine;
 	delete sine;
 	return (result);
-}
-
-Rational*		Rational::abs(void) const
-{
-	return (new Rational(this->_numerator.abs(), this->_denominator.abs()));
 }
 
 Rational*		Rational::factorial(void) const// TODO: Implementer le parsing correspondant (!)

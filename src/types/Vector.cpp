@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/05 14:46:37 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 11:48:40 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -888,6 +888,15 @@ std::ostream&	Vector::print(std::ostream &os) const
 	}
 	os << "]";
 	return (os);
+}
+
+IType*			Vector::abs(void) const
+{
+	if (!*this)
+		return (new Rational(0));
+	throw LogicError("Absolute function is not defined for vectors, "
+			"use the norm function instead");
+	return (nullptr);
 }
 
 IType*			Vector::clone(void) const

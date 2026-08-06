@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/05 12:33:20 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 11:48:40 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1017,6 +1017,15 @@ std::ostream&	Polynomial::print(std::ostream &os) const
 		print_terms(os, this->_dividers, this->_name);
 	}
 	return (os);
+}
+
+IType*			Polynomial::abs(void) const
+{
+	if (this->getTerms().size() == 1 && this->getDividers().size() == 1 	\
+			&& *this->getDividers()[0].coefficient == 1)
+		return (this->getTerms()[0].coefficient->abs());
+	throw UnsupportedError("Absolute function is not defined for polynomials, "
+			"use the norm function instead");
 }
 
 IType*			Polynomial::clone(void) const

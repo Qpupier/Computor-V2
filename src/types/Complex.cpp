@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 11:19:18 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 11:48:40 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1029,6 +1029,14 @@ std::ostream&	Complex::print(std::ostream &os) const
 		print_value(os, this->_imaginary, "i", !this->_real);
 	}
 	return (os);
+}
+
+IType*			Complex::abs(void) const
+{
+	if (!*this->getImaginary())
+		return (this->getReal()->abs());
+	throw LogicError("Absolute function is not defined for complex numbers, "
+			"use the norm function instead");
 }
 
 IType*			Complex::clone(void) const

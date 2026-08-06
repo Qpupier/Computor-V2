@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 17:41:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/04 16:39:04 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 11:30:08 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,17 +87,18 @@ class	Real: public IType
 		bool			in_Q(void) const;
 		bool			in_Z(void) const;
 		std::ostream&	print(std::ostream &os) const;
+		IType*			abs(void) const;
 		IType*			clone(void) const;
 		IType*			cos(void) const;
 		IType*			exp(void) const;
 		IType*			function_operator(const IType &other) const;
 		IType*			matrix_inversion(void) const;
 		IType*			matrix_operator(const IType &other) const;
+		IType*			norm(void) const;
 		IType*			sin(void) const;
 		IType*			sqrt(void) const;
 		IType*			tan(void) const;
 		Rational*		gcd(const IType &other) const;
-		Real*			abs(void) const;
 		Real*			rad(void) const;
 		void			print_rounded(const std::string var = std::string()) const;
 

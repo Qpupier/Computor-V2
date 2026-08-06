@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/04 15:29:02 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 11:29:06 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,16 +119,17 @@ class	Rational: public IType
 		bool			in_Q(void) const;
 		bool			in_Z(void) const;
 		std::ostream&	print(std::ostream &os) const;
+		IType*			abs(void) const;
 		IType*			clone(void) const;
 		IType*			cos(void) const;
 		IType*			exp(void) const;
 		IType*			function_operator(const IType &other) const;
 		IType*			matrix_operator(const IType &other) const;
 		IType*			matrix_inversion(void) const;
+		IType*			norm(void) const;
 		IType*			sin(void) const;
 		IType*			sqrt(void) const;
 		IType*			tan(void) const;
-		Rational*		abs(void) const;
 		Rational*		factorial(void) const;
 		Rational*		gcd(const IType& other) const;
 		Rational*		gcd(const Rational& other) const;

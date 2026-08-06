@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/05 14:46:02 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 11:48:40 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -524,6 +524,11 @@ std::ostream&	Real::print(std::ostream &os) const
 	return (os);
 }
 
+IType*			Real::abs(void) const
+{
+	return (new Real(this->_value.abs()));
+}
+
 IType*			Real::clone(void) const
 {
 	return (new Real(*this));
@@ -599,6 +604,13 @@ IType*			Real::matrix_operator(const IType &other) const
 	return (nullptr);
 }
 
+IType*			Real::norm(void) const
+{
+	throw LogicError("Norm is not defined for real numbers, "
+			"use the absolute function instead");
+	return (nullptr);
+}
+
 IType*			Real::sin(void) const
 {
 	long long int	k(0);
@@ -663,11 +675,6 @@ Rational*		Real::gcd(const IType &other) const
 {
 	return (new Rational(1));
 	(void)other;
-}
-
-Real*			Real::abs(void) const
-{
-	return (new Real(this->_value.abs()));
 }
 
 Real*			Real::rad(void) const
