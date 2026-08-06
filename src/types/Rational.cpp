@@ -6,13 +6,21 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 18:14:19 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 18:31:12 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Rational.hpp"
 
 // Utils
+
+static Rational		from_complex(const Complex& complex)
+{
+	if (*complex.getImaginary())
+		throw LogicError("A complex number cannot be converted to a "
+				"rational number");
+	return (Rational(*complex.getReal()));
+}
 
 static Rational		from_polynomial(const Polynomial& polynomial)
 {
@@ -182,7 +190,7 @@ Rational::Rational(std::string str)
 
 Rational::Rational(const IType& other)
 {
-	const Rational*		other_rational;// TODO: Verifier tous les constructeurs avec tous les cast
+	const Rational*		other_rational;
 	const Complex*		other_complex;
 	const Matrix*		other_matrix;
 	const Polynomial*	other_polynomial;
@@ -198,18 +206,15 @@ Rational::Rational(const IType& other)
 	if (other_rational)
 		*this = *other_rational;
 	else if (other_complex)
-	{
-		if (*other_complex->getImaginary())
-			throw ERROR_UNEXPECTED;
-		*this = *other_complex->getReal();
-	}
+		*this = from_complex(*other_complex);
 	else if (other_polynomial)
 		*this = from_polynomial(*other_polynomial);
 	else if (other_real)
 		*this = from_real(*other_real);
-	else if (other_matrix || other_vector)
-		throw LogicError("A matrix or a vector cannot be converted to a "
-				"rational number");
+	else if (other_matrix)
+		throw LogicError("A matrix cannot be converted to a rational number");
+	else if (other_vector)
+		throw LogicError("A vector cannot be converted to a rational number");
 	else
 		throw ERROR_UNEXPECTED;
 	this->reduce();

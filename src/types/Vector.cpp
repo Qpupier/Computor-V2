@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 18:17:41 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 18:27:46 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,18 +124,30 @@ Vector::Vector(std::string str, t_data &data)
 Vector::Vector(const IType &other): _vector()
 {
 	const Vector*		other_vector;
+	const Rational*		other_rational;
+	const Complex*		other_complex;
 	const Matrix*		other_matrix;
 	const Polynomial*	other_polynomial;
+	const Real*			other_real;
 
 	other_vector = dynamic_cast<const Vector*>(&other);
+	other_rational = dynamic_cast<const Rational*>(&other);
+	other_complex = dynamic_cast<const Complex*>(&other);
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	other_real = dynamic_cast<const Real*>(&other);
 	if (other_vector)
 		*this = *other_vector;
 	else if (other_matrix)
 		*this = from_matrix(other_matrix);
 	else if (other_polynomial)
 		*this = from_polynomial(other_polynomial);
+	else if (other_rational)
+		throw LogicError("A rational number cannot be converted to a vector");
+	else if (other_complex)
+		throw LogicError("A complex number cannot be converted to a vector");
+	else if (other_real)
+		throw LogicError("A real number cannot be converted to a vector");
 	else
 		throw ERROR_UNEXPECTED;
 }
@@ -326,7 +338,7 @@ Vector*		Vector::operator+(const Complex &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (*this + rational);
 }
@@ -424,7 +436,7 @@ Vector*		Vector::operator-(const Complex &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (*this - rational);
 }
@@ -523,7 +535,7 @@ Vector*		Vector::operator*(const Complex &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (*this * rational);
 }
@@ -616,7 +628,7 @@ Vector*		Vector::operator/(const Complex &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (*this / rational);
 }
@@ -715,7 +727,7 @@ Vector*		Vector::operator%(const Complex &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (*this % rational);
 }

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 12:04:42 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 18:22:32 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,11 +112,15 @@ Real::Real(const IType& other)
 	const Real*			other_real;
 	const Rational*		other_rational;
 	const Complex*		other_complex;
+	const Matrix*		other_matrix;
 	const Polynomial*	other_polynomial;
+	const Vector*		other_vector;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	other_complex = dynamic_cast<const Complex*>(&other);
+	other_matrix = dynamic_cast<const Matrix*>(&other);
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	other_vector = dynamic_cast<const Vector*>(&other);
 	other_real = dynamic_cast<const Real*>(&other);
 	if (other_real)
 		*this = *other_real;
@@ -126,6 +130,10 @@ Real::Real(const IType& other)
 		*this = from_complex(*other_complex);
 	else if (other_polynomial)
 		*this = from_polynomial(*other_polynomial);
+	else if (other_matrix)
+		throw LogicError("A matrix cannot be converted to a real number");
+	else if (other_vector)
+		throw LogicError("A vector cannot be converted to a real number");
 	else
 		throw ERROR_UNEXPECTED;
 }

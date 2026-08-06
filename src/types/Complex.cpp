@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 18:17:51 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 18:27:46 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,8 +278,10 @@ Complex::Complex(const IType &other): _real(nullptr), _imaginary(nullptr)
 		from_polynomial(*this, *other_polynomial);
 	else if (other_real)
 		*this = Complex(other_real->clone(), new Rational(0));
-	else if (other_matrix || other_vector)
-		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
+	else if (other_matrix)
+		LogicError("A matrix cannot be converted to a complex number");
+	else if (other_vector)
+		LogicError("A vector cannot be converted to a complex number");
 	else
 		throw ERROR_UNEXPECTED;
 }
@@ -418,7 +420,7 @@ Matrix*		Complex::operator+(const Matrix &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (rational + other);
 }
@@ -438,7 +440,7 @@ Vector*		Complex::operator+(const Vector &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (rational + other);
 }
@@ -516,7 +518,7 @@ Matrix*		Complex::operator-(const Matrix &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (rational - other);
 }
@@ -542,7 +544,7 @@ Vector*		Complex::operator-(const Vector &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (rational - other);
 }
@@ -632,7 +634,7 @@ Matrix*		Complex::operator*(const Matrix &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (rational * other);
 }
@@ -652,7 +654,7 @@ Vector*		Complex::operator*(const Vector &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (rational * other);
 }
@@ -735,7 +737,7 @@ Matrix*		Complex::operator/(const Matrix &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (rational / other);
 }
@@ -762,7 +764,7 @@ Vector*		Complex::operator/(const Vector &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (rational / other);
 }

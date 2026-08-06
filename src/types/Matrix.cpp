@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 18:20:03 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 18:27:46 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -642,7 +642,7 @@ Matrix*		Matrix::operator+(const Complex &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (*this + rational);
 }
@@ -743,7 +743,7 @@ Matrix*		Matrix::operator-(const Complex &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (*this - rational);
 }
@@ -845,7 +845,7 @@ Matrix*		Matrix::operator*(const Complex &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (*this * rational);
 }
@@ -957,7 +957,7 @@ Matrix*		Matrix::operator/(const Complex &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_COMPLEX;
 	}
 	return (*this / rational);
 }
