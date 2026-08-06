@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/05 13:58:58 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 11:19:18 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,6 +212,44 @@ static Complex*			test_exact_value(Complex* sqrt, const Complex& value)
 	delete square;
 	delete test;
 	return (sqrt);
+}
+
+static IType*			get_division_numerator(const Complex& a, 			\
+		const Complex& b, bool is_real)
+{
+	IType*	product1;
+	IType*	product2;
+	IType*	numerator;
+
+	if (is_real)
+	{
+		product1 = *a.getReal() * *b.getReal();
+		product2 = *a.getImaginary() * *b.getImaginary();
+		numerator = *product1 + *product2;
+	}
+	else
+	{
+		product1 = *a.getImaginary() * *b.getReal();
+		product2 = *a.getReal() * *b.getImaginary();
+		numerator = *product1 - *product2;
+	}
+	delete product1;
+	delete product2;
+	return (numerator);
+}
+
+static IType*			get_division_denominator(const Complex& b)
+{
+	IType*	part1;
+	IType*	part2;
+	IType*	denominator;
+
+	part1 = *b.getReal() * *b.getReal();
+	part2 = *b.getImaginary() * *b.getImaginary();
+	denominator = *part1 + *part2;
+	delete part1;
+	delete part2;
+	return (denominator);
 }
 
 
@@ -761,21 +799,28 @@ Complex*	Complex::operator/(const long long int value) const
 	return (*this / Rational(value));
 }
 
-Complex*	Complex::operator%(const Complex &other) const// TODO: Refaire avec les entiers de Gauss
+Complex*	Complex::operator%(const Complex &other) const
 {
-	Rational	rational;
-	Rational	other_rational;
+	Complex*	result;
+	IType*		real;
+	IType*		imaginary;
+	IType*		denominator;
 
-	try
+	real = get_division_numerator(*this, other, true);
+	imaginary = get_division_numerator(*this, other, false);
+	denominator = get_division_denominator(other);
+	if (!*denominator)
 	{
-		rational = *this;
-		other_rational = other;
+		delete real;
+		delete imaginary;
+		delete denominator;
+		throw ERROR_DIVISION_BY_ZERO;
 	}
-	catch (const LogicError &e)
-	{
-		throw ERROR_MODULO_COMPLEX;
-	}
-	return (new Complex(rational % other_rational, new Rational()));
+	result = new Complex(*real / *denominator, *imaginary / *denominator);
+	delete real;
+	delete imaginary;
+	delete denominator;
+	return (result);
 }
 
 Complex*	Complex::operator%(const Rational &other) const
