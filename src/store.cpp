@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:11:12 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/05 14:48:21 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 10:59:32 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,4 +111,5 @@ void		delete_empty_function_stored(				\
 		}
 	if (throw_error)
 		throw LogicError(error_msg);
+	std::cerr << error_msg << std::endl;
 }
