@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 14:21:07 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 18:17:41 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,7 +326,7 @@ Vector*		Vector::operator+(const Complex &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
 	}
 	return (*this + rational);
 }
@@ -424,7 +424,7 @@ Vector*		Vector::operator-(const Complex &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
 	}
 	return (*this - rational);
 }
@@ -523,7 +523,7 @@ Vector*		Vector::operator*(const Complex &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
 	}
 	return (*this * rational);
 }
@@ -616,7 +616,7 @@ Vector*		Vector::operator/(const Complex &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
 	}
 	return (*this / rational);
 }
@@ -715,7 +715,7 @@ Vector*		Vector::operator%(const Complex &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
 	}
 	return (*this % rational);
 }
@@ -970,10 +970,12 @@ IType*			Vector::tan(void) const
 
 Rational*		Vector::gcd(const IType &other) const
 {
-	const Vector*	other_vector;
-	const Rational*	other_rational;
-	const Complex*	other_complex;
-	const Matrix*	other_matrix;
+	const Vector*		other_vector;
+	const Rational*		other_rational;
+	const Complex*		other_complex;
+	const Matrix*		other_matrix;
+	const Polynomial*	other_polynomial;
+	const Real*			other_real;
 
 	other_vector = dynamic_cast<const Vector*>(&other);
 	if (other_vector)
@@ -987,6 +989,12 @@ Rational*		Vector::gcd(const IType &other) const
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (this->gcd(*other_matrix));
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	if (other_polynomial)
+		return (this->gcd(*other_polynomial));
+	other_real = dynamic_cast<const Real*>(&other);
+	if (other_real)
+		return (this->gcd(*other_real));
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
@@ -1038,6 +1046,28 @@ Rational*		Vector::gcd(const Matrix &other) const
 			delete tmp;
 		}
 	return (gcd);
+}
+
+Rational*		Vector::gcd(const Polynomial &other) const
+{
+	return (other.gcd(*this));
+}
+
+Rational*		Vector::gcd(const Real &other) const
+{
+	Rational*	result;
+	Rational*	tmp;
+
+	if (this->empty())
+		return (new Rational(1));
+	result = other.gcd(*(*this)[0]);
+	for (unsigned long int i(1); i < this->size(); i++)
+	{
+		tmp = result;
+		result = result->gcd(*(*this)[i]);
+		delete tmp;
+	}
+	return (result);
 }
 
 Real*			Vector::rad(void) const

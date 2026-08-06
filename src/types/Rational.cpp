@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 14:13:20 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 18:14:19 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,14 +182,18 @@ Rational::Rational(std::string str)
 
 Rational::Rational(const IType& other)
 {
-	const Rational*		other_rational;
+	const Rational*		other_rational;// TODO: Verifier tous les constructeurs avec tous les cast
 	const Complex*		other_complex;
-	const Polynomial*	other_polynomial;// [ ]: Tout ajouter dans chaque classe (Vector et Real)
+	const Matrix*		other_matrix;
+	const Polynomial*	other_polynomial;
+	const Vector*		other_vector;
 	const Real*			other_real;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	other_complex = dynamic_cast<const Complex*>(&other);
+	other_matrix = dynamic_cast<const Matrix*>(&other);
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	other_vector = dynamic_cast<const Vector*>(&other);
 	other_real = dynamic_cast<const Real*>(&other);
 	if (other_rational)
 		*this = *other_rational;
@@ -203,6 +207,9 @@ Rational::Rational(const IType& other)
 		*this = from_polynomial(*other_polynomial);
 	else if (other_real)
 		*this = from_real(*other_real);
+	else if (other_matrix || other_vector)
+		throw LogicError("A matrix or a vector cannot be converted to a "
+				"rational number");
 	else
 		throw ERROR_UNEXPECTED;
 	this->reduce();
@@ -1162,6 +1169,11 @@ Rational*		Rational::gcd(const Matrix& other) const
 	return (gcd);
 }
 
+Rational*		Rational::gcd(const Polynomial& other) const
+{
+	return (other.gcd(*this));
+}
+
 Rational*		Rational::gcd(const Vector& other) const
 {
 	Rational*	gcd;
@@ -1177,8 +1189,6 @@ Rational*		Rational::gcd(const Vector& other) const
 	return (gcd);
 }
 
-// TODO: Polynomial
-
 Rational*		Rational::gcd(const Real& other) const
 {
 	return (new Rational(1));
@@ -1189,10 +1199,10 @@ Rational*		Rational::gcd(const IType& other) const
 {
 	const Rational*		other_rational;
 	const Complex*		other_complex;
-	const Matrix*		other_matrix;// TODO
-	// const Polynomial*	other_polynomial;
+	const Matrix*		other_matrix;
+	const Polynomial*	other_polynomial;
 	const Vector*		other_vector;
-	// const Real*			other_real;
+	const Real*			other_real;
 
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
@@ -1203,15 +1213,15 @@ Rational*		Rational::gcd(const IType& other) const
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (this->gcd(*other_matrix));
-	// other_polynomial = dynamic_cast<const Polynomial*>(&other);
-	// if (other_polynomial)
-	// 	return (this->gcd(*other_polynomial));
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	if (other_polynomial)
+		return (this->gcd(*other_polynomial));
 	other_vector = dynamic_cast<const Vector*>(&other);
 	if (other_vector)
 		return (this->gcd(*other_vector));
-	// other_real = dynamic_cast<const Real*>(&other);
-	// if (other_real)
-	// 	return (this->gcd(*other_real));
+	other_real = dynamic_cast<const Real*>(&other);
+	if (other_real)
+		return (this->gcd(*other_real));
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 14:11:32 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 18:08:26 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -514,29 +514,13 @@ Polynomial::Polynomial(const Polynomial &other)
 
 Polynomial::Polynomial(const IType &other)
 {
-	const Rational*		other_rational;
-	const Complex*		other_complex;
-	const Matrix*		other_matrix;
-	const Vector*		other_vector;
 	const Polynomial*	other_polynomial;
 
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
-	other_rational = dynamic_cast<const Rational*>(&other);
-	other_complex = dynamic_cast<const Complex*>(&other);
-	other_matrix = dynamic_cast<const Matrix*>(&other);
-	other_vector = dynamic_cast<const Vector*>(&other);
 	if (other_polynomial)
 		*this = *other_polynomial;
-	else if (other_rational)
-		*this = Polynomial("", (t_term){other_rational->clone(), 0});
-	else if (other_complex)
-		*this = Polynomial("", (t_term){other_complex->clone(), 0});
-	else if (other_matrix)
-		*this = Polynomial("", (t_term){other_matrix->clone(), 0});
-	else if (other_vector)
-		*this = Polynomial("", (t_term){other_vector->clone(), 0});
 	else
-		throw ERROR_UNEXPECTED;
+		*this = Polynomial("", (t_term){other.clone(), 0});
 	this->reduce();
 }
 
@@ -716,11 +700,6 @@ Polynomial*	Polynomial::operator+(const Polynomial &other) const
 
 IType*		Polynomial::operator+(const IType &other) const
 {
-	const Polynomial*	other_polynomial;
-
-	other_polynomial = dynamic_cast<const Polynomial*>(&other);
-	if (other_polynomial)
-		return (*this + *other_polynomial);
 	return (*this + Polynomial(other));
 }
 
@@ -747,11 +726,6 @@ IType*		Polynomial::operator-(const Polynomial &other) const
 
 IType*		Polynomial::operator-(const IType &other) const
 {
-	const Polynomial*	other_polynomial;
-
-	other_polynomial = dynamic_cast<const Polynomial*>(&other);
-	if (other_polynomial)
-		return (*this - *other_polynomial);
 	return (*this - Polynomial(other));
 }
 
@@ -780,11 +754,6 @@ Polynomial*	Polynomial::operator*(const Polynomial &other) const
 
 IType*		Polynomial::operator*(const IType &other) const
 {
-	const Polynomial*	other_polynomial;
-
-	other_polynomial = dynamic_cast<const Polynomial*>(&other);
-	if (other_polynomial)
-		return (*this * *other_polynomial);
 	return (*this * Polynomial(other));
 }
 
@@ -820,11 +789,6 @@ Polynomial*	Polynomial::operator/(const Polynomial &other) const
 
 IType*		Polynomial::operator/(const IType &other) const
 {
-	const Polynomial*	other_polynomial;
-
-	other_polynomial = dynamic_cast<const Polynomial*>(&other);
-	if (other_polynomial)
-		return (*this / *other_polynomial);
 	return (*this / Polynomial(other));
 }
 
@@ -850,11 +814,6 @@ Polynomial*	Polynomial::operator%(const Polynomial &other) const
 
 IType*		Polynomial::operator%(const IType &other) const
 {
-	const Polynomial*	other_polynomial;
-
-	other_polynomial = dynamic_cast<const Polynomial*>(&other);
-	if (other_polynomial)
-		return (*this % *other_polynomial);
 	return (*this % Polynomial(other));
 }
 
@@ -1035,13 +994,15 @@ IType*			Polynomial::clone(void) const
 
 IType*			Polynomial::cos(void) const
 {
-	throw UnsupportedError("Cosine of a vector is a formal power serie, which is not supported");
+	throw UnsupportedError("Cosine of a vector is a formal power serie, "
+			"which is not supported");
 	return (nullptr);
 }
 
 IType*			Polynomial::exp(void) const
 {
-	throw UnsupportedError("Exponential of a vector is a formal power serie, which is not supported");
+	throw UnsupportedError("Exponential of a vector is a formal power serie, "
+			"which is not supported");
 	return (nullptr);
 }
 
@@ -1109,7 +1070,8 @@ IType*			Polynomial::norm(void) const
 
 IType*			Polynomial::sin(void) const
 {
-	throw UnsupportedError("Sine of a vector is a formal power serie, which is not supported");
+	throw UnsupportedError("Sine of a vector is a formal power serie, "
+			"which is not supported");
 	return (nullptr);
 }
 
@@ -1129,14 +1091,79 @@ IType*			Polynomial::sqrt(void) const
 
 IType*			Polynomial::tan(void) const
 {
-	throw UnsupportedError("Tangent of a vector is a formal power serie, which is not supported");
+	throw UnsupportedError("Tangent of a vector is a formal power serie, "
+			"which is not supported");
 	return (nullptr);
+}
+
+Rational*		Polynomial::gcd(const Polynomial &other) const
+{
+	Rational*	gcd;
+	Rational*	result;
+
+	if (!this->in_Q() || !other.in_Q() || this->getTerms().empty() 	\
+			|| other.getTerms().empty())
+		return (new Rational(1));
+	gcd = vector_gcd(this->_terms);
+	result = gcd->gcd(*vector_gcd(other._terms));
+	delete gcd;
+	return (result);
+}
+
+Rational*		Polynomial::gcd(const Rational &other) const
+{
+	return (Polynomial(other).gcd(*this));
+}
+
+Rational*		Polynomial::gcd(const Complex &other) const
+{
+	return (Polynomial(other).gcd(*this));
+}
+
+Rational*		Polynomial::gcd(const Matrix &other) const
+{
+	return (Polynomial(other).gcd(*this));
+}
+
+Rational*		Polynomial::gcd(const Vector &other) const
+{
+	return (Polynomial(other).gcd(*this));
+}
+
+Rational*		Polynomial::gcd(const Real &other) const
+{
+	return (new Rational(1));
+	(void)other;
 }
 
 Rational*		Polynomial::gcd(const IType &other) const
 {
-	throw ERROR_UNEXPECTED;// TODO
-	(void)other;
+	const Polynomial*	other_polynomial;
+	const Rational*		other_rational;
+	const Complex*		other_complex;
+	const Matrix*		other_matrix;
+	const Vector*		other_vector;
+	const Real*			other_real;
+
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	if (other_polynomial)
+		return (this->gcd(*other_polynomial));
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (this->gcd(*other_rational));
+	other_complex = dynamic_cast<const Complex*>(&other);
+	if (other_complex)
+		return (this->gcd(*other_complex));
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (this->gcd(*other_matrix));
+	other_vector = dynamic_cast<const Vector*>(&other);
+	if (other_vector)
+		return (this->gcd(*other_vector));
+	other_real = dynamic_cast<const Real*>(&other);
+	if (other_real)
+		return (this->gcd(*other_real));
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 

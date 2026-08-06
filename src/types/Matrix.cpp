@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 14:11:03 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 18:20:03 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -434,19 +434,31 @@ Matrix::Matrix(const Matrix &other): 		\
 
 Matrix::Matrix(const IType &other): Matrix()
 {
+	const Rational*		other_rational;
+	const Complex*		other_complex;
 	const Matrix*		other_matrix;
 	const Vector*		other_vector;
 	const Polynomial*	other_polynomial;
+	const Real*			other_real;
 
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	other_vector = dynamic_cast<const Vector*>(&other);
 	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	other_rational = dynamic_cast<const Rational*>(&other);
+	other_complex = dynamic_cast<const Complex*>(&other);
+	other_real = dynamic_cast<const Real*>(&other);
 	if (other_matrix)
 		*this = *other_matrix;
 	else if (other_vector)
 		*this = Matrix(*other_vector);
 	else if (other_polynomial)
 		*this = Matrix(*other_polynomial);
+	else if (other_rational)
+		throw LogicError("A rational number cannot be converted to a matrix");
+	else if (other_complex)
+		throw LogicError("A complex number cannot be converted to a matrix");
+	else if (other_real)
+		throw LogicError("A real number cannot be converted to a matrix");
 	else
 		throw ERROR_UNEXPECTED;
 }
@@ -622,7 +634,7 @@ Matrix*		Matrix::operator+(const Rational &other) const
 
 Matrix*		Matrix::operator+(const Complex &other) const
 {
-	Rational	rational;
+	Rational	rational;// TODO: Ajouter les reels ici et verifier de partout
 
 	try
 	{
@@ -630,7 +642,7 @@ Matrix*		Matrix::operator+(const Complex &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
 	}
 	return (*this + rational);
 }
@@ -731,7 +743,7 @@ Matrix*		Matrix::operator-(const Complex &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
 	}
 	return (*this - rational);
 }
@@ -833,7 +845,7 @@ Matrix*		Matrix::operator*(const Complex &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
 	}
 	return (*this * rational);
 }
@@ -945,7 +957,7 @@ Matrix*		Matrix::operator/(const Complex &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
 	}
 	return (*this / rational);
 }
@@ -1602,21 +1614,44 @@ Rational*		Matrix::gcd(const Matrix &other) const
 	return (gcd);
 }
 
+Rational*		Matrix::gcd(const Polynomial &other) const
+{
+	return (other.gcd(*this));
+}
+
+Rational*		Matrix::gcd(const Real &other) const
+{
+	return (new Rational(1));
+	(void)other;
+}
+
 Rational*		Matrix::gcd(const IType &other) const
 {
-	const Rational*	other_rational;
-	const Complex*	other_complex;
-	const Matrix*	other_matrix;
+	const Rational*		other_rational;
+	const Complex*		other_complex;
+	const Matrix*		other_matrix;
+	const Polynomial*	other_polynomial;
+	const Vector*		other_vector;
+	const Real*			other_real;
 
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	if (other_matrix)
+		return (this->gcd(*other_matrix));
 	other_rational = dynamic_cast<const Rational*>(&other);
 	if (other_rational)
 		return (this->gcd(*other_rational));
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
 		return (this->gcd(*other_complex));
-	other_matrix = dynamic_cast<const Matrix*>(&other);
-	if (other_matrix)
-		return (this->gcd(*other_matrix));
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	if (other_polynomial)
+		return (this->gcd(*other_polynomial));
+	other_vector = dynamic_cast<const Vector*>(&other);
+	if (other_vector)
+		return (this->gcd(*other_vector));
+	other_real = dynamic_cast<const Real*>(&other);
+	if (other_real)
+		return (this->gcd(*other_real));
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }

@@ -6,13 +6,34 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 14:10:17 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 18:17:51 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Complex.hpp"
 
 // Utils
+
+static void				from_polynomial(Complex &complex, 					\
+		const Polynomial &polynomial)
+{
+	if (polynomial.getTerms().empty())
+	{
+		complex.setReal(new Rational(0));
+		complex.setImaginary(new Rational(0));
+	}
+	else
+	{
+		if (polynomial.getDividers().size() != 1 					\
+				|| *polynomial.getDividers()[0].coefficient != 1 	\
+				|| polynomial.getDividers()[0].power 				\
+				|| polynomial.getTerms().size() != 1 				\
+				|| polynomial.getTerms()[0].power)
+			throw ERROR_UNEXPECTED;
+		complex.setReal(polynomial.getTerms()[0].coefficient->clone());
+		complex.setImaginary(new Rational(0));
+	}
+}
 
 static std::ostream&	print_value_rational(std::ostream& os, 				\
 		bool negative, const std::string& i, Rational* copy_rational)
@@ -134,27 +155,6 @@ static Complex*			division(const Complex& a, const Complex& b, 		\
 	return (result);
 }
 
-static void				from_polynomial(Complex &complex, 					\
-		const Polynomial &polynomial)
-{
-	if (polynomial.getTerms().empty())
-	{
-		complex.setReal(new Rational(0));
-		complex.setImaginary(new Rational(0));
-	}
-	else
-	{
-		if (polynomial.getDividers().size() != 1 					\
-				|| *polynomial.getDividers()[0].coefficient != 1 	\
-				|| polynomial.getDividers()[0].power 				\
-				|| polynomial.getTerms().size() != 1 				\
-				|| polynomial.getTerms()[0].power)
-			throw ERROR_UNEXPECTED;
-		complex.setReal(polynomial.getTerms()[0].coefficient->clone());
-		complex.setImaginary(new Rational(0));
-	}
-}
-
 static void				print_complex_rounded_value_default(				\
 		const InfiniteFloat& real, const InfiniteFloat& imaginary)
 {
@@ -257,20 +257,29 @@ static IType*			get_division_denominator(const Complex& b)
 
 Complex::Complex(const IType &other): _real(nullptr), _imaginary(nullptr)
 {
-	const Complex*		other_complex(dynamic_cast<const Complex*>(&other));
-	const Rational*		other_rational(dynamic_cast<const Rational*>(&other));
-	const Polynomial*	other_polynomial								\
-			(dynamic_cast<const Polynomial*>(&other));
+	const Complex*		other_complex;
+	const Rational*		other_rational;
+	const Matrix*		other_matrix;
+	const Polynomial*	other_polynomial;
+	const Vector*		other_vector;
+	const Real*			other_real;
 
+	other_complex = dynamic_cast<const Complex*>(&other);
+	other_rational = dynamic_cast<const Rational*>(&other);
+	other_matrix = dynamic_cast<const Matrix*>(&other);
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	other_vector = dynamic_cast<const Vector*>(&other);
+	other_real = dynamic_cast<const Real*>(&other);
 	if (other_complex)
 		*this = *other_complex;
 	else if (other_rational)
-	{
-		this->_real = other_rational->clone();
-		this->_imaginary = new Rational(0);
-	}
+		*this = Complex(other_rational->clone(), new Rational(0));
 	else if (other_polynomial)
 		from_polynomial(*this, *other_polynomial);
+	else if (other_real)
+		*this = Complex(other_real->clone(), new Rational(0));
+	else if (other_matrix || other_vector)
+		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
 	else
 		throw ERROR_UNEXPECTED;
 }
@@ -409,7 +418,7 @@ Matrix*		Complex::operator+(const Matrix &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
 	}
 	return (rational + other);
 }
@@ -429,7 +438,7 @@ Vector*		Complex::operator+(const Vector &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
 	}
 	return (rational + other);
 }
@@ -507,7 +516,7 @@ Matrix*		Complex::operator-(const Matrix &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
 	}
 	return (rational - other);
 }
@@ -533,7 +542,7 @@ Vector*		Complex::operator-(const Vector &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
 	}
 	return (rational - other);
 }
@@ -623,7 +632,7 @@ Matrix*		Complex::operator*(const Matrix &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
 	}
 	return (rational * other);
 }
@@ -643,7 +652,7 @@ Vector*		Complex::operator*(const Vector &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
 	}
 	return (rational * other);
 }
@@ -726,7 +735,7 @@ Matrix*		Complex::operator/(const Matrix &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
 	}
 	return (rational / other);
 }
@@ -753,7 +762,7 @@ Vector*		Complex::operator/(const Vector &other) const
 	}
 	catch (const LogicError &e)
 	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
+		throw ERROR_OPERATION_MATRIX_VECTOR_COMPLEX;
 	}
 	return (rational / other);
 }
@@ -1228,19 +1237,31 @@ Rational*		Complex::gcd(const Vector &other) const
 
 Rational*		Complex::gcd(const IType &other) const
 {
-	const Rational*	other_rational;
-	const Complex*	other_complex;
-	const Matrix*	other_matrix;
+	const Complex*		other_complex;
+	const Rational*		other_rational;
+	const Matrix*		other_matrix;
+	const Polynomial*	other_polynomial;
+	const Vector*		other_vector;
+	const Real*			other_real;
 
-	other_rational = dynamic_cast<const Rational*>(&other);
-	if (other_rational)
-		return (this->gcd(*other_rational));
 	other_complex = dynamic_cast<const Complex*>(&other);
 	if (other_complex)
 		return (this->gcd(*other_complex));
+	other_rational = dynamic_cast<const Rational*>(&other);
+	if (other_rational)
+		return (this->gcd(*other_rational));
 	other_matrix = dynamic_cast<const Matrix*>(&other);
 	if (other_matrix)
 		return (this->gcd(*other_matrix));
+	other_polynomial = dynamic_cast<const Polynomial*>(&other);
+	if (other_polynomial)
+		return (other_polynomial->gcd(*this));
+	other_vector = dynamic_cast<const Vector*>(&other);
+	if (other_vector)
+		return (this->gcd(*other_vector));
+	other_real = dynamic_cast<const Real*>(&other);
+	if (other_real)
+		return (this->gcd(*other_real));
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
