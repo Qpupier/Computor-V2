@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 11:49:37 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 11:56:28 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,7 +296,8 @@ static Matrix*									sqrt_newton_iteration(		\
 	return (nullptr);
 }
 
-static Matrix*	exp_get_new_term(const Matrix& matrix, long long int k)
+static Matrix*									exp_get_new_term(			\
+		const Matrix& matrix, long long int k)
 {
 	Matrix*		new_term;
 	Matrix*		power;
@@ -310,7 +311,8 @@ static Matrix*	exp_get_new_term(const Matrix& matrix, long long int k)
 	return (new_term);
 }
 
-static Rational*	get_matrix_new_term_coeff(long long int k, const Rational& k2)
+static Rational*								get_matrix_new_term_coeff(	\
+		long long int k, const Rational& k2)
 {
 	Rational*	coeff;
 	Rational*	coeff_num;
@@ -324,7 +326,8 @@ static Rational*	get_matrix_new_term_coeff(long long int k, const Rational& k2)
 	return (coeff);
 }
 
-static Matrix*	cos_get_new_term(const Matrix& matrix, long long int k)
+static Matrix*									cos_get_new_term(			\
+		const Matrix& matrix, long long int k)
 {
 	Matrix*		matrix_power;
 	Matrix*		new_term;
@@ -341,7 +344,8 @@ static Matrix*	cos_get_new_term(const Matrix& matrix, long long int k)
 	return (new_term);
 }
 
-static Matrix*	sin_get_new_term(const Matrix& matrix, long long int k)
+static Matrix*									sin_get_new_term(			\
+		const Matrix& matrix, long long int k)
 {
 	Matrix*		matrix_power;
 	Matrix*		new_term;
@@ -362,7 +366,8 @@ static Matrix*	sin_get_new_term(const Matrix& matrix, long long int k)
 	return (new_term);
 }
 
-static bool		is_round_equal(const Matrix &a, const Matrix &b)
+static bool										is_round_equal(				\
+		const Matrix &a, const Matrix &b)
 {
 	if (a.getWidth() != b.getWidth() || a.getHeight() != b.getHeight())
 		return (false);
@@ -1205,7 +1210,9 @@ InfiniteFloat		Matrix::getRoundedValue(unsigned long int i, 	\
 {
 	if (i >= this->_width || j >= this->_height)
 		throw ERROR_MATRIX_OUT_OF_RANGE;
-	return (dynamic_cast<Rational*>(this->_matrix[j][i])->getValue());// [ ] Changer ca
+	if (this->_matrix[j][i]->in_Q())
+		return (dynamic_cast<Rational*>(this->_matrix[j][i])->getValue());
+	return (dynamic_cast<Real*>(this->_matrix[j][i])->getValue());
 }
 
 unsigned long int	Matrix::getWidth(void) const
@@ -1586,7 +1593,7 @@ Rational*		Matrix::gcd(const Matrix &other) const
 
 	if (!this->in_Q() || !other.in_Q())
 		return (new Rational(1));
-	gcd = this->gcd(*dynamic_cast<const Rational*>(other[0][0]));// [ ] changer ca par un constructeur en Rational
+	gcd = this->gcd(*dynamic_cast<const Rational*>(other[0][0]));
 	for (unsigned int i = 0; i < other.getHeight(); i++)
 		for (unsigned int j = 0; j < other.getWidth(); j++)
 		{

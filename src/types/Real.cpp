@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 11:48:40 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 12:04:42 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,20 @@
 
 // Utils
 
-static Real		from_rational(const Rational& rational)
+static Real			from_rational(const Rational& rational)
 {
 	return (Real(InfiniteFloat(rational.getNumerator()) 	\
 			/ InfiniteFloat(rational.getDenominator())));
 }
 
-static Real		from_complex(const Complex& complex)
+static Real			from_complex(const Complex& complex)
 {
 	if (*complex.getImaginary())
 		throw ERROR_UNEXPECTED;
 	return (Real(*complex.getReal()));
 }
 
-static Real		from_polynomial(const Polynomial& polynomial)
+static Real			from_polynomial(const Polynomial& polynomial)
 {
 	if (polynomial.getDividers().size() != 1 					\
 			|| *polynomial.getDividers()[0].coefficient != 1 	\
@@ -38,47 +38,59 @@ static Real		from_polynomial(const Polynomial& polynomial)
 	return (Real(*polynomial.getTerms()[0].coefficient));
 }
 
-static IType*	cos_get_new_term(const Real& number, long long int k)
+static Rational*	get_real_new_term_coeff(long long int k, const Rational& k2)
 {
-	IType*		new_term;
-	IType*		num_product;
-	IType*		power2;
+	Rational*	coeff;
+	Rational*	coeff_num;
 	Rational*	factorial;
-	Rational*	power1;
 
-	power1 = Rational(-1) ^ k;
-	power2 = number ^ (2 * k);
-	num_product = *power1 * *power2;
-	delete power1;
-	delete power2;
-	factorial = Rational(2 * k).factorial();
-	new_term = *num_product / *factorial;
-	delete num_product;
+	coeff_num = Rational(-1) ^ k;
+	factorial = k2.factorial();
+	coeff = *coeff_num / *factorial;
+	delete coeff_num;
 	delete factorial;
+	return (coeff);
+}
+
+static IType*		cos_get_new_term(const Real& number, long long int k)
+{
+	Real*		real_power;
+	Real*		new_term;
+	Rational*	coeff;
+	Rational*	k2;
+
+	k2 = Rational(k) * 2;
+	coeff = get_real_new_term_coeff(k, *k2);
+	real_power = number ^ *k2;
+	delete k2;
+	new_term = *coeff * *real_power;
+	delete coeff;
+	delete real_power;
 	return (new_term);
 }
 
-static IType*	sin_get_new_term(const Real& number, long long int k)
+static IType*		sin_get_new_term(const Real& number, long long int k)
 {
-	IType*		new_term;
-	IType*		num_product;
-	IType*		power2;
-	Rational*	factorial;
-	Rational*	power1;
+	Real*		real_power;
+	Real*		new_term;
+	Rational*	coeff;
+	Rational*	k2;
+	Rational*	tmp;
 
-	power1 = Rational(-1) ^ k;
-	power2 = number ^ (2 * k + 1);// [ ] Overflow ?
-	num_product = *power1 * *power2;
-	delete power1;
-	delete power2;
-	factorial = Rational(2 * k + 1).factorial();
-	new_term = *num_product / *factorial;
-	delete num_product;
-	delete factorial;
+	k2 = Rational(k) * 2;
+	tmp = k2;
+	k2 = *tmp + 1;
+	delete tmp;
+	coeff = get_real_new_term_coeff(k, *k2);
+	real_power = number ^ *k2;
+	delete k2;
+	new_term = *coeff * *real_power;
+	delete coeff;
+	delete real_power;
 	return (new_term);
 }
 
-static IType*	exp_get_new_term(const Real& number, long long int k)
+static IType*		exp_get_new_term(const Real& number, long long int k)
 {
 	IType*		new_term;
 	IType*		power;

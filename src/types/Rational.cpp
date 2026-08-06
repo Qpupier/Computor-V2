@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 11:48:40 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 12:03:57 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,43 +66,56 @@ static IType*		sqrt_final_value(InfiniteFloat sqrt_value, 	\
 	return (new Real(sqrt_value));
 }
 
+static Rational*	get_rational_new_term_coeff(long long int k, 	\
+		const Rational& k2)
+{
+	Rational*	coeff;
+	Rational*	coeff_num;
+	Rational*	factorial;
+
+	coeff_num = Rational(-1) ^ k;
+	factorial = k2.factorial();
+	coeff = *coeff_num / *factorial;
+	delete coeff_num;
+	delete factorial;
+	return (coeff);
+}
+
 static Rational*	cos_get_new_term(const Rational& number, long long int k)
 {
-	Rational*	power1;
-	Rational*	power2;
-	Rational*	num_product;
-	Rational*	factorial;
+	Rational*	coeff;
+	Rational*	k2;
 	Rational*	new_term;
+	Rational*	real_power;
 
-	power1 = Rational(-1) ^ k;
-	power2 = number ^ (2 * k);
-	num_product = *power1 * *power2;
-	delete power1;
-	delete power2;
-	factorial = Rational(2 * k).factorial();
-	new_term = *num_product / *factorial;
-	delete num_product;
-	delete factorial;
+	k2 = Rational(k) * 2;
+	coeff = get_rational_new_term_coeff(k, *k2);
+	real_power = number ^ *k2;
+	delete k2;
+	new_term = *coeff * *real_power;
+	delete coeff;
+	delete real_power;
 	return (new_term);
 }
 
 static Rational*	sin_get_new_term(const Rational& number, long long int k)
 {
-	Rational*	power1;
-	Rational*	power2;
-	Rational*	num_product;
-	Rational*	factorial;
+	Rational*	coeff;
+	Rational*	k2;
 	Rational*	new_term;
+	Rational*	real_power;
+	Rational*	tmp;
 
-	power1 = Rational(-1) ^ k;
-	power2 = number ^ (2 * k + 1);// [ ] Attention overflow ?
-	num_product = *power1 * *power2;
-	delete power1;
-	delete power2;
-	factorial = Rational(2 * k + 1).factorial();
-	new_term = *num_product / *factorial;
-	delete num_product;
-	delete factorial;
+	k2 = Rational(k) * 2;
+	tmp = k2;
+	k2 = *tmp + 1;
+	delete tmp;
+	coeff = get_rational_new_term_coeff(k, *k2);
+	real_power = number ^ *k2;
+	delete k2;
+	new_term = *coeff * *real_power;
+	delete coeff;
+	delete real_power;
 	return (new_term);
 }
 
