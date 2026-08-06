@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 12:03:57 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 14:13:20 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 // Utils
 
-static Rational		from_polynomial(const Polynomial &polynomial)
+static Rational		from_polynomial(const Polynomial& polynomial)
 {
 	if (polynomial.getTerms().empty())
 		return (Rational(0));
@@ -27,19 +27,27 @@ static Rational		from_polynomial(const Polynomial &polynomial)
 	return (Rational(*polynomial.getTerms()[0].coefficient));
 }
 
-static Rational		from_real(const Real &real)// TODO
+static Rational		from_real(const Real& real)
 {
-	Rational	result;
-	std::vector<unsigned char>	all_digits(real.getValue().getIntegerPart().getDigits());
+	Rational					result;
+	std::vector<unsigned char>	all_digits							\
+			(real.getValue().getIntegerPart().getDigits());
 	std::vector<unsigned char>	decimal_digits;
+	Rational*					divider;
+	Rational*					tmp_result;
 
+	if (all_digits.size() > InfiniteFloat::PRINT_PRECISION)
+		throw LogicError("This real number isn't a rational number");
 	decimal_digits = real.getValue().getDecimalPart().getDigits();
-	all_digits.insert(all_digits.end(), decimal_digits.begin(), decimal_digits.end());
-	result = Rational(InfiniteInt(all_digits, real.getValue().getIsNegative(), true));
-	Rational* divider;
+	all_digits.insert(all_digits.end(), decimal_digits.begin(), 	\
+			decimal_digits.end());
+	result = Rational(InfiniteInt(all_digits, 						\
+			real.getValue().getIsNegative(), true));
 	divider = Rational(10) ^ static_cast<long long int>(decimal_digits.size());
-	result = result / *divider;
+	tmp_result = result / *divider;
 	delete divider;
+	result = *tmp_result;
+	delete tmp_result;
 	return (result);
 }
 
@@ -48,7 +56,7 @@ static InfiniteInt	compute_lcm(InfiniteInt a, InfiniteInt b)
 	return (a / compute_gcd(a, b) * b);
 }
 
-static IType*		sqrt_final_value(InfiniteFloat sqrt_value, 	\
+static IType*		sqrt_final_value(InfiniteFloat sqrt_value, 		\
 		InfiniteFloat value)
 {
 	InfiniteFloat				test_exact_value;
@@ -172,7 +180,7 @@ Rational::Rational(std::string str)
 	this->reduce();
 }
 
-Rational::Rational(const IType &other)
+Rational::Rational(const IType& other)
 {
 	const Rational*		other_rational;
 	const Complex*		other_complex;
@@ -197,6 +205,7 @@ Rational::Rational(const IType &other)
 		*this = from_real(*other_real);
 	else
 		throw ERROR_UNEXPECTED;
+	this->reduce();
 }
 
 
@@ -217,9 +226,9 @@ Rational&	Rational::operator=(const Rational* other)
 	return (*this);
 }
 
-Rational&	Rational::operator=(const Rational &other)
+Rational&	Rational::operator=(const Rational& other)
 {
-	if (this != &other)
+	if (this !=& other)
 	{
 		this->_numerator = other._numerator;
 		this->_denominator = other._denominator;
@@ -227,21 +236,13 @@ Rational&	Rational::operator=(const Rational &other)
 	return (*this);
 }
 
-Rational	Rational::operator=(const Complex &other)
-{
-	if (other.getImaginary())
-		throw LogicError("Cannot convert a complex number with a 	\
-				non-zero imaginary part to a rational number");
-	return (Rational(*other.getReal()));
-}
-
-Rational	Rational::operator=(const IType &other)
+Rational	Rational::operator=(const IType& other)
 {
 	*this = Rational(other);
 	return (*this);
 }
 
-bool		Rational::operator==(const IType &other) const
+bool		Rational::operator==(const IType& other) const
 {
 	Rational	other_rational;
 
@@ -249,7 +250,7 @@ bool		Rational::operator==(const IType &other) const
 	{
 		other_rational = Rational(other);
 	}
-	catch(const UnexpectedError &e)
+	catch(const UnexpectedError& e)
 	{
 		return (false);
 	}
@@ -262,7 +263,7 @@ bool		Rational::operator==(const long long int value) const
 	return (*this == Rational(value));
 }
 
-bool		Rational::operator!=(const IType &other) const
+bool		Rational::operator!=(const IType& other) const
 {
 	return (!(*this == other));
 }
@@ -272,7 +273,7 @@ bool		Rational::operator!=(const long long int value) const
 	return (*this != Rational(value));
 }
 
-bool		Rational::operator<(const IType &other) const
+bool		Rational::operator<(const IType& other) const
 {
 	Real	other_real;
 
@@ -280,7 +281,7 @@ bool		Rational::operator<(const IType &other) const
 	{
 		other_real = Real(other);
 	}
-	catch(const UnexpectedError &e)
+	catch(const UnexpectedError& e)
 	{
 		throw UNSUPPORTED_EXPONENT;
 	}
@@ -292,7 +293,7 @@ bool		Rational::operator<(const long long int value) const
 	return (*this < Rational(value));
 }
 
-bool		Rational::operator<=(const IType &other) const
+bool		Rational::operator<=(const IType& other) const
 {
 	return (*this < other || *this == other);
 }
@@ -302,7 +303,7 @@ bool		Rational::operator<=(const long long int value) const
 	return (*this <= Rational(value));
 }
 
-bool		Rational::operator>(const IType &other) const
+bool		Rational::operator>(const IType& other) const
 {
 	Rational	other_rational;
 
@@ -310,7 +311,7 @@ bool		Rational::operator>(const IType &other) const
 	{
 		other_rational = Rational(other);
 	}
-	catch(const UnexpectedError &e)
+	catch(const UnexpectedError& e)
 	{
 		throw UNSUPPORTED_EXPONENT;
 	}
@@ -322,7 +323,7 @@ bool		Rational::operator>(const long long int value) const
 	return (*this > Rational(value));
 }
 
-bool		Rational::operator>=(const IType &other) const
+bool		Rational::operator>=(const IType& other) const
 {
 	Rational	other_rational;
 
@@ -330,7 +331,7 @@ bool		Rational::operator>=(const IType &other) const
 	{
 		other_rational = Rational(other);
 	}
-	catch(const UnexpectedError &e)
+	catch(const UnexpectedError& e)
 	{
 		throw UNSUPPORTED_EXPONENT;
 	}
@@ -342,19 +343,19 @@ bool		Rational::operator>=(const long long int value) const
 	return (*this >= Rational(value));
 }
 
-Rational*	Rational::operator+(const Rational &other) const
+Rational*	Rational::operator+(const Rational& other) const
 {
 	return (new Rational(this->_numerator * other._denominator 	\
 				+ other._numerator * this->_denominator, 		\
 			this->_denominator * other._denominator));
 }
 
-Complex*	Rational::operator+(const Complex &other) const
+Complex*	Rational::operator+(const Complex& other) const
 {
 	return (Complex(this->clone(), new Rational()) + other);
 }
 
-Matrix*		Rational::operator+(const Matrix &other) const
+Matrix*		Rational::operator+(const Matrix& other) const
 {
 	Matrix*				result;
 	unsigned long int	width;
@@ -369,12 +370,12 @@ Matrix*		Rational::operator+(const Matrix &other) const
 	return (result);
 }
 
-IType*		Rational::operator+(const Polynomial &other) const
+IType*		Rational::operator+(const Polynomial& other) const
 {
 	return (other + *this);
 }
 
-Vector*		Rational::operator+(const Vector &other) const
+Vector*		Rational::operator+(const Vector& other) const
 {
 	unsigned long int	size(other.size());
 	Vector*				result;
@@ -385,12 +386,12 @@ Vector*		Rational::operator+(const Vector &other) const
 	return (result);
 }
 
-Real*		Rational::operator+(const Real &other) const
+Real*		Rational::operator+(const Real& other) const
 {
 	return (new Real((this->getValue() + other.getValue())));
 }
 
-IType*		Rational::operator+(const IType &other) const
+IType*		Rational::operator+(const IType& other) const
 {
 	const Rational*		other_rational;
 	const Complex*		other_complex;
@@ -431,19 +432,19 @@ Rational*	Rational::operator-(void) const
 	return (*this * (-1));
 }
 
-Rational*	Rational::operator-(const Rational &other) const
+Rational*	Rational::operator-(const Rational& other) const
 {
 	return (new Rational(this->_numerator * other._denominator 	\
 				- other._numerator * this->_denominator, 		\
 			this->_denominator * other._denominator));
 }
 
-Complex*	Rational::operator-(const Complex &other) const
+Complex*	Rational::operator-(const Complex& other) const
 {
 	return (Complex(this->clone(), new Rational()) - other);
 }
 
-Matrix*		Rational::operator-(const Matrix &other) const
+Matrix*		Rational::operator-(const Matrix& other) const
 {
 	Matrix*				result;
 	unsigned long int	width;
@@ -458,7 +459,7 @@ Matrix*		Rational::operator-(const Matrix &other) const
 	return (result);
 }
 
-IType*		Rational::operator-(const Polynomial &other) const
+IType*		Rational::operator-(const Polynomial& other) const
 {
 	IType*	tmp;
 	IType*	result;
@@ -469,7 +470,7 @@ IType*		Rational::operator-(const Polynomial &other) const
 	return (result);
 }
 
-Vector*		Rational::operator-(const Vector &other) const
+Vector*		Rational::operator-(const Vector& other) const
 {
 	unsigned long int	size(other.size());
 	Vector*				result;
@@ -480,12 +481,12 @@ Vector*		Rational::operator-(const Vector &other) const
 	return (result);
 }
 
-Real*		Rational::operator-(const Real &other) const
+Real*		Rational::operator-(const Real& other) const
 {
 	return (new Real(this->getValue() - other.getValue()));
 }
 
-IType*		Rational::operator-(const IType &other) const
+IType*		Rational::operator-(const IType& other) const
 {
 	const Rational*		other_rational;
 	const Complex*		other_complex;
@@ -521,18 +522,18 @@ Rational*	Rational::operator-(const long long int value) const
 	return (*this - Rational(value));
 }
 
-Rational*	Rational::operator*(const Rational &other) const
+Rational*	Rational::operator*(const Rational& other) const
 {
 	return (new Rational(this->_numerator * other._numerator, 	\
 			this->_denominator * other._denominator));
 }
 
-Complex*	Rational::operator*(const Complex &other) const
+Complex*	Rational::operator*(const Complex& other) const
 {
 	return (Complex(this->clone(), new Rational()) * other);
 }
 
-Matrix*		Rational::operator*(const Matrix &other) const
+Matrix*		Rational::operator*(const Matrix& other) const
 {
 	Matrix*				result;
 	unsigned long int	width;
@@ -547,12 +548,12 @@ Matrix*		Rational::operator*(const Matrix &other) const
 	return (result);
 }
 
-IType*		Rational::operator*(const Polynomial &other) const
+IType*		Rational::operator*(const Polynomial& other) const
 {
 	return (other * *this);
 }
 
-Vector*		Rational::operator*(const Vector &other) const
+Vector*		Rational::operator*(const Vector& other) const
 {
 	unsigned long int	size(other.size());
 	Vector*				result;
@@ -563,12 +564,12 @@ Vector*		Rational::operator*(const Vector &other) const
 	return (result);
 }
 
-Real*		Rational::operator*(const Real &other) const
+Real*		Rational::operator*(const Real& other) const
 {
 	return (new Real(this->getValue() * other.getValue()));
 }
 
-IType*		Rational::operator*(const IType &other) const
+IType*		Rational::operator*(const IType& other) const
 {
 	const Rational*		other_rational;
 	const Complex*		other_complex;
@@ -604,17 +605,17 @@ Rational*	Rational::operator*(const long long int value) const
 	return (*this * Rational(value));
 }
 
-Rational*	Rational::operator/(const Rational &other) const
+Rational*	Rational::operator/(const Rational& other) const
 {
 	return (*this * Rational(other.getDenominator(), other.getNumerator()));
 }
 
-Complex*	Rational::operator/(const Complex &other) const
+Complex*	Rational::operator/(const Complex& other) const
 {
 	return (Complex(this->clone(), new Rational()) / other);
 }
 
-Matrix*		Rational::operator/(const Matrix &other) const
+Matrix*		Rational::operator/(const Matrix& other) const
 {
 	Matrix*				result;
 	unsigned long int	width;
@@ -629,7 +630,7 @@ Matrix*		Rational::operator/(const Matrix &other) const
 			{
 				result->setValue(i, j, *this / *other[j][i]);
 			}
-			catch (const std::exception &e)
+			catch (const std::exception& e)
 			{
 				delete result;
 				throw;
@@ -637,7 +638,7 @@ Matrix*		Rational::operator/(const Matrix &other) const
 	return (result);
 }
 
-Polynomial*	Rational::operator/(const Polynomial &other) const
+Polynomial*	Rational::operator/(const Polynomial& other) const
 {
 	Polynomial*	tmp;
 	Polynomial*	result;
@@ -649,7 +650,7 @@ Polynomial*	Rational::operator/(const Polynomial &other) const
 	return (result);
 }
 
-Vector*		Rational::operator/(const Vector &other) const
+Vector*		Rational::operator/(const Vector& other) const
 {
 	unsigned long int	size(other.size());
 	Vector*				result;
@@ -660,7 +661,7 @@ Vector*		Rational::operator/(const Vector &other) const
 		{
 			result->setValue(i, *this / *other[i]);
 		}
-		catch (const std::exception &e)
+		catch (const std::exception& e)
 		{
 			delete result;
 			throw;
@@ -668,12 +669,12 @@ Vector*		Rational::operator/(const Vector &other) const
 	return (result);
 }
 
-Real*		Rational::operator/(const Real &other) const
+Real*		Rational::operator/(const Real& other) const
 {
 	return (new Real(this->getValue() / other.getValue()));
 }
 
-IType*		Rational::operator/(const IType &other) const
+IType*		Rational::operator/(const IType& other) const
 {
 	const Rational*		other_rational;
 	const Complex*		other_complex;
@@ -709,7 +710,7 @@ Rational*	Rational::operator/(const long long int value) const
 	return (*this / Rational(value));
 }
 
-Rational*	Rational::operator%(const Rational &other) const
+Rational*	Rational::operator%(const Rational& other) const
 {
 	Rational*	result;
 	Rational*	tmp;
@@ -724,12 +725,12 @@ Rational*	Rational::operator%(const Rational &other) const
 	return (result);
 }
 
-Complex*	Rational::operator%(const Complex &other) const
+Complex*	Rational::operator%(const Complex& other) const
 {
 	return (Complex(this->clone(), new Rational()) % other);
 }
 
-Matrix*		Rational::operator%(const Matrix &other) const
+Matrix*		Rational::operator%(const Matrix& other) const
 {
 	Matrix*				result;
 	unsigned long int	width;
@@ -744,7 +745,7 @@ Matrix*		Rational::operator%(const Matrix &other) const
 			{
 				result->setValue(i, j, *this % *other[j][i]);
 			}
-			catch (const std::exception &e)
+			catch (const std::exception& e)
 			{
 				delete result;
 				throw;
@@ -752,7 +753,7 @@ Matrix*		Rational::operator%(const Matrix &other) const
 	return (result);
 }
 
-Polynomial*	Rational::operator%(const Polynomial &other) const
+Polynomial*	Rational::operator%(const Polynomial& other) const
 {
 	Polynomial*	tmp;
 	Polynomial*	result;
@@ -764,7 +765,7 @@ Polynomial*	Rational::operator%(const Polynomial &other) const
 	return (result);
 }
 
-Vector*		Rational::operator%(const Vector &other) const
+Vector*		Rational::operator%(const Vector& other) const
 {
 	unsigned long int	size(other.size());
 	Vector*				result;
@@ -775,7 +776,7 @@ Vector*		Rational::operator%(const Vector &other) const
 		{
 			result->setValue(i, *this % *other[i]);
 		}
-		catch (const std::exception &e)
+		catch (const std::exception& e)
 		{
 			delete result;
 			throw;
@@ -783,12 +784,12 @@ Vector*		Rational::operator%(const Vector &other) const
 	return (result);
 }
 
-IType*		Rational::operator%(const Real &other) const
+IType*		Rational::operator%(const Real& other) const
 {
 	return (new Real(this->getValue() % other.getValue()));
 }
 
-IType*		Rational::operator%(const IType &other) const
+IType*		Rational::operator%(const IType& other) const
 {
 	const Rational*		other_rational;
 	const Complex*		other_complex;
@@ -824,7 +825,7 @@ Rational*	Rational::operator%(const long long int value) const
 	return (*this % Rational(value));
 }
 
-Rational*	Rational::operator^(const Rational &other) const
+Rational*	Rational::operator^(const Rational& other) const
 {
 	Rational*	result;
 	Rational*	tmp;
@@ -842,7 +843,7 @@ Rational*	Rational::operator^(const Rational &other) const
 	return (result);
 }
 
-IType*		Rational::operator^(const IType &other) const
+IType*		Rational::operator^(const IType& other) const
 {
 	Rational	power;
 
@@ -850,7 +851,7 @@ IType*		Rational::operator^(const IType &other) const
 	{
 		power = Rational(other);
 	}
-	catch(const UnexpectedError &e)
+	catch(const UnexpectedError& e)
 	{
 		throw UNSUPPORTED_EXPONENT;
 	}
@@ -924,13 +925,10 @@ bool			Rational::in_Q(void) const
 
 bool			Rational::in_Z(void) const
 {
-	Rational	copy(*this);
-
-	// copy.reduce();// [ ] Useful?
-	return (copy.getDenominator() == InfiniteInt(1));
+	return (this->getDenominator() == 1);
 }
 
-std::ostream&	Rational::print(std::ostream &os) const
+std::ostream&	Rational::print(std::ostream& os) const
 {
 	Rational	copy(*this);
 	InfiniteInt	numerator;
@@ -1009,14 +1007,14 @@ IType*			Rational::exp(void) const
 	return (nullptr);
 }
 
-IType*			Rational::function_operator(const IType &other) const
+IType*			Rational::function_operator(const IType& other) const
 {
 	throw ERROR_UNEXPECTED;
 	(void)other;
 	return (nullptr);
 }
 
-IType*			Rational::matrix_operator(const IType &other) const
+IType*			Rational::matrix_operator(const IType& other) const
 {
 	throw ERROR_MATRIX_OPERATOR;
 	(void)other;
@@ -1123,7 +1121,7 @@ Rational*		Rational::factorial(void) const// TODO: Implementer le parsing corres
 	return (result);
 }
 
-Rational*		Rational::gcd(const Rational &other) const
+Rational*		Rational::gcd(const Rational& other) const
 {
 	InfiniteInt	gcd_numerator;
 	InfiniteInt	gcd_denominator;
@@ -1137,18 +1135,18 @@ Rational*		Rational::gcd(const Rational &other) const
 	return (new Rational(gcd_numerator, gcd_denominator));
 }
 
-Rational*		Rational::gcd(const Complex &other) const
+Rational*		Rational::gcd(const Complex& other) const
 {
 	Rational*	first;
 	Rational*	second;
 
-	first = this->gcd(*dynamic_cast<const Rational*>(other.getReal()));// [ ] Changer ca
-	second = first->gcd(*dynamic_cast<const Rational*>(other.getImaginary()));
+	first = this->gcd(*other.getReal());
+	second = first->gcd(*other.getImaginary());
 	delete first;
 	return (second);
 }
 
-Rational*		Rational::gcd(const Matrix &other) const
+Rational*		Rational::gcd(const Matrix& other) const
 {
 	Rational*	gcd;
 	Rational*	tmp;
@@ -1158,13 +1156,13 @@ Rational*		Rational::gcd(const Matrix &other) const
 		for (unsigned long int j = 0; j < other.getWidth(); j++)
 		{
 			tmp = gcd;
-			gcd = gcd->gcd(*dynamic_cast<const Rational*>(other[i][j]));// [ ] Changer ca
+			gcd = gcd->gcd(*other[i][j]);
 			delete tmp;
 		}
 	return (gcd);
 }
 
-Rational*		Rational::gcd(const Vector &other) const
+Rational*		Rational::gcd(const Vector& other) const
 {
 	Rational*	gcd;
 	Rational*	tmp;
@@ -1173,7 +1171,7 @@ Rational*		Rational::gcd(const Vector &other) const
 	for (unsigned long int i = 0; i < other.size(); i++)
 	{
 		tmp = gcd;
-		gcd = gcd->gcd(*dynamic_cast<const Rational*>(other[i]));
+		gcd = gcd->gcd(*other[i]);
 		delete tmp;
 	}
 	return (gcd);
@@ -1181,13 +1179,13 @@ Rational*		Rational::gcd(const Vector &other) const
 
 // TODO: Polynomial
 
-Rational*		Rational::gcd(const Real &other) const
+Rational*		Rational::gcd(const Real& other) const
 {
 	return (new Rational(1));
 	(void)other;
 }
 
-Rational*		Rational::gcd(const IType &other) const
+Rational*		Rational::gcd(const IType& other) const
 {
 	const Rational*		other_rational;
 	const Complex*		other_complex;
@@ -1262,7 +1260,7 @@ void			Rational::print_rounded(const std::string var) const
 
 
 // Output stream operator overload
-std::ostream&	operator<<(std::ostream &os, const Rational &num)
+std::ostream&	operator<<(std::ostream& os, const Rational& num)
 {
 	return (num.print(os));
 }

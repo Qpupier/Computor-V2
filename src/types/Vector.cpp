@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 11:48:40 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 14:21:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -806,7 +806,7 @@ InfiniteFloat	Vector::getRoundedValue(unsigned long int index) const
 {
 	if (index >= this->_vector.size())
 		throw ERROR_VECTOR_OUT_OF_RANGE;
-	return (dynamic_cast<const Rational*>(this->_vector[index])->getValue());// [ ] Changer ca
+	return (Real(*this->_vector[index]).getValue());
 }
 
 
@@ -998,11 +998,11 @@ Rational*		Vector::gcd(const Vector &other) const
 
 	if (other.empty())
 		return (new Rational(1));
-	result = this->gcd(*dynamic_cast<const Rational*>(other[0]));
+	result = this->gcd(*other[0]);
 	for (unsigned long int i(1); i < other.size(); i++)
 	{
 		tmp = result;
-		result = result->gcd(*dynamic_cast<const Rational*>(other[i]));
+		result = result->gcd(*other[i]);
 		delete tmp;
 	}
 	return (result);
@@ -1018,8 +1018,8 @@ Rational*		Vector::gcd(const Complex &other) const
 	Rational*	first;
 	Rational*	second;
 
-	first = this->gcd(*dynamic_cast<const Rational*>(other.getReal()));
-	second = first->gcd(*dynamic_cast<const Rational*>(other.getImaginary()));
+	first = this->gcd(*other.getReal());
+	second = first->gcd(*other.getImaginary());
 	delete first;
 	return (second);
 }
@@ -1029,12 +1029,12 @@ Rational*		Vector::gcd(const Matrix &other) const
 	Rational*	gcd;
 	Rational*	tmp;
 
-	gcd = this->gcd(*dynamic_cast<const Rational*>(other[0][0]));// [ ] Changer ca
+	gcd = this->gcd(*other[0][0]);
 	for (unsigned int i = 0; i < other.getHeight(); i++)
 		for (unsigned int j = 0; j < other.getWidth(); j++)
 		{
 			tmp = gcd;
-			gcd = gcd->gcd(*dynamic_cast<const Rational*>(other[i][j]));
+			gcd = gcd->gcd(*other[i][j]);
 			delete tmp;
 		}
 	return (gcd);

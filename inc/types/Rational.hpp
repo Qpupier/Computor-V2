@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 11:29:06 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 13:40:36 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ class	Rational: public IType
 		Rational&	operator=(const Rational* other);
 		Rational&	operator=(const Rational& other);
 		Rational	operator=(const IType& other);
-		Rational	operator=(const Complex& other);
 		bool		operator==(const IType& other) const;
 		bool		operator==(const long long int value) const;
 		bool		operator!=(const IType& other) const;

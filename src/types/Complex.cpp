@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 11:48:40 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 14:10:17 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1198,10 +1198,8 @@ Rational*		Complex::gcd(const Complex &other) const
 	Rational*	first;
 	Rational*	second;
 
-	if (!this->in_Q() || !other.in_Q())
-		return (new Rational(1));
-	first = this->gcd(*dynamic_cast<const Rational*>(other.getReal()));
-	second = first->gcd(*dynamic_cast<const Rational*>(other.getImaginary()));
+	first = this->gcd(*other.getReal());
+	second = first->gcd(*other.getImaginary());
 	delete first;
 	return (second);
 }
@@ -1211,10 +1209,8 @@ Rational*		Complex::gcd(const Matrix &other) const
 	Rational*	first;
 	Rational*	second;
 
-	if (!this->in_Q() || !other.in_Q())
-		return (new Rational(1));
-	first = other.gcd(*dynamic_cast<const Rational*>(this->getReal()));
-	second = first->gcd(*dynamic_cast<const Rational*>(this->getImaginary()));
+	first = other.gcd(*this->getReal());
+	second = first->gcd(*this->getImaginary());
 	delete first;
 	return (second);
 }
@@ -1224,10 +1220,8 @@ Rational*		Complex::gcd(const Vector &other) const
 	Rational*	first;
 	Rational*	second;
 
-	if (!this->in_Q() || !other.in_Q())
-		return (new Rational(1));
-	first = other.gcd(*dynamic_cast<const Rational*>(this->getReal()));
-	second = first->gcd(*dynamic_cast<const Rational*>(this->getImaginary()));
+	first = other.gcd(*this->getReal());
+	second = first->gcd(*this->getImaginary());
 	delete first;
 	return (second);
 }

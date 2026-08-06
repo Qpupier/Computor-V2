@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 11:56:28 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/06 14:11:03 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1575,8 +1575,8 @@ Rational*		Matrix::gcd(const Complex &other) const
 	Rational*	first;
 	Rational*	second;
 
-	first = this->gcd(*dynamic_cast<const Rational*>(other.getReal()));
-	second = first->gcd(*dynamic_cast<const Rational*>(other.getImaginary()));
+	first = this->gcd(*other.getReal());
+	second = first->gcd(*other.getImaginary());
 	delete first;
 	return (second);
 }
@@ -1591,14 +1591,12 @@ Rational*		Matrix::gcd(const Matrix &other) const
 	Rational*	gcd;
 	Rational*	tmp;
 
-	if (!this->in_Q() || !other.in_Q())
-		return (new Rational(1));
-	gcd = this->gcd(*dynamic_cast<const Rational*>(other[0][0]));
+	gcd = this->gcd(*other[0][0]);
 	for (unsigned int i = 0; i < other.getHeight(); i++)
 		for (unsigned int j = 0; j < other.getWidth(); j++)
 		{
 			tmp = gcd;
-			gcd = gcd->gcd(*dynamic_cast<const Rational*>(other[i][j]));
+			gcd = gcd->gcd(*other[i][j]);
 			delete tmp;
 		}
 	return (gcd);
