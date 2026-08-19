@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/19 17:48:14 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/19 18:12:48 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -955,7 +955,7 @@ IType*			Vector::matrix_operator(const IType &other) const
 	{
 		other_matrix = Matrix(other);
 	}
-	catch (const UnexpectedError &e)
+	catch (const LogicError &e)
 	{
 		throw ERROR_MATRIX_OPERATOR;
 	}

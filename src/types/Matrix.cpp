@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/19 11:25:53 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/19 18:12:35 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -907,7 +907,7 @@ Matrix*		Matrix::operator*(const long long int value) const
 	return (*this * Rational(value));
 }
 
-Matrix*		Matrix::operator/(const Matrix &other) const// [ ]: Changer pour que ce ne soit pas terme a terme ?
+Matrix*		Matrix::operator/(const Matrix &other) const
 {
 	Matrix*	result;
 
@@ -1045,7 +1045,8 @@ Matrix*		Matrix::operator%(const Matrix &other) const
 		for (unsigned long int j = 0; j < this->_width; j++)
 			try
 			{
-				result->setValue(j, i, *this->_matrix[i][j] % *other._matrix[i][j]);
+				result->setValue(j, i, 	\
+						*this->_matrix[i][j] % *other._matrix[i][j]);
 			}
 			catch(const LogicError& e)
 			{
@@ -1421,7 +1422,7 @@ IType*			Matrix::matrix_operator(const IType &other) const
 	{
 		other_matrix = Matrix(other);
 	}
-	catch (const UnexpectedError &e)
+	catch (const LogicError &e)
 	{
 		throw ERROR_MATRIX_OPERATOR;
 	}
