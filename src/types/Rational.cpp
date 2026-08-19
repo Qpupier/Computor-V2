@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 18:49:17 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/19 16:43:24 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1240,6 +1240,11 @@ void			Rational::reduce(void)
 {
 	InfiniteInt	gcd;
 
+	if (this->_denominator < 0)
+	{
+		this->_numerator *= -1;
+		this->_denominator *= -1;
+	}
 	gcd = compute_gcd(this->_numerator, this->_denominator);
 	if (!gcd)
 	{
