@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/19 15:21:02 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/19 17:48:14 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,11 @@ Vector::Vector(std::string str, t_data &data)
 	size = vector.size();
 	for (unsigned long int i = 0; i < size; i++)
 		this->_vector.push_back(value_to_rational(vector[i], data));
+}
+
+Vector::Vector(const Vector &other): _vector()
+{
+	*this = other;
 }
 
 Vector::Vector(const IType &other): _vector()
