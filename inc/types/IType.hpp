@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 17:42:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 11:26:16 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 17:57:35 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,10 @@ class	IType
 		virtual Real*			rad(void) const = 0;
 		virtual void			print_rounded(const std::string var 	\
 				= std::string()) const = 0;
+		
+		// TODO: Enum Type pour eviter de faire des dynamic_cast partout
 
-	protected:
+		protected:
 		// Constructor
 		IType(void) {};
 };

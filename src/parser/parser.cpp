@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 16:25:04 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 18:11:35 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static Token						create_token(							\
 		std::__throw_regex_error(std::regex_constants::error_complexity, 	\
 				"Invalid format of TOKEN_NEXT regex");
 	start = it->second;
-	return Token(*it, get_token_type(*it, data.tokens_types));// TODO: Empecher de mettre en variable un nom de fonction (sin, cos, tan, exp, abs, norm, sqrt, rad)
+	return Token(*it, get_token_type(*it, data.tokens_types));
 }
 
 static std::vector<t_possibility>	get_tokens(const std::string &line, 	\
@@ -66,11 +66,11 @@ AST*								compute_expression(						\
 		throw ERROR_INVALID_EXPRESSION;
 	possibilities = get_tokens(line, data);
 	ast = get_the_only_possibility(possibilities, data, is_right_side, eval);
-	// TODO: Verifier que les variables qui representent des fonctions sont bien enfant d'un operateur <>
 	if (!ast)
 		return (nullptr);
 	try
 	{
+		verif_preset_terms(ast);
 		if (is_right_side || !ast->end_of_tree())
 			ast->reduce_expression(data.stored);
 		if (is_right_side && !eval && waiting_function(data.stored))
