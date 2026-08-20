@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/19 18:12:35 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 13:57:25 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1746,7 +1746,7 @@ bool	is_matrix(const IType& type)
 	{
 		matrix = Matrix(type);
 	}
-	catch (const UnexpectedError &e)
+	catch (const LogicError &e)
 	{
 		return (false);
 	}
