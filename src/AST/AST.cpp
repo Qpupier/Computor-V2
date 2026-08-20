@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 16:43:05 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 17:06:38 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,28 @@ static IType*	matrix_operator(IType *left_entity, IType *right_entity)
 	return (*left_entity * *right_entity);
 }
 
-static IType*	get_result(IType *left_entity, IType *right_entity, 	\
-		Operator::t_operator op, 										\
+static IType*	get_result_function(IType *left, IType *right, 				\
+		std::map<std::pair<std::string, std::string>, const IType*> &stored)
+{
+	IType*	function;
+	IType*	result;
+
+	function = find_function(left, stored);
+	try
+	{
+		result = function->function_operator(*right);
+	}
+	catch (...)
+	{
+		delete function;
+		throw;
+	}
+	delete function;
+	return (result);
+}
+
+static IType*	get_result(IType *left_entity, IType *right_entity, 		\
+		Operator::t_operator op, 											\
 		std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
 	switch (op)
@@ -90,22 +110,8 @@ static IType*	get_result(IType *left_entity, IType *right_entity, 	\
 			return (left_entity->matrix_operator(*right_entity));
 		case Operator::E_POWER:
 			return (*left_entity ^ *right_entity);
-		case Operator::E_FUNCTION:// [ ] ameliorer
-			IType*	function;
-			IType*	result;
-
-			function = find_function(left_entity, stored);
-			try
-			{
-				result = function->function_operator(*right_entity);
-			}
-			catch (...)
-			{
-				delete function;
-				throw;
-			}
-			delete function;
-			return (result);
+		case Operator::E_FUNCTION:
+			return (get_result_function(left_entity, right_entity, stored));
 		case Operator::E_INVERSE:
 			return (right_entity->matrix_inversion());
 		case Operator::E_UNKNOWN:
