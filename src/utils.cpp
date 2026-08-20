@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 20:00:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/18 18:30:07 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 14:58:50 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,12 @@ void		print_expression(const std::string &line, t_data &data)
 			+ std::string(COLOR_RESET));
 	ast->getNode()->print_rounded();
 	delete ast;
+}
+
+void		trim_string(std::string &s)
+{
+	while (std::isspace(s[0]))
+		s.erase(0, 1);
+	while (std::isspace(s[s.size() - 1]))
+		s.erase(s.size() - 1, 1);
 }

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 14:23:00 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 14:28:20 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <readline/history.h>
 
 class IType;
-// # include "IType.hpp"
+
 # include "Token.hpp"
 # include "errors.hpp"
 

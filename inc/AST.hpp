@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:01:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 17:22:13 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 14:59:40 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,6 @@ void	compute_equation(const std::string &line, t_data &data, const bool eval);
 void	delete_empty_function_stored(std::map<std::pair<std::string, std::string>, const IType*> &stored, const std::string error_msg, const bool throw_error = false);
 void	print_expression(const std::string &line, t_data &data);
 void	set_function_right(t_data &data, AST* ast);
+void	trim_string(std::string &s);
 
 #endif

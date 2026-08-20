@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 14:24:58 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 15:00:55 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ static std::vector<std::string>					parse_line(					\
 	std::vector<std::string>	row;
 	std::size_t					pos;
 
+	trim_string(line);
 	line = line.substr(1, line.size() - 2);
+	trim_string(line);
 	pos = 0;
 	while (pos != std::string::npos)
 	{
@@ -51,6 +53,7 @@ static std::vector<std::vector<std::string>>	parse_matrix(				\
 	std::size_t								pos;
 
 	matrix = matrix.substr(1, matrix.size() - 2);
+	trim_string(matrix);
 	pos = 0;
 	while (pos != std::string::npos)
 	{
