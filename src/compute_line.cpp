@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 15:48:19 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 10:57:50 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 16:15:06 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	stored_variables(const 	\
 
 	std::cout 															\
 			<< "\033[33mListing stored variables and functions\033[0m" 	\
-			<< std::endl;
+			<< std::endl;//TODO: Print already defined functions and variables
 	while (it != stored.end())
 	{
 		std::cout << "\033[33m  ";

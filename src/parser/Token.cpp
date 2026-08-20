@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:15:11 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 16:10:23 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 16:18:37 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,6 @@ Token::t_token	get_token_type(const std::string &token, 			\
 	for (std::map<const Token::t_token, std::regex>::const_iterator 	\
 			it(tokens_types.begin()); it != tokens_types.end(); ++it)
 		if (std::regex_match(token, it->second))
-			return it->first;
+			return (it->first);
 	return (Token::E_TOKEN_ERROR);
 }

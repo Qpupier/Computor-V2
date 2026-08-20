@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:11:12 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 14:01:59 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 16:51:11 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static void	store_new_variable(								\
 		std::map<std::pair<std::string, std::string>, 		\
 			const IType*> &stored, std::pair<std::string, 	\
-		std::string> key, const Polynomial* polynomial)// TODO: Ne pas stocker les Reals
+		std::string> key, const Polynomial* polynomial)
 {
 	for (std::map<std::pair<std::string, std::string>, const IType*>	\
 			::iterator it(stored.begin()); it != stored.end();)
@@ -67,11 +67,16 @@ bool		set_function_left(const std::vector<Token> &tokens, 	\
 	std::pair<std::string, std::string>	pair;
 
 	if (tokens.size() == 4 	\
-			&& tokens[0].getType() == Token::E_TOKEN_POLYNOMIAL 		\
-			&& tokens[1].getType() == Token::E_TOKEN_LEFT_PARENTHESES 	\
-			&& tokens[2].getType() == Token::E_TOKEN_POLYNOMIAL 		\
+			&& tokens[0].getType() == Token::E_TOKEN_POLYNOMIAL 			\
+			&& tokens[1].getType() == Token::E_TOKEN_LEFT_PARENTHESES 		\
+			&& tokens[2].getType() == Token::E_TOKEN_POLYNOMIAL 			\
 			&& tokens[3].getType() == Token::E_TOKEN_RIGHT_PARENTHESES)
 	{
+		if (std::regex_match(tokens[0].getValue(), 							\
+				std::regex(TOKEN_NO_VARIABLE)))
+			throw LogicError(std::string("\"") + tokens[0].getValue() 		\
+					+ std::string("\" is a basic"	\
+						" variable or function and cannot be changed"));
 		pair.first = "_" + tokens[0].getValue();
 		pair.second = tokens[2].getValue();
 		stored[pair] = nullptr;

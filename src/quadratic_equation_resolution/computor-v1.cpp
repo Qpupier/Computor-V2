@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:03:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/05 18:45:20 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 16:07:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static IType*	get_discriminant(const IType *a, const IType *b, const IType *c)
 	delete tmp_b2;
 	delete tmp_4ac;
 	std::cout << COLOR_PINK << "Δ = " << *discriminant << COLOR_RESET 	\
-			<< std::endl;
+			<< std::endl;// [ ] ou environ =
 	return (discriminant);
 }
 
@@ -54,7 +54,7 @@ static void		print_real_solutions(std::string var, 					\
 		nb_solutions = 1;
 	std::cout << COLOR_GREEN 											\
 			<< (nb_solutions == 1 ? "One solution" : "Two solutions") 	\
-			<< " in ℝ:" << COLOR_RESET << std::endl;
+			<< " in ℝ:" << COLOR_RESET << std::endl;// [ ] ou C
 	std::cout << var << (nb_solutions > 1 ? "1" : "") << " ≈ " 			\
 			<< solution1 << std::endl;
 	if (nb_solutions == 2)
