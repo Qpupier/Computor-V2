@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 14:52:03 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 15:02:32 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ static bool							waiting_function(const 					\
 	return (false);
 }
 
-Token								create_token(							\
+static Token						create_token(							\
 		std::string::const_iterator &start, 								\
-		const std::string::const_iterator &end, const t_data &data)// [ ] Static?
+		const std::string::const_iterator &end, const t_data &data)
 {
 	std::vector<int>			token_positions({1});
 	std::sregex_token_iterator	token_null;

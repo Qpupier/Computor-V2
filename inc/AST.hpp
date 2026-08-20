@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:01:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 14:59:40 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 15:02:53 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ class	AST
 std::ostream &operator<<(std::ostream &os, const AST &ast);
 
 // Functions
-Token	create_token(std::string::const_iterator &start, const std::string::const_iterator &end, const t_data &data);
 bool	set_function_left(const std::vector<Token>& tokens, std::map<std::pair<std::string, std::string>, const IType*> &stored);
 AST*	build_ast(t_possibility tokens, t_data &data);
 AST*	compute_expression(const std::string &line, t_data &data, bool is_right_side, const bool eval = true);
