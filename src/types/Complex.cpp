@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 18:27:46 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 14:22:53 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -410,19 +410,26 @@ Complex*	Complex::operator+(const Rational &other) const
 	return (*this + Complex(other.clone(), new Rational()));
 }
 
-Matrix*		Complex::operator+(const Matrix &other) const
+IType*		Complex::operator+(const Matrix &other) const
 {
 	Rational	rational;
+	Real		real;
 
-	try
+	if (!*this->_imaginary)
 	{
-		rational = *this;
+		if (this->in_Q())
+		{
+			rational = *this;
+			return (rational + other);
+		}
+		else
+		{
+			real = *this;
+			return (real + other);
+		}
 	}
-	catch (const LogicError &e)
-	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
-	}
-	return (rational + other);
+	throw ERROR_OPERATION_MATRIX_COMPLEX;
+	return (nullptr);
 }
 
 IType*		Complex::operator+(const Polynomial &other) const
@@ -430,19 +437,26 @@ IType*		Complex::operator+(const Polynomial &other) const
 	return (other + *this);
 }
 
-Vector*		Complex::operator+(const Vector &other) const
+IType*		Complex::operator+(const Vector &other) const
 {
 	Rational	rational;
+	Real		real;
 
-	try
+	if (!*this->_imaginary)
 	{
-		rational = *this;
+		if (this->in_Q())
+		{
+			rational = *this;
+			return (rational + other);
+		}
+		else
+		{
+			real = *this;
+			return (real + other);
+		}
 	}
-	catch (const LogicError &e)
-	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
-	}
-	return (rational + other);
+	throw ERROR_OPERATION_VECTOR_COMPLEX;
+	return (nullptr);
 }
 
 Complex*	Complex::operator+(const Real &other) const
@@ -508,19 +522,26 @@ Complex*	Complex::operator-(const Rational &other) const
 	return (*this - Complex(other.clone(), new Rational()));
 }
 
-Matrix*		Complex::operator-(const Matrix &other) const
+IType*		Complex::operator-(const Matrix &other) const
 {
 	Rational	rational;
+	Real		real;
 
-	try
+	if (!*this->_imaginary)
 	{
-		rational = *this;
+		if (this->in_Q())
+		{
+			rational = *this;
+			return (rational - other);
+		}
+		else
+		{
+			real = *this;
+			return (real - other);
+		}
 	}
-	catch (const LogicError &e)
-	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
-	}
-	return (rational - other);
+	throw ERROR_OPERATION_MATRIX_COMPLEX;
+	return (nullptr);
 }
 
 IType*		Complex::operator-(const Polynomial &other) const
@@ -534,19 +555,26 @@ IType*		Complex::operator-(const Polynomial &other) const
 	return (result);
 }
 
-Vector*		Complex::operator-(const Vector &other) const
+IType*		Complex::operator-(const Vector &other) const
 {
 	Rational	rational;
+	Real		real;
 
-	try
+	if (!*this->_imaginary)
 	{
-		rational = *this;
+		if (this->in_Q())
+		{
+			rational = *this;
+			return (rational - other);
+		}
+		else
+		{
+			real = *this;
+			return (real - other);
+		}
 	}
-	catch (const LogicError &e)
-	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
-	}
-	return (rational - other);
+	throw ERROR_OPERATION_VECTOR_COMPLEX;
+	return (nullptr);
 }
 
 Complex*	Complex::operator-(const Real &other) const
@@ -624,19 +652,26 @@ Complex*	Complex::operator*(const Rational &other) const
 	return (result);
 }
 
-Matrix*		Complex::operator*(const Matrix &other) const
+IType*		Complex::operator*(const Matrix &other) const
 {
 	Rational	rational;
+	Real		real;
 
-	try
+	if (!*this->_imaginary)
 	{
-		rational = *this;
+		if (this->in_Q())
+		{
+			rational = *this;
+			return (rational * other);
+		}
+		else
+		{
+			real = *this;
+			return (real * other);
+		}
 	}
-	catch (const LogicError &e)
-	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
-	}
-	return (rational * other);
+	throw ERROR_OPERATION_MATRIX_COMPLEX;
+	return (nullptr);
 }
 
 IType*		Complex::operator*(const Polynomial &other) const
@@ -644,19 +679,26 @@ IType*		Complex::operator*(const Polynomial &other) const
 	return (other * *this);
 }
 
-Vector*		Complex::operator*(const Vector &other) const
+IType*		Complex::operator*(const Vector &other) const
 {
 	Rational	rational;
+	Real		real;
 
-	try
+	if (!*this->_imaginary)
 	{
-		rational = *this;
+		if (this->in_Q())
+		{
+			rational = *this;
+			return (rational * other);
+		}
+		else
+		{
+			real = *this;
+			return (real * other);
+		}
 	}
-	catch (const LogicError &e)
-	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
-	}
-	return (rational * other);
+	throw ERROR_OPERATION_VECTOR_COMPLEX;
+	return (nullptr);
 }
 
 Complex*	Complex::operator*(const Real &other) const
@@ -727,19 +769,26 @@ Complex*	Complex::operator/(const Rational &other) const
 	return (*this / Complex(other.clone(), new Rational()));
 }
 
-Matrix*		Complex::operator/(const Matrix &other) const
+IType*		Complex::operator/(const Matrix &other) const
 {
 	Rational	rational;
+	Real		real;
 
-	try
+	if (!*this->_imaginary)
 	{
-		rational = *this;
+		if (this->in_Q())
+		{
+			rational = *this;
+			return (rational / other);
+		}
+		else
+		{
+			real = *this;
+			return (real / other);
+		}
 	}
-	catch (const LogicError &e)
-	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
-	}
-	return (rational / other);
+	throw ERROR_OPERATION_MATRIX_COMPLEX;
+	return (nullptr);
 }
 
 Polynomial*	Complex::operator/(const Polynomial &other) const
@@ -754,19 +803,26 @@ Polynomial*	Complex::operator/(const Polynomial &other) const
 	return (result);
 }
 
-Vector*		Complex::operator/(const Vector &other) const
+IType*		Complex::operator/(const Vector &other) const
 {
 	Rational	rational;
+	Real		real;
 
-	try
+	if (!*this->_imaginary)
 	{
-		rational = *this;
+		if (this->in_Q())
+		{
+			rational = *this;
+			return (rational / other);
+		}
+		else
+		{
+			real = *this;
+			return (real / other);
+		}
 	}
-	catch (const LogicError &e)
-	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
-	}
-	return (rational / other);
+	throw ERROR_OPERATION_VECTOR_COMPLEX;
+	return (nullptr);
 }
 
 Complex*	Complex::operator/(const Real &other) const
@@ -839,19 +895,26 @@ Complex*	Complex::operator%(const Rational &other) const
 	return (*this % Complex(other.clone(), new Rational()));
 }
 
-Matrix*		Complex::operator%(const Matrix &other) const
+IType*		Complex::operator%(const Matrix &other) const
 {
 	Rational	rational;
+	Real		real;
 
-	try
+	if (!*this->_imaginary)
 	{
-		rational = *this;
+		if (this->in_Q())
+		{
+			rational = *this;
+			return (rational % other);
+		}
+		else
+		{
+			real = *this;
+			return (real % other);
+		}
 	}
-	catch(const LogicError &e)
-	{
-		throw ERROR_MODULO_COMPLEX;
-	}
-	return (rational % other);
+	throw ERROR_OPERATION_MATRIX_COMPLEX;
+	return (nullptr);
 }
 
 Polynomial*	Complex::operator%(const Polynomial &other) const
@@ -866,19 +929,26 @@ Polynomial*	Complex::operator%(const Polynomial &other) const
 	return (result);
 }
 
-Vector*		Complex::operator%(const Vector &other) const
+IType*		Complex::operator%(const Vector &other) const
 {
 	Rational	rational;
+	Real		real;
 
-	try
+	if (!*this->_imaginary)
 	{
-		rational = *this;
+		if (this->in_Q())
+		{
+			rational = *this;
+			return (rational % other);
+		}
+		else
+		{
+			real = *this;
+			return (real % other);
+		}
 	}
-	catch(const LogicError &e)
-	{
-		throw ERROR_MODULO_COMPLEX;
-	}
-	return (rational % other);
+	throw ERROR_OPERATION_VECTOR_COMPLEX;
+	return (nullptr);
 }
 
 Complex*	Complex::operator%(const Real &other) const

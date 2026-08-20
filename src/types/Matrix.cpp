@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 13:57:25 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 14:24:58 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -634,17 +634,24 @@ Matrix*		Matrix::operator+(const Rational &other) const
 
 Matrix*		Matrix::operator+(const Complex &other) const
 {
-	Rational	rational;// TODO: Ajouter les reels ici et verifier de partout
+	Rational	rational;
+	Real		real;
 
-	try
+	if (!*other.getImaginary())
 	{
-		rational = other;
+		if (other.in_Q())
+		{
+			rational = other;
+			return (*this + rational);
+		}
+		else
+		{
+			real = other;
+			return (*this + real);
+		}
 	}
-	catch (const LogicError &e)
-	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
-	}
-	return (*this + rational);
+	throw ERROR_OPERATION_MATRIX_COMPLEX;
+	return (nullptr);
 }
 
 IType*		Matrix::operator+(const Polynomial &other) const
@@ -736,16 +743,23 @@ Matrix*		Matrix::operator-(const Rational &other) const
 Matrix*		Matrix::operator-(const Complex &other) const
 {
 	Rational	rational;
+	Real		real;
 
-	try
+	if (!*other.getImaginary())
 	{
-		rational = other;
+		if (other.in_Q())
+		{
+			rational = other;
+			return (*this - rational);
+		}
+		else
+		{
+			real = other;
+			return (*this - real);
+		}
 	}
-	catch (const LogicError &e)
-	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
-	}
-	return (*this - rational);
+	throw ERROR_OPERATION_MATRIX_COMPLEX;
+	return (nullptr);
 }
 
 IType*		Matrix::operator-(const Polynomial &other) const
@@ -838,16 +852,23 @@ Matrix*		Matrix::operator*(const Rational &other) const
 Matrix*		Matrix::operator*(const Complex &other) const
 {
 	Rational	rational;
+	Real		real;
 
-	try
+	if (!*other.getImaginary())
 	{
-		rational = other;
+		if (other.in_Q())
+		{
+			rational = other;
+			return (*this * rational);
+		}
+		else
+		{
+			real = other;
+			return (*this * real);
+		}
 	}
-	catch (const LogicError &e)
-	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
-	}
-	return (*this * rational);
+	throw ERROR_OPERATION_MATRIX_COMPLEX;
+	return (nullptr);
 }
 
 IType*		Matrix::operator*(const Polynomial &other) const
@@ -950,16 +971,23 @@ Matrix*		Matrix::operator/(const Rational &other) const
 Matrix*		Matrix::operator/(const Complex &other) const
 {
 	Rational	rational;
+	Real		real;
 
-	try
+	if (!*other.getImaginary())
 	{
-		rational = other;
+		if (other.in_Q())
+		{
+			rational = other;
+			return (*this / rational);
+		}
+		else
+		{
+			real = other;
+			return (*this / real);
+		}
 	}
-	catch (const LogicError &e)
-	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
-	}
-	return (*this / rational);
+	throw ERROR_OPERATION_MATRIX_COMPLEX;
+	return (nullptr);
 }
 
 Polynomial*	Matrix::operator/(const Polynomial &other) const
@@ -1078,16 +1106,23 @@ Matrix*		Matrix::operator%(const Rational &other) const
 Matrix*		Matrix::operator%(const Complex &other) const
 {
 	Rational	rational;
+	Real		real;
 
-	try
+	if (!*other.getImaginary())
 	{
-		rational = other;
+		if (other.in_Q())
+		{
+			rational = other;
+			return (*this % rational);
+		}
+		else
+		{
+			real = other;
+			return (*this % real);
+		}
 	}
-	catch (const LogicError &e)
-	{
-		throw ERROR_MODULO_COMPLEX;
-	}
-	return (*this % rational);
+	throw ERROR_OPERATION_MATRIX_COMPLEX;
+	return (nullptr);
 }
 
 Polynomial*	Matrix::operator%(const Polynomial &other) const

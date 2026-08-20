@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:11:12 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 10:59:32 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 14:01:59 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static void	store_new_variable(								\
 		std::map<std::pair<std::string, std::string>, 		\
 			const IType*> &stored, std::pair<std::string, 	\
-		std::string> key, const Polynomial* polynomial)
+		std::string> key, const Polynomial* polynomial)// TODO: Ne pas stocker les Reals
 {
 	for (std::map<std::pair<std::string, std::string>, const IType*>	\
 			::iterator it(stored.begin()); it != stored.end();)

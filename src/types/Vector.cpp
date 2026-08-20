@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/19 18:12:48 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 14:26:35 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -336,16 +336,23 @@ Vector*		Vector::operator+(const Rational &other) const
 Vector*		Vector::operator+(const Complex &other) const
 {
 	Rational	rational;
+	Real		real;
 
-	try
+	if (!*other.getImaginary())
 	{
-		rational = other;
+		if (other.in_Q())
+		{
+			rational = other;
+			return (*this + rational);
+		}
+		else
+		{
+			real = other;
+			return (*this + real);
+		}
 	}
-	catch (const LogicError &e)
-	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
-	}
-	return (*this + rational);
+	throw ERROR_OPERATION_VECTOR_COMPLEX;
+	return (nullptr);
 }
 
 Matrix*		Vector::operator+(const Matrix &other) const
@@ -434,16 +441,23 @@ Vector*		Vector::operator-(const Rational &other) const
 Vector*		Vector::operator-(const Complex &other) const
 {
 	Rational	rational;
+	Real		real;
 
-	try
+	if (!*other.getImaginary())
 	{
-		rational = other;
+		if (other.in_Q())
+		{
+			rational = other;
+			return (*this - rational);
+		}
+		else
+		{
+			real = other;
+			return (*this - real);
+		}
 	}
-	catch (const LogicError &e)
-	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
-	}
-	return (*this - rational);
+	throw ERROR_OPERATION_VECTOR_COMPLEX;
+	return (nullptr);
 }
 
 Matrix*		Vector::operator-(const Matrix &other) const
@@ -533,16 +547,23 @@ Vector*		Vector::operator*(const Rational &other) const
 Vector*		Vector::operator*(const Complex &other) const
 {
 	Rational	rational;
+	Real		real;
 
-	try
+	if (!*other.getImaginary())
 	{
-		rational = other;
+		if (other.in_Q())
+		{
+			rational = other;
+			return (*this * rational);
+		}
+		else
+		{
+			real = other;
+			return (*this * real);
+		}
 	}
-	catch (const LogicError &e)
-	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
-	}
-	return (*this * rational);
+	throw ERROR_OPERATION_VECTOR_COMPLEX;
+	return (nullptr);
 }
 
 Matrix*		Vector::operator*(const Matrix &other) const
@@ -626,16 +647,23 @@ Vector*		Vector::operator/(const Rational &other) const
 Vector*		Vector::operator/(const Complex &other) const
 {
 	Rational	rational;
+	Real		real;
 
-	try
+	if (!*other.getImaginary())
 	{
-		rational = other;
+		if (other.in_Q())
+		{
+			rational = other;
+			return (*this / rational);
+		}
+		else
+		{
+			real = other;
+			return (*this / real);
+		}
 	}
-	catch (const LogicError &e)
-	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
-	}
-	return (*this / rational);
+	throw ERROR_OPERATION_VECTOR_COMPLEX;
+	return (nullptr);
 }
 
 Matrix*		Vector::operator/(const Matrix &other) const
@@ -725,16 +753,23 @@ Vector*		Vector::operator%(const Rational &other) const
 Vector*		Vector::operator%(const Complex &other) const
 {
 	Rational	rational;
+	Real		real;
 
-	try
+	if (!*other.getImaginary())
 	{
-		rational = other;
+		if (other.in_Q())
+		{
+			rational = other;
+			return (*this % rational);
+		}
+		else
+		{
+			real = other;
+			return (*this % real);
+		}
 	}
-	catch (const LogicError &e)
-	{
-		throw ERROR_OPERATION_MATRIX_COMPLEX;
-	}
-	return (*this % rational);
+	throw ERROR_OPERATION_VECTOR_COMPLEX;
+	return (nullptr);
 }
 
 Matrix*		Vector::operator%(const Matrix &other) const
