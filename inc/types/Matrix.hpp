@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 17:52:40 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 15:13:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,9 @@ class	Matrix: public IType
 		void			round(void);
 		void			swap_lines(unsigned long int line1, 	\
 				unsigned long int line2);
+
+		//Constants
+		static constexpr unsigned char	MAX_NEWTON_ITERATIONS = 7;// [ ] Ajuster ce chiffre
 
 	private:
 		// Members

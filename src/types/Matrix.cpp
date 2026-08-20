@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 15:00:55 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 15:13:45 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1553,7 +1553,7 @@ IType*			Matrix::sqrt(void) const
 	for (int i(0); i < InfiniteFloat::CALCULATION_PRECISION; i++)
 		epsilon /= InfiniteFloat(10);
 	sqrt_value = new Matrix(this->_width, this->_height);
-	for (int i(0); i < 6; i++)// [ ] Definir un nombre d'iterations max
+	for (int i(0); i < Matrix::MAX_NEWTON_ITERATIONS; i++)
 	{
 		result = sqrt_newton_iteration(*this, &sqrt_value, Real(epsilon));
 		if (result)
