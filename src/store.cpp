@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:11:12 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 16:51:11 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 17:01:28 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,7 @@ bool		set_function_left(const std::vector<Token> &tokens, 	\
 			&& tokens[2].getType() == Token::E_TOKEN_POLYNOMIAL 			\
 			&& tokens[3].getType() == Token::E_TOKEN_RIGHT_PARENTHESES)
 	{
-		if (std::regex_match(tokens[0].getValue(), 							\
-				std::regex(TOKEN_NO_VARIABLE)))
-			throw LogicError(std::string("\"") + tokens[0].getValue() 		\
-					+ std::string("\" is a basic"	\
-						" variable or function and cannot be changed"));
+		stop_preset_terms(tokens[0].getValue());
 		pair.first = "_" + tokens[0].getValue();
 		pair.second = tokens[2].getValue();
 		stored[pair] = nullptr;

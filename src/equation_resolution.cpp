@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 14:12:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 16:52:21 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 17:01:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,22 +57,19 @@ void		assignation(std::string var, 				\
 	std::string							var_lower(to_lower(var));
 	std::pair<std::string, std::string>	pair(var_lower, std::string());
 
-	std::cout << COLOR_BOLD << var << " = " << *result << COLOR_RESET 		\
+	std::cout << COLOR_BOLD << var << " = " << *result << COLOR_RESET 	\
 			<< std::endl;
 	if (!result->in_Q())
 	{
-		std::cout << COLOR_BOLD << COLOR_DIM 								\
-				<< "Real numbers cannot be stored as variables" 			\
+		std::cout << COLOR_BOLD << COLOR_DIM 							\
+				<< "Real numbers cannot be stored as variables" 		\
 				<< COLOR_RESET << std::endl;
 		return ;
 	}
-	if (std::regex_match(var, std::regex(TOKEN_NO_VARIABLE)))// [ ] Nouvelle fonction
-		throw LogicError(std::string("\"") + var + std::string("\" is a"	\
-			" basic variable or function and cannot be changed"));
+	stop_preset_terms(var);
 	result->print_rounded(var);
-	for (std::map<std::pair<std::string, std::string>, const IType*>		\
+	for (std::map<std::pair<std::string, std::string>, const IType*>	\
 			::iterator it(stored.begin()); it != stored.end();)
-	{
 		if (it->first.first == var_lower)
 		{
 			delete it->second;
@@ -80,7 +77,6 @@ void		assignation(std::string var, 				\
 		}
 		else
 			it++;
-	}
 	stored[pair] = result;
 }
 
