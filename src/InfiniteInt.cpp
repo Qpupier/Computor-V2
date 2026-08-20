@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:39:10 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 14:48:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 15:07:17 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -621,11 +621,11 @@ InfiniteInt	InfiniteInt::sqrt(void) const
 		padding.push_back(0);
 	while (padding)
 	{
-		for (unsigned char test_digit = 1; test_digit <= 10; test_digit++)// [ ] Set macros
+		for (unsigned char test_digit = 1; test_digit <= 10; test_digit++)
 		{
 			std::vector<unsigned char> test(result.getDigits());
 			test.push_back(test_digit);
-			if (((InfiniteInt(test) * padding) ^ InfiniteInt(2)) > *this)
+			if (((InfiniteInt(test) * padding) ^ 2) > *this)
 			{
 				result.push_back(test_digit - 1);
 				break ;
