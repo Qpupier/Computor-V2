@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/19 16:43:24 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/21 17:31:23 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -990,7 +990,7 @@ IType*			Rational::cos(void) const
 	return (nullptr);
 }
 
-IType*			Rational::exp(void) const// TODO: Parsing corresponding (e^x)
+IType*			Rational::exp(void) const
 {
 	long long int	k(0);
 	Rational*		result;

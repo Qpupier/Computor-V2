@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/08/21 13:03:12 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/08/21 19:38:32 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,8 +69,8 @@ DIRS		=	$(DIR_OBJ)/AST												\
 				$(DIR_OBJ)/quadratic_equation_resolution					\
 				$(DIR_OBJ)/quadratic_equation_resolution/print_solutions	\
 				$(DIR_OBJ)/types
-# CC			=	c++
-CC			=	g++
+# CC			=	g++
+CC			=	clang++
 CXXFLAGS	=	-W -Wall -Wextra -Werror -Wshadow -Wold-style-cast -Wcast-qual -Wconversion -Wsign-conversion -Wstrict-aliasing -g3
 MAKEFLAGS	=	--jobs
 CXXFLAGS	+=	-O2 # Optimization
