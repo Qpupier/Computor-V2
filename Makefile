@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/08/20 17:02:50 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/08/21 13:03:12 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,7 +73,7 @@ DIRS		=	$(DIR_OBJ)/AST												\
 CC			=	g++
 CXXFLAGS	=	-W -Wall -Wextra -Werror -Wshadow -Wold-style-cast -Wcast-qual -Wconversion -Wsign-conversion -Wstrict-aliasing -g3
 MAKEFLAGS	=	--jobs
-# CXXFLAGS	+=	-O2 # Optimization
+CXXFLAGS	+=	-O2 # Optimization
 # CXXFLAGS	+=	-fsanitize=address # Debugging
 CDEP		=	-MMD -MP
 LIBRAIRIES	=	-lreadline

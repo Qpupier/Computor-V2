@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 18:11:35 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/21 17:22:43 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ AST*								compute_expression(						\
 		return (nullptr);
 	try
 	{
-		verif_preset_terms(ast);
 		if (is_right_side || !ast->end_of_tree())
 			ast->reduce_expression(data.stored);
 		if (is_right_side && !eval && waiting_function(data.stored))

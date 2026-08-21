@@ -6,20 +6,21 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 14:30:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/18 18:29:25 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/21 13:46:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "computor-v2.hpp"
+// #include "computor-v2.hpp"
+#include "IType.hpp"
 
 static void				history(std::smatch match, 	\
 		const std::vector<std::string> &history_results)
 {
-	HIST_ENTRY**		hist(history_list());
-	unsigned long int	n;
-	unsigned long int	last;
 	unsigned long int	first;
+	unsigned long int	last(0);
+	unsigned long int	n;
 	bool				max(false);
+	HIST_ENTRY**		hist(history_list());
 
 	if (match.length() > 1 && !match[1].str().empty())
 	{
@@ -40,6 +41,27 @@ static void				history(std::smatch match, 	\
 	}
 }
 
+static void				stored_variables(const 		\
+		std::map<std::pair<std::string, std::string>, const IType*> &stored)
+{
+	std::map<std::pair<std::string, std::string>, const IType*>			\
+			::const_iterator	it(stored.begin());
+
+	std::cout 															\
+			<< "\033[33mListing stored variables and functions\033[0m" 	\
+			<< std::endl;//TODO: Print already defined functions and variables
+	while (it != stored.end())
+	{
+		std::cout << "\033[33m  ";
+		if (!it->first.second.empty())
+			std::cout << it->first.first << "(" << it->first.second << ")";
+		else
+			std::cout << it->first.first;
+		std::cout << " = " << *it->second << "\033[0m" << std::endl;
+		it++;
+	}
+}
+
 static unsigned char	read_interactive(std::string &str_line, t_data &data)
 {
 	std::smatch	match;
@@ -49,19 +71,26 @@ static unsigned char	read_interactive(std::string &str_line, t_data &data)
 	if (!line)
 		return (EXIT_SUCCESS);
 	str_line = std::string(line);
-	if (std::regex_match(str_line, data.patterns.at(TOKEN_WHITESPACE)))
-	{
-		free(line);
-		return (CONTINUE);
-	}
 	if (std::regex_match(str_line, data.patterns.at(TOKEN_QUIT)))
 	{
 		free(line);
 		return (EXIT_SUCCESS);
 	}
+	if (std::regex_match(str_line, data.patterns.at(TOKEN_WHITESPACE)))
+	{
+		free(line);
+		return (CONTINUE);
+	}
+	if (std::regex_match(str_line, match, data.patterns.at(TOKEN_LIST)))
+	{
+		stored_variables(data.stored);
+		free(line);
+		return (CONTINUE);
+	}
 	if (std::regex_match(str_line, match, data.patterns.at(TOKEN_HISTORY)))
 	{
 		history(match, data.history_results);
+		free(line);
 		return (CONTINUE);
 	}
 	add_history(line);

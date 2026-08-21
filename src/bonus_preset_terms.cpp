@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/20 16:57:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 18:08:35 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/21 13:49:51 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	stop_preset_terms(const std::string& name, bool change)
 		throw LogicError(message);
 }
 
-void	verif_preset_terms(AST* ast, bool left, bool last_operator_is_function)
+void	verif_preset_terms(AST* ast, bool left, bool last_operator_is_function)// TODO: Enlever e et pi
 {
 	Operator*	op;
 	Polynomial*	polynomial;

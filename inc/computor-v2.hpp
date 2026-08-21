@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 17:01:41 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/20 18:33:46 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ class IType;
 # define UNSUPPORTED_MULTI_POLYNOMIALS		UnsupportedError("Multiple unknown polynomials are not supported")
 # define CONTINUE							2
 # define NOTHING							3
+# define PRESET_PI							"3.1415926535897932384626433832795028841971693993751058209749445923"
+# define PRESET_E							"2.7182818284590452353602874713526624977572470936999595749669676277"
 
 typedef struct	s_data
 {
