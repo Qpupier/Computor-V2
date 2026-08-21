@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:01:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 18:06:10 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/21 19:56:43 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,9 @@ void	clean_tokens(t_possibility& possibility);
 void	compute_equation(const std::string &line, t_data &data, const bool eval);
 void	delete_empty_function_stored(std::map<std::pair<std::string, std::string>, const IType*> &stored, const std::string error_msg, const bool throw_error = false);
 void	print_expression(const std::string &line, t_data &data);
+void	print_variables(const std::map<std::pair<std::string, std::string>, const IType*> &stored, const std::vector<std::string>& preset = std::vector<std::string>(), const bool print_preset = true);
 void	set_function_right(t_data &data, AST* ast);
 void	stop_preset_terms(const std::string& name, bool change = true);
 void	trim_string(std::string &s);
 void	verif_preset_terms(AST* ast, bool left = true, bool last_operator_is_function = false);
-
 #endif

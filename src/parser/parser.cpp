@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/21 17:22:43 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/21 19:51:40 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,33 @@ AST*								compute_expression(						\
 		throw;
 	}
 	return (ast);
+}
+
+void								print_expression(const std::string& 	\
+		line, t_data &data)
+{
+	std::string	result;
+	AST*		ast;
+
+	ast = compute_expression(line, data, true);
+	if (!ast)
+		throw UnexpectedError											\
+				("Unexpected error while computing the expression");
+	if (!ast->end_of_tree())
+	{
+		delete ast;
+		throw UnexpectedError("Unexpected error: the AST is not an expression");
+	}
+	try {verif_preset_terms(ast);}
+	catch (...)
+	{
+		delete ast;
+		throw;
+	}
+	result = ast->getNode()->to_string();
+	std::cout << COLOR_BOLD << result << COLOR_RESET << std::endl;
+	data.history_results.push_back(std::string(COLOR_GREEN) + result 	\
+			+ std::string(COLOR_RESET));
+	ast->getNode()->print_rounded();
+	delete ast;
 }

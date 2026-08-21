@@ -6,12 +6,11 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 14:30:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/21 13:46:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/21 19:57:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "computor-v2.hpp"
-#include "IType.hpp"
+#include "AST.hpp"
 
 static void				history(std::smatch match, 	\
 		const std::vector<std::string> &history_results)
@@ -44,22 +43,11 @@ static void				history(std::smatch match, 	\
 static void				stored_variables(const 		\
 		std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
-	std::map<std::pair<std::string, std::string>, const IType*>			\
-			::const_iterator	it(stored.begin());
-
-	std::cout 															\
-			<< "\033[33mListing stored variables and functions\033[0m" 	\
+	std::cout << COLOR_YELLOW											\
+			<< "Listing stored variables and functions" << COLOR_RESET	\
 			<< std::endl;//TODO: Print already defined functions and variables
-	while (it != stored.end())
-	{
-		std::cout << "\033[33m  ";
-		if (!it->first.second.empty())
-			std::cout << it->first.first << "(" << it->first.second << ")";
-		else
-			std::cout << it->first.first;
-		std::cout << " = " << *it->second << "\033[0m" << std::endl;
-		it++;
-	}
+	print_variables(stored, std::vector<std::string>({"pi", "e"}));
+	print_variables(stored, std::vector<std::string>({"pi", "e"}), false);
 }
 
 static unsigned char	read_interactive(std::string &str_line, t_data &data)

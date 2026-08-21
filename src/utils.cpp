@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 20:00:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/21 17:25:17 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/21 20:02:17 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,38 +39,33 @@ std::string	to_lower(std::string s)
 	return (s);
 }
 
-void		print_expression(const std::string &line, t_data &data)
-{
-	std::string	result;
-	AST*		ast;
-
-	ast = compute_expression(line, data, true);
-	if (!ast)
-		throw UnexpectedError											\
-				("Unexpected error while computing the expression");
-	if (!ast->end_of_tree())
-	{
-		delete ast;
-		throw UnexpectedError("Unexpected error: the AST is not an expression");
-	}
-	try {verif_preset_terms(ast);}
-	catch (...)
-	{
-		delete ast;
-		throw;
-	}
-	result = ast->getNode()->to_string();
-	std::cout << COLOR_BOLD << result << COLOR_RESET << std::endl;
-	data.history_results.push_back(std::string(COLOR_GREEN) + result 	\
-			+ std::string(COLOR_RESET));
-	ast->getNode()->print_rounded();
-	delete ast;
-}
-
 void		trim_string(std::string &s)
 {
 	while (std::isspace(s[0]))
 		s.erase(0, 1);
 	while (std::isspace(s[s.size() - 1]))
 		s.erase(s.size() - 1, 1);
+}
+
+void		print_variables(const 	\
+		std::map<std::pair<std::string, std::string>, const IType*> &stored, const std::vector<std::string>& preset, const bool print_preset)
+{
+	std::map<std::pair<std::string, std::string>, const IType*>			\
+			::const_iterator	it(stored.begin());
+
+	while (it != stored.end())
+	{
+		if (print_preset ^ std::find(preset.begin(), preset.end(), it->first.first) != preset.end())
+		{
+			it++;
+			continue;
+		}
+		std::cout << COLOR_YELLOW << "  ";
+		if (!it->first.second.empty())
+			std::cout << it->first.first << "(" << it->first.second << ")";
+		else
+			std::cout << it->first.first;
+		std::cout << " = " << *it->second << COLOR_RESET << std::endl;
+		it++;
+	}
 }
