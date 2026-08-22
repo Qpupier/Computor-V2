@@ -6,6 +6,25 @@ One solution in ℝ:
 S = {-1} ∈ ℝ
 x = -1
 Listing stored variables and functions
-  funA(χ) = χ^2 + 2χ + 1
-  x = -1
-  y = 0
+
+  Pre-set constants:
+    e ≈ 2.71828183...
+    pi ≈ 3.14159265...
+
+  Pre-set functions:
+    sqrt => Square root
+    norm => Norm
+    abs => Absolute
+    cos => Cosine
+    sin => Sine
+    tan => Tangent
+    exp => Exponential
+    rad => Degree to radian
+    deg => Radian to degree
+
+  User-defined variables:
+    x = -1
+    y = 0
+
+  User-defined functions:
+    funA(χ) = χ^2 + 2χ + 1

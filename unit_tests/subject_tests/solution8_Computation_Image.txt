@@ -4,6 +4,25 @@ funC(χ) = 4χ + 3
 41
 15
 Listing stored variables and functions
-  funA(χ) = χ + 8
-  funB(χ) = χ^2 + 4χ - 1
-  funC(χ) = 4χ + 3
+
+  Pre-set constants:
+    e ≈ 2.71828183...
+    pi ≈ 3.14159265...
+
+  Pre-set functions:
+    sqrt => Square root
+    norm => Norm
+    abs => Absolute
+    cos => Cosine
+    sin => Sine
+    tan => Tangent
+    exp => Exponential
+    rad => Degree to radian
+    deg => Radian to degree
+
+  User-defined variables:
+
+  User-defined functions:
+    funA(χ) = χ + 8
+    funB(χ) = χ^2 + 4χ - 1
+    funC(χ) = 4χ + 3

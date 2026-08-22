@@ -2,6 +2,25 @@ varA = [ 2 , 3 ]
 [ 4 , 3 ]
 varB = [ 3 , 4 ]
 Listing stored variables and functions
-  vara = [ 2 , 3 ]
+
+  Pre-set constants:
+    e ≈ 2.71828183...
+    pi ≈ 3.14159265...
+
+  Pre-set functions:
+    sqrt => Square root
+    norm => Norm
+    abs => Absolute
+    cos => Cosine
+    sin => Sine
+    tan => Tangent
+    exp => Exponential
+    rad => Degree to radian
+    deg => Radian to degree
+
+  User-defined variables:
+    vara = [ 2 , 3 ]
 [ 4 , 3 ]
-  varb = [ 3 , 4 ]
+    varb = [ 3 , 4 ]
+
+  User-defined functions:

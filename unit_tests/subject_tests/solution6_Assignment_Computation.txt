@@ -5,8 +5,27 @@ varC = 1
 varD = 479/2
 varD = 239.5
 Listing stored variables and functions
-  funA(χ) = (2χ + 477) / 2
-  vara = 27
-  varb = 53
-  varc = 1
-  vard = 479/2
+
+  Pre-set constants:
+    e ≈ 2.71828183...
+    pi ≈ 3.14159265...
+
+  Pre-set functions:
+    sqrt => Square root
+    norm => Norm
+    abs => Absolute
+    cos => Cosine
+    sin => Sine
+    tan => Tangent
+    exp => Exponential
+    rad => Degree to radian
+    deg => Radian to degree
+
+  User-defined variables:
+    vara = 27
+    varb = 53
+    varc = 1
+    vard = 479/2
+
+  User-defined functions:
+    funA(χ) = (2χ + 477) / 2

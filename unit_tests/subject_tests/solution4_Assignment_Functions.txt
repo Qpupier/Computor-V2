@@ -2,5 +2,25 @@ funA(χ) = 2χ^5 + 4χ^2 - 5χ + 4
 Division by zero is impossible
 funC(χ) = -2χ - 5
 Listing stored variables and functions
-  funA(χ) = 2χ^5 + 4χ^2 - 5χ + 4
-  funC(χ) = -2χ - 5
+
+  Pre-set constants:
+    e ≈ 2.71828183...
+    pi ≈ 3.14159265...
+
+  Pre-set functions:
+    sqrt => Square root
+    norm => Norm
+    abs => Absolute
+    cos => Cosine
+    sin => Sine
+    tan => Tangent
+    exp => Exponential
+    rad => Degree to radian
+    deg => Radian to degree
+
+  User-defined variables:
+
+  User-defined functions:
+    funA(χ) = 2χ^5 + 4χ^2 - 5χ + 4
+    funC(χ) = -2χ - 5
+

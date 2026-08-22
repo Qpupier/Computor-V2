@@ -1,5 +1,24 @@
 varA = 3 + 2i
 varB = -4 - 4i
 Listing stored variables and functions
-  vara = 3 + 2i
-  varb = -4 - 4i
+
+  Pre-set constants:
+    e ≈ 2.71828183...
+    pi ≈ 3.14159265...
+
+  Pre-set functions:
+    sqrt => Square root
+    norm => Norm
+    abs => Absolute
+    cos => Cosine
+    sin => Sine
+    tan => Tangent
+    exp => Exponential
+    rad => Degree to radian
+    deg => Radian to degree
+
+  User-defined variables:
+    vara = 3 + 2i
+    varb = -4 - 4i
+
+  User-defined functions:

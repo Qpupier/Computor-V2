@@ -9,16 +9,14 @@ run()
 {
 	echo -n "\033[35;3mTesting:\033[0m \"$1\"\n$2 "
 	echo "$1" | ./computor-v2 > output 2> error
-	truncate -s -1 output error
-	sed -i 's/\x1b\[[0-9;]*m//g' output error
+	sed -i -z 's/\x1b\[[0-9;]*m//g; s/\n*$//' output error
 }
 
 run_output()
 {
 	echo -n "\033[35;3mTesting:\033[0m \"$1\"\n$2 "
 	echo "$1" | ./computor-v2 > output 2>&1
-	truncate -s -1 output
-	sed -i 's/\x1b\[[0-9;]*m//g' output
+	sed -i -z 's/\x1b\[[0-9;]*m//g; s/\n*$//' output
 }
 
 print_error()
@@ -57,7 +55,7 @@ test_leaks_and_errors()
 run_test()
 {
 	run "$1" "$2" "$3"
-	printf '%s' "$2" > expected
+	echo -n "$2" > expected
 	if ! diff -u expected output > /dev/null; then
 		echo "❌"
 		if [ "$3" != "debug" ]; then
@@ -75,7 +73,7 @@ run_test()
 run_error()
 {
 	run "$1" "$2" "$3"
-	printf '%s' "$2" > expected
+	echo -n "$2" > expected
 	if ! diff -u expected error > /dev/null; then
 		echo "❌"
 		if [ "$3" != "debug" ]; then
@@ -93,7 +91,7 @@ run_error()
 run_batch()
 {
 	run_output "$1" "$2" "$3"
-	printf '%s' "$2" > expected
+	echo -n "$2" > expected
 	if ! diff -u expected output > /dev/null; then
 		echo "❌"
 		if [ "$3" != "debug" ]; then

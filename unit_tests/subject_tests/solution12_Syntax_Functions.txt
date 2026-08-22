@@ -3,7 +3,26 @@ funB(χ) = 2χ
 funC(χ) = (6χ - 11) / 3
 funD(χ) = 2χ
 Listing stored variables and functions
-  funA(χ) = 3χ
-  funB(χ) = 2χ
-  funC(χ) = (6χ - 11) / 3
-  funD(χ) = 2χ
+
+  Pre-set constants:
+    e ≈ 2.71828183...
+    pi ≈ 3.14159265...
+
+  Pre-set functions:
+    sqrt => Square root
+    norm => Norm
+    abs => Absolute
+    cos => Cosine
+    sin => Sine
+    tan => Tangent
+    exp => Exponential
+    rad => Degree to radian
+    deg => Radian to degree
+
+  User-defined variables:
+
+  User-defined functions:
+    funA(χ) = 3χ
+    funB(χ) = 2χ
+    funC(χ) = (6χ - 11) / 3
+    funD(χ) = 2χ

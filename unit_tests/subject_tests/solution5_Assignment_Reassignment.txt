@@ -3,5 +3,24 @@ y = 2
 y = 7
 y = 2i - 4
 Listing stored variables and functions
-  x = 2
-  y = 2i - 4
+
+  Pre-set constants:
+    e ≈ 2.71828183...
+    pi ≈ 3.14159265...
+
+  Pre-set functions:
+    sqrt => Square root
+    norm => Norm
+    abs => Absolute
+    cos => Cosine
+    sin => Sine
+    tan => Tangent
+    exp => Exponential
+    rad => Degree to radian
+    deg => Radian to degree
+
+  User-defined variables:
+    x = 2
+    y = 2i - 4
+
+  User-defined functions:

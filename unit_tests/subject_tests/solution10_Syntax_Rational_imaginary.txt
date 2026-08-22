@@ -4,7 +4,26 @@ varC = 36
 varD = 868/3
 varD ≈ 289.33333333...
 Listing stored variables and functions
-  vara = 2
-  varb = 18
-  varc = 36
-  vard = 868/3
+
+  Pre-set constants:
+    e ≈ 2.71828183...
+    pi ≈ 3.14159265...
+
+  Pre-set functions:
+    sqrt => Square root
+    norm => Norm
+    abs => Absolute
+    cos => Cosine
+    sin => Sine
+    tan => Tangent
+    exp => Exponential
+    rad => Degree to radian
+    deg => Radian to degree
+
+  User-defined variables:
+    vara = 2
+    varb = 18
+    varc = 36
+    vard = 868/3
+
+  User-defined functions:
