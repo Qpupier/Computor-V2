@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:11:12 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 17:01:28 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/22 15:01:03 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ static void	store_function(t_data &data, 	\
 	{
 		delete polynomial;
 		delete_empty_function_stored(data.stored, 						\
-			"Function parameter does not match the variable in the right side \
-				of the equation", true);
+			"Function parameter does not match the variable in the right side"
+			" of the equation", true);
 	}
 	key.first.erase(0, 1);
 	store_new_variable(data.stored, key, polynomial);

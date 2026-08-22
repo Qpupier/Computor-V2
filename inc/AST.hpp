@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:01:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/22 13:29:28 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/22 14:41:33 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,10 @@ void			compute_equation(const std::string &line, t_data &data, const bool eval);
 void			delete_empty_function_stored(std::map<std::pair<std::string, std::string>, const IType*> &stored, const std::string error_msg, const bool throw_error = false);
 void			history(std::smatch match, const std::vector<std::string>& history_results);
 void			print_expression(const std::string &line, t_data &data);
-void			print_variables(const std::map<std::pair<std::string, std::string>, const IType*> &stored, const std::vector<std::string>& preset = std::vector<std::string>(), const bool print_preset = true);
+void			print_variables(const t_data& data, const bool print_preset, const bool print_variables);
 void			set_function_right(t_data &data, AST* ast);
 void			stop_preset_terms(const std::string& name, bool change = true);
-void			stored_variables(const std::map<std::pair<std::string, std::string>, const IType*>& stored);
+void			stored_variables(const t_data& data);
 void			trim_string(std::string &s);
 void			verif_preset_terms(AST* ast, bool left = true, bool last_operator_is_function = false);
 

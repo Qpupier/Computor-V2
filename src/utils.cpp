@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 20:00:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/21 20:02:17 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/22 15:04:51 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,25 +47,32 @@ void		trim_string(std::string &s)
 		s.erase(s.size() - 1, 1);
 }
 
-void		print_variables(const 	\
-		std::map<std::pair<std::string, std::string>, const IType*> &stored, const std::vector<std::string>& preset, const bool print_preset)
+void		print_variables(const t_data& data, const bool print_preset, 	\
+		const bool print_variables)
 {
 	std::map<std::pair<std::string, std::string>, const IType*>			\
-			::const_iterator	it(stored.begin());
+			::const_iterator	it(data.stored.begin());
+	bool						is_constant;
 
-	while (it != stored.end())
+	while (it != data.stored.end())
 	{
-		if (print_preset ^ std::find(preset.begin(), preset.end(), it->first.first) != preset.end())
+		is_constant = std::find(data.preset_constants.begin(), 			\
+					data.preset_constants.end(), it->first.first) 		\
+				!= data.preset_constants.end();
+		if ((print_preset && print_variables && is_constant) 			\
+				|| (!print_preset 										\
+					&& ((print_variables && it->first.second.empty() 	\
+							&& !is_constant) 							\
+						|| (!print_variables && !it->first.second.empty()))))
 		{
-			it++;
-			continue;
+			std::cout << "    ";
+			if (!it->first.second.empty())
+				std::cout << it->first.first << "(" << it->first.second << ")";
+			else
+				std::cout << it->first.first;
+			std::cout << (print_preset ? " ≈ " : " = ") << *it->second 	\
+					<< std::endl;
 		}
-		std::cout << COLOR_YELLOW << "  ";
-		if (!it->first.second.empty())
-			std::cout << it->first.first << "(" << it->first.second << ")";
-		else
-			std::cout << it->first.first;
-		std::cout << " = " << *it->second << COLOR_RESET << std::endl;
 		it++;
 	}
 }

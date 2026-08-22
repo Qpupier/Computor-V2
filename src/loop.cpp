@@ -6,11 +6,22 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 14:30:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/22 13:29:43 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/22 14:59:36 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
+
+static void	print_preset_functions(const std::vector<std::pair<std::string, std::string>>& preset_functions)
+{
+	std::vector<std::pair<std::string, std::string>>::const_iterator	it(preset_functions.begin());
+
+	while (it != preset_functions.end())
+	{
+		std::cout << "    " << it->first << " => " << it->second << std::endl;
+		it++;
+	}
+}
 
 void	history(std::smatch match, 	\
 		const std::vector<std::string>& history_results)
@@ -40,14 +51,20 @@ void	history(std::smatch match, 	\
 	}
 }
 
-void	stored_variables(const 		\
-		std::map<std::pair<std::string, std::string>, const IType*>& stored)
+void	stored_variables(const t_data& data)
 {
-	std::cout << COLOR_YELLOW											\
-			<< "Listing stored variables and functions" << COLOR_RESET	\
-			<< std::endl;//TODO: Print already defined functions and variables
-	print_variables(stored, std::vector<std::string>({"pi", "e"}));
-	print_variables(stored, std::vector<std::string>({"pi", "e"}), false);
+	std::cout << COLOR_YELLOW << COLOR_BOLD 							\
+			<< "Listing stored variables and functions" << COLOR_RESET 	\
+			<< COLOR_YELLOW << std::endl 								\
+			<< std::endl << "  Pre-set constants:" << std::endl;
+	print_variables(data, true, true);
+	std::cout << std::endl << "  Pre-set functions:" << std::endl;
+	print_preset_functions(data.preset_functions);
+	std::cout << std::endl << "  User-defined variables:" << std::endl;
+	print_variables(data, false, true);
+	std::cout << std::endl << "  User-defined functions:" << std::endl;
+	print_variables(data, false, false);
+	std::cout << COLOR_RESET << std::endl;
 }
 
 int		loop(t_data &data, bool is_interactive)

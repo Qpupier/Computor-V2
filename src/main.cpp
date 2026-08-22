@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/21 13:46:49 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/22 15:00:03 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,24 +26,55 @@ static void	free_stored(const 	\
 	}
 }
 
+static void	set_preset_constants(t_data &data)
+{
+	Rational*	rational;
+
+	rational = new Rational(PRESET_PI);
+	data.stored[std::pair<std::string, std::string>("pi", std::string())] 	\
+			= new Real(*rational);
+	delete rational;
+	data.preset_constants.push_back("pi");
+	rational = new Rational(PRESET_E);
+	data.stored[std::pair<std::string, std::string>("e", std::string())] 	\
+			= new Real(*rational);
+	delete rational;
+	data.preset_constants.push_back("e");
+}
+
+static void	set_preset_functions(t_data &data)
+{
+	data.preset_functions.push_back(	\
+			std::pair<std::string, std::string>("sqrt", "Square root"));
+	data.preset_functions.push_back(	\
+			std::pair<std::string, std::string>("norm", "Norm"));
+	data.preset_functions.push_back(	\
+			std::pair<std::string, std::string>("abs", "Absolute"));
+	data.preset_functions.push_back(	\
+			std::pair<std::string, std::string>("cos", "Cosine"));
+	data.preset_functions.push_back(	\
+			std::pair<std::string, std::string>("sin", "Sine"));
+	data.preset_functions.push_back(	\
+			std::pair<std::string, std::string>("tan", "Tangent"));
+	data.preset_functions.push_back(	\
+			std::pair<std::string, std::string>("exp", "Exponential"));
+	data.preset_functions.push_back(	\
+			std::pair<std::string, std::string>("rad", "Degree to radian"));
+	data.preset_functions.push_back(	\
+			std::pair<std::string, std::string>("deg", "Radian to degree"));
+}
+
 int			main(int argc, const char **argv)
 {
-	t_data		data;
-	int			status;
-	Rational*	rational;
+	t_data	data;
+	int		status;
 
 	if (argc > 1)
 		return (usage());
 	define_patterns(data.patterns);
 	define_token_types(data.tokens_types);
-	rational = new Rational(PRESET_PI);
-	data.stored[std::pair<std::string, std::string>("pi", std::string())] 	\
-			= new Real(*rational);
-	delete rational;
-	rational = new Rational(PRESET_E);
-	data.stored[std::pair<std::string, std::string>("e", std::string())] 	\
-			= new Real(*rational);
-	delete rational;
+	set_preset_constants(data);
+	set_preset_functions(data);
 	status = loop(data, isatty(STDIN_FILENO));
 	free_stored(data.stored);
 	return (status);
