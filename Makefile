@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/08/21 19:38:32 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/08/22 13:30:52 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ LST_SRC		=	AST/AST.cpp																			\
 				parser/clean_tokens.cpp																\
 				parser/parser.cpp																	\
 				parser/parser_possibilities.cpp														\
+				parser/read.cpp																		\
 				quadratic_equation_resolution/print_solutions/exact_solutions.cpp					\
 				quadratic_equation_resolution/print_solutions/exact_solutions_imaginary_part.cpp	\
 				quadratic_equation_resolution/print_solutions/exact_solutions_real_part.cpp			\
