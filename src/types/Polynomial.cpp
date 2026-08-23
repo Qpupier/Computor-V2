@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 18:28:57 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 18:56:06 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1178,23 +1178,6 @@ Real*			Polynomial::rad(void) const
 	return (this->getTerms()[0].coefficient->rad());
 }
 
-void			Polynomial::free(void)
-{
-	free_vector_terms(this->_terms);
-	free_vector_terms(this->_dividers);
-}
-
-void			Polynomial::print_rounded(const std::string var) const
-{
-	(void)var;
-}
-
-void			Polynomial::sort_powers(void)
-{
-	terms_sort_powers(this->_terms);
-	terms_sort_powers(this->_dividers);
-}
-
 void			Polynomial::factorize_constant_factor(void)
 {
 	Rational*	gcd_dividend;
@@ -1212,6 +1195,17 @@ void			Polynomial::factorize_constant_factor(void)
 	delete gcd;
 }
 
+void			Polynomial::free(void)
+{
+	free_vector_terms(this->_terms);
+	free_vector_terms(this->_dividers);
+}
+
+void			Polynomial::print_rounded(const std::string var) const
+{
+	(void)var;
+}
+
 void			Polynomial::reduce(void)
 {
 	Polynomial::t_division_result	division_result;
@@ -1226,7 +1220,7 @@ void			Polynomial::reduce(void)
 	}
 	division_result = euclidean_division(this->_terms, this->_dividers, true);
 	if (division_result.quotient.empty())
-		second_division(this->_terms, this->_dividers, 	\
+		second_division(this->_terms, this->_dividers, 				\
 				division_result.remainder);
 	free_vector_terms(division_result.quotient);
 	free_vector_terms(division_result.remainder);
@@ -1234,8 +1228,24 @@ void			Polynomial::reduce(void)
 		this->factorize_constant_factor();
 	if (this->_terms.size() == 1 && this->_dividers.size() == 1 	\
 			&& *this->_dividers[0].coefficient != 1)
-		*this = Polynomial("", (t_term){*this->_terms[0].coefficient 	\
-				/ *this->_dividers[0].coefficient, 0});
+		this->reduce_constant();
+}
+
+void			Polynomial::reduce_constant(void)
+{
+	IType*	new_type;
+	
+	new_type = *this->_terms[0].coefficient 	\
+			/ *this->_dividers[0].coefficient;
+	this->free();
+	this->_terms.push_back((t_term){new_type, 0});
+	this->_dividers.push_back((t_term){new Rational(1), 0});
+}
+
+void			Polynomial::sort_powers(void)
+{
+	terms_sort_powers(this->_terms);
+	terms_sort_powers(this->_dividers);
 }
 
 
@@ -1281,7 +1291,7 @@ std::vector<Polynomial::t_term>	vector_term_coeff_multiplication(	\
 }
 
 void							free_vector_terms(					\
-		std::vector<Polynomial::t_term> &vector)
+		std::vector<Polynomial::t_term>& vector)
 {
 	std::vector<Polynomial::t_term>::iterator	it(vector.begin());
 

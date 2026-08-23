@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 18:08:26 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 18:53:41 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ class	Polynomial: public IType
 		void			print_rounded(const std::string var 	\
 				= std::string()) const;
 		void			reduce(void);
+		void			reduce_constant(void);
 		void			sort_powers(void);
 
 	private:
