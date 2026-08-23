@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:43:37 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/05 13:24:20 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 11:41:16 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ Rational*				get_module_square(const Complex* complex);
 void					display_result(const Polynomial *polynomial, t_data &data);
 void					find_solutions(const std::vector<Complex*> &coefficients, std::string var, t_data &data);
 void					print_rounded_solutions(const t_quadratic_solutions &solutions, const bool reduce_sqrt, const std::string var, const unsigned char nb_solutions);
-void					print_solutions(t_quadratic_solutions& solutions, const std::string set, const std::string var, t_data &data);
+void					print_solutions(t_quadratic_solutions& solutions, std::string& set, const std::string var, t_data &data);
 void					reduce_sqrt(InfiniteInt *factor, InfiniteInt *sqrt);
 void					set_imaginary_terms(const std::vector<const Complex*> coefficients, t_quadratic_solutions &solutions, const std::vector<Rational> sqrt_factors, Rational* denominator);
 void					set_terms(const std::vector<const Complex*> coefficients, t_quadratic_solutions &solutions, const std::vector<Rational> sqrt_factors, Rational* denominator);

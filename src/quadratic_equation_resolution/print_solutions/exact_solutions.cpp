@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:19:13 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 11:14:20 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 11:40:48 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ static inline bool	solutions_equal(const t_quadratic_solutions& 	\
 }
 
 static std::string	print_exact_solution(const t_quadratic_solutions& 	\
-		solutions, const unsigned char i, const bool reduce_sqrt)
+		solutions, const unsigned char i, const bool reduce_sqrt, 		\
+		std::string& set)
 {
 	std::string	result;
 	bool		has_real_part;
@@ -54,12 +55,13 @@ static std::string	print_exact_solution(const t_quadratic_solutions& 	\
 		if (has_real_part)
 			result += " + ";
 		result += print_imaginary_part(solutions, i, reduce_sqrt);
+		set = "ℂ";
 	}
 	return (result);
 }
 
 static std::string	print_exact_solutions(const t_quadratic_solutions& 	\
-		solutions, const std::string set, const bool reduce_sqrt, 		\
+		solutions, std::string& set, const bool reduce_sqrt, 		\
 		const unsigned char nb_solutions)
 {
 	std::string	result;
@@ -72,7 +74,7 @@ static std::string	print_exact_solutions(const t_quadratic_solutions& 	\
 	result = "S = {";
 	for (unsigned char i = 0; i < nb_solutions; i++)
 	{
-		result += print_exact_solution(solutions, i, reduce_sqrt);
+		result += print_exact_solution(solutions, i, reduce_sqrt, set);
 		if (nb_solutions == 1)
 			break;
 	}
@@ -106,7 +108,7 @@ bool				parentheses_needed(const InfiniteInt term1, 	\
 }
 
 void				print_solutions(t_quadratic_solutions& s, 	\
-		const std::string set, const std::string var, t_data &data)
+		std::string& set, const std::string var, t_data &data)
 {
 	std::string		result;
 	unsigned char	nb_solutions;
