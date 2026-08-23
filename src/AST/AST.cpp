@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:03:38 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:23:42 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,10 @@ static IType*	defined_functions(std::string function_name)
 {
 	if (function_name == "sqrt")
 		return (new DefinedFunction(DefinedFunction::E_FUNCTION_SQRT));
+	if (function_name == "norm")
+		return (new DefinedFunction(DefinedFunction::E_FUNCTION_NORM));
+	if (function_name == "abs")
+		return (new DefinedFunction(DefinedFunction::E_FUNCTION_ABSOLUTE));
 	if (function_name == "exp")
 		return (new DefinedFunction(DefinedFunction::E_FUNCTION_EXPONENTIAL));
 	if (function_name == "cos")
