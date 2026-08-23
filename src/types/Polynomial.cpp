@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:48:25 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 18:28:57 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -908,6 +908,14 @@ std::string		Polynomial::to_string(void) const
 	return (oss.str());
 }
 
+bool			Polynomial::is_constant(void) const
+{
+	if (this->_terms.size() == 1 && this->_dividers.size() == 1 	\
+			&& *this->_dividers[0].coefficient == 1)
+		return (true);
+	return (false);
+}
+
 bool			Polynomial::in_C(void) const
 {
 	for (const auto& term : this->_terms)
@@ -980,11 +988,10 @@ std::ostream&	Polynomial::print(std::ostream &os) const
 
 IType*			Polynomial::abs(void) const
 {
-	if (this->getTerms().size() == 1 && this->getDividers().size() == 1 	\
-			&& *this->getDividers()[0].coefficient == 1)
-		return (this->getTerms()[0].coefficient->abs());
-	throw UnsupportedError("Absolute function is not defined for polynomials, "
-			"use the norm function instead");
+	if (!this->is_constant())
+		throw UnsupportedError("Absolute function is not defined for "
+				"polynomials, use the norm function instead");
+	return (this->getTerms()[0].coefficient->abs());
 }
 
 IType*			Polynomial::clone(void) const
@@ -993,17 +1000,17 @@ IType*			Polynomial::clone(void) const
 }
 
 IType*			Polynomial::cos(void) const
-{// TODO: verifier que ca peut pas etre simplifie
-	throw UnsupportedError("Cosine of a vector is a formal power serie, "
-			"which is not supported");
-	return (nullptr);
+{
+	if (!this->is_constant())
+		throw UnsupportedError("Cosine of a polynomial is undefined");
+	return (this->getTerms()[0].coefficient->cos());
 }
 
 IType*			Polynomial::exp(void) const
 {
-	throw UnsupportedError("Exponential of a vector is a formal power serie, "
-			"which is not supported");
-	return (nullptr);
+	if (!this->is_constant())
+		throw UnsupportedError("Exponential of a polynomial is undefined");
+	return (this->getTerms()[0].coefficient->exp());
 }
 
 IType*			Polynomial::function_operator(const IType &other) const
@@ -1022,33 +1029,16 @@ IType*			Polynomial::function_operator(const IType &other) const
 
 IType*			Polynomial::matrix_operator(const IType &other) const
 {
-	try
-	{
-		Matrix	matrix(*this);
-		Matrix	other_matrix(other);
-
-		return (matrix.matrix_operator(other_matrix));
-	}
-	catch (const LogicError &e)
-	{
+	if (!this->is_constant())
 		throw ERROR_MATRIX_OPERATOR;
-	}
-	return (nullptr);
+	return (this->getTerms()[0].coefficient->matrix_operator(other));
 }
 
 IType*			Polynomial::matrix_inversion(void) const
 {
-	try
-	{
-		Matrix	matrix(*this);
-
-		return (matrix.matrix_inversion());
-	}
-	catch (const LogicError &e)
-	{
+	if (!this->is_constant())
 		throw ERROR_MATRIX_INVERSION_SQUARE;
-	}
-	return (nullptr);
+	return (this->getTerms()[0].coefficient->matrix_inversion());
 }
 
 IType*			Polynomial::norm(void) const
@@ -1070,9 +1060,9 @@ IType*			Polynomial::norm(void) const
 
 IType*			Polynomial::sin(void) const
 {
-	throw UnsupportedError("Sine of a vector is a formal power serie, "
-			"which is not supported");
-	return (nullptr);
+	if (!this->is_constant())
+		throw UnsupportedError("Sine of a polynomial is undefined");
+	return (this->getTerms()[0].coefficient->sin());
 }
 
 IType*			Polynomial::sqrt(void) const
@@ -1091,29 +1081,16 @@ IType*			Polynomial::sqrt(void) const
 
 IType*			Polynomial::tan(void) const
 {
-	throw UnsupportedError("Tangent of a vector is a formal power serie, "
-			"which is not supported");
-	return (nullptr);
+	if (!this->is_constant())
+		throw UnsupportedError("Tangent of a polynomial is undefined");
+	return (this->getTerms()[0].coefficient->tan());
 }
 
 Rational*		Polynomial::fact(void) const
 {
-	Rational	rational;//TODO: verifier les memes protections
-
-	if (this->in_Q())
-	{
-		try
-		{
-			rational = Rational(*this);
-		}
-		catch (...)
-		{
-			throw ERROR_FACTORIAL_FUNCTION;
-		}
-		return (rational.fact());
-	}
-	throw ERROR_FACTORIAL_FUNCTION;
-	return (nullptr);
+	if (!this->is_constant())
+		throw ERROR_FACTORIAL_FUNCTION;
+	return (this->getTerms()[0].coefficient->fact());
 }
 
 Rational*		Polynomial::gcd(const Polynomial &other) const
@@ -1189,38 +1166,16 @@ Rational*		Polynomial::gcd(const IType &other) const
 
 Real*			Polynomial::deg(void) const
 {
-	if (this->in_Q())
-		try
-		{
-			return (Rational(*this).deg());
-		}
-		catch (...) {}
-	else
-		try
-		{
-			return (Real(*this).deg());
-		}
-		catch (...) {}
-	throw ERROR_DEGREE_FUNCTION;
-	return (nullptr);
+	if (!this->is_constant())
+		throw ERROR_DEGREE_FUNCTION;
+	return (this->getTerms()[0].coefficient->deg());
 }
 
 Real*			Polynomial::rad(void) const
 {
-	if (this->in_Q())
-		try
-		{
-			return (Rational(*this).rad());
-		}
-		catch (...) {}
-	else
-		try
-		{
-			return (Real(*this).rad());
-		}
-		catch (...) {}
-	throw ERROR_RADIAN_FUNCTION;
-	return (nullptr);
+	if (!this->is_constant())
+		throw ERROR_RADIAN_FUNCTION;
+	return (this->getTerms()[0].coefficient->rad());
 }
 
 void			Polynomial::free(void)
@@ -1277,6 +1232,10 @@ void			Polynomial::reduce(void)
 	free_vector_terms(division_result.remainder);
 	if (this->in_Q() || this->in_C() || this->in_M())
 		this->factorize_constant_factor();
+	if (this->_terms.size() == 1 && this->_dividers.size() == 1 	\
+			&& *this->_dividers[0].coefficient != 1)
+		*this = Polynomial("", (t_term){*this->_terms[0].coefficient 	\
+				/ *this->_dividers[0].coefficient, 0});
 }
 
 

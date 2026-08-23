@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:35:27 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 18:08:26 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ class	Polynomial: public IType
 
 		// Methods
 		std::string		to_string(void) const;
+		bool			is_constant(void) const;
 		bool			in_C(void) const;
 		bool			in_D(void) const;
 		bool			in_M(void) const;
