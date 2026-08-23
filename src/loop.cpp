@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 14:30:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/22 14:59:36 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 18:38:11 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,13 @@ void	history(std::smatch match, 	\
 
 void	stored_variables(const t_data& data)
 {
-	std::cout << COLOR_YELLOW << COLOR_BOLD 							\
-			<< "Listing stored variables and functions" << COLOR_RESET 	\
-			<< COLOR_YELLOW << std::endl 								\
+	std::cout << COLOR_YELLOW << COLOR_BOLD 								\
+			<< "Listing stored variables and functions" << COLOR_RESET 		\
+			<< COLOR_YELLOW << std::endl 									\
+			<< std::endl << "  Pre-set keywords:" 							\
+			<< std::endl << "    history => Display the history of commands"
+				" and results" 												\
+			<< std::endl << "    quit => Exit the program" << std::endl 	\
 			<< std::endl << "  Pre-set constants:" << std::endl;
 	print_variables(data, true, true);
 	std::cout << std::endl << "  Pre-set functions:" << std::endl;

@@ -2,6 +2,10 @@ a = 12
 14
 Listing stored variables and functions
 
+  Pre-set keywords:
+    history => Display the history of commands and results
+    quit => Exit the program
+
   Pre-set constants:
     e ≈ 2.71828183...
     pi ≈ 3.14159265...
