@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:03:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 16:07:44 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 11:18:08 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,12 @@ static IType*	get_discriminant(const IType *a, const IType *b, const IType *c)
 	discriminant = *tmp_b2 - *tmp_4ac;
 	delete tmp_b2;
 	delete tmp_4ac;
-	std::cout << COLOR_PINK << "Δ = " << *discriminant << COLOR_RESET 	\
-			<< std::endl;// [ ] ou environ =
+	std::cout << COLOR_PINK << "Δ";
+	if (discriminant->in_Q())
+		std::cout << " = ";
+	else
+		std::cout << " ≈ ";
+	std::cout << *discriminant << COLOR_RESET << std::endl;
 	return (discriminant);
 }
 
