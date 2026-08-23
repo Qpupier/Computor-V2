@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 17:41:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:11:51 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:35:52 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ class	Real: public IType
 		IType*			sin(void) const;
 		IType*			sqrt(void) const;
 		IType*			tan(void) const;
+		Rational*		fact(void) const;
 		Rational*		gcd(const IType &other) const;
 		Real*			deg(void) const;
 		Real*			rad(void) const;

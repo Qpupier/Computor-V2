@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:35:43 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:01:08 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:33:15 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ class	Complex: public IType
 		IType*			sin(void) const;
 		IType*			sqrt(void) const;
 		IType*			tan(void) const;
+		Rational*		fact(void) const;
 		Rational*		gcd(const IType &other) const;
 		Rational*		gcd(const Complex &other) const;
 		Rational*		gcd(const Rational &other) const;

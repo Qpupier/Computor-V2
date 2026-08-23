@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:02:45 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:35:41 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ class	Rational: public IType
 		IType*			sin(void) const;
 		IType*			sqrt(void) const;
 		IType*			tan(void) const;
-		Rational*		factorial(void) const;
+		Rational*		fact(void) const;
 		Rational*		gcd(const IType& other) const;
 		Rational*		gcd(const Rational& other) const;
 		Rational*		gcd(const Complex& other) const;

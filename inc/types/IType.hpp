@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 17:42:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:00:39 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:33:55 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ class	IType
 		virtual IType*			sin(void) const = 0;
 		virtual IType*			sqrt(void) const = 0;
 		virtual IType*			tan(void) const = 0;
+		virtual Rational*		fact(void) const = 0;
 		virtual Rational*		gcd(const IType &other) const = 0;
 		virtual Real*			deg(void) const = 0;
 		virtual Real*			rad(void) const = 0;
@@ -82,8 +83,8 @@ class	IType
 		// TODO: Enum Type pour eviter de faire des dynamic_cast partout
 
 		protected:
-		// Constructor
-		IType(void) {};
+			// Constructor
+			IType(void) {};
 };
 
 std::ostream &operator<<(std::ostream &os, const IType &type);

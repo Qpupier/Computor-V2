@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:07:00 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:51:57 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ static Rational*	get_rational_new_term_coeff(long long int k, 	\
 	Rational*	factorial;
 
 	coeff_num = Rational(-1) ^ k;
-	factorial = k2.factorial();
+	factorial = k2.fact();
 	coeff = *coeff_num / *factorial;
 	delete coeff_num;
 	delete factorial;
@@ -142,7 +142,7 @@ static Rational*	exp_get_new_term(const Rational& number, long long int k)
 	Rational*	new_term;
 
 	power = number ^ k;
-	factorial = Rational(k).factorial();
+	factorial = Rational(k).fact();
 	new_term = *power / *factorial;
 	delete power;
 	delete factorial;
@@ -1115,18 +1115,18 @@ IType*			Rational::tan(void) const
 	return (result);
 }
 
-Rational*		Rational::factorial(void) const// TODO: Implementer le parsing correspondant (!)
+Rational*		Rational::fact(void) const// TODO: Implementer le parsing correspondant (!)
 {
 	Rational*	result;
 	Rational*	next_number;
 	Rational*	next_factorial;
 	
 	if (!this->in_N())
-		throw LogicError("Factorial is only defined for natural numbers (ℕ)");
+		throw ERROR_FACTORIAL_FUNCTION;
 	if (!*this)
 		return (new Rational(1));
 	next_number = *this - 1;
-	next_factorial = Rational(*next_number).factorial();
+	next_factorial = Rational(*next_number).fact();
 	delete next_number;
 	result = *this * *next_factorial;
 	delete next_factorial;

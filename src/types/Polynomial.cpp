@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:06:42 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:48:25 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -993,7 +993,7 @@ IType*			Polynomial::clone(void) const
 }
 
 IType*			Polynomial::cos(void) const
-{
+{// TODO: verifier que ca peut pas etre simplifie
 	throw UnsupportedError("Cosine of a vector is a formal power serie, "
 			"which is not supported");
 	return (nullptr);
@@ -1093,6 +1093,26 @@ IType*			Polynomial::tan(void) const
 {
 	throw UnsupportedError("Tangent of a vector is a formal power serie, "
 			"which is not supported");
+	return (nullptr);
+}
+
+Rational*		Polynomial::fact(void) const
+{
+	Rational	rational;//TODO: verifier les memes protections
+
+	if (this->in_Q())
+	{
+		try
+		{
+			rational = Rational(*this);
+		}
+		catch (...)
+		{
+			throw ERROR_FACTORIAL_FUNCTION;
+		}
+		return (rational.fact());
+	}
+	throw ERROR_FACTORIAL_FUNCTION;
 	return (nullptr);
 }
 

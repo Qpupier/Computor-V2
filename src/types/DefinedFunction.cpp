@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:35:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:05:32 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:41:47 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,6 +257,8 @@ std::ostream&	DefinedFunction::print(std::ostream &os) const
 			return (os << "rad");
 		case E_FUNCTION_DEGREE:
 			return (os << "deg");
+		case E_FUNCTION_FACTORIAL:
+			return (os << "fact");
 		default:
 			throw ERROR_UNKNOWN_FUNCTION;
 	}
@@ -308,6 +310,8 @@ IType*			DefinedFunction::function_operator(const IType &other) const
 			return (other.rad());
 		case E_FUNCTION_DEGREE:
 			return (other.deg());
+		case E_FUNCTION_FACTORIAL:
+			return (other.fact());
 		default:
 			throw ERROR_UNKNOWN_FUNCTION;
 	}
@@ -345,6 +349,12 @@ IType*			DefinedFunction::sqrt(void) const
 }
 
 IType*			DefinedFunction::tan(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+Rational*		DefinedFunction::fact(void) const
 {
 	throw ERROR_UNEXPECTED;
 	return (nullptr);

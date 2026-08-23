@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:01:37 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:34:02 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ class	Matrix: public IType
 		IType*			sqrt(void) const;
 		IType*			tan(void) const;
 		Matrix*			matrix_operator(const Matrix &other) const;
+		Rational*		fact(void) const;
 		Rational*		gcd(const IType &ther) const;
 		Rational*		gcd(const Matrix &other) const;
 		Rational*		gcd(const Rational &other) const;

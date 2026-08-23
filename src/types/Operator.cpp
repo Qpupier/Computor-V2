@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:06:05 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:42:28 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -352,6 +352,12 @@ IType*			Operator::sqrt(void) const
 }
 
 IType*			Operator::tan(void) const
+{
+	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+Rational*		Operator::fact(void) const
 {
 	throw ERROR_UNEXPECTED;
 	return (nullptr);

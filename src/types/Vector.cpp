@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:07:53 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:51:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1017,6 +1017,12 @@ IType*			Vector::sqrt(void) const
 IType*			Vector::tan(void) const
 {
 	throw LogicError("Tangent of a vector is impossible");
+	return (nullptr);
+}
+
+Rational*		Vector::fact(void) const
+{
+	throw ERROR_FACTORIAL_FUNCTION;
 	return (nullptr);
 }
 

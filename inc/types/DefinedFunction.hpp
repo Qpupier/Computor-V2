@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:16:29 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:03:46 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:36:52 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ class	DefinedFunction: public IType
 			E_FUNCTION_SINE,
 			E_FUNCTION_TANGENT,
 			E_FUNCTION_RADIAN,
-			E_FUNCTION_DEGREE
+			E_FUNCTION_DEGREE,
+			E_FUNCTION_FACTORIAL
 		}				t_function;
 
 		// Constructors and destructor
@@ -85,6 +86,7 @@ class	DefinedFunction: public IType
 		IType*			sin(void) const;
 		IType*			sqrt(void) const;
 		IType*			tan(void) const;
+		Rational*		fact(void) const;
 		Rational*		gcd(const IType &other) const;
 		Real*			deg(void) const;
 		Real*			rad(void) const;

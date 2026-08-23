@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:05:48 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:52:03 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -307,7 +307,7 @@ static Matrix*									exp_get_new_term(			\
 	Rational*	factorial;
 
 	power = matrix ^ k;
-	factorial = Rational(k).factorial();
+	factorial = Rational(k).fact();
 	new_term = *power / *factorial;
 	delete power;
 	delete factorial;
@@ -322,7 +322,7 @@ static Rational*								get_matrix_new_term_coeff(	\
 	Rational*	factorial;
 
 	coeff_num = Rational(-1) ^ k;
-	factorial = k2.factorial();
+	factorial = k2.fact();
 	coeff = *coeff_num / *factorial;
 	delete coeff_num;
 	delete factorial;
@@ -1614,6 +1614,12 @@ Matrix*			Matrix::matrix_operator(const Matrix &other) const
 			result->setValue(j, i, cell);
 		}
 	return (result);
+}
+
+Rational*		Matrix::fact(void) const
+{//TODO: verifier toutes les fonctions en cas de matrice nulle
+	throw ERROR_FACTORIAL_FUNCTION;
+	return (nullptr);
 }
 
 Rational*		Matrix::gcd(const Rational &other) const

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:12:19 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:36:19 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ static void	set_preset_functions(t_data &data)
 			std::pair<std::string, std::string>("rad", "Degree to radian"));
 	data.preset_functions.push_back(	\
 			std::pair<std::string, std::string>("deg", "Radian to degree"));
+	data.preset_functions.push_back(	\
+			std::pair<std::string, std::string>("fact", "Factorial"));
 }
 
 int			main(int argc, const char **argv)

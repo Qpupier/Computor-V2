@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:04:57 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:45:33 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1267,6 +1267,14 @@ IType*			Complex::tan(void) const
 	delete cosine;
 	delete sine;
 	return (result);
+}
+
+Rational*		Complex::fact(void) const
+{
+	if (!this->getImaginary() && this->getReal()->in_Q())//TODO: verifier ces protections sur les autres fonctions de la classe
+		return (this->getReal()->fact());
+	throw ERROR_FACTORIAL_FUNCTION;
+	return (nullptr);
 }
 
 Rational*		Complex::gcd(const Rational &other) const

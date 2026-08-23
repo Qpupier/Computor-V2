@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:01:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:35:27 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ class	Polynomial: public IType
 		IType*			sin(void) const;
 		IType*			sqrt(void) const;
 		IType*			tan(void) const;
+		Rational*		fact(void) const;
 		Rational*		gcd(const IType &other) const;
 		Rational*		gcd(const Rational& other) const;
 		Rational*		gcd(const Complex& other) const;

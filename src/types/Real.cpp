@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:15:33 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:51:57 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static Rational*	get_real_new_term_coeff(long long int k, const Rational& k2)
 	Rational*	factorial;
 
 	coeff_num = Rational(-1) ^ k;
-	factorial = k2.factorial();
+	factorial = k2.fact();
 	coeff = *coeff_num / *factorial;
 	delete coeff_num;
 	delete factorial;
@@ -97,7 +97,7 @@ static IType*		exp_get_new_term(const Real& number, long long int k)
 	Rational*	factorial;
 
 	power = number ^ k;
-	factorial = Rational(k).factorial();
+	factorial = Rational(k).fact();
 	new_term = *power / *factorial;
 	delete power;
 	delete factorial;
@@ -689,6 +689,12 @@ IType*			Real::tan(void) const
 	delete sine;
 	delete cosine;
 	return (result);
+}
+
+Rational*		Real::fact(void) const
+{
+	throw ERROR_FACTORIAL_FUNCTION;
+	return (nullptr);
 }
 
 Rational*		Real::gcd(const IType &other) const

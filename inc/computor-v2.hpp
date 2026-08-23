@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:09:09 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:40:45 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,9 @@ class IType;
 # define ERROR_NON_DETERMINISTIC_EXPRESSION	LogicError("Multiple possibilities to compute the expression, the expression is non-deterministic")
 # define ERROR_OPERATION_MATRIX_COMPLEX		LogicError("Impossible operation between matrix and complex number")
 # define ERROR_OPERATION_VECTOR_COMPLEX		LogicError("Impossible operation between vector and complex number")
-# define ERROR_RADIAN_FUNCTION				LogicError("Radian function only exists for rational or real numbers")
 # define ERROR_DEGREE_FUNCTION				LogicError("Degree function only exists for rational or real numbers")
+# define ERROR_FACTORIAL_FUNCTION			LogicError("Factorial function is only defined for natural numbers (ℕ)")
+# define ERROR_RADIAN_FUNCTION				LogicError("Radian function only exists for rational or real numbers")
 # define ERROR_SQRT_NEGATIVE				LogicError("Cannot compute square root of a negative number")
 # define ERROR_TANGENT_UNDEFINED			LogicError("Tangent is undefined for this value")
 # define ERROR_VECTOR_DIMENSIONS			LogicError("Vector operation: incompatible dimensions")
