@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:11:12 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/22 15:01:03 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 15:50:45 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,14 @@ void		set_function_right(t_data &data, AST* ast)
 {
 	Polynomial*	polynomial;
 
-	if (!ast->end_of_tree())
-		delete_empty_function_stored(data.stored, 						\
-				"The right side of the function definition must be a single \
-					expression", true);
 	polynomial = new Polynomial(*ast->getNode());
+	if (!ast->end_of_tree() || !polynomial->in_Q())
+	{
+		delete polynomial;
+		delete_empty_function_stored(data.stored, 						\
+				"The right side of the function definition must be a polynomial"
+				" with rational, complex, matrix or vector coefficients", true);
+	}
 	for (std::map<std::pair<std::string, std::string>, const IType*>	\
 			::iterator it(data.stored.begin()); it != data.stored.end(); it++)
 		if (!it->second)
