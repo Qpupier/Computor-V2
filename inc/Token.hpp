@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:10:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:32:33 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 15:42:02 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,13 @@
 # define TOKEN_IMAGINARY		"i"
 # define TOKEN_OPERATOR_INVERSE	"~"
 # define TOKEN_OPERATOR			"(?:\\*\\*|[\\+\\-\\*\\/\\^%]|" TOKEN_OPERATOR_INVERSE ")"
-# define TOKEN_RATIONAL			"[\\(\\)]|" TOKEN_NUMBER "|" TOKEN_VARIABLE "|" TOKEN_OPERATOR
+# define TOKEN_BRACKETS			"[\\(\\)\\|]"
+# define TOKEN_RATIONAL			TOKEN_BRACKETS "|" TOKEN_NUMBER "|" TOKEN_VARIABLE "|" TOKEN_OPERATOR
 # define TOKEN_MATRIX_ELEMENT	"(?:" TOKEN_WHITESPACE "(?:" TOKEN_RATIONAL "))+" TOKEN_WHITESPACE
 # define TOKEN_MATRIX_LINE		TOKEN_WHITESPACE "\\[" TOKEN_MATRIX_ELEMENT "(?:," TOKEN_MATRIX_ELEMENT ")*\\]" TOKEN_WHITESPACE
 # define TOKEN_MATRIX			"\\[" TOKEN_MATRIX_LINE "(?:;" TOKEN_MATRIX_LINE ")*\\]"
 # define TOKEN_VECTOR			"\\[" TOKEN_MATRIX_ELEMENT "(?:," TOKEN_MATRIX_ELEMENT ")*\\]"
-# define TOKEN					"(?:" TOKEN_MATRIX "|" TOKEN_VECTOR "|[\\(\\)\\|]|" TOKEN_NUMBER "|" TOKEN_VARIABLE "|" TOKEN_IMAGINARY "|" TOKEN_OPERATOR "|\\s+)"
+# define TOKEN					"(?:" TOKEN_MATRIX "|" TOKEN_VECTOR "|" TOKEN_BRACKETS "|" TOKEN_NUMBER "|" TOKEN_VARIABLE "|" TOKEN_IMAGINARY "|" TOKEN_OPERATOR "|\\s+)"
 # define TOKEN_NEXT				TOKEN_BEGIN "(" TOKEN "|\\?)"
 # define TOKEN_FULL_EXPRESSION	TOKEN_BEGIN "(?:" TOKEN "+\\??|" TOKEN_QUESTION ")" TOKEN_END
 # define TOKEN_QUIT				TOKEN_BEGIN TOKEN_WHITESPACE "quit" TOKEN_WHITESPACE TOKEN_END
