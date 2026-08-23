@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 18:22:32 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:15:33 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -697,23 +697,31 @@ Rational*		Real::gcd(const IType &other) const
 	(void)other;
 }
 
+Real*			Real::deg(void) const
+{
+	Real*	constant;
+	Real*	pi;
+	Real*	result;
+
+	pi = get_pi();
+	constant = Real(180) / *pi;
+	delete pi;
+	result = *this * *constant;
+	delete constant;
+	return (result);
+}
+
 Real*			Real::rad(void) const
 {
-	InfiniteInt	pi_denominator(1);
-	double		pi_integer_part(M_PI);
-	Real*		product;
-	Real*		result;
+	Real*	constant;
+	Real*	pi;
+	Real*	result;
 
-	while (std::floor(pi_integer_part) != pi_integer_part)
-	{
-		pi_integer_part *= 10;
-		pi_denominator *= 10;
-	}
-	product = *this 													\
-			* Rational(static_cast<long long int>(pi_integer_part), 	\
-				pi_denominator).getValue();
-	result = *product / Real(180);
-	delete product;
+	pi = get_pi();
+	constant = *pi / Real(180);
+	delete pi;
+	result = *this * *constant;
+	delete constant;
 	return (result);
 }
 
@@ -728,4 +736,18 @@ void			Real::print_rounded(const std::string var) const
 std::ostream&	operator<<(std::ostream &os, const Real &num)
 {
 	return (num.print(os));
+}
+
+
+// Functions
+
+Real*	get_pi(void)
+{
+	Rational*	rational;
+	Real*		pi;
+
+	rational = new Rational(PRESET_PI);
+	pi = new Real(*rational);
+	delete rational;
+	return (pi);
 }

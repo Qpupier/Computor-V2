@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/21 17:31:23 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:07:00 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1229,6 +1229,11 @@ Rational*		Rational::gcd(const IType& other) const
 		return (this->gcd(*other_real));
 	throw ERROR_UNEXPECTED;
 	return (nullptr);
+}
+
+Real*			Rational::deg(void) const
+{
+	return (Real(*this).deg());
 }
 
 Real*			Rational::rad(void) const

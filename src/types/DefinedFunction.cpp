@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:35:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 11:48:42 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:05:32 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,6 +255,8 @@ std::ostream&	DefinedFunction::print(std::ostream &os) const
 			return (os << "tan");
 		case E_FUNCTION_RADIAN:
 			return (os << "rad");
+		case E_FUNCTION_DEGREE:
+			return (os << "deg");
 		default:
 			throw ERROR_UNKNOWN_FUNCTION;
 	}
@@ -304,6 +306,8 @@ IType*			DefinedFunction::function_operator(const IType &other) const
 			return (other.tan());
 		case E_FUNCTION_RADIAN:
 			return (other.rad());
+		case E_FUNCTION_DEGREE:
+			return (other.deg());
 		default:
 			throw ERROR_UNKNOWN_FUNCTION;
 	}
@@ -350,6 +354,12 @@ Rational*		DefinedFunction::gcd(const IType &other) const
 {
 	throw ERROR_UNEXPECTED;
 	(void)other;
+	return (nullptr);
+}
+
+Real*			DefinedFunction::deg(void) const
+{
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 

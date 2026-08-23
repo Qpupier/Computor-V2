@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 17:44:27 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/22 15:00:03 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:12:19 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,8 @@ static void	set_preset_constants(t_data &data)
 {
 	Rational*	rational;
 
-	rational = new Rational(PRESET_PI);
 	data.stored[std::pair<std::string, std::string>("pi", std::string())] 	\
-			= new Real(*rational);
-	delete rational;
+			= get_pi();
 	data.preset_constants.push_back("pi");
 	rational = new Rational(PRESET_E);
 	data.stored[std::pair<std::string, std::string>("e", std::string())] 	\

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 11:37:41 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:06:05 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -361,6 +361,12 @@ Rational*		Operator::gcd(const IType &other) const
 {
 	throw ERROR_UNEXPECTED;
 	(void)other;
+	return (nullptr);
+}
+
+Real*			Operator::deg(void) const
+{
+	throw ERROR_UNEXPECTED;
 	return (nullptr);
 }
 

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 17:39:25 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:02:45 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ class	Rational: public IType
 		Rational*		gcd(const Polynomial& other) const;
 		Rational*		gcd(const Vector& other) const;
 		Rational*		gcd(const Real& other) const;
+		Real*			deg(void) const;
 		Real*			rad(void) const;
 		void			print_rounded	\
 				(const std::string var = std::string()) const;

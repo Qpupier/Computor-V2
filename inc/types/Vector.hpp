@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:42:16 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/19 17:44:48 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:03:12 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ class	Vector: public IType
 		Rational*		gcd(const Matrix &other) const;
 		Rational*		gcd(const Polynomial &other) const;
 		Rational*		gcd(const Real &other) const;
+		Real*			deg(void) const;
 		Real*			rad(void) const;
 		void			print_rounded	\
 				(const std::string var = std::string()) const;

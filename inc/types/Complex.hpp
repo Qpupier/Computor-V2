@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:35:43 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 14:19:06 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:01:08 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ class	Complex: public IType
 		Rational*		gcd(const Rational &other) const;
 		Rational*		gcd(const Matrix &other) const;
 		Rational*		gcd(const Vector &other) const;
+		Real*			deg(void) const;
 		Real*			rad(void) const;
 		void			print_rounded(const std::string var = std::string()) const;
 

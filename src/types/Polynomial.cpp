@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 18:08:26 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:06:42 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1164,6 +1164,24 @@ Rational*		Polynomial::gcd(const IType &other) const
 	if (other_real)
 		return (this->gcd(*other_real));
 	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+Real*			Polynomial::deg(void) const
+{
+	if (this->in_Q())
+		try
+		{
+			return (Rational(*this).deg());
+		}
+		catch (...) {}
+	else
+		try
+		{
+			return (Real(*this).deg());
+		}
+		catch (...) {}
+	throw ERROR_DEGREE_FUNCTION;
 	return (nullptr);
 }
 

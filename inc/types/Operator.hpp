@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 14:55:07 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 11:28:16 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:01:47 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ class	Operator: public IType
 		IType*			sqrt(void) const;
 		IType*			tan(void) const;
 		Rational*		gcd(const IType &other) const;
+		Real*			deg(void) const;
 		Real*			rad(void) const;
 		void			print_rounded(const std::string var = std::string()) const;
 

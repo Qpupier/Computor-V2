@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 15:13:44 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:01:37 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ class	Matrix: public IType
 		Rational*		gcd(const Vector &other) const;
 		Rational*		gcd(const Polynomial &other) const;
 		Rational*		gcd(const Real &other) const;
+		Real*			deg(void) const;
 		Real*			rad(void) const;
 		void			empty(void);
 		void			error(const LogicError &e);

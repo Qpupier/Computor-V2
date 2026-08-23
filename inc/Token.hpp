@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:10:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/21 17:27:31 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:19:15 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # define TOKEN_EQUATION_EVAL	TOKEN_EXPRESSION "=" TOKEN_EXPRESSION TOKEN_QUESTION
 # define TOKEN_FULL				TOKEN_BEGIN "(?:" TOKEN_EXPRESSION "|" TOKEN_EQUATION ")" TOKEN_END
 # define TOKEN_VARIABLE			"(?:[a-zA-Z]{2,}|[a-hj-zA-HJ-Z])"
-# define TOKEN_NO_VARIABLE		"(?:cos|sin|tan|e|exp|abs|norm|sqrt|rad|degree|pi)"
+# define TOKEN_NO_VARIABLE		"(?:cos|sin|tan|e|exp|abs|norm|sqrt|rad|deg|pi)"
 # define TOKEN_NUMBER			"\\d+(?:\\.\\d+)?"
 # define TOKEN_IMAGINARY		"i"
 # define TOKEN_OPERATOR_INVERSE	"~"
@@ -43,7 +43,6 @@
 # define TOKEN_QUIT				TOKEN_BEGIN TOKEN_WHITESPACE "quit" TOKEN_WHITESPACE TOKEN_END
 # define TOKEN_HISTORY			TOKEN_BEGIN TOKEN_WHITESPACE "history" TOKEN_WHITESPACE "(\\d*)" TOKEN_WHITESPACE TOKEN_END
 
-// TODO: Ajouter degree ?
 typedef enum	e_bracket
 {
 	E_BRACKET_NOTHING,

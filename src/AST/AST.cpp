@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 17:06:38 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:03:38 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ static IType*	defined_functions(std::string function_name)
 		return (new DefinedFunction(DefinedFunction::E_FUNCTION_TANGENT));
 	if (function_name == "rad")
 		return (new DefinedFunction(DefinedFunction::E_FUNCTION_RADIAN));
+	if (function_name == "deg")
+		return (new DefinedFunction(DefinedFunction::E_FUNCTION_DEGREE));
 	return (nullptr);
 }
 

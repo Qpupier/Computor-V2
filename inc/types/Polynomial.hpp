@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/06 17:52:28 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:01:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ class	Polynomial: public IType
 		Rational*		gcd(const Polynomial& other) const;
 		Rational*		gcd(const Vector& other) const;
 		Rational*		gcd(const Real& other) const;
+		Real*			deg(void) const;
 		Real*			rad(void) const;
 		void			factorize_constant_factor(void);
 		void			free(void);

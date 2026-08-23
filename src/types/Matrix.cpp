@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 15:13:45 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:05:48 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1692,6 +1692,12 @@ Rational*		Matrix::gcd(const IType &other) const
 	if (other_real)
 		return (this->gcd(*other_real));
 	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+Real*			Matrix::deg(void) const
+{
+	throw ERROR_DEGREE_FUNCTION;
 	return (nullptr);
 }
 

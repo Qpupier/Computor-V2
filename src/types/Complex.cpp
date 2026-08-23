@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 14:22:53 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:04:57 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1335,6 +1335,24 @@ Rational*		Complex::gcd(const IType &other) const
 	if (other_real)
 		return (this->gcd(*other_real));
 	throw ERROR_UNEXPECTED;
+	return (nullptr);
+}
+
+Real*			Complex::deg(void) const
+{
+	if (this->in_Q())
+		try
+		{
+			return (Rational(*this).deg());
+		}
+		catch (...) {}
+	else
+		try
+		{
+			return (Real(*this).deg());
+		}
+		catch (...) {}
+	throw ERROR_DEGREE_FUNCTION;
 	return (nullptr);
 }
 

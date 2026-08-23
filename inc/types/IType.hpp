@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 17:42:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 17:57:35 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:00:39 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ class	IType
 		virtual IType*			sqrt(void) const = 0;
 		virtual IType*			tan(void) const = 0;
 		virtual Rational*		gcd(const IType &other) const = 0;
+		virtual Real*			deg(void) const = 0;
 		virtual Real*			rad(void) const = 0;
 		virtual void			print_rounded(const std::string var 	\
 				= std::string()) const = 0;

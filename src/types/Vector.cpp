@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/20 14:26:35 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 14:07:53 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1120,6 +1120,12 @@ Rational*		Vector::gcd(const Real &other) const
 		delete tmp;
 	}
 	return (result);
+}
+
+Real*			Vector::deg(void) const
+{
+	throw ERROR_DEGREE_FUNCTION;
+	return (nullptr);
 }
 
 Real*			Vector::rad(void) const
