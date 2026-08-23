@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 16:48:49 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 16:10:44 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 17:52:01 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,10 @@ static AST*				build_node(t_possibility& left_tokens, 			\
 
 	left_child = build_ast(left_tokens, data);
 	right_child = build_ast(right_tokens, data);
-	if ((token.getType() != Token::E_TOKEN_OPERATOR_INVERSE 	\
-				&& !left_child) 								\
-			|| !right_child)
+	if ((token.getType() != Token::E_TOKEN_OPERATOR_INVERSE 			\
+				&& !left_child) 										\
+			|| (token.getType() != Token::E_TOKEN_OPERATOR_FACTORIAL 	\
+				&& !right_child))
 	{
 		delete left_child;
 		delete right_child;

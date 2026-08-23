@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:10:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 15:42:02 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 16:52:35 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,33 +16,34 @@
 # include <regex>
 # include <iostream>
 
-# define TOKEN_BEGIN			"^"
-# define TOKEN_END				"$"
-# define TOKEN_WHITESPACE		"\\s*"
-# define TOKEN_QUESTION			TOKEN_WHITESPACE "\\?" TOKEN_WHITESPACE
-# define TOKEN_LIST				TOKEN_BEGIN TOKEN_QUESTION TOKEN_END
-# define TOKEN_EXPRESSION		"[^=\\?]+"
-# define TOKEN_EQUATION			TOKEN_EXPRESSION "(?:=(?:" TOKEN_EXPRESSION ")?(?:" TOKEN_QUESTION ")?)?"
-# define TOKEN_EXPRESSION_EVAL	TOKEN_EXPRESSION "=" TOKEN_QUESTION
-# define TOKEN_EQUATION_EVAL	TOKEN_EXPRESSION "=" TOKEN_EXPRESSION TOKEN_QUESTION
-# define TOKEN_FULL				TOKEN_BEGIN "(?:" TOKEN_EXPRESSION "|" TOKEN_EQUATION ")" TOKEN_END
-# define TOKEN_VARIABLE			"(?:[a-zA-Z]{2,}|[a-hj-zA-HJ-Z])"
-# define TOKEN_NO_VARIABLE		"(?:cos|sin|tan|exp|abs|norm|sqrt|rad|deg|fact|pi|e)"
-# define TOKEN_NUMBER			"\\d+(?:\\.\\d+)?"
-# define TOKEN_IMAGINARY		"i"
-# define TOKEN_OPERATOR_INVERSE	"~"
-# define TOKEN_OPERATOR			"(?:\\*\\*|[\\+\\-\\*\\/\\^%]|" TOKEN_OPERATOR_INVERSE ")"
-# define TOKEN_BRACKETS			"[\\(\\)\\|]"
-# define TOKEN_RATIONAL			TOKEN_BRACKETS "|" TOKEN_NUMBER "|" TOKEN_VARIABLE "|" TOKEN_OPERATOR
-# define TOKEN_MATRIX_ELEMENT	"(?:" TOKEN_WHITESPACE "(?:" TOKEN_RATIONAL "))+" TOKEN_WHITESPACE
-# define TOKEN_MATRIX_LINE		TOKEN_WHITESPACE "\\[" TOKEN_MATRIX_ELEMENT "(?:," TOKEN_MATRIX_ELEMENT ")*\\]" TOKEN_WHITESPACE
-# define TOKEN_MATRIX			"\\[" TOKEN_MATRIX_LINE "(?:;" TOKEN_MATRIX_LINE ")*\\]"
-# define TOKEN_VECTOR			"\\[" TOKEN_MATRIX_ELEMENT "(?:," TOKEN_MATRIX_ELEMENT ")*\\]"
-# define TOKEN					"(?:" TOKEN_MATRIX "|" TOKEN_VECTOR "|" TOKEN_BRACKETS "|" TOKEN_NUMBER "|" TOKEN_VARIABLE "|" TOKEN_IMAGINARY "|" TOKEN_OPERATOR "|\\s+)"
-# define TOKEN_NEXT				TOKEN_BEGIN "(" TOKEN "|\\?)"
-# define TOKEN_FULL_EXPRESSION	TOKEN_BEGIN "(?:" TOKEN "+\\??|" TOKEN_QUESTION ")" TOKEN_END
-# define TOKEN_QUIT				TOKEN_BEGIN TOKEN_WHITESPACE "quit" TOKEN_WHITESPACE TOKEN_END
-# define TOKEN_HISTORY			TOKEN_BEGIN TOKEN_WHITESPACE "history" TOKEN_WHITESPACE "(\\d*)" TOKEN_WHITESPACE TOKEN_END
+# define TOKEN_BEGIN				"^"
+# define TOKEN_END					"$"
+# define TOKEN_WHITESPACE			"\\s*"
+# define TOKEN_QUESTION				TOKEN_WHITESPACE "\\?" TOKEN_WHITESPACE
+# define TOKEN_LIST					TOKEN_BEGIN TOKEN_QUESTION TOKEN_END
+# define TOKEN_EXPRESSION			"[^=\\?]+"
+# define TOKEN_EQUATION				TOKEN_EXPRESSION "(?:=(?:" TOKEN_EXPRESSION ")?(?:" TOKEN_QUESTION ")?)?"
+# define TOKEN_EXPRESSION_EVAL		TOKEN_EXPRESSION "=" TOKEN_QUESTION
+# define TOKEN_EQUATION_EVAL		TOKEN_EXPRESSION "=" TOKEN_EXPRESSION TOKEN_QUESTION
+# define TOKEN_FULL					TOKEN_BEGIN "(?:" TOKEN_EXPRESSION "|" TOKEN_EQUATION ")" TOKEN_END
+# define TOKEN_VARIABLE				"(?:[a-zA-Z]{2,}|[a-hj-zA-HJ-Z])"
+# define TOKEN_NO_VARIABLE			"(?:cos|sin|tan|exp|abs|norm|sqrt|rad|deg|fact|pi|e|quit|history)"// TODO: Add "Pre-set keywords" in "?"
+# define TOKEN_NUMBER				"\\d+(?:\\.\\d+)?"
+# define TOKEN_IMAGINARY			"i"
+# define TOKEN_OPERATOR_INVERSE		"~"
+# define TOKEN_OPERATOR_FACTORIAL	"!"
+# define TOKEN_OPERATOR				"(?:\\*\\*|[\\+\\-\\*\\/\\^%]|" TOKEN_OPERATOR_INVERSE "|" TOKEN_OPERATOR_FACTORIAL ")"
+# define TOKEN_BRACKETS				"[\\(\\)\\|]"
+# define TOKEN_RATIONAL				TOKEN_BRACKETS "|" TOKEN_NUMBER "|" TOKEN_VARIABLE "|" TOKEN_OPERATOR
+# define TOKEN_MATRIX_ELEMENT		"(?:" TOKEN_WHITESPACE "(?:" TOKEN_RATIONAL "))+" TOKEN_WHITESPACE
+# define TOKEN_MATRIX_LINE			TOKEN_WHITESPACE "\\[" TOKEN_MATRIX_ELEMENT "(?:," TOKEN_MATRIX_ELEMENT ")*\\]" TOKEN_WHITESPACE
+# define TOKEN_MATRIX				"\\[" TOKEN_MATRIX_LINE "(?:;" TOKEN_MATRIX_LINE ")*\\]"
+# define TOKEN_VECTOR				"\\[" TOKEN_MATRIX_ELEMENT "(?:," TOKEN_MATRIX_ELEMENT ")*\\]"
+# define TOKEN						"(?:" TOKEN_MATRIX "|" TOKEN_VECTOR "|" TOKEN_BRACKETS "|" TOKEN_NUMBER "|" TOKEN_VARIABLE "|" TOKEN_IMAGINARY "|" TOKEN_OPERATOR "|\\s+)"
+# define TOKEN_NEXT					TOKEN_BEGIN "(" TOKEN "|\\?)"
+# define TOKEN_FULL_EXPRESSION		TOKEN_BEGIN "(?:" TOKEN "+\\??|" TOKEN_QUESTION ")" TOKEN_END
+# define TOKEN_QUIT					TOKEN_BEGIN TOKEN_WHITESPACE "quit" TOKEN_WHITESPACE TOKEN_END
+# define TOKEN_HISTORY				TOKEN_BEGIN TOKEN_WHITESPACE "history" TOKEN_WHITESPACE "(\\d*)" TOKEN_WHITESPACE TOKEN_END
 
 typedef enum	e_bracket
 {
@@ -77,6 +78,7 @@ class	Token
 			E_TOKEN_POLYNOMIAL,
 			E_TOKEN_FUNCTION,
 			E_TOKEN_OPERATOR_INVERSE,
+			E_TOKEN_OPERATOR_FACTORIAL,
 			E_TOKEN_OPERATOR,
 			E_TOKEN_MATRIX,
 			E_TOKEN_VECTOR,

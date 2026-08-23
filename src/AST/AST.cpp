@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:36:42 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 17:50:59 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,8 @@ static IType*	get_result(IType *left_entity, IType *right_entity, 		\
 			return (get_result_function(left_entity, right_entity, stored));
 		case Operator::E_INVERSE:
 			return (right_entity->matrix_inversion());
+		case Operator::E_FACTORIAL:
+			return (left_entity->fact());
 		case Operator::E_UNKNOWN:
 			return (matrix_operator(left_entity, right_entity));
 		default:
@@ -138,29 +140,32 @@ AST::AST(const Token &token, t_data &data): _left(nullptr), _right(nullptr)
 	switch (token.getType())
 	{
 		case Token::E_TOKEN_OPERATOR_INVERSE:
-			_node = new Operator(token);
+			this->_node = new Operator(token);
+			break;
+		case Token::E_TOKEN_OPERATOR_FACTORIAL:
+			this->_node = new Operator(token);
 			break;
 		case Token::E_TOKEN_OPERATOR:
-			_node = new Operator(token);
+			this->_node = new Operator(token);
 			break;
 		case Token::E_TOKEN_NUMBER:
-			_node = new Rational(token);
+			this->_node = new Rational(token);
 			break;
 		case Token::E_TOKEN_IMAGINARY:
-			_node = new Complex();
+			this->_node = new Complex();
 			break;
 		case Token::E_TOKEN_MATRIX:
-			_node = new Matrix(token, data);
+			this->_node = new Matrix(token, data);
 			break;
 		case Token::E_TOKEN_VECTOR:
-			_node = new Vector(token, data);
+			this->_node = new Vector(token, data);
 			break;
 		case Token::E_TOKEN_POLYNOMIAL:
-			_node = new Polynomial(token);
+			this->_node = new Polynomial(token);
 			break;
 		default:
-			throw UnexpectedError("Invalid token type for AST node \
-					(\"" + token.getValue() + "\")");
+			throw UnexpectedError("Invalid token type for AST node (\"" 	\
+					+ token.getValue() + "\")");
 	}
 }
 
@@ -268,16 +273,12 @@ void			AST::reduce_expression(	\
 		this->_right->reduce_expression(stored);
 	if (this->end_of_tree())
 		return;
-	if (this->_left && !this->_right)
-		result = this->_node->function_operator(*this->_left->_node);
-	else
-	{
-		op = dynamic_cast<Operator*>(this->_node);
-		if (!op)
-			throw ERROR_OPERATOR_EXPECTED;
-		result = get_result(this->_left ? this->_left->_node : nullptr, 	\
-				this->_right->_node, op->getOperator(), stored);
-	}
+	op = dynamic_cast<Operator*>(this->_node);
+	if (!op)
+		throw ERROR_OPERATOR_EXPECTED;
+	result = get_result(this->_left ? this->_left->_node : nullptr, 	\
+			this->_right ? this->_right->_node : nullptr, 				\
+			op->getOperator(), stored);
 	this->free();
 	this->_node = result;
 	this->_left = nullptr;

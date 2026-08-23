@@ -18,6 +18,7 @@ Listing stored variables and functions
     exp => Exponential
     rad => Degree to radian
     deg => Radian to degree
+    fact => Factorial
 
   User-defined variables:
     x = 2

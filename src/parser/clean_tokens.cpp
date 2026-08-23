@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:17:56 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/26 16:10:23 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 17:26:48 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,8 @@ static void	whitespaces_format_error(const std::vector<Token> &tokens)
 				throw LogicError("No space allowed without operator");
 			if (prev_type == Token::E_TOKEN_OPERATOR_INVERSE)
 				throw LogicError("No space allowed after inversed operator");
+			if (next_type == Token::E_TOKEN_OPERATOR_FACTORIAL)
+				throw LogicError("No space allowed before factorial operator");
 		}
 		if (bad_sign_placement(tokens, i))
 			throw LogicError("Invalid placement for sign operator");

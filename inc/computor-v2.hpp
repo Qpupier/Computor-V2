@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:40:45 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 17:09:49 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ class IType;
 # define ERROR_VECTOR_OUT_OF_RANGE			LogicError("Vector index out of range")
 # define ERROR_VECTOR_SQRT					LogicError("Vector square root is impossible")
 # define ERROR_OPERATOR_EXPECTED			UnexpectedError("Invalid expression: operator expected")
-# define ERROR_UNEXPECTED					UnexpectedError("Impossible to complete operation")
+# define ERROR_UNEXPECTED					UnexpectedError("Impossible to complete operation (" __FILE__ ":" + std::to_string(__LINE__) + ")")
 # define ERROR_UNKNOWN_BRACKET				UnexpectedError("Unknown bracket type")
 # define ERROR_UNKNOWN_FUNCTION				UnexpectedError("Unknown function")
 # define UNSUPPORTED_DIVISION				UnsupportedError("Division not supported between polynomials with these powers")

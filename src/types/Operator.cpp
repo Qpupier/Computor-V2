@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:42:28 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 16:55:02 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ Operator::Operator(std::string op)
 		_op = E_FUNCTION;
 	else if (op == TOKEN_OPERATOR_INVERSE)
 		_op = E_INVERSE;
+	else if (op == TOKEN_OPERATOR_FACTORIAL)
+		_op = E_FACTORIAL;
 	else
 		throw UnexpectedError("Invalid operator: " + op);
 }
@@ -284,6 +286,8 @@ std::ostream&	Operator::print(std::ostream &os) const
 			return (os << "<>");
 		case E_INVERSE:
 			return (os << TOKEN_OPERATOR_INVERSE);
+		case E_FACTORIAL:
+			return (os << TOKEN_OPERATOR_FACTORIAL);
 		default:
 			break;
 	}

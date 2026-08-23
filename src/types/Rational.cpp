@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:51:57 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 17:58:05 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1115,7 +1115,7 @@ IType*			Rational::tan(void) const
 	return (result);
 }
 
-Rational*		Rational::fact(void) const// TODO: Implementer le parsing correspondant (!)
+Rational*		Rational::fact(void) const
 {
 	Rational*	result;
 	Rational*	next_number;

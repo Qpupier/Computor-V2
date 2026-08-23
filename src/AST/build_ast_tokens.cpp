@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 14:02:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/25 15:17:18 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 17:40:39 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,9 @@ static long long int	select_less_priority_operator(	\
 	pos = select_operator(possibility, {TOKEN_OPERATOR_INVERSE});
 	if (pos != -1)
 		return (pos);
+	pos = select_operator(possibility, {TOKEN_OPERATOR_FACTORIAL});
+	if (pos != -1)
+		return (pos);
 	pos = select_operator(possibility, {"<>"});
 	if (pos != -1)
 		return (pos);
@@ -96,7 +99,9 @@ bool			handle_operators(t_possibility& possibility, long long int *pos)
 	if ((!*pos || static_cast<unsigned long int>(*pos) 					\
 				== possibility.tokens.size() - 1) 						\
 			&& possibility.tokens[static_cast<unsigned long int>(*pos)]	\
-				.getType() != Token::E_TOKEN_OPERATOR_INVERSE)
+				.getType() != Token::E_TOKEN_OPERATOR_INVERSE 			\
+			&& possibility.tokens[static_cast<unsigned long int>(*pos)]	\
+				.getType() != Token::E_TOKEN_OPERATOR_FACTORIAL)
 	{
 		insert_token(possibility, pos);
 		return (true);

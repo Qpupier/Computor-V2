@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:52:03 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 18:00:47 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1617,7 +1617,7 @@ Matrix*			Matrix::matrix_operator(const Matrix &other) const
 }
 
 Rational*		Matrix::fact(void) const
-{//TODO: verifier toutes les fonctions en cas de matrice nulle
+{
 	throw ERROR_FACTORIAL_FUNCTION;
 	return (nullptr);
 }

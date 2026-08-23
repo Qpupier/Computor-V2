@@ -6,14 +6,13 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:01:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/22 14:41:33 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 16:44:37 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef AST_HPP
 # define AST_HPP
 
-# include <stdio.h>
 # include "computor-v2.hpp"
 # include "IType.hpp"
 # include "backtracking_possibilities.hpp"

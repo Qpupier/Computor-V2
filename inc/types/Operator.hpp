@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 14:55:07 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:34:12 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/23 16:03:46 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class	Operator: public IType
 			E_POWER,
 			E_FUNCTION,
 			E_INVERSE,
+			E_FACTORIAL,
 			E_UNKNOWN
 		}				t_operator;
 
