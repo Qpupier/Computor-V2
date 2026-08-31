@@ -6,11 +6,11 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 10:38:24 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/28 16:17:00 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 17:28:34 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef INFINITEFLOAT_HPP
+#ifndef INFINITEFLOAT_HPP// [ ] Changer en "InfiniteDecimal"
 # define INFINITEFLOAT_HPP
 
 # include "InfiniteInt.hpp"

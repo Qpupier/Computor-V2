@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 16:19:45 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 17:31:08 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1100,7 +1100,7 @@ bool			Complex::in_Z(void) const
 	return (this->_real->in_Z() && this->_imaginary->in_Z());
 }
 
-std::ostream&	Complex::print(std::ostream &os) const
+std::ostream&	Complex::print(std::ostream &os) const// [ ] Enlever le 1 dans le resultat de "i / 2"
 {
 	if (!this->_real || !this->_imaginary)
 		throw ERROR_UNEXPECTED;
@@ -1111,7 +1111,7 @@ std::ostream&	Complex::print(std::ostream &os) const
 		print_value(os, this->_imaginary, "i", true);
 		print_value(os, this->_real, "", false);
 	}
-	else
+	else// [ ] Enlever les espaces autour du '-' pour le resultat de "i^3"
 	{
 		print_value(os, this->_real, "", true);
 		print_value(os, this->_imaginary, "i", !this->_real);

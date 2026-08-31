@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 14:02:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 17:40:39 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 17:27:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static long long int	select_operator(const t_possibility& possibility, 	\
 }
 
 static long long int	select_less_priority_operator(	\
-		const t_possibility& possibility)
+		const t_possibility& possibility)// [ ] Attention, l'ordre est inverse dans 2^3^4
 {
 	long long int	pos;
 

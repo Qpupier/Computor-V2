@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/22 13:24:59 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/22 14:39:50 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 17:17:39 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static unsigned char	read_keywords(const std::string &str_line, t_data &data)
 		stored_variables(data);
 		return (CONTINUE);
 	}
-	if (std::regex_match(str_line, match, data.patterns.at(TOKEN_HISTORY)))
+	if (std::regex_match(str_line, match, data.patterns.at(TOKEN_HISTORY)))// [ ] Store "history" sans result
 	{
 		history(match, data.history_results);
 		return (CONTINUE);

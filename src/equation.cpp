@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 13:19:58 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 17:30:13 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void		compute_equation(const std::string &line, t_data &data, 	\
 	AST*		left_ast;
 	AST*		right_ast;
 
-	pos = line.find('=');
+	pos = line.find('=');// [ ] Ne pas assigner mais verifier l'assertion "x = x ?" quand x est defini
 	left_ast = compute_expression(line.substr(0, pos), data, false, eval);
 	right_ast = nullptr;
 	try

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 15:53:57 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 17:32:24 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -348,7 +348,7 @@ static bool								is_it_different_variables(			\
 	if ((p1.getTerms().size() <= 1 && p1.getDividers().size() <= 1) 	\
 			|| (p2.getTerms().size() <= 1 && p2.getDividers().size() <= 1))
 		return (false);
-	return (p1.getName() != p2.getName());
+	return (p1.getName() != p2.getName());// [ ] Autoriser insensitive
 }
 
 static void								second_division(					\
@@ -976,7 +976,7 @@ bool			Polynomial::in_Z(void) const
 	return (true);
 }
 
-std::ostream&	Polynomial::print(std::ostream &os) const
+std::ostream&	Polynomial::print(std::ostream &os) const// [ ] Enlever les parentheses dans le resultat de 4 / var
 {
 	if (this->_dividers.size() == 1 					\
 			&& *this->_dividers[0].coefficient == 1 	\

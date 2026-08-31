@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 17:10:36 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 17:23:26 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,7 +275,7 @@ void			AST::reduce_expression(	\
 		return;
 	op = dynamic_cast<Operator*>(this->_node);
 	if (!op)
-		throw ERROR_OPERATOR_EXPECTED;
+		throw ERROR_OPERATOR_EXPECTED;// [ ] "+(-4)"
 	result = get_result(this->_left ? this->_left->_node : nullptr, 	\
 			this->_right ? this->_right->_node : nullptr, 				\
 			op->getOperator(), stored);

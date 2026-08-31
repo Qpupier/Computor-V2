@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:17:56 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 17:26:48 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 17:14:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void	semantic_verification(const std::vector<Token>& tokens)
 		current_token = tokens[i].getValue();
 		if (prev_type == Token::E_TOKEN_OPERATOR 	\
 				&& current_type == Token::E_TOKEN_OPERATOR)
-			throw LogicError("Two operators cannot be adjacent");
+			throw LogicError("Two operators cannot be adjacent");// [ ] -0*-1 sur tous les operateurs
 	}
 }
 

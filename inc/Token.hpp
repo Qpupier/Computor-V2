@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:10:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 18:54:57 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 17:35:23 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@
 # define TOKEN_EQUATION_EVAL		TOKEN_EXPRESSION "=" TOKEN_EXPRESSION TOKEN_QUESTION
 # define TOKEN_FULL					TOKEN_BEGIN "(?:" TOKEN_EXPRESSION "|" TOKEN_EQUATION ")" TOKEN_END
 # define TOKEN_VARIABLE				"(?:[a-zA-Z]{2,}|[a-hj-zA-HJ-Z])"
-# define TOKEN_NO_VARIABLE			"(?:cos|sin|tan|exp|abs|norm|sqrt|rad|deg|fact|pi|e|quit|history)"
-# define TOKEN_NUMBER				"\\d+(?:\\.\\d+)?"
-# define TOKEN_IMAGINARY			"i"
+# define TOKEN_NO_VARIABLE			"(?:cos|sin|tan|exp|abs|norm|sqrt|rad|deg|fact|pi|e|quit|history)"// [ ] Ajouter une variable pour avoir le resultat de la derniere commande ?
+# define TOKEN_NUMBER				"\\d+(?:\\.\\d+)?"// [ ] Mot-cle delete pour supprimer une variable ou une fonction
+# define TOKEN_IMAGINARY			"i"// [ ] Bloquer les mot-cles pour que ne puisse pas etre des variables (insensitive)
 # define TOKEN_OPERATOR_INVERSE		"~"
 # define TOKEN_OPERATOR_FACTORIAL	"!"
 # define TOKEN_OPERATOR				"(?:\\*\\*|[\\+\\-\\*\\/\\^%]|" TOKEN_OPERATOR_INVERSE "|" TOKEN_OPERATOR_FACTORIAL ")"

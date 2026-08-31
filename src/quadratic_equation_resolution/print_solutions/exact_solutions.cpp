@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:19:13 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 11:40:48 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 17:33:42 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ void				print_solutions(t_quadratic_solutions& s, 	\
 	{
 		simplify_factors2(s);
 		reduce_sqrt = false;
-	}
+	}// [ ] Enlever les parentheses inutiles dans le resultat de "3x^2 + 5x + 2 = 0"
 	nb_solutions = solutions_equal(s) ? 1 : 2;
 	result = std::string(COLOR_GREEN) 									\
 			+ print_exact_solutions(s, set, reduce_sqrt, nb_solutions) 	\
