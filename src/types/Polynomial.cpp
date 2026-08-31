@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 17:32:24 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 17:59:16 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -348,7 +348,7 @@ static bool								is_it_different_variables(			\
 	if ((p1.getTerms().size() <= 1 && p1.getDividers().size() <= 1) 	\
 			|| (p2.getTerms().size() <= 1 && p2.getDividers().size() <= 1))
 		return (false);
-	return (p1.getName() != p2.getName());// [ ] Autoriser insensitive
+	return (to_lower(p1.getName()) != to_lower(p2.getName()));
 }
 
 static void								second_division(					\
@@ -688,6 +688,8 @@ Polynomial*	Polynomial::operator+(const Polynomial &other) const
 		throw UNSUPPORTED_MULTI_POLYNOMIALS;
 	if (this->getName().empty())
 		name = other.getName();
+	else if (!other.getName().empty() && this->getName() != other.getName())
+		name = to_lower(this->getName());
 	result = new Polynomial(name);
 	free_vector_terms(result->_dividers);
 	result->_dividers 	\
@@ -743,6 +745,8 @@ Polynomial*	Polynomial::operator*(const Polynomial &other) const
 		throw UNSUPPORTED_MULTI_POLYNOMIALS;
 	if (this->getName().empty())
 		name = other.getName();
+	else if (!other.getName().empty() && this->getName() != other.getName())
+		name = to_lower(this->getName());
 	result = new Polynomial(name);
 	free_vector_terms(result->_terms);
 	free_vector_terms(result->_dividers);
@@ -771,6 +775,8 @@ Polynomial*	Polynomial::operator/(const Polynomial &other) const
 		throw UNSUPPORTED_MULTI_POLYNOMIALS;
 	if (this->getName().empty())
 		name = other.getName();
+	else if (!other.getName().empty() && this->getName() != other.getName())
+		name = to_lower(this->getName());
 	result = new Polynomial(name);
 	result->free();
 	result->_terms = multiply_vectors(this->_terms, other._dividers);
