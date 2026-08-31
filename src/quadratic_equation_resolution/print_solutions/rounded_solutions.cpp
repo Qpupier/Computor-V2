@@ -6,36 +6,36 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:27:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/29 10:31:50 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 17:44:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "quadratic.hpp"
 
 static void	sqrt_calculations(const t_quadratic_solutions &solutions, 	\
-		const bool reduce_sqrt, InfiniteFloat &sqrt_real, 				\
-		InfiniteFloat &sqrt_imaginary)
+		const bool reduce_sqrt, InfiniteDecimal &sqrt_real, 				\
+		InfiniteDecimal &sqrt_imaginary)
 {
-	InfiniteFloat	term1;
+	InfiniteDecimal	term1;
 
 	if (reduce_sqrt)
 	{
-		sqrt_real = InfiniteFloat(solutions.sqrt_real).sqrt();
-		sqrt_imaginary = InfiniteFloat(solutions.sqrt_imaginary).sqrt();
+		sqrt_real = InfiniteDecimal(solutions.sqrt_real).sqrt();
+		sqrt_imaginary = InfiniteDecimal(solutions.sqrt_imaginary).sqrt();
 	}
 	else
 	{
-		term1 = InfiniteFloat(solutions.sqrt_term1_factor) 	\
-				* InfiniteFloat(solutions.sqrt_term1_sqrt).sqrt();
-		sqrt_real = InfiniteFloat(term1 + solutions.sqrt_term2_real).sqrt();
+		term1 = InfiniteDecimal(solutions.sqrt_term1_factor) 	\
+				* InfiniteDecimal(solutions.sqrt_term1_sqrt).sqrt();
+		sqrt_real = InfiniteDecimal(term1 + solutions.sqrt_term2_real).sqrt();
 		sqrt_imaginary 											\
-				= InfiniteFloat(term1 + solutions.sqrt_term2_imaginary).sqrt();
+				= InfiniteDecimal(term1 + solutions.sqrt_term2_imaginary).sqrt();
 	}
 }
 
 static void	rounded_calculations(const t_quadratic_solutions &solutions, 	\
-		const InfiniteFloat sqrt[2], InfiniteFloat x_real[2], 			\
-		InfiniteFloat x_imaginary[2])
+		const InfiniteDecimal sqrt[2], InfiniteDecimal x_real[2], 			\
+		InfiniteDecimal x_imaginary[2])
 {
 	for (unsigned char i = 0; i < 2; i++)
 	{
@@ -63,10 +63,10 @@ void		print_rounded_solutions(										\
 		const t_quadratic_solutions &solutions, const bool reduce_sqrt, 	\
 		const std::string var, const unsigned char nb_solutions)
 {
-	InfiniteFloat	sqrt[2];
-	InfiniteFloat	sqrt_imaginary;
-	InfiniteFloat	x_real[2];
-	InfiniteFloat	x_imaginary[2];
+	InfiniteDecimal	sqrt[2];
+	InfiniteDecimal	sqrt_imaginary;
+	InfiniteDecimal	x_real[2];
+	InfiniteDecimal	x_imaginary[2];
 
 	sqrt_calculations(solutions, reduce_sqrt, sqrt[0], sqrt[1]);
 	rounded_calculations(solutions, sqrt, x_real, x_imaginary);

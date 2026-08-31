@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 14:35:09 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 17:44:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ class	Matrix: public IType
 		Matrix*		operator^(const long long int value) const;
 
 		// Getters
-		InfiniteFloat		getRoundedValue(unsigned long int i, 	\
+		InfiniteDecimal		getRoundedValue(unsigned long int i, 	\
 			unsigned long int j) const;
 		t_type				getType(void) const;
 		IType*				getValue(unsigned long int i, 			\

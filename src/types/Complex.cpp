@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 17:31:08 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 17:44:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,9 +158,9 @@ static Complex*			division(const Complex& a, const Complex& b, 		\
 }
 
 static void				print_complex_rounded_value_default(				\
-		const InfiniteFloat& real, const InfiniteFloat& imaginary)
+		const InfiniteDecimal& real, const InfiniteDecimal& imaginary)
 {
-	InfiniteFloat	tmp;
+	InfiniteDecimal	tmp;
 
 	std::cout << real;
 	if (imaginary < 0)
@@ -179,15 +179,15 @@ static void				print_complex_rounded_value_default(				\
 static IType*			test_exact_value_round_part(const Real* part)
 {
 	std::vector<unsigned char>	decimal_part;
-	InfiniteFloat				inf_part;
+	InfiniteDecimal				inf_part;
 
 	inf_part = part->getValue();
 	decimal_part = inf_part.getDecimalPart().getDigits();
-	for (std::size_t i(InfiniteFloat::PRINT_PRECISION); 			\
-			i < decimal_part.size() && i < InfiniteFloat::MAX_PRECISION; i++)
+	for (std::size_t i(InfiniteDecimal::PRINT_PRECISION); 			\
+			i < decimal_part.size() && i < InfiniteDecimal::MAX_PRECISION; i++)
 		decimal_part[i] = 0;
 	if (InfiniteInt(decimal_part))
-		return (new Real(InfiniteFloat(inf_part.getIntegerPart(), 	\
+		return (new Real(InfiniteDecimal(inf_part.getIntegerPart(), 	\
 				decimal_part, inf_part.getIsNegative())));
 	return (new Rational(inf_part.getIntegerPart()));
 }
@@ -1411,7 +1411,7 @@ std::ostream	&operator<<(std::ostream &os, const Complex &num)
 // Functions
 
 void	print_complex_rounded_value(const std::string var, 	\
-		const InfiniteFloat& real, const InfiniteFloat& imaginary)
+		const InfiniteDecimal& real, const InfiniteDecimal& imaginary)
 {
 	if (!var.empty())
 	{

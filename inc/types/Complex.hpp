@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:35:43 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 14:34:09 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 17:44:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,6 @@ std::ostream	&operator<<(std::ostream &os, const Complex &num);
 
 
 // Functions
-void	print_complex_rounded_value(const std::string var, const InfiniteFloat & real, const InfiniteFloat & imaginary);
+void	print_complex_rounded_value(const std::string var, const InfiniteDecimal & real, const InfiniteDecimal & imaginary);
 
 #endif

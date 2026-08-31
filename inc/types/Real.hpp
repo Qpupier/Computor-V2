@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 17:41:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 15:48:03 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 17:44:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define REAL_HPP
 
 # include "IType.hpp"
-# include "InfiniteFloat.hpp"
+# include "InfiniteDecimal.hpp"
 # include "Rational.hpp"
 # include "Complex.hpp"
 # include "Polynomial.hpp"
@@ -23,10 +23,10 @@ class	Real: public IType
 {
 	// Constructors and destructor
 	public:
-		Real(void): _value(InfiniteFloat()) {};
+		Real(void): _value(InfiniteDecimal()) {};
 		Real(const Real& other): _value(other._value) {};
-		Real(const InfiniteFloat& value): _value(value) {};
-		Real(const long long int value): _value(InfiniteFloat(value)) {};
+		Real(const InfiniteDecimal& value): _value(value) {};
+		Real(const long long int value): _value(InfiniteDecimal(value)) {};
 		Real(const IType& other);
 		~Real(void) {};
 
@@ -78,7 +78,7 @@ class	Real: public IType
 
 		// Getters
 		t_type			getType(void) const;
-		InfiniteFloat&	getValue(void) const;
+		InfiniteDecimal&	getValue(void) const;
 
 		// Methods
 		std::string		to_string(void) const;
@@ -107,7 +107,7 @@ class	Real: public IType
 
 	private:
 		// Members
-		InfiniteFloat	_value;
+		InfiniteDecimal	_value;
 };
 
 // Output stream operator overload

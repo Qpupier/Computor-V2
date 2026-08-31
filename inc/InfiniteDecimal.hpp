@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   InfiniteFloat.hpp                                  :+:      :+:    :+:   */
+/*   InfiniteDecimal.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,105 +10,105 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef INFINITEFLOAT_HPP// [ ] Changer en "InfiniteDecimal"
-# define INFINITEFLOAT_HPP
+#ifndef INFINITEDECIMAL_HPP
+# define INFINITEDECIMAL_HPP
 
 # include "InfiniteInt.hpp"
 
-class	InfiniteFloat
+class	InfiniteDecimal
 {
 	public:
 		// Constructors and destructor
-		InfiniteFloat(const InfiniteInt integer_part, 					\
+		InfiniteDecimal(const InfiniteInt integer_part, 					\
 				const InfiniteInt decimal_part, const bool is_negative = false);
-		InfiniteFloat(const InfiniteInt integer): 						\
-				InfiniteFloat(integer, InfiniteInt(), 					\
+		InfiniteDecimal(const InfiniteInt integer): 						\
+				InfiniteDecimal(integer, InfiniteInt(), 					\
 					integer.getIsNegative()) {};
-		InfiniteFloat(void): InfiniteFloat(InfiniteInt()) {};
-		InfiniteFloat(const std::vector<unsigned char> integer_digits, 	\
+		InfiniteDecimal(void): InfiniteDecimal(InfiniteInt()) {};
+		InfiniteDecimal(const std::vector<unsigned char> integer_digits, 	\
 				const std::vector<unsigned char> decimal_digits 		\
 					= std::vector<unsigned char>(), 					\
 				bool is_negative = false): 								\
-					InfiniteFloat(InfiniteInt(integer_digits), 			\
+					InfiniteDecimal(InfiniteInt(integer_digits), 			\
 						InfiniteInt(decimal_digits, false, false), 		\
 						is_negative) {};
-		InfiniteFloat(const long long int value, 						\
+		InfiniteDecimal(const long long int value, 						\
 				bool is_integer_part = true): 							\
-					InfiniteFloat(InfiniteInt(value, is_integer_part)) {};
-		InfiniteFloat(const InfiniteFloat &other): 						\
-				InfiniteFloat(other.getIntegerPart(), 					\
+					InfiniteDecimal(InfiniteInt(value, is_integer_part)) {};
+		InfiniteDecimal(const InfiniteDecimal &other): 						\
+				InfiniteDecimal(other.getIntegerPart(), 					\
 				other.getDecimalPart(), other.getIsNegative()) {};
-		InfiniteFloat(const std::string integer_part, 					\
+		InfiniteDecimal(const std::string integer_part, 					\
 				const std::string decimal_part = "0", 					\
 				bool is_negative = false): 								\
-					InfiniteFloat(InfiniteInt(integer_part), 			\
+					InfiniteDecimal(InfiniteInt(integer_part), 			\
 						InfiniteInt(decimal_part, false, false), 		\
 						is_negative) {};
-		~InfiniteFloat(void) {};
+		~InfiniteDecimal(void) {};
 
 		// Operator overloads
 		explicit			operator bool(void) const;
-		InfiniteFloat&		operator=(const InfiniteFloat &other);
-		InfiniteFloat&		operator=(const InfiniteInt &other);
-		InfiniteFloat&		operator=(const long long int value);
-		bool				operator==(const InfiniteFloat &other) const;
+		InfiniteDecimal&		operator=(const InfiniteDecimal &other);
+		InfiniteDecimal&		operator=(const InfiniteInt &other);
+		InfiniteDecimal&		operator=(const long long int value);
+		bool				operator==(const InfiniteDecimal &other) const;
 		bool				operator==(const InfiniteInt &other) const;
 		bool				operator==(const long long int value) const;
-		bool				operator!=(const InfiniteFloat&other) const;
+		bool				operator!=(const InfiniteDecimal&other) const;
 		bool				operator!=(const InfiniteInt&other) const;
 		bool				operator!=(const long long int value) const;
-		bool				operator<(const InfiniteFloat &other) const;
+		bool				operator<(const InfiniteDecimal &other) const;
 		bool				operator<(const InfiniteInt &other) const;
 		bool				operator<(const long long int value) const;
-		bool				operator<=(const InfiniteFloat &other) const;
+		bool				operator<=(const InfiniteDecimal &other) const;
 		bool				operator<=(const InfiniteInt &other) const;
 		bool				operator<=(const long long int value) const;
-		bool				operator>(const InfiniteFloat &other) const;
+		bool				operator>(const InfiniteDecimal &other) const;
 		bool				operator>(const InfiniteInt &other) const;
 		bool				operator>(const long long int value) const;
-		bool				operator>=(const InfiniteFloat &other) const;
+		bool				operator>=(const InfiniteDecimal &other) const;
 		bool				operator>=(const InfiniteInt &other) const;
 		bool				operator>=(const long long int value) const;
-		InfiniteFloat		operator+(const InfiniteFloat &other) const;
-		InfiniteFloat		operator+(const InfiniteInt &other) const;
-		InfiniteFloat		operator+(const long long int value) const;
+		InfiniteDecimal		operator+(const InfiniteDecimal &other) const;
+		InfiniteDecimal		operator+(const InfiniteInt &other) const;
+		InfiniteDecimal		operator+(const long long int value) const;
 		// IType*				operator+(const IType &other) const;
-		void				operator+=(const InfiniteFloat &other);
+		void				operator+=(const InfiniteDecimal &other);
 		void				operator+=(const InfiniteInt &other);
 		void				operator+=(const long long int value);
-		InfiniteFloat&		operator++(void);
-		InfiniteFloat		operator++(int);
-		InfiniteFloat		operator-(void) const;
-		InfiniteFloat		operator-(const InfiniteFloat &other) const;
-		InfiniteFloat		operator-(const InfiniteInt &other) const;
-		InfiniteFloat		operator-(const long long int value) const;
-		void				operator-=(const InfiniteFloat &other);
+		InfiniteDecimal&		operator++(void);
+		InfiniteDecimal		operator++(int);
+		InfiniteDecimal		operator-(void) const;
+		InfiniteDecimal		operator-(const InfiniteDecimal &other) const;
+		InfiniteDecimal		operator-(const InfiniteInt &other) const;
+		InfiniteDecimal		operator-(const long long int value) const;
+		void				operator-=(const InfiniteDecimal &other);
 		void				operator-=(const InfiniteInt &other);
 		void				operator-=(const long long int value);
-		InfiniteFloat&		operator--(void);
-		InfiniteFloat		operator--(int);
-		InfiniteFloat		operator*(const InfiniteFloat &other) const;
-		InfiniteFloat		operator*(const InfiniteInt &other) const;
-		InfiniteFloat		operator*(const long long int value) const;
-		void				operator*=(const InfiniteFloat &other);
+		InfiniteDecimal&		operator--(void);
+		InfiniteDecimal		operator--(int);
+		InfiniteDecimal		operator*(const InfiniteDecimal &other) const;
+		InfiniteDecimal		operator*(const InfiniteInt &other) const;
+		InfiniteDecimal		operator*(const long long int value) const;
+		void				operator*=(const InfiniteDecimal &other);
 		void				operator*=(const InfiniteInt &other);
 		void				operator*=(const long long int value);
-		InfiniteFloat		operator/(const InfiniteFloat &other) const;
-		InfiniteFloat		operator/(const InfiniteInt &other) const;
-		InfiniteFloat		operator/(const long long int value) const;
-		void				operator/=(const InfiniteFloat &other);
+		InfiniteDecimal		operator/(const InfiniteDecimal &other) const;
+		InfiniteDecimal		operator/(const InfiniteInt &other) const;
+		InfiniteDecimal		operator/(const long long int value) const;
+		void				operator/=(const InfiniteDecimal &other);
 		void				operator/=(const InfiniteInt &other);
 		void				operator/=(const long long int value);
-		InfiniteFloat		operator%(const InfiniteFloat &other) const;
-		InfiniteFloat		operator%(const InfiniteInt &other) const;
-		InfiniteFloat		operator%(const long long int value) const;
-		void				operator%=(const InfiniteFloat &other);
+		InfiniteDecimal		operator%(const InfiniteDecimal &other) const;
+		InfiniteDecimal		operator%(const InfiniteInt &other) const;
+		InfiniteDecimal		operator%(const long long int value) const;
+		void				operator%=(const InfiniteDecimal &other);
 		void				operator%=(const InfiniteInt &other);
 		void				operator%=(const long long int value);
-		InfiniteFloat		operator^(const InfiniteFloat &other) const;
-		InfiniteFloat		operator^(const InfiniteInt &other) const;
-		InfiniteFloat		operator^(const long long int value) const;
-		void				operator^=(const InfiniteFloat &other);
+		InfiniteDecimal		operator^(const InfiniteDecimal &other) const;
+		InfiniteDecimal		operator^(const InfiniteInt &other) const;
+		InfiniteDecimal		operator^(const long long int value) const;
+		void				operator^=(const InfiniteDecimal &other);
 		void				operator^=(const InfiniteInt &other);
 		void				operator^=(const long long int value);
 
@@ -123,8 +123,8 @@ class	InfiniteFloat
 		void	setIsNegative(bool is_negative);
 
 		// Methods
-		InfiniteFloat	abs(void) const;
-		InfiniteFloat	sqrt(void) const;
+		InfiniteDecimal	abs(void) const;
+		InfiniteDecimal	sqrt(void) const;
 		bool			in_D(void) const;
 		void			push_back_decimal(unsigned char digit);
 		void			push_back_integer(unsigned char digit);
@@ -143,6 +143,6 @@ class	InfiniteFloat
 };
 
 // Output stream operator overload
-std::ostream&	operator<<(std::ostream &os, const InfiniteFloat &num);
+std::ostream&	operator<<(std::ostream &os, const InfiniteDecimal &num);
 
 #endif

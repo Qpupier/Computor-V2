@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 16:04:07 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 17:44:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -854,7 +854,7 @@ Vector*		Vector::operator^(const long long int value) const
 
 // Getters
 
-InfiniteFloat	Vector::getRoundedValue(unsigned long int index) const
+InfiniteDecimal	Vector::getRoundedValue(unsigned long int index) const
 {
 	if (index >= this->_vector.size())
 		throw ERROR_VECTOR_OUT_OF_RANGE;

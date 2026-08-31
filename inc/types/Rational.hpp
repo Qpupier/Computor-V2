@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 15:47:45 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 17:44:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ class	Rational: public IType
 		Rational*	operator^(const long long int value) const;
 
 		// Getters
-		InfiniteFloat	getValue(void) const;
+		InfiniteDecimal	getValue(void) const;
 		InfiniteInt		getNumerator(void) const;
 		InfiniteInt		getDenominator(void) const;
 		t_type			getType(void) const;

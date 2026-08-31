@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 16:02:15 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 17:44:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 
 static Real			from_rational(const Rational& rational)
 {
-	return (Real(InfiniteFloat(rational.getNumerator()) 	\
-			/ InfiniteFloat(rational.getDenominator())));
+	return (Real(InfiniteDecimal(rational.getNumerator()) 	\
+			/ InfiniteDecimal(rational.getDenominator())));
 }
 
 static Real			from_complex(const Complex& complex)
@@ -242,7 +242,7 @@ Real*		Real::operator+(const Real& other) const
 
 Real*		Real::operator+(const long long int value) const
 {
-	return (new Real(this->_value + InfiniteFloat(value)));
+	return (new Real(this->_value + InfiniteDecimal(value)));
 }
 
 IType*		Real::operator-(void) const
@@ -272,7 +272,7 @@ Real*		Real::operator-(const Real& other) const
 
 Real*		Real::operator-(const long long int value) const
 {
-	return (new Real(this->_value - InfiniteFloat(value)));
+	return (new Real(this->_value - InfiniteDecimal(value)));
 }
 
 IType*		Real::operator*(const IType& other) const
@@ -292,7 +292,7 @@ Real*		Real::operator*(const Real& other) const
 
 Real*		Real::operator*(const long long int value) const
 {
-	return (new Real(this->_value * InfiniteFloat(value)));
+	return (new Real(this->_value * InfiniteDecimal(value)));
 }
 
 IType*		Real::operator/(const IType& other) const
@@ -502,9 +502,9 @@ IType::t_type	Real::getType(void) const
 	return (IType::t_type::E_TYPE_REAL);
 }
 
-InfiniteFloat&	Real::getValue(void) const
+InfiniteDecimal&	Real::getValue(void) const
 {
-	return (const_cast<InfiniteFloat&>(this->_value));
+	return (const_cast<InfiniteDecimal&>(this->_value));
 }
 
 
@@ -663,13 +663,13 @@ IType*			Real::sin(void) const
 
 IType*			Real::sqrt(void) const
 {
-	InfiniteFloat	sqrt_value(1);
-	InfiniteFloat	value(this->getValue());
-	InfiniteFloat	epsilon(1);
-	InfiniteFloat	delta(1);
+	InfiniteDecimal	sqrt_value(1);
+	InfiniteDecimal	value(this->getValue());
+	InfiniteDecimal	epsilon(1);
+	InfiniteDecimal	delta(1);
 
-	for (int i(0); i < InfiniteFloat::CALCULATION_PRECISION; i++)
-		epsilon /= InfiniteFloat(10);
+	for (int i(0); i < InfiniteDecimal::CALCULATION_PRECISION; i++)
+		epsilon /= InfiniteDecimal(10);
 	while (delta >= epsilon)
 	{
 		sqrt_value = (sqrt_value + value / sqrt_value) / 2;

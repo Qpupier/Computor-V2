@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 16:01:53 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 17:44:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static Rational		from_real(const Real& real)
 	Rational*					divider;
 	Rational*					tmp_result;
 
-	if (all_digits.size() > InfiniteFloat::PRINT_PRECISION)
+	if (all_digits.size() > InfiniteDecimal::PRINT_PRECISION)
 		throw LogicError("This real number isn't a rational number");
 	decimal_digits = real.getValue().getDecimalPart().getDigits();
 	all_digits.insert(all_digits.end(), decimal_digits.begin(), 	\
@@ -64,19 +64,19 @@ static InfiniteInt	compute_lcm(InfiniteInt a, InfiniteInt b)
 	return (a / compute_gcd(a, b) * b);
 }
 
-static IType*		sqrt_final_value(InfiniteFloat sqrt_value, 		\
-		InfiniteFloat value)
+static IType*		sqrt_final_value(InfiniteDecimal sqrt_value, 		\
+		InfiniteDecimal value)
 {
-	InfiniteFloat				test_exact_value;
+	InfiniteDecimal				test_exact_value;
 	std::vector<unsigned char>	decimal_part;
 
 	decimal_part = sqrt_value.getDecimalPart().getDigits();
-	for (std::size_t i(InfiniteFloat::PRINT_PRECISION); 	\
-			i < decimal_part.size() && i < InfiniteFloat::MAX_PRECISION; i++)
+	for (std::size_t i(InfiniteDecimal::PRINT_PRECISION); 	\
+			i < decimal_part.size() && i < InfiniteDecimal::MAX_PRECISION; i++)
 		decimal_part[i] = 0;
 	if (!InfiniteInt(decimal_part))
 		return (new Rational(sqrt_value.getIntegerPart()));
-	test_exact_value = InfiniteFloat(sqrt_value.getIntegerPart(), decimal_part);
+	test_exact_value = InfiniteDecimal(sqrt_value.getIntegerPart(), decimal_part);
 	if ((test_exact_value ^ 2) == value)
 		return (new Real(test_exact_value));
 	return (new Real(sqrt_value));
@@ -878,10 +878,10 @@ Rational*	Rational::operator^(const long long int value) const
 
 // Getters
 
-InfiniteFloat	Rational::getValue(void) const
+InfiniteDecimal	Rational::getValue(void) const
 {
-	return (InfiniteFloat(this->_numerator) 	\
-			/ InfiniteFloat(this->_denominator));
+	return (InfiniteDecimal(this->_numerator) 	\
+			/ InfiniteDecimal(this->_denominator));
 }
 
 InfiniteInt		Rational::getNumerator(void) const
@@ -1082,15 +1082,15 @@ IType*			Rational::sin(void) const
 
 IType*			Rational::sqrt(void) const
 {
-	InfiniteFloat	sqrt_value(1);
-	InfiniteFloat	value(this->getValue());
-	InfiniteFloat	epsilon(1);
-	InfiniteFloat	delta(1);
+	InfiniteDecimal	sqrt_value(1);
+	InfiniteDecimal	value(this->getValue());
+	InfiniteDecimal	epsilon(1);
+	InfiniteDecimal	delta(1);
 
 	if (value.getIsNegative())
 		return (Complex(*this).sqrt());
-	for (int i(0); i < InfiniteFloat::CALCULATION_PRECISION; i++)
-		epsilon /= InfiniteFloat(10);
+	for (int i(0); i < InfiniteDecimal::CALCULATION_PRECISION; i++)
+		epsilon /= InfiniteDecimal(10);
 	while (delta >= epsilon)
 	{
 		sqrt_value = (sqrt_value + value / sqrt_value) / 2;

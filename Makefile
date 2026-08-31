@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/08/22 13:30:52 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/08/31 17:44:30 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,7 +47,7 @@ LST_SRC		=	AST/AST.cpp																			\
 				types/Real.cpp																		\
 				types/Vector.cpp																	\
 				main.cpp																			\
-				InfiniteFloat.cpp																	\
+				InfiniteDecimal.cpp																	\
 				InfiniteInt.cpp																		\
 				bonus_preset_terms.cpp																\
 				compute_line.cpp																	\

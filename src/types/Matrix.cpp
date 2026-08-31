@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 17:16:29 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 17:44:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,25 +195,25 @@ static void										gauss_jordan_elimination(	\
 
 static IType*																\
 		sqrt_final_value_approx_reduce_precision(							\
-			const InfiniteFloat& cell_float)
+			const InfiniteDecimal& cell_float)
 {
 	InfiniteInt					decimal;
 	std::vector<unsigned char>	decimal_part;
 
 	decimal_part = cell_float.getDecimalPart().getDigits();
-	for (std::size_t k(InfiniteFloat::PRINT_PRECISION); 	\
-			k < decimal_part.size() && k < InfiniteFloat::MAX_PRECISION; k++)
+	for (std::size_t k(InfiniteDecimal::PRINT_PRECISION); 	\
+			k < decimal_part.size() && k < InfiniteDecimal::MAX_PRECISION; k++)
 		decimal_part[k] = 0;
 	decimal = InfiniteInt(decimal_part, false, false);
 	if (decimal)
-		return (new Real(InfiniteFloat(cell_float.getIntegerPart(), decimal)));
+		return (new Real(InfiniteDecimal(cell_float.getIntegerPart(), decimal)));
 	return (new Rational(cell_float.getIntegerPart()));
 }
 
 static Matrix*									sqrt_final_value_approx(	\
 		Matrix* sqrt_value)
 {
-	InfiniteFloat				cell_float;
+	InfiniteDecimal				cell_float;
 	std::vector<unsigned char>	decimal_part;
 	IType*						cell;
 	Matrix*						copy;
@@ -1246,7 +1246,7 @@ Matrix*		Matrix::operator^(const long long int value) const
 
 // Getters
 
-InfiniteFloat		Matrix::getRoundedValue(unsigned long int i, 	\
+InfiniteDecimal		Matrix::getRoundedValue(unsigned long int i, 	\
 		unsigned long int j) const
 {
 	if (i >= this->_width || j >= this->_height)
@@ -1545,7 +1545,7 @@ IType*			Matrix::sin(void) const
 
 IType*			Matrix::sqrt(void) const
 {
-	InfiniteFloat	epsilon(1);
+	InfiniteDecimal	epsilon(1);
 	Matrix*			sqrt_value;
 	Matrix*			result;
 
@@ -1553,8 +1553,8 @@ IType*			Matrix::sqrt(void) const
 		throw ERROR_MATRIX_SQRT_SQUARE;
 	if (this->is_null())
 		return (matrix_null(this->_width, this->_height));
-	for (int i(0); i < InfiniteFloat::CALCULATION_PRECISION; i++)
-		epsilon /= InfiniteFloat(10);
+	for (int i(0); i < InfiniteDecimal::CALCULATION_PRECISION; i++)
+		epsilon /= InfiniteDecimal(10);
 	sqrt_value = new Matrix(this->_width, this->_height);
 	for (int i(0); i < Matrix::MAX_NEWTON_ITERATIONS; i++)
 	{
