@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:11:12 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 18:32:14 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 11:28:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	store_new_variable(								\
 			delete polynomial;
 			throw LogicError("Function parameter is already defined");
 		}
-		if (to_lower(key.first) == to_lower(it->first.first))//TODO: Faire comme les fonctions et ne pas lower la
+		if (to_lower(key.first) == to_lower(it->first.first))
 		{
 			delete it->second;
 			it = stored.erase(it);

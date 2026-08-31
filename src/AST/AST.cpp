@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 17:50:59 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 11:26:49 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,18 +288,24 @@ void			AST::reduce_expression(	\
 void			AST::replace_variables(	\
 		std::map<std::pair<std::string, std::string>, const IType*> &stored)
 {
-	std::pair<std::string, std::string>	var_key;
+	std::pair<std::string, std::string>	found_key;
+	std::string							var_lower;
 	const Polynomial*					polynomial;
 
 	polynomial = dynamic_cast<const Polynomial*>(this->_node);
 	if (!polynomial)
 		return;
-	var_key.first = to_lower(polynomial->getName());
-	var_key.second = std::string();
-	if (stored.find(var_key) != stored.end())
+	var_lower = to_lower(polynomial->getName());
+	for (std::map<std::pair<std::string, std::string>, const IType*>	\
+			::iterator it(stored.begin()); it != stored.end(); it++)
 	{
-		delete this->_node;
-		this->_node = stored[var_key]->clone();
+		found_key = it->first;
+		if (to_lower(found_key.first) == var_lower)
+		{
+			delete this->_node;
+			this->_node = stored[found_key]->clone();
+			break ;
+		}
 	}
 }
 
