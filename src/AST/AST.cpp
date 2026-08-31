@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 11:26:49 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 17:10:36 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -300,7 +300,7 @@ void			AST::replace_variables(	\
 			::iterator it(stored.begin()); it != stored.end(); it++)
 	{
 		found_key = it->first;
-		if (to_lower(found_key.first) == var_lower)
+		if (to_lower(found_key.first) == var_lower && found_key.second.empty())
 		{
 			delete this->_node;
 			this->_node = stored[found_key]->clone();
