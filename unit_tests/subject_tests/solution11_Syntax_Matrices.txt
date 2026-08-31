@@ -25,9 +25,9 @@ Listing stored variables and functions
     fact => Factorial
 
   User-defined variables:
-    mata = [ 1 , 2 ]
+    matA = [ 1 , 2 ]
 [ 3 , 2 ]
 [ 3 , 4 ]
-    matb = [ 1 , 2 ]
+    matB = [ 1 , 2 ]
 
   User-defined functions:

@@ -26,8 +26,8 @@ Listing stored variables and functions
     fact => Factorial
 
   User-defined variables:
-    vara = 2
-    varb = 2121/500
-    varc = -43/10
+    varA = 2
+    varB = 2121/500
+    varC = -43/10
 
   User-defined functions:

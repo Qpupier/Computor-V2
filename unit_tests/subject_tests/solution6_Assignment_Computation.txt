@@ -27,10 +27,10 @@ Listing stored variables and functions
     fact => Factorial
 
   User-defined variables:
-    vara = 27
-    varb = 53
-    varc = 1
-    vard = 479/2
+    varA = 27
+    varB = 53
+    varC = 1
+    varD = 479/2
 
   User-defined functions:
     funA(χ) = (2χ + 477) / 2

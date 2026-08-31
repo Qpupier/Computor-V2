@@ -24,8 +24,8 @@ Listing stored variables and functions
     fact => Factorial
 
   User-defined variables:
-    vara = [ 2 , 3 ]
+    varA = [ 2 , 3 ]
 [ 4 , 3 ]
-    varb = [ 3 , 4 ]
+    varB = [ 3 , 4 ]
 
   User-defined functions:

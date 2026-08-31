@@ -23,7 +23,7 @@ Listing stored variables and functions
     fact => Factorial
 
   User-defined variables:
-    vara = 3 + 2i
-    varb = -4 - 4i
+    varA = 3 + 2i
+    varB = -4 - 4i
 
   User-defined functions:
