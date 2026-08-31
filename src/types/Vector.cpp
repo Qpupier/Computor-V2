@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:27:17 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:51:07 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 16:04:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -859,6 +859,11 @@ InfiniteFloat	Vector::getRoundedValue(unsigned long int index) const
 	if (index >= this->_vector.size())
 		throw ERROR_VECTOR_OUT_OF_RANGE;
 	return (Real(*this->_vector[index]).getValue());
+}
+
+IType::t_type	Vector::getType(void) const
+{
+	return (IType::t_type::E_TYPE_VECTOR);
 }
 
 

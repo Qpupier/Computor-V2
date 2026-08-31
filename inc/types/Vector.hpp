@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 13:42:16 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:36:00 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 15:49:16 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ class	Vector: public IType
 
 		// Getters
 		InfiniteFloat	getRoundedValue(unsigned long int index) const;
+		t_type			getType(void) const;
 
 		// Setters
 		void			setValue(unsigned long int index, IType* value);

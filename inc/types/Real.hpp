@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 17:41:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:35:52 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 15:48:03 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ class	Real: public IType
 		Real*		operator^(const long long int value) const;
 
 		// Getters
+		t_type			getType(void) const;
 		InfiniteFloat&	getValue(void) const;
 
 		// Methods

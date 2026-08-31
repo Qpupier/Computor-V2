@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 13:28:11 by qpupier           #+#    #+#             */
-/*   Updated: 2026/07/01 19:08:35 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 16:06:48 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,10 @@ Rational*			get_module_square(const Complex* complex)
 	Rational*	imaginary_square;
 	Rational*	module_square;
 
-	real_square = dynamic_cast<Rational*>(*complex->getReal() * *complex->getReal());
-	imaginary_square = dynamic_cast<Rational*>(*complex->getImaginary() * *complex->getImaginary());
+	real_square = dynamic_cast<Rational*>(*complex->getReal() 				\
+			* *complex->getReal());
+	imaginary_square = dynamic_cast<Rational*>(*complex->getImaginary() 	\
+			* *complex->getImaginary());
 	module_square = dynamic_cast<Rational*>(*real_square + *imaginary_square);
 	delete real_square;
 	delete imaginary_square;

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 11:05:28 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:51:57 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 16:02:15 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -496,6 +496,11 @@ Real*		Real::operator^(const long long int value) const
 
 
 // Getters
+
+IType::t_type	Real::getType(void) const
+{
+	return (IType::t_type::E_TYPE_REAL);
+}
 
 InfiniteFloat&	Real::getValue(void) const
 {

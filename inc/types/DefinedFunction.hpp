@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:16:29 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:36:52 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 14:34:24 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,9 @@ class	DefinedFunction: public IType
 		IType*		operator%(const long long int value) const;
 		IType*		operator^(const IType &other) const;
 		IType*		operator^(const long long int value) const;
+
+		// Getters
+		t_type	getType(void) const;
 
 		// Methods
 		std::string		to_string(void) const;

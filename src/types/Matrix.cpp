@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 18:00:47 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 16:17:05 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,14 +223,12 @@ static Matrix*									sqrt_final_value_approx(	\
 		for (unsigned long int i(0); i < copy->getWidth(); i++)
 		{
 			cell = copy->getValue(i, j);
-			try
-			{
+			if (cell->getType() == IType::t_type::E_TYPE_RATIONAL)
 				cell_float = dynamic_cast<Rational*>(cell)->getValue();
-			}
-			catch (...)
-			{
+			else if (cell->getType() == IType::t_type::E_TYPE_REAL)
 				cell_float = dynamic_cast<Real*>(cell)->getValue();
-			}
+			else
+				throw ERROR_UNEXPECTED;
 			copy->setValue(i, j, 	\
 					sqrt_final_value_approx_reduce_precision(cell_float));
 		}
@@ -1248,14 +1246,6 @@ Matrix*		Matrix::operator^(const long long int value) const
 
 // Getters
 
-IType*				Matrix::getValue(unsigned long int i, 			\
-		unsigned long int j) const
-{
-	if (i >= this->_width || j >= this->_height)
-		throw ERROR_MATRIX_OUT_OF_RANGE;
-	return (this->_matrix[j][i]);
-}
-
 InfiniteFloat		Matrix::getRoundedValue(unsigned long int i, 	\
 		unsigned long int j) const
 {
@@ -1274,6 +1264,19 @@ unsigned long int	Matrix::getWidth(void) const
 unsigned long int	Matrix::getHeight(void) const
 {
 	return (this->_height);
+}
+
+IType::t_type		Matrix::getType(void) const
+{
+	return (IType::t_type::E_TYPE_MATRIX);
+}
+
+IType*				Matrix::getValue(unsigned long int i, 			\
+		unsigned long int j) const
+{
+	if (i >= this->_width || j >= this->_height)
+		throw ERROR_MATRIX_OUT_OF_RANGE;
+	return (this->_matrix[j][i]);
 }
 
 

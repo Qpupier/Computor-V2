@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 17:58:05 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 16:01:53 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -878,6 +878,12 @@ Rational*	Rational::operator^(const long long int value) const
 
 // Getters
 
+InfiniteFloat	Rational::getValue(void) const
+{
+	return (InfiniteFloat(this->_numerator) 	\
+			/ InfiniteFloat(this->_denominator));
+}
+
 InfiniteInt		Rational::getNumerator(void) const
 {
 	return (this->_numerator);
@@ -888,10 +894,9 @@ InfiniteInt		Rational::getDenominator(void) const
 	return (this->_denominator);
 }
 
-InfiniteFloat	Rational::getValue(void) const
+IType::t_type	Rational::getType(void) const
 {
-	return (InfiniteFloat(this->_numerator) 	\
-			/ InfiniteFloat(this->_denominator));
+	return (IType::t_type::E_TYPE_RATIONAL);
 }
 
 

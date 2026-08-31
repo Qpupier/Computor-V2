@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 18:56:06 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 15:53:57 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -868,9 +868,9 @@ Polynomial*	Polynomial::operator^(const long long int value) const
 
 // Getters
 
-std::string						Polynomial::getName(void) const
+std::vector<Polynomial::t_term>	Polynomial::getDividers(void) const
 {
-	return (this->_name);
+	return (this->_dividers);
 }
 
 std::vector<Polynomial::t_term>	Polynomial::getTerms(void) const
@@ -878,9 +878,14 @@ std::vector<Polynomial::t_term>	Polynomial::getTerms(void) const
 	return (this->_terms);
 }
 
-std::vector<Polynomial::t_term>	Polynomial::getDividers(void) const
+std::string						Polynomial::getName(void) const
 {
-	return (this->_dividers);
+	return (this->_name);
+}
+
+IType::t_type					Polynomial::getType(void) const
+{
+	return (IType::t_type::E_TYPE_POLYNOMIAL);
 }
 
 

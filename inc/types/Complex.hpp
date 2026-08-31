@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:35:43 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:33:15 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 14:34:09 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ class	Complex: public IType
 		Complex*	operator^(const long long int value) const;
 
 		// Getters
+		t_type	getType(void) const;
 		IType*	getReal(void) const;
 		IType*	getImaginary(void) const;
 

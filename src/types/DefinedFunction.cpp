@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/26 15:35:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:41:47 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 15:55:10 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,6 +197,14 @@ IType*	DefinedFunction::operator^(const long long int value) const
 	throw ERROR_UNEXPECTED;
 	(void)value;
 	return (nullptr);
+}
+
+
+// Getters
+
+IType::t_type	DefinedFunction::getType(void) const
+{
+	return (IType::t_type::E_TYPE_FUNCTION);
 }
 
 

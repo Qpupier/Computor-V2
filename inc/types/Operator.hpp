@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 14:55:07 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 16:03:46 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 14:35:31 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ class	Operator: public IType
 
 		// Getters
 		t_operator	getOperator(void) const;
+		t_type		getType(void) const;
 
 		// Methods
 		std::string		to_string(void) const;

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 18:53:41 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 15:46:58 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,10 @@ class	Polynomial: public IType
 		Polynomial*	operator^(const long long int value) const;
 
 		// Getters
-		std::string			getName(void) const;
-		std::vector<t_term>	getTerms(void) const;
 		std::vector<t_term>	getDividers(void) const;
+		std::vector<t_term>	getTerms(void) const;
+		std::string			getName(void) const;
+		t_type				getType(void) const;
 
 		// Setters
 		void	setName(const std::string& name);

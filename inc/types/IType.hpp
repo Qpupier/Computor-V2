@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 17:42:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 14:33:55 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 15:53:10 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,22 @@ class	IType
 		virtual IType*		operator^(const IType &other) const = 0;
 		virtual IType*		operator^(const long long int value) const = 0;
 
+		// Enums
+		typedef enum	e_type
+		{
+			E_TYPE_RATIONAL,
+			E_TYPE_COMPLEX,
+			E_TYPE_MATRIX,
+			E_TYPE_POLYNOMIAL,
+			E_TYPE_VECTOR,
+			E_TYPE_REAL,
+			E_TYPE_OPERATOR,
+			E_TYPE_FUNCTION
+		}				t_type;
+
+		// Getters
+		virtual t_type	getType(void) const = 0;
+
 		// Methods
 		virtual std::string		to_string(void) const = 0;
 		virtual bool			in_C(void) const = 0;
@@ -79,8 +95,7 @@ class	IType
 		virtual Real*			rad(void) const = 0;
 		virtual void			print_rounded(const std::string var 	\
 				= std::string()) const = 0;
-		
-		// TODO: Enum Type pour eviter de faire des dynamic_cast partout
+
 
 		protected:
 			// Constructor

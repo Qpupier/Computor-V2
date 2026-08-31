@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 18:06:48 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/08/31 16:19:45 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,14 +78,16 @@ static std::ostream&	print_value_real(std::ostream& os, bool negative, 	\
 static std::ostream&	print_value(std::ostream &os, IType* value, 		\
 		const std::string &i, bool is_first)
 {
-	IType*	copy;
-	bool	negative_between(false);
-	
+	bool		negative_between(false);
+	IType*		copy;
+	Rational*	copy_rational;
+	Real*		copy_real;
+
 	if (!*value)
 		return (os);
 	copy = value->clone();
-	Rational *copy_rational = dynamic_cast<Rational*>(copy);
-	Real *copy_real = dynamic_cast<Real*>(copy);
+	copy_rational = dynamic_cast<Rational*>(copy);
+	copy_real = dynamic_cast<Real*>(copy);
 	if (!is_first)
 	{
 		if (*value < 0)
@@ -196,10 +198,10 @@ static Complex*			test_exact_value(Complex* sqrt, const Complex& value)
 	Complex*	test;
 
 	test = new Complex(*sqrt);
-	if (!dynamic_cast<Rational*>(sqrt->getReal()))
+	if (sqrt->getReal()->getType() == IType::t_type::E_TYPE_REAL)
 		test->setReal(test_exact_value_round_part(		\
 				dynamic_cast<Real*>(sqrt->getReal())));
-	if (!dynamic_cast<Rational*>(sqrt->getImaginary()))
+	if (sqrt->getImaginary()->getType() == IType::t_type::E_TYPE_REAL)
 		test->setImaginary(test_exact_value_round_part(	\
 				dynamic_cast<Real*>(sqrt->getImaginary())));
 	square = *test ^ 2;
@@ -279,9 +281,9 @@ Complex::Complex(const IType &other): _real(nullptr), _imaginary(nullptr)
 	else if (other_real)
 		*this = Complex(other_real->clone(), new Rational(0));
 	else if (other_matrix)
-		LogicError("A matrix cannot be converted to a complex number");
+		throw LogicError("A matrix cannot be converted to a complex number");
 	else if (other_vector)
-		LogicError("A vector cannot be converted to a complex number");
+		throw LogicError("A vector cannot be converted to a complex number");
 	else
 		throw ERROR_UNEXPECTED;
 }
@@ -1032,12 +1034,17 @@ Complex*	Complex::operator^(const long long int value) const
 
 // Getters
 
-IType*	Complex::getImaginary(void) const
+IType::t_type	Complex::getType(void) const
+{
+	return (IType::t_type::E_TYPE_COMPLEX);
+}
+
+IType*			Complex::getImaginary(void) const
 {
 	return (this->_imaginary);
 }
 
-IType*	Complex::getReal(void) const
+IType*			Complex::getReal(void) const
 {
 	return (this->_real);
 }
