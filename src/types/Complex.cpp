@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 17:44:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/01 14:44:24 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static std::ostream&	print_value_rational(std::ostream& os, 				\
 		copy_rational = dynamic_cast<Rational*>(-*copy_rational);
 		delete tmp;
 	}
-	if (i.empty() || *copy_rational != 1)
+	if (i.empty() || copy_rational->getNumerator() != 1)
 		os << copy_rational->getNumerator();
 	if (!i.empty())
 		os << i;
@@ -1100,7 +1100,7 @@ bool			Complex::in_Z(void) const
 	return (this->_real->in_Z() && this->_imaginary->in_Z());
 }
 
-std::ostream&	Complex::print(std::ostream &os) const// [ ] Enlever le 1 dans le resultat de "i / 2"
+std::ostream&	Complex::print(std::ostream &os) const
 {
 	if (!this->_real || !this->_imaginary)
 		throw ERROR_UNEXPECTED;
