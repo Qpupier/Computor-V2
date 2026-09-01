@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 17:59:16 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/01 14:35:48 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,13 +250,25 @@ static void								print_coefficient(					\
 	delete coefficient;
 }
 
+static unsigned long int				get_nb_terms(const 	\
+		std::vector<Polynomial::t_term> &terms)
+{
+	unsigned long int	nb_terms(0);
+
+	for (std::vector<Polynomial::t_term>::const_iterator 	\
+			it(terms.begin()); it != terms.end(); it++)
+		if (*it->coefficient)
+			nb_terms++;
+	return (nb_terms);
+}
+
 static std::ostream&					print_terms(std::ostream &os, 		\
 		const std::vector<Polynomial::t_term> &terms, 						\
 		const std::string &name, bool alone = false)
 {
 	bool	first_term;
 
-	if (!alone && terms.size() > 1)
+	if (!alone && get_nb_terms(terms) > 1)
 		os << "(";
 	first_term = true;
 	for (std::vector<Polynomial::t_term>::const_reverse_iterator 	\
@@ -275,7 +287,7 @@ static std::ostream&					print_terms(std::ostream &os, 		\
 	}
 	if (first_term)
 		os << "0";
-	if (!alone && terms.size() > 1)
+	if (!alone && get_nb_terms(terms) > 1)
 		os << ")";
 	return (os);
 }
@@ -982,7 +994,7 @@ bool			Polynomial::in_Z(void) const
 	return (true);
 }
 
-std::ostream&	Polynomial::print(std::ostream &os) const// [ ] Enlever les parentheses dans le resultat de 4 / var
+std::ostream&	Polynomial::print(std::ostream &os) const
 {
 	if (this->_dividers.size() == 1 					\
 			&& *this->_dividers[0].coefficient == 1 	\
