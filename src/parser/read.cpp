@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/22 13:24:59 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 17:17:39 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/01 14:19:57 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ static unsigned char	read_keywords(const std::string &str_line, t_data &data)
 		stored_variables(data);
 		return (CONTINUE);
 	}
-	if (std::regex_match(str_line, match, data.patterns.at(TOKEN_HISTORY)))// [ ] Store "history" sans result
+	if (std::regex_match(str_line, match, data.patterns.at(TOKEN_HISTORY)))
 	{
 		history(match, data.history_results);
-		return (CONTINUE);
+		return (HISTORY);
 	}
 	return (NOTHING);
 }
@@ -49,7 +49,7 @@ static unsigned char	read_interactive(std::string &str_line, t_data &data)
 		free(line);
 		return (CONTINUE);
 	}
-	if (status != NOTHING)
+	if (status != NOTHING && status != HISTORY)
 	{
 		free(line);
 		rl_clear_history();
@@ -57,7 +57,7 @@ static unsigned char	read_interactive(std::string &str_line, t_data &data)
 	}
 	add_history(line);
 	free(line);
-	return (NOTHING);
+	return (status);
 }
 
 static unsigned char	read_tty(std::string &str_line, t_data &data)

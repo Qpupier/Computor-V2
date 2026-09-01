@@ -6,13 +6,14 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 14:30:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 17:17:06 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/01 14:19:21 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
 
-static void	print_preset_functions(const std::vector<std::pair<std::string, std::string>>& preset_functions)
+static void	print_preset_functions(const 					\
+		std::vector<std::pair<std::string, std::string>>& preset_functions)
 {
 	std::vector<std::pair<std::string, std::string>>::const_iterator	it(preset_functions.begin());
 
@@ -23,7 +24,17 @@ static void	print_preset_functions(const std::vector<std::pair<std::string, std:
 	}
 }
 
-void	history(std::smatch match, 	\
+static void	print_history_line(const std::string& line, 	\
+		const std::string& result)
+{
+	std::cout << line;
+	if (line != "history")
+		std::cout << COLOR_DIM << " => " << COLOR_RESET 	\
+				<< COLOR_ITALIC << result;
+	std::cout << COLOR_RESET << std::endl;
+}
+
+void	history(std::smatch match, 							\
 		const std::vector<std::string>& history_results)
 {
 	unsigned long int	first;
@@ -39,16 +50,15 @@ void	history(std::smatch match, 	\
 	}
 	if (hist)
 	{
-		for (unsigned long int i = 0; hist[i] != NULL; ++i)
+		for (unsigned long int i = 0; hist[i]; ++i)
 			last = i;
 		if (!max)
 			n = last + 1;
 		first = last + 1 >= n ? last - n + 1 : 0;
-		for (unsigned long int i(first); hist[i] != NULL; i++)
-			std::cout << hist[i]->line << COLOR_DIM << " => " 				\
-					<< COLOR_RESET << COLOR_ITALIC << history_results[i] 	\
-					<< std::endl;
+		for (unsigned long int i(first); hist[i]; i++)
+			print_history_line(hist[i]->line, history_results[i]);
 	}
+	std::cout << "history" << std::endl;
 }
 
 void	stored_variables(const t_data& data)
@@ -79,8 +89,12 @@ int		loop(t_data &data, bool is_interactive)// [ ] Gerer les signaux
 	while (true)
 	{
 		status = read_line(is_interactive, str_line, data);
-		if (status == CONTINUE)
+		if (status == CONTINUE || status == HISTORY)
+		{
+			if (status == HISTORY)
+				data.history_results.push_back("");
 			continue;
+		}
 		if (status != NOTHING)
 			return (status);
 		compute_line(str_line, data);

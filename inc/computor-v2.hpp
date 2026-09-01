@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 17:09:49 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/01 13:56:29 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,6 @@ class IType;
 # define UNSUPPORTED_DIVISION				UnsupportedError("Division not supported between polynomials with these powers")
 # define UNSUPPORTED_EXPONENT				UnsupportedError("Exponentiation can only be natural numbers (ℕ)")
 # define UNSUPPORTED_MULTI_POLYNOMIALS		UnsupportedError("Multiple unknown polynomials are not supported")
-# define CONTINUE							2
-# define NOTHING							3
 # define PRESET_PI							"3.1415926535897932384626433832795028841971693993751058209749445923"
 # define PRESET_E							"2.7182818284590452353602874713526624977572470936999595749669676277"
 
@@ -80,6 +78,13 @@ typedef struct	s_data
 	std::vector<std::pair<std::string, std::string>>			preset_functions;
 	std::vector<std::string>									history_results;
 }				t_data;
+
+typedef enum	e_exit_loop
+{
+	NOTHING = 2,
+	CONTINUE,
+	HISTORY
+}				t_exit_loop;
 
 std::string	to_lower(std::string s);
 int			loop(t_data &data, bool is_interactive);
