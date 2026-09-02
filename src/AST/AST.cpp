@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/02 11:55:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/02 15:47:59 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,61 @@ static IType*	get_result_function(IType *left, IType *right, 				\
 	return (result);
 }
 
+static IType*	multiply_neg(const IType& left_entity, const IType& right_entity)
+{
+	IType*	neg;
+	IType*	result;
+
+	neg = right_entity * -1;
+	result = left_entity * *neg;
+	delete neg;
+	return (result);
+}
+
+static IType*	divide_neg(const IType& left_entity, const IType& right_entity)
+{
+	IType*	neg;
+	IType*	result;
+
+	neg = right_entity * -1;
+	result = left_entity / *neg;
+	delete neg;
+	return (result);
+}
+
+static IType*	modulo_neg(const IType& left_entity, const IType& right_entity)
+{
+	IType*	neg;
+	IType*	result;
+
+	neg = right_entity * -1;
+	result = left_entity % *neg;
+	delete neg;
+	return (result);
+}
+
+static IType*	matrix_neg(const IType& left_entity, const IType& right_entity)
+{
+	IType*	neg;
+	IType*	result;
+
+	neg = right_entity * -1;
+	result = left_entity.matrix_operator(*neg);
+	delete neg;
+	return (result);
+}
+
+static IType*	power_neg(const IType& left_entity, const IType& right_entity)
+{
+	IType*	neg;
+	IType*	result;
+
+	neg = right_entity * -1;
+	result = left_entity ^ *neg;
+	delete neg;
+	return (result);
+}
+
 static IType*	get_result(IType *left_entity, IType *right_entity, 		\
 		Operator::t_operator op, 											\
 		std::map<std::pair<std::string, std::string>, const IType*> &stored)
@@ -110,14 +165,24 @@ static IType*	get_result(IType *left_entity, IType *right_entity, 		\
 			return (*left_entity - *right_entity);
 		case Operator::E_MULTIPLY:
 			return (*left_entity * *right_entity);
+		case Operator::E_MULTIPLY_NEG:
+			return (multiply_neg(*left_entity, *right_entity));
 		case Operator::E_DIVIDE:
 			return (*left_entity / *right_entity);
+		case Operator::E_DIVIDE_NEG:
+			return (divide_neg(*left_entity, *right_entity));
 		case Operator::E_MODULO:
 			return (*left_entity % *right_entity);
+		case Operator::E_MODULO_NEG:
+			return (modulo_neg(*left_entity, *right_entity));
 		case Operator::E_MATRIX:
 			return (left_entity->matrix_operator(*right_entity));
+		case Operator::E_MATRIX_NEG:
+			return (matrix_neg(*left_entity, *right_entity));
 		case Operator::E_POWER:
 			return (*left_entity ^ *right_entity);
+		case Operator::E_POWER_NEG:
+			return (power_neg(*left_entity, *right_entity));
 		case Operator::E_FUNCTION:
 			return (get_result_function(left_entity, right_entity, stored));
 		case Operator::E_INVERSE:

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 14:55:07 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 14:35:31 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/02 15:42:13 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,15 @@ class	Operator: public IType
 			E_ADD,
 			E_SUBTRACT,
 			E_MULTIPLY,
+			E_MULTIPLY_NEG,
 			E_DIVIDE,
+			E_DIVIDE_NEG,
 			E_MODULO,
+			E_MODULO_NEG,
 			E_MATRIX,
+			E_MATRIX_NEG,
 			E_POWER,
+			E_POWER_NEG,
 			E_FUNCTION,
 			E_INVERSE,
 			E_FACTORIAL,

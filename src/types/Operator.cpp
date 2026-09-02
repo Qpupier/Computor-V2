@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 15:00:31 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 16:01:21 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/02 15:42:49 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,24 @@ Operator::Operator(std::string op)
 		_op = E_SUBTRACT;
 	else if (op == "*")
 		_op = E_MULTIPLY;
+	else if (op == "*-")
+		_op = E_MULTIPLY_NEG;
 	else if (op == "/")
 		_op = E_DIVIDE;
+	else if (op == "/-")
+		_op = E_DIVIDE_NEG;
 	else if (op == "%")
 		_op = E_MODULO;
+	else if (op == "%-")
+		_op = E_MODULO_NEG;
 	else if (op == "**")
 		_op = E_MATRIX;
+	else if (op == "**-")
+		_op = E_MATRIX_NEG;
 	else if (op == "^")
 		_op = E_POWER;
+	else if (op == "^-")
+		_op = E_POWER_NEG;
 	else if (op == "***")
 		_op = E_UNKNOWN;
 	else if (op == "<>")

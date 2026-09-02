@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 14:02:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 17:27:44 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/02 15:40:39 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,16 @@ static long long int	select_less_priority_operator(	\
 	pos = select_operator(possibility, {"-", "+"});
 	if (pos != -1)
 		return (pos);
-	pos = select_operator(possibility, {"*", "/", "%"});
+	pos = select_operator(possibility, {"*", "*-", "/", "/-", "%", "%-"});
 	if (pos != -1)
 		return (pos);
-	pos = select_operator(possibility, {"**", "***"});
+	pos = select_operator(possibility, {"**", "**-", "***"});
 	if (pos != -1)
 		return (pos);
-	pos = select_operator(possibility, {"^"});
+	// pos = select_operator(possibility, {"--", "++"});
+	// if (pos != -1)
+	// 	return (pos);
+	pos = select_operator(possibility, {"^", "^-"});
 	if (pos != -1)
 		return (pos);
 	pos = select_operator(possibility, {TOKEN_OPERATOR_INVERSE});
