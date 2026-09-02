@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/25 17:04:19 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/01 15:46:23 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/02 17:18:54 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,7 @@ static void			set_missing_operators(t_possibility &possibility)
 						? "<>" 												\
 						: new_operator(prev_token, current_token), 			\
 					Token::E_TOKEN_OPERATOR));
-			for (auto pair = possibility.brackets_pairs.begin(); 			\
-					pair != possibility.brackets_pairs.end(); pair++)
-			{
-				if (pair->second.first >= i)
-					pair->second.first++;
-				if (pair->second.second >= i)
-					pair->second.second++;
-			}
+			brackets_pairs_increment(possibility.brackets_pairs, i);
 		}
 	}
 }

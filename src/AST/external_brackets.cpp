@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/25 17:12:46 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/01 15:45:15 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/02 17:17:01 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,34 @@ AST*				handle_external_brackets(t_possibility& possibility, 	\
 				new DefinedFunction(DefinedFunction::E_FUNCTION_ABSOLUTE), 	\
 				build_ast(possibility, data), nullptr));
 	throw ERROR_UNKNOWN_BRACKET;
+}
+
+void				brackets_pairs_decrement(std::vector<std::pair			\
+			<t_bracket, std::pair<unsigned long int, unsigned long int>>>& 	\
+			brackets_pairs, 												\
+		unsigned long int start)
+{
+	for (auto pair = brackets_pairs.begin(); pair != brackets_pairs.end(); 	\
+			pair++)
+	{
+		if (pair->second.first >= start)
+			pair->second.first--;
+		if (pair->second.second >= start)
+			pair->second.second--;
+	}
+}
+
+void				brackets_pairs_increment(std::vector<std::pair			\
+			<t_bracket, std::pair<unsigned long int, unsigned long int>>>& 	\
+			brackets_pairs, 												\
+		unsigned long int start)
+{
+	for (auto pair = brackets_pairs.begin(); pair != brackets_pairs.end(); 	\
+			pair++)
+	{
+		if (pair->second.first >= start)
+			pair->second.first++;
+		if (pair->second.second >= start)
+			pair->second.second++;
+	}
 }

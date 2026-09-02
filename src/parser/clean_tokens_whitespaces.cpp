@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 15:51:42 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/02 16:02:40 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/02 17:19:43 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,7 @@ void		remove_whitespaces(t_possibility& possibility)
 		if (possibility.tokens[i].getType() == Token::E_TOKEN_WHITESPACE 	\
 				|| possibility.tokens[i].getType() == Token::E_TOKEN_TO_DELETE)
 		{
-			for (auto pair = possibility.brackets_pairs.begin(); 			\
-					pair != possibility.brackets_pairs.end(); pair++)
-			{
-				if (pair->second.first > i)
-					pair->second.first--;
-				if (pair->second.second > i)
-					pair->second.second--;
-			}
+			brackets_pairs_decrement(possibility.brackets_pairs, i + 1);
 			possibility.tokens.erase(possibility.tokens.begin() 			\
 					+ static_cast<std::vector<Token>::difference_type>(i));
 		}
