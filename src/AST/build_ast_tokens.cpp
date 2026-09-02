@@ -6,11 +6,11 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 14:02:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/02 15:40:39 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/02 17:18:14 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "computor-v2.hpp"
+#include "AST.hpp"
 #include "backtracking_possibilities.hpp"
 
 static long long int	select_operator(const t_possibility& possibility, 	\
@@ -48,9 +48,6 @@ static long long int	select_less_priority_operator(	\
 	pos = select_operator(possibility, {"**", "**-", "***"});
 	if (pos != -1)
 		return (pos);
-	// pos = select_operator(possibility, {"--", "++"});
-	// if (pos != -1)
-	// 	return (pos);
 	pos = select_operator(possibility, {"^", "^-"});
 	if (pos != -1)
 		return (pos);
@@ -79,15 +76,13 @@ static void		insert_token(t_possibility &possibility, long long int* pos)
 			possibility.tokens[0].setType(Token::E_TOKEN_NUMBER);
 			possibility.tokens.insert(possibility.tokens.begin() + 1, 	\
 					Token("*", Token::E_TOKEN_OPERATOR));
-			for (auto pair = possibility.brackets_pairs.begin(); 		\
-					pair != possibility.brackets_pairs.end(); pair++)
-			{
-				pair->second.first++;
-				pair->second.second++;
-			}
+			brackets_pairs_increment(possibility.brackets_pairs, 0);
 		}
 		else
+		{
 			possibility.tokens.erase(possibility.tokens.begin());
+			brackets_pairs_decrement(possibility.brackets_pairs, 0);
+		}
 	}
 	else
 		throw LogicError	\

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:01:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/02 15:53:16 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/02 17:17:35 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ AST*			build_ast(t_possibility tokens, t_data &data);
 AST*			compute_expression(const std::string &line, t_data &data, bool is_right_side, const bool eval = true);
 AST*			get_the_only_possibility(std::vector<t_possibility>& possibilities, t_data &data, bool is_right_side, const bool eval);
 AST*			handle_external_brackets(t_possibility& possibility, t_bracket brackets_type, t_data& data);
+void			brackets_pairs_decrement(std::vector<std::pair<t_bracket, std::pair<unsigned long int, unsigned long int>>>& brackets_pairs, unsigned long int start);
+void			brackets_pairs_increment(std::vector<std::pair<t_bracket, std::pair<unsigned long int, unsigned long int>>>& brackets_pairs, unsigned long int start);
 void			clean_tokens(t_possibility& possibility);
 void			compute_equation(const std::string &line, t_data &data, const bool eval);
 void			delete_empty_function_stored(std::map<std::pair<std::string, std::string>, const IType*> &stored, const std::string error_msg, const bool throw_error = false);

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:17:56 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/02 16:02:56 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/02 16:58:37 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,17 @@ static void	semantic_verification(std::vector<Token>& tokens)
 		current_type = tokens[i].getType();
 		prev_token = i > 1 ? tokens[i - 1].getValue() : tokens[0].getValue();
 		current_token = tokens[i].getValue();
-		if (current_token == "+" || current_token == "-")
+		if (prev_type == Token::E_TOKEN_OPERATOR)
 		{
-			tokens[i].setValue(prev_token + (current_token == "-" ? "-" : ""));
-			tokens[i - 1].setType(Token::E_TOKEN_TO_DELETE);
+			if (current_token == "+" || current_token == "-")
+			{
+				tokens[i].setValue(prev_token + 	\
+						(current_token == "-" ? "-" : ""));
+				tokens[i - 1].setType(Token::E_TOKEN_TO_DELETE);
+			}
+			else if (current_type == Token::E_TOKEN_OPERATOR)
+				throw LogicError("Two operators cannot be adjacent");
 		}
-		else if (prev_type == Token::E_TOKEN_OPERATOR 	\
-				&& current_type == Token::E_TOKEN_OPERATOR)
-			throw LogicError("Two operators cannot be adjacent");
 	}
 }
 
