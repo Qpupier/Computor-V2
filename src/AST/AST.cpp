@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:18:03 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 17:23:26 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/02 11:55:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,16 +219,29 @@ AST*	AST::getRight(void) const
 
 void	AST::setLeft(AST *left)
 {
+	delete this->_left;
 	this->_left = left;
+}
+
+void	AST::setNode(IType *node)
+{
+	delete this->_node;
+	this->_node = node;
 }
 
 void	AST::setRight(AST *right)
 {
+	delete this->_right;
 	this->_right = right;
 }
 
 
 // Methods
+
+bool			AST::end_of_tree(void) const
+{
+	return (!this->_left && !this->_right);
+}
 
 std::ostream&	AST::print(std::ostream &os) const
 {
@@ -241,9 +254,18 @@ std::ostream&	AST::print(std::ostream &os) const
 	return (os);
 }
 
-bool			AST::end_of_tree(void) const
+IType*			AST::getLeftNode(void) const
 {
-	return (!this->_left && !this->_right);
+	if (this->_left)
+		return (this->_left->getNode());
+	return (nullptr);
+}
+
+IType*			AST::getRightNode(void) const
+{
+	if (this->_right)
+		return (this->_right->getNode());
+	return (nullptr);
 }
 
 void			AST::free(void)
@@ -266,23 +288,27 @@ void			AST::reduce_expression(	\
 	IType*		result;
 
 	if (this->end_of_tree())
-		return this->replace_variables(stored);
+		return (this->replace_variables(stored));
 	if (this->_left)
 		this->_left->reduce_expression(stored);
 	if (this->_right)
 		this->_right->reduce_expression(stored);
 	if (this->end_of_tree())
 		return;
+	if (this->_node->getType() == IType::E_TYPE_FUNCTION && this->_left 	\
+			&& this->_left->end_of_tree() && !this->_right)
+	{
+		this->setNode(this->_node->function_operator(*this->_left->_node));
+		this->setLeft(nullptr);
+		return ;
+	}
 	op = dynamic_cast<Operator*>(this->_node);
 	if (!op)
 		throw ERROR_OPERATOR_EXPECTED;// [ ] "+(-4)"
-	result = get_result(this->_left ? this->_left->_node : nullptr, 	\
-			this->_right ? this->_right->_node : nullptr, 				\
+	result = get_result(this->getLeftNode(), this->getRightNode(), 			\
 			op->getOperator(), stored);
 	this->free();
 	this->_node = result;
-	this->_left = nullptr;
-	this->_right = nullptr;
 }
 
 void			AST::replace_variables(	\

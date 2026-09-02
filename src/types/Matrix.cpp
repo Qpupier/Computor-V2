@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 17:44:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/01 15:18:06 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static std::vector<std::string>					parse_line(					\
 }
 
 static std::vector<std::vector<std::string>>	parse_matrix(				\
-		std::string &matrix, unsigned long int * width)// [ ] Accepter les | dans les matrices
+		std::string &matrix, unsigned long int * width)
 {
 	std::vector<std::vector<std::string>>	rows;
 	std::string								line;

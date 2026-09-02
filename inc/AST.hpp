@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:01:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 16:44:37 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/02 11:55:01 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,20 @@ class	AST
 		AST& operator=(const AST &other);
 
 		// Getters
-		IType*	getNode(void) const;
 		AST*	getLeft(void) const;
+		IType*	getNode(void) const;
 		AST*	getRight(void) const;
 
 		// Setters
 		void	setLeft(AST *left);
+		void	setNode(IType *node);
 		void	setRight(AST *right);
 
 		// Methods
-		std::ostream&	print(std::ostream &os) const;
 		bool			end_of_tree(void) const;
+		std::ostream&	print(std::ostream &os) const;
+		IType*			getLeftNode(void) const;
+		IType*			getRightNode(void) const;
 		void			free(void);
 		void			reduce_expression(std::map<std::pair<std::string, std::string>, const IType*> &stored);
 		void			replace_variables(std::map<std::pair<std::string, std::string>, const IType*> &stored);
