@@ -6,14 +6,14 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 17:30:13 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/03 11:46:24 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
 #include "quadratic.hpp"
 
-static void	equation_error(AST *left_ast, AST *right_ast, 	\
+static void	equation_error(AST *left_ast, AST *right_ast, 				\
 		const UnexpectedError &error)
 {
 	if (left_ast)
@@ -55,7 +55,7 @@ void		compute_equation(const std::string &line, t_data &data, 	\
 	AST*		left_ast;
 	AST*		right_ast;
 
-	pos = line.find('=');// [ ] Ne pas assigner mais verifier l'assertion "x = x ?" quand x est defini
+	pos = line.find('=');
 	left_ast = compute_expression(line.substr(0, pos), data, false, eval);
 	right_ast = nullptr;
 	try
