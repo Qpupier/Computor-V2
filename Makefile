@@ -20,6 +20,7 @@ LST_SRC		=	AST/AST.cpp																			\
 				AST/build_ast.cpp																	\
 				AST/build_ast_tokens.cpp															\
 				AST/external_brackets.cpp															\
+				AST/select_operator.cpp																\
 				parser/Token.cpp																	\
 				parser/clean_tokens.cpp																\
 				parser/clean_tokens_whitespaces.cpp													\

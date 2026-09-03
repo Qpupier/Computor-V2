@@ -6,62 +6,12 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 14:02:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/02 17:18:14 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/03 15:25:55 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
 #include "backtracking_possibilities.hpp"
-
-static long long int	select_operator(const t_possibility& possibility, 	\
-		const std::vector<std::string> &operators)
-{
-	unsigned long int	pos;
-	bool				surface;
-
-	for (size_t i = 0; i < possibility.tokens.size(); i++)
-	{
-		pos = possibility.tokens.size() - i - 1;
-		surface = true;
-		for (const auto& pair : possibility.brackets_pairs)
-			if (pos >= pair.second.first && pos <= pair.second.second)
-				surface = false;
-		if (surface)
-			for (const std::string& op: operators)
-				if (possibility.tokens[pos].getValue() == op)
-					return (static_cast<long int>(pos));
-	}
-	return (-1);
-}
-
-static long long int	select_less_priority_operator(	\
-		const t_possibility& possibility)// [ ] Attention, l'ordre est inverse dans 2^3^4
-{
-	long long int	pos;
-
-	pos = select_operator(possibility, {"-", "+"});
-	if (pos != -1)
-		return (pos);
-	pos = select_operator(possibility, {"*", "*-", "/", "/-", "%", "%-"});
-	if (pos != -1)
-		return (pos);
-	pos = select_operator(possibility, {"**", "**-", "***"});
-	if (pos != -1)
-		return (pos);
-	pos = select_operator(possibility, {"^", "^-"});
-	if (pos != -1)
-		return (pos);
-	pos = select_operator(possibility, {TOKEN_OPERATOR_INVERSE});
-	if (pos != -1)
-		return (pos);
-	pos = select_operator(possibility, {TOKEN_OPERATOR_FACTORIAL});
-	if (pos != -1)
-		return (pos);
-	pos = select_operator(possibility, {"<>"});
-	if (pos != -1)
-		return (pos);
-	return (-1);
-}
 
 static void		insert_token(t_possibility &possibility, long long int* pos)
 {

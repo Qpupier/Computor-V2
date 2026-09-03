@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 16:48:49 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/02 14:51:18 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/03 15:21:02 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,7 @@ static AST*				build_ast_recur(t_possibility& possibility, 	\
 	if (pos == -1)
 	{
 		if (possibility.tokens.size() != 2)
-		{
-			std::cout << "Here?" << std::endl;
 			throw ERROR_OPERATOR_EXPECTED;
-		}
 		return (new AST(Token(possibility.tokens[0].getValue() 	\
 					+ possibility.tokens[1].getValue(), 		\
 				Token::E_TOKEN_FUNCTION), data));

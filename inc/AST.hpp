@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:01:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/02 17:17:35 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/03 15:25:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ class	AST
 std::ostream &operator<<(std::ostream &os, const AST &ast);
 
 // Functions
+long long int	select_less_priority_operator(const t_possibility& possibility);
 unsigned char	read_line(bool is_interactive, std::string& str_line, t_data& data);
 bool			set_function_left(const std::vector<Token>& tokens, std::map<std::pair<std::string, std::string>, const IType*> &stored);
 AST*			build_ast(t_possibility tokens, t_data &data);
