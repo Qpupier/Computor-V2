@@ -15,17 +15,17 @@ on:
   push:
     branches: ["master"]
 jobs:
-  test:
+  category:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        test: [format, logic_error, numbers, complexes, matrices, polynomials, subject, bonus]
+        category: [format, logic_error, numbers, complexes, matrices, polynomials, subject, bonus]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install -y valgrind libreadline-dev
       - name: Compilation
         run: make -j
-      - name: Unit tests - ${{ matrix.test }}
-        run: ./unit_tests/${{ matrix.test }}.sh debug
+      - name: Unit tests - ${{ matrix.category }}
+        run: ./unit_tests/${{ matrix.category }}.sh debug
