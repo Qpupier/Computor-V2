@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/07 15:26:34 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/07 17:18:00 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,14 @@
 #include "quadratic.hpp"
 
 static void	equation_error(AST *left_ast, AST *right_ast, 				\
-		const UnexpectedError &error)
+		const std::exception& error, bool throw_error = true)
 {
 	if (left_ast)
 		delete left_ast;
 	if (right_ast)
 		delete right_ast;
-	throw error;
+	if (throw_error)
+		throw error;
 }
 
 static void	equation(AST *left_ast, AST *right_ast, t_data &data)
@@ -49,7 +50,7 @@ static void	equation(AST *left_ast, AST *right_ast, t_data &data)
 }
 
 void		compute_equation(const std::string &line, t_data &data, 	\
-		const bool eval)
+		const bool eval)// TODO: Fonction trop longue
 {
 	std::size_t	pos;
 	AST*		left_ast;
@@ -68,9 +69,10 @@ void		compute_equation(const std::string &line, t_data &data, 	\
 			delete left_ast;
 		throw LogicError(e.what());
 	}
-	catch (const std::exception &e)
+	catch (...)
 	{
-		equation_error(left_ast, right_ast, UnexpectedError(e.what()));
+		equation_error(left_ast, right_ast, std::exception(), false);
+		throw;
 	}
 	if (left_ast)
 		equation(left_ast, right_ast, data);
