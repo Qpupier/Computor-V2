@@ -43,7 +43,7 @@ jobs:
       - name: Build
         run: make -j
       - name: Save compiled binary
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: binary
           path: .
@@ -64,8 +64,9 @@ jobs:
       matrix:
         test: [format, logic_error, numbers, complexes, matrices, polynomials, subject, bonus]
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           name: binary
+      - run: chmod +x unit_tests/${{ matrix.test }}.sh
       - name: Run ${{ matrix.test }}
         run: ./unit_tests/${{ matrix.test }}.sh debug
