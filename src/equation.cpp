@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/03 11:46:24 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/07 15:26:34 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ void		compute_equation(const std::string &line, t_data &data, 	\
 	}
 	if (left_ast)
 		equation(left_ast, right_ast, data);
+	else if (eval)
+		std::cout << COLOR_BOLD << "False" << COLOR_RESET << std::endl;
 	delete left_ast;
 	delete right_ast;
 }

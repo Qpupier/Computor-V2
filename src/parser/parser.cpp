@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/03 11:43:51 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/07 15:42:06 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,23 @@ static Token						create_token(							\
 	return Token(*it, get_token_type(*it, data.tokens_types));
 }
 
-static std::vector<t_possibility>	get_tokens(const std::string &line, 	\
-		const t_data &data)
+static AST*							compute_AST(AST* ast, t_data &data, 	\
+		bool is_right_side, const bool eval)
 {
-	std::vector<Token>	initial_tokens;
-	std::string::const_iterator	end(line.end());
+	bool	begin_alone;
 
-	for (std::string::const_iterator start(line.begin()); start != end;)
-		initial_tokens.push_back(create_token(start, end, data));
-	return (all_possibilities(initial_tokens));
+	begin_alone = ast->end_of_tree();
+	if (is_right_side || !ast->end_of_tree() || eval)
+		ast->reduce_expression(data.stored);
+	if (!is_right_side && eval && begin_alone 	\
+			&& ast->getNode()->getType() == IType::E_TYPE_POLYNOMIAL)
+	{
+		delete ast;
+		return (nullptr);
+	}
+	if (is_right_side && waiting_function(data.stored) && !eval)
+		set_function_right(data, ast);
+	return (ast);
 }
 
 AST*								compute_expression(						\
@@ -60,27 +68,28 @@ AST*								compute_expression(						\
 		const bool eval)
 {
 	std::vector<t_possibility>	possibilities;
-	AST*				ast;
+	std::vector<Token>			initial_tokens;
+	std::string::const_iterator	end(line.end());
+	AST*						ast;
 
 	if (!std::regex_match(line, data.patterns.at(TOKEN_FULL_EXPRESSION)))
 		throw ERROR_INVALID_EXPRESSION;
-	possibilities = get_tokens(line, data);
+	for (std::string::const_iterator start(line.begin()); start != end;)
+		initial_tokens.push_back(create_token(start, end, data));
+	possibilities = all_possibilities(initial_tokens);
 	ast = get_the_only_possibility(possibilities, data, is_right_side, eval);
 	if (!ast)
 		return (nullptr);
 	try
 	{
-		if (is_right_side || !ast->end_of_tree() || eval)
-			ast->reduce_expression(data.stored);
-		if (is_right_side && !eval && waiting_function(data.stored))
-			set_function_right(data, ast);
+		return (compute_AST(ast, data, is_right_side, eval));
 	}
 	catch (...)
 	{
 		delete ast;
 		throw;
 	}
-	return (ast);
+	return (nullptr);
 }
 
 void								print_expression(const std::string& 	\
