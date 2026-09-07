@@ -14,9 +14,9 @@
 
 // Utils
 
-static void				align_sizes(									\
-		std::vector<unsigned char>& this_decimal_digits, 				\
-		std::vector<unsigned char>& other_decimal_digits, 				\
+static void				align_sizes(										\
+		std::vector<unsigned char>& this_decimal_digits, 					\
+		std::vector<unsigned char>& other_decimal_digits, 					\
 		const std::vector<unsigned char>::size_type decimal_size)
 {
 	while (this_decimal_digits.size() < decimal_size)
@@ -25,9 +25,9 @@ static void				align_sizes(									\
 		other_decimal_digits.push_back(0);
 }
 
-static void				concat_parts(std::vector<unsigned char>& a, 	\
-		std::vector<unsigned char>& b, 									\
-		const std::vector<unsigned char>& this_decimal_digits, 			\
+static void				concat_parts(std::vector<unsigned char>& a, 		\
+		std::vector<unsigned char>& b, 										\
+		const std::vector<unsigned char>& this_decimal_digits, 				\
 		const std::vector<unsigned char>& other_decimal_digits)
 {
 	a.insert(a.end(), this_decimal_digits.begin(), this_decimal_digits.end());
@@ -35,7 +35,7 @@ static void				concat_parts(std::vector<unsigned char>& a, 	\
 }
 
 static InfiniteInt		add_integer_parts(const InfiniteDecimal& tmp_a, 	\
-		const InfiniteDecimal& tmp_b, 									\
+		const InfiniteDecimal& tmp_b, 										\
 		const std::vector<unsigned char>::size_type& decimal_size)
 {
 	std::vector<unsigned char>	a(tmp_a.getIntegerPart().getDigits());
@@ -51,7 +51,7 @@ static InfiniteInt		add_integer_parts(const InfiniteDecimal& tmp_a, 	\
 }
 
 static InfiniteInt		sub_integer_parts(const InfiniteDecimal& tmp_a, 	\
-		const InfiniteDecimal& tmp_b, 									\
+		const InfiniteDecimal& tmp_b, 										\
 		const std::vector<unsigned char>::size_type& decimal_size)
 {
 	std::vector<unsigned char>	a(tmp_a.getIntegerPart().getDigits());
@@ -80,9 +80,9 @@ static InfiniteInt		mul_integer_parts(const InfiniteDecimal& tmp_a, 	\
 	return (InfiniteInt(a) * InfiniteInt(b));
 }
 
-static InfiniteDecimal	place_floating_point(							\
-		const InfiniteInt& int_result, 									\
-		const std::vector<unsigned char>::size_type& decimal_size, 		\
+static InfiniteDecimal	place_floating_point(								\
+		const InfiniteInt& int_result, 										\
+		const std::vector<unsigned char>::size_type& decimal_size, 			\
 		const bool is_negative)
 {
 	InfiniteDecimal							result;
@@ -106,7 +106,7 @@ static InfiniteDecimal	place_floating_point(							\
 	return (result);
 }
 
-static void				remove_decimal_part_in_divisor(					\
+static void				remove_decimal_part_in_divisor(						\
 		InfiniteDecimal& dividend, InfiniteDecimal& divisor)
 {
 	while (divisor.getDecimalPart())
@@ -116,9 +116,9 @@ static void				remove_decimal_part_in_divisor(					\
 	}
 }
 
-static bool				division_next_digit(							\
+static bool				division_next_digit(								\
 		const InfiniteDecimal& dividend, InfiniteInt& tmp_dividend, 		\
-		std::vector<unsigned char>::size_type& nb_integer, 				\
+		std::vector<unsigned char>::size_type& nb_integer, 					\
 		std::vector<unsigned char>::size_type& nb_decimal)
 {
 	if (nb_integer < dividend.getIntegerPart().size())
@@ -137,9 +137,9 @@ static bool				division_next_digit(							\
 	return (false);
 }
 
-static void				division_loop(const InfiniteDecimal& dividend, 	\
-		const InfiniteInt& divisor, 									\
-		std::vector<unsigned char>& result_integer, 					\
+static void				division_loop(const InfiniteDecimal& dividend, 		\
+		const InfiniteInt& divisor, 										\
+		std::vector<unsigned char>& result_integer, 						\
 		std::vector<unsigned char>& result_decimal)
 {
 	InfiniteInt								tmp_dividend;
@@ -165,8 +165,8 @@ static void				division_loop(const InfiniteDecimal& dividend, 	\
 }
 
 static void				insert_new_digit(const InfiniteDecimal num, 		\
-		InfiniteDecimal& padding, 										\
-		std::vector<unsigned char>& result_integer, 					\
+		InfiniteDecimal& padding, 											\
+		std::vector<unsigned char>& result_integer, 						\
 		std::vector<unsigned char>& result_decimal)
 {
 	unsigned char				last_good_digit(0);
@@ -188,14 +188,16 @@ static void				insert_new_digit(const InfiniteDecimal num, 		\
 	padding /= InfiniteDecimal(10);
 }
 
-static std::string		print_rounded_infinite(InfiniteDecimal& num_copy)
+static std::ostream&	print_rounded_infinite(InfiniteDecimal& num_copy, 	\
+		std::ostream& os)
 {
-	InfiniteDecimal	factor(1);
+	InfiniteDecimal				factor(1);
 	std::vector<unsigned char>	decimal_digits;
+	unsigned char				i(0);
 
 	if (num_copy.getDecimalPart()[InfiniteDecimal::PRINT_PRECISION] >= 5)
 	{
-		for (unsigned char i(0); i < InfiniteDecimal::PRINT_PRECISION; i++)
+		for (unsigned char j(0); j < InfiniteDecimal::PRINT_PRECISION; j++)
 			factor /= 10;
 		num_copy += factor;
 	}
@@ -203,15 +205,23 @@ static std::string		print_rounded_infinite(InfiniteDecimal& num_copy)
 	decimal_digits.resize(InfiniteDecimal::PRINT_PRECISION);
 	num_copy.setDecimalPart(InfiniteInt(decimal_digits, false, false));
 	num_copy.reduce();
-	return ("...");
+	os << num_copy.getIntegerPart();
+	os << ".";
+	for (; i < InfiniteDecimal::PRINT_PRECISION 	\
+			&& i < num_copy.getDecimalPart().size(); i++)
+		os << static_cast<char>(num_copy.getDecimalPart()[i] + '0');
+	for (; i < InfiniteDecimal::PRINT_PRECISION; i++)
+		os << "0";
+	os << "...";
+	return (os);
 }
 
 
 // Constructors
 
 InfiniteDecimal::InfiniteDecimal(const InfiniteInt integer_part, 			\
-		const InfiniteInt decimal_part, const bool is_negative): 		\
-			_integer_part(integer_part), _decimal_part(decimal_part), 	\
+		const InfiniteInt decimal_part, const bool is_negative): 			\
+			_integer_part(integer_part), _decimal_part(decimal_part), 		\
 			_isNegative(is_negative)
 {
 	this->_integer_part.setIsIntegerPart(true);
@@ -708,20 +718,19 @@ void			InfiniteDecimal::reduce(void)
 std::ostream&	operator<<(std::ostream &os, const InfiniteDecimal &num)
 {
 	InfiniteDecimal	num_copy(num);
-	std::string		rounded;
+	unsigned char	i(0);
 
 	if (num_copy.getIsNegative())
 		os << "-";
 	if (num_copy.getDecimalPart().size() > InfiniteDecimal::PRINT_PRECISION)
-		rounded = print_rounded_infinite(num_copy);
+		return (print_rounded_infinite(num_copy, os));
 	os << num_copy.getIntegerPart();
 	if (num_copy.getDecimalPart())
 	{
 		os << ".";
-		for (unsigned char i(0); i < InfiniteDecimal::PRINT_PRECISION 	\
+		for (; i < InfiniteDecimal::PRINT_PRECISION 	\
 				&& i < num_copy.getDecimalPart().size(); i++)
 			os << static_cast<char>(num_copy.getDecimalPart()[i] + '0');
 	}
-	os << rounded;
 	return (os);
 }
