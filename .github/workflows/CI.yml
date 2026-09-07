@@ -15,17 +15,42 @@ on:
   push:
     branches: ["master"]
 jobs:
-  category:
+  compile:
     runs-on: ubuntu-latest
+    permissions:
+      packages: read
+    container:
+      image: ghcr.io/${{ github.repository }}/env:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Build
+        run: make -j
+      - name: Save compiled binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: binary
+          path: .
+          retention-days: 1
+  test:
+    needs: compile
+    runs-on: ubuntu-latest
+    permissions:
+      packages: read
+    container:
+      image: ghcr.io/${{ github.repository }}/env:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       fail-fast: false
       matrix:
-        category: [format, logic_error, numbers, complexes, matrices, polynomials, subject, bonus]
+        test: [format, logic_error, numbers, complexes, matrices, polynomials, subject, bonus]
     steps:
-      - uses: actions/checkout@v5
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y valgrind libreadline-dev
-      - name: Compilation
-        run: make -j
-      - name: Unit tests - ${{ matrix.category }}
-        run: ./unit_tests/${{ matrix.category }}.sh debug
+      - uses: actions/download-artifact@v4
+        with:
+          name: binary
+      - name: Run ${{ matrix.test }}
+        run: ./unit_tests/${{ matrix.test }}.sh debug
