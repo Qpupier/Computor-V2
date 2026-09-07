@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 11:44:30 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/01 14:49:05 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/07 17:39:57 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -356,7 +356,9 @@ bool		Complex::operator!=(const long long int value) const
 bool		Complex::operator<(const IType &other) const
 {
 	if (!other)
-		return (*this->_imaginary < 0 && *this->_real < 0);
+		return ((!*this->_real && *this->_imaginary < 0) 		\
+				|| (!*this->_imaginary && *this->_real < 0) 	\
+				|| (*this->_real < 0 && *this->_imaginary < 0));
 	return (!*this->_imaginary && *this->_real < other);
 }
 
@@ -367,6 +369,8 @@ bool		Complex::operator<(const long long int value) const
 
 bool		Complex::operator<=(const IType &other) const
 {
+	if (!other)
+		return (*this < other || (!*this->_real && !*this->_imaginary));
 	return (!*this->_imaginary && *this->_real <= other);
 }
 
@@ -377,6 +381,10 @@ bool		Complex::operator<=(const long long int value) const
 
 bool		Complex::operator>(const IType &other) const
 {
+	if (!other)
+		return ((!*this->_real && *this->_imaginary > 0) 		\
+				|| (!*this->_imaginary && *this->_real > 0) 	\
+				|| (*this->_real > 0 && *this->_imaginary > 0));
 	return (!*this->_imaginary && *this->_real > other);
 }
 
@@ -387,6 +395,8 @@ bool		Complex::operator>(const long long int value) const
 
 bool		Complex::operator>=(const IType &other) const
 {
+	if (!other)
+		return (*this > other || (!*this->_real && !*this->_imaginary));
 	return (!*this->_imaginary && *this->_real >= other);
 }
 
@@ -1424,7 +1434,13 @@ void	print_complex_rounded_value(const std::string var, 	\
 	if (!real && !imaginary)
 		std::cout << "0";
 	else if (!real)
-		std::cout << imaginary << "i";
+	{
+		if (imaginary == -1)
+			std::cout << "-";
+		else if (imaginary != 1)
+			std::cout << imaginary;
+		std::cout << "i";
+	}
 	else if (!imaginary)
 		std::cout << real;
 	else if (real < 0 && imaginary > 0)

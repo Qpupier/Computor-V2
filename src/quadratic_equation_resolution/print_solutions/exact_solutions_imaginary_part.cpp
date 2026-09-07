@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 18:20:41 by qpupier           #+#    #+#             */
-/*   Updated: 2026/06/15 14:12:22 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/07 17:36:39 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@ static std::string	print_imaginary_term1(	\
 {
 	std::string result;
 
-	if (solutions.imaginary_term1[index] 	\
-			&& solutions.imaginary_term1[index] != 1)
+	if (solutions.imaginary_term1[index])
 		result += solutions.imaginary_term1[index].to_string();
 	return (result);
 }
@@ -108,7 +107,10 @@ std::string			print_imaginary_part(									\
 			index, reduce_sqrt);
 	if (parentheses)
 		result += ")";
-	result += "i";
+	if (result == "1" || result == "-1")
+		result.pop_back();
+	if (result != "0")
+		result += "i";
 	if (solutions.imaginary_denominator[index] > 1)
 		result += " / " + solutions.imaginary_denominator[index].to_string();
 	return (result);
