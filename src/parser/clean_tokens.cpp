@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:17:56 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/07 11:46:11 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/07 13:50:42 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ static void	semantic_verification(std::vector<Token>& tokens)
 void		clean_tokens(t_possibility& possibility)
 {
 	whitespaces_format_error(possibility.tokens);
+	remove_whitespaces(possibility);
 	successive_operators_verification(possibility.tokens);
 	semantic_verification(possibility.tokens);
 	remove_whitespaces(possibility);
