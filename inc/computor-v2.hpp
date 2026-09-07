@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:56:38 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/07 11:46:10 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/07 18:39:43 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ class IType;
 # define ERROR_INCOMPATIBLE_TYPES			LogicError("Incompatible types for operation")
 # define ERROR_INVALID_EXPRESSION			LogicError("Invalid expression format")
 # define ERROR_MATRIX_DIMENSIONS			LogicError("Matrix operation: incompatible dimensions")
-# define ERROR_MATRIX_INVERSION_PIVOT		LogicError("Impossible matrix inversion (pivot is missing)")
+# define ERROR_MATRIX_INVERSION_DETERMINANT	LogicError("Impossible matrix inversion (determinant is null)")
 # define ERROR_MATRIX_INVERSION_SQUARE		LogicError("Matrix inversion is only possible for square matrices")
 # define ERROR_MATRIX_OPERATOR				LogicError("Matrix operator (**) can only be applied to matrices")
 # define ERROR_MATRIX_OUT_OF_RANGE			LogicError("Matrix index out of range")

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/01 15:18:06 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/07 18:39:57 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,9 +129,9 @@ unsigned long int								line_pivot(					\
 		const Matrix& matrix, unsigned long int pivot)
 {
 	for (unsigned long int i(pivot); i < matrix.getHeight(); i++)
-		if (matrix.getValue(pivot, i))
+		if (*matrix.getValue(pivot, i))
 			return (i);
-	throw ERROR_MATRIX_INVERSION_PIVOT;
+	throw ERROR_MATRIX_INVERSION_DETERMINANT;
 	return (pivot);
 }
 
