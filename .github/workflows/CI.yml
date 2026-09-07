@@ -15,29 +15,17 @@ on:
   push:
     branches: ["master"]
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        test: [format, logic_error, numbers, complexes, matrices, polynomials, subject, bonus]
     steps:
       - uses: actions/checkout@v4
-      - name: Install Valgrind & Readline
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y valgrind libreadline-dev
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y valgrind libreadline-dev
       - name: Compilation
         run: make -j
-      - name: Unit tests - Format
-        run: ./unit_tests/format.sh debug
-      - name: Unit tests - Logic errors
-        run: ./unit_tests/logic_error.sh debug
-      - name: Unit tests - Numbers
-        run: ./unit_tests/numbers.sh debug
-      - name: Unit tests - Complex numbers
-        run: ./unit_tests/complexes.sh debug
-      - name: Unit tests - Matrices
-        run: ./unit_tests/matrices.sh debug
-      - name: Unit tests - Polynomials
-        run: ./unit_tests/polynomials.sh debug
-      - name: Unit tests - Subject examples
-        run: ./unit_tests/subject.sh debug
-      - name: Unit tests - Bonus
-        run: ./unit_tests/bonus.sh debug
+      - name: Unit tests - ${{ matrix.test }}
+        run: ./unit_tests/${{ matrix.test }}.sh debug

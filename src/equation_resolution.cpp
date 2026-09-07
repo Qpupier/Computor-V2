@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 14:12:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/07 15:42:13 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/07 15:53:11 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,6 @@ void		display_result(const Polynomial *polynomial, t_data &data)
 	else if (degree == 2)
 		trinomial(polynomial, data);
 	else
-		throw UnsupportedError("The polynomial degree is strictly greater than \
-				2, I can't solve.");
+		throw UnsupportedError("The polynomial degree is strictly greater"	\
+				" than 2, I can't solve.");
 }
