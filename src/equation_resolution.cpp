@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 14:12:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 11:17:33 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/03 18:06:31 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void	monomial(const Polynomial *polynomial, 	\
 void		assignation(std::string var, 				\
 		std::map<std::pair<std::string, std::string>, 	\
 			const IType*> &stored, 						\
-		IType *result)
+		IType *result)// [ ]: x = 3 ? dans le cas ou x n'est pas assigne
 {
 	std::pair<std::string, std::string>	pair(var, std::string());
 	std::string							var_lower(to_lower(var));

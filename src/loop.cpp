@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 14:30:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/01 14:19:21 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/03 18:04:23 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	stored_variables(const t_data& data)
 	std::cout << COLOR_RESET << std::endl;
 }
 
-int		loop(t_data &data, bool is_interactive)// [ ] Gerer les signaux
+int		loop(t_data &data, bool is_interactive)
 {
 	std::string		str_line;
 	unsigned char	status;

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:17:56 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/02 16:58:37 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/07 11:46:11 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,7 @@ static void	successive_operators_verification(std::vector<Token>& tokens)
 		current_token = tokens[i].getValue();
 		if ((current_token == "+" || current_token == "-") 	\
 				&& (prev_token == "+" || prev_token == "-"))
-		{
-			tokens[i - 1].setType(Token::E_TOKEN_TO_DELETE);
-			if (prev_token == current_token)
-				tokens[i].setValue("+");
-			else
-				tokens[i].setValue("-");
-		}
+			throw ERROR_SUCCESSIVE_OPERATORS;
 	}
 }
 
@@ -55,7 +49,7 @@ static void	semantic_verification(std::vector<Token>& tokens)
 				tokens[i - 1].setType(Token::E_TOKEN_TO_DELETE);
 			}
 			else if (current_type == Token::E_TOKEN_OPERATOR)
-				throw LogicError("Two operators cannot be adjacent");
+				throw ERROR_SUCCESSIVE_OPERATORS;
 		}
 	}
 }
@@ -64,7 +58,6 @@ void		clean_tokens(t_possibility& possibility)
 {
 	whitespaces_format_error(possibility.tokens);
 	successive_operators_verification(possibility.tokens);
-	remove_whitespaces(possibility);
 	semantic_verification(possibility.tokens);
 	remove_whitespaces(possibility);
 	if (!possibility.tokens.empty() 										\
