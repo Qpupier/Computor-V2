@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:10:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/08 14:38:08 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/08 15:26:38 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define TOKEN_FULL					TOKEN_BEGIN "(?:" TOKEN_EXPRESSION "|" TOKEN_EQUATION ")" TOKEN_END
 # define TOKEN_VARIABLE				"(?:[a-zA-Z]{2,}|[a-hj-zA-HJ-Z])"
 # define TOKEN_NO_VARIABLE			"(?:cos|sin|tan|exp|abs|norm|sqrt|rad|deg|fact|pi|e|quit|history|delete|all)"// [ ] Ajouter une variable pour avoir le resultat de la derniere commande ?
-# define TOKEN_NUMBER				"\\d+(?:\\.\\d+)?"// [ ] Mot-cle delete pour supprimer une variable ou une fonction
+# define TOKEN_NUMBER				"\\d+(?:\\.\\d+)?"
 # define TOKEN_IMAGINARY			"i"
 # define TOKEN_OPERATOR_INVERSE		"~"
 # define TOKEN_OPERATOR_FACTORIAL	"!"
@@ -44,6 +44,8 @@
 # define TOKEN_FULL_EXPRESSION		TOKEN_BEGIN "(?:" TOKEN "+\\??|" TOKEN_QUESTION ")" TOKEN_END
 # define TOKEN_QUIT					TOKEN_BEGIN TOKEN_WHITESPACE "quit" TOKEN_WHITESPACE TOKEN_END
 # define TOKEN_HISTORY				TOKEN_BEGIN TOKEN_WHITESPACE "history" TOKEN_WHITESPACE "(\\d*)" TOKEN_WHITESPACE TOKEN_END
+# define TOKEN_DELETE				TOKEN_BEGIN TOKEN_WHITESPACE "delete" TOKEN_WHITESPACE TOKEN_VARIABLE TOKEN_WHITESPACE TOKEN_END
+# define TOKEN_DELETE_ALL			TOKEN_BEGIN TOKEN_WHITESPACE "delete" TOKEN_WHITESPACE "all" TOKEN_WHITESPACE TOKEN_END
 
 typedef enum	e_bracket
 {

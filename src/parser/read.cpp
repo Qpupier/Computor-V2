@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/22 13:24:59 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/08 11:47:13 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/08 14:48:08 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static unsigned char	read_keywords(const std::string &str_line, t_data &data)
 		history(match, data.history_results);
 		return (HISTORY);
 	}
-	return (NOTHING);
+	return (read_keyword_delete(str_line, data));
 }
 
 static unsigned char	read_interactive(std::string &str_line, t_data &data)
@@ -67,8 +67,8 @@ static unsigned char	read_tty(std::string &str_line, t_data &data)
 	return (read_keywords(str_line, data));
 }
 
-void		add_history_result(std::vector<std::string> &history_results, 	\
-		const std::string &result, const bool success)
+void					add_history_result(std::vector<std::string>& 		\
+		history_results, const std::string &result, const bool success)
 {
 	std::string	color;
 

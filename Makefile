@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/09/02 16:01:22 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/09/08 14:52:08 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ LST_SRC		=	AST/AST.cpp																			\
 				parser/Token.cpp																	\
 				parser/clean_tokens.cpp																\
 				parser/clean_tokens_whitespaces.cpp													\
+				parser/delete.cpp																	\
 				parser/parser.cpp																	\
 				parser/parser_possibilities.cpp														\
 				parser/read.cpp																		\
