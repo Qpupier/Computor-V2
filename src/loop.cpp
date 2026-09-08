@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 14:30:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/03 18:04:23 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/08 14:04:57 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int		loop(t_data &data, bool is_interactive)
 		if (status == CONTINUE || status == HISTORY)
 		{
 			if (status == HISTORY)
-				data.history_results.push_back("");
+				add_history_result(data.history_results, "");
 			continue;
 		}
 		if (status != NOTHING)

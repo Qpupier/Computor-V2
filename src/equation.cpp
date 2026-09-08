@@ -6,14 +6,14 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/07 17:18:00 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/08 14:19:04 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
 #include "quadratic.hpp"
 
-static void	equation_error(AST *left_ast, AST *right_ast, 				\
+static void	equation_error(AST *left_ast, AST *right_ast, 					\
 		const std::exception& error, bool throw_error = true)
 {
 	if (left_ast)
@@ -49,8 +49,22 @@ static void	equation(AST *left_ast, AST *right_ast, t_data &data)
 	delete polynomial;
 }
 
-void		compute_equation(const std::string &line, t_data &data, 	\
-		const bool eval)// TODO: Fonction trop longue
+static void	handle_equation(AST* left_ast, AST* right_ast, t_data& data, 	\
+		const bool eval)
+{
+	if (left_ast)
+		equation(left_ast, right_ast, data);
+	else if (eval)
+	{
+		std::cout << COLOR_BOLD << "False" << COLOR_RESET << std::endl;
+		add_history_result(data.history_results, "False");
+	}
+	delete left_ast;
+	delete right_ast;
+}
+
+void		compute_equation(const std::string &line, t_data &data, 		\
+		const bool eval)
 {
 	std::size_t	pos;
 	AST*		left_ast;
@@ -74,10 +88,5 @@ void		compute_equation(const std::string &line, t_data &data, 	\
 		equation_error(left_ast, right_ast, std::exception(), false);
 		throw;
 	}
-	if (left_ast)
-		equation(left_ast, right_ast, data);
-	else if (eval)
-		std::cout << COLOR_BOLD << "False" << COLOR_RESET << std::endl;
-	delete left_ast;
-	delete right_ast;
+	handle_equation(left_ast, right_ast, data, eval);
 }

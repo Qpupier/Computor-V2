@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:01:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/03 15:25:44 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/08 11:46:54 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ AST*			build_ast(t_possibility tokens, t_data &data);
 AST*			compute_expression(const std::string &line, t_data &data, bool is_right_side, const bool eval = true);
 AST*			get_the_only_possibility(std::vector<t_possibility>& possibilities, t_data &data, bool is_right_side, const bool eval);
 AST*			handle_external_brackets(t_possibility& possibility, t_bracket brackets_type, t_data& data);
+void			add_history_result(std::vector<std::string> &history_results, const std::string &result, const bool success = true);
 void			brackets_pairs_decrement(std::vector<std::pair<t_bracket, std::pair<unsigned long int, unsigned long int>>>& brackets_pairs, unsigned long int start);
 void			brackets_pairs_increment(std::vector<std::pair<t_bracket, std::pair<unsigned long int, unsigned long int>>>& brackets_pairs, unsigned long int start);
 void			clean_tokens(t_possibility& possibility);

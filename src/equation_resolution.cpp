@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 14:12:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/07 15:53:11 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/08 14:04:12 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,8 @@ static void	binomial(const Polynomial *polynomial, t_data &data)
 	tmp = -(*terms[0].coefficient);
 	result = *tmp / *terms[1].coefficient;
 	delete tmp;
-	data.history_results.push_back(std::string(COLOR_GREEN) 		\
-			+ polynomial->getName() + " = " + result->to_string() 	\
-			+ std::string(COLOR_RESET));
+	add_history_result(data.history_results, polynomial->getName() 	\
+			+ " = " + result->to_string());
 	assignation(polynomial->getName(), data.stored, result);
 }
 
@@ -45,8 +44,7 @@ static void	monomial(const Polynomial *polynomial, 	\
 	else
 		result = "False";
 	std::cout << COLOR_BOLD << result << COLOR_RESET << std::endl;
-	history_results.push_back(std::string(COLOR_GREEN) + result 	\
-			+ std::string(COLOR_RESET));
+	add_history_result(history_results, result);
 }
 
 void		assignation(std::string var, 				\

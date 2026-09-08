@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 16:11:12 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 11:28:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/08 14:05:07 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,7 @@ static void	store_function(t_data &data, 	\
 	data.stored[key] = polynomial;
 	result = key.first + "(" + key.second + ") = " + polynomial->to_string();
 	std::cout << COLOR_BOLD << result << COLOR_RESET << std::endl;
-	data.history_results.push_back(std::string(COLOR_GREEN) + result 	\
-			+ std::string(COLOR_RESET));
+	add_history_result(data.history_results, result);
 }
 
 bool		set_function_left(const std::vector<Token> &tokens, 	\

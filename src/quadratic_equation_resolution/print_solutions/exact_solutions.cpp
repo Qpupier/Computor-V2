@@ -6,11 +6,12 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:19:13 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/01 14:54:09 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/08 14:08:09 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "quadratic.hpp"
+#include "AST.hpp"
 
 static inline bool	solutions_equal(const t_quadratic_solutions& 	\
 		solutions)
@@ -129,7 +130,7 @@ void				print_solutions(t_quadratic_solutions& s, 	\
 	result = std::string(COLOR_GREEN) 									\
 			+ print_exact_solutions(s, set, reduce_sqrt, nb_solutions) 	\
 			+ std::string(COLOR_RESET);
-	data.history_results.push_back(result);
+	add_history_result(data.history_results, result);
 	if (nb_solutions == 1)
 		assignation(var, data.stored, new Complex(						\
 				new Rational(s.real_term1[0], s.real_denominator[0]), 	\

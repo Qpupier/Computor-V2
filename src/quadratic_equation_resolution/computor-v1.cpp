@@ -6,12 +6,13 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:03:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/23 11:35:53 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/08 14:06:05 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Polynomial.hpp"
 #include "quadratic.hpp"
+#include "AST.hpp"
 
 static IType*	get_discriminant(const IType *a, const IType *b, const IType *c)
 {
@@ -71,7 +72,7 @@ static void		print_real_solutions(std::string var, 					\
 	if (nb_solutions == 2)
 		result += " or " + var + " ≈ " + solution2.to_string();
 	result += std::string(COLOR_RESET);
-	data.history_results.push_back(result);
+	add_history_result(data.history_results, result);
 }
 
 static void		find_real_solutions(									\
