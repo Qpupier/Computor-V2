@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/20 16:57:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/21 17:27:20 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/08 14:37:03 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,13 @@
 void	stop_preset_terms(const std::string& name, bool change)
 {
 	std::string	message;
+	std::string	lower_name(to_lower(name));
 
-	message = std::string("\"") + name 	\
+	message = std::string("\"") + lower_name 	\
 			+ std::string("\" is a pre-set variable or function");
 	if (change)
 		message += std::string(" and cannot be changed");
-	if (std::regex_match(name, std::regex(TOKEN_NO_VARIABLE)))
+	if (std::regex_match(lower_name, std::regex(TOKEN_NO_VARIABLE)))
 		throw LogicError(message);
 }
 

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:19:13 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/08 14:08:09 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/08 14:35:19 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,10 +130,10 @@ void				print_solutions(t_quadratic_solutions& s, 	\
 	result = std::string(COLOR_GREEN) 									\
 			+ print_exact_solutions(s, set, reduce_sqrt, nb_solutions) 	\
 			+ std::string(COLOR_RESET);
-	add_history_result(data.history_results, result);
 	if (nb_solutions == 1)
 		assignation(var, data.stored, new Complex(						\
 				new Rational(s.real_term1[0], s.real_denominator[0]), 	\
 				new Rational(s.imaginary_term1[0], s.imaginary_denominator[0])));
+	add_history_result(data.history_results, result);
 	print_rounded_solutions(s, reduce_sqrt, var, nb_solutions);
 }

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/08 14:05:18 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/08 14:37:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void								print_expression(const std::string& 	\
 
 	ast = compute_expression(line, data, true);
 	if (!ast)
-		throw UnexpectedError											\
+		throw UnexpectedError	\
 				("Unexpected error while computing the expression");
 	if (!ast->end_of_tree())
 	{

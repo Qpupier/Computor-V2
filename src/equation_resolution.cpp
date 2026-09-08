@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 14:12:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/08 14:04:12 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/08 14:35:31 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ static void	binomial(const Polynomial *polynomial, t_data &data)
 	tmp = -(*terms[0].coefficient);
 	result = *tmp / *terms[1].coefficient;
 	delete tmp;
+	assignation(polynomial->getName(), data.stored, result);
 	add_history_result(data.history_results, polynomial->getName() 	\
 			+ " = " + result->to_string());
-	assignation(polynomial->getName(), data.stored, result);
 }
 
 static void	monomial(const Polynomial *polynomial, 	\
@@ -55,6 +55,7 @@ void		assignation(std::string var, 				\
 	std::pair<std::string, std::string>	pair(var, std::string());
 	std::string							var_lower(to_lower(var));
 
+	stop_preset_terms(var);
 	std::cout << COLOR_BOLD << var << " = " << *result << COLOR_RESET 	\
 			<< std::endl;
 	if (!result->in_Q())
@@ -64,7 +65,6 @@ void		assignation(std::string var, 				\
 				<< COLOR_RESET << std::endl;
 		return ;
 	}
-	stop_preset_terms(var);
 	result->print_rounded(var);
 	for (std::map<std::pair<std::string, std::string>, const IType*>	\
 			::iterator it(stored.begin()); it != stored.end();)
