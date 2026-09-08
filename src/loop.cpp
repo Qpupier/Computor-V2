@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/16 14:30:08 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/08 16:20:15 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/08 17:37:22 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void	stored_variables(const t_data& data)
 			<< "Listing stored variables and functions" << COLOR_RESET 		\
 			<< COLOR_YELLOW << std::endl 									\
 			<< std::endl << "  Pre-set keywords:" 							\
+			<< std::endl << "    last => Result of the last command" 		\
 			<< std::endl << "    delete <name> => Delete a user-defined"	\
 				" variable or function" 									\
 			<< std::endl << "    delete all => Delete all user-defined"		\

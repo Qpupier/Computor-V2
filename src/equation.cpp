@@ -6,12 +6,13 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 17:27:32 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/08 14:19:04 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/08 17:04:44 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
 #include "quadratic.hpp"
+#include "Boolean.hpp"
 
 static void	equation_error(AST *left_ast, AST *right_ast, 					\
 		const std::exception& error, bool throw_error = true)
@@ -57,6 +58,7 @@ static void	handle_equation(AST* left_ast, AST* right_ast, t_data& data, 	\
 	else if (eval)
 	{
 		std::cout << COLOR_BOLD << "False" << COLOR_RESET << std::endl;
+		assign_last(data, new Boolean(false));
 		add_history_result(data.history_results, "False");
 	}
 	delete left_ast;

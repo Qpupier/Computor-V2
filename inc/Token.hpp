@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 19:10:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/08 15:26:38 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/08 17:36:03 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # define TOKEN_EQUATION_EVAL		TOKEN_EXPRESSION "=" TOKEN_EXPRESSION TOKEN_QUESTION
 # define TOKEN_FULL					TOKEN_BEGIN "(?:" TOKEN_EXPRESSION "|" TOKEN_EQUATION ")" TOKEN_END
 # define TOKEN_VARIABLE				"(?:[a-zA-Z]{2,}|[a-hj-zA-HJ-Z])"
-# define TOKEN_NO_VARIABLE			"(?:cos|sin|tan|exp|abs|norm|sqrt|rad|deg|fact|pi|e|quit|history|delete|all)"// [ ] Ajouter une variable pour avoir le resultat de la derniere commande ?
+# define TOKEN_NO_VARIABLE			"(?:cos|sin|tan|exp|abs|norm|sqrt|rad|deg|fact|pi|e|quit|history|last|delete|all)"
 # define TOKEN_NUMBER				"\\d+(?:\\.\\d+)?"
 # define TOKEN_IMAGINARY			"i"
 # define TOKEN_OPERATOR_INVERSE		"~"

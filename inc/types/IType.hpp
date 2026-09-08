@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 17:42:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 17:44:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/08 16:25:31 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ class	IType
 			E_TYPE_POLYNOMIAL,
 			E_TYPE_VECTOR,
 			E_TYPE_REAL,
+			E_TYPE_BOOLEAN,
 			E_TYPE_OPERATOR,
 			E_TYPE_FUNCTION
 		}				t_type;

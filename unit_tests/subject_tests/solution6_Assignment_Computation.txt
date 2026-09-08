@@ -7,8 +7,7 @@ varD = 239.5
 Listing stored variables and functions
 
   Pre-set keywords:
-    delete <name> => Delete a user-defined variable or function
-    delete all => Delete all user-defined variables and functions
+    last => Result of the last command
     history => Display the history of commands and results
     quit => Exit the program
 

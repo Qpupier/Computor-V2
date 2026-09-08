@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 14:12:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/08 14:35:31 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/08 18:02:29 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,37 +45,6 @@ static void	monomial(const Polynomial *polynomial, 	\
 		result = "False";
 	std::cout << COLOR_BOLD << result << COLOR_RESET << std::endl;
 	add_history_result(history_results, result);
-}
-
-void		assignation(std::string var, 				\
-		std::map<std::pair<std::string, std::string>, 	\
-			const IType*> &stored, 						\
-		IType *result)
-{
-	std::pair<std::string, std::string>	pair(var, std::string());
-	std::string							var_lower(to_lower(var));
-
-	stop_preset_terms(var);
-	std::cout << COLOR_BOLD << var << " = " << *result << COLOR_RESET 	\
-			<< std::endl;
-	if (!result->in_Q())
-	{
-		std::cout << COLOR_BOLD << COLOR_DIM 							\
-				<< "Real numbers cannot be stored as variables" 		\
-				<< COLOR_RESET << std::endl;
-		return ;
-	}
-	result->print_rounded(var);
-	for (std::map<std::pair<std::string, std::string>, const IType*>	\
-			::iterator it(stored.begin()); it != stored.end();)
-		if (to_lower(it->first.first) == var_lower)
-		{
-			delete it->second;
-			it = stored.erase(it);
-		}
-		else
-			it++;
-	stored[pair] = result;
 }
 
 void		display_result(const Polynomial *polynomial, t_data &data)

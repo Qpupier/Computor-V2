@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 20:00:36 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/08 14:55:43 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/08 17:44:30 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,27 +52,27 @@ void		trim_string(std::string &s)
 void		print_variables(const t_data& data, const bool print_preset, 	\
 		const bool print_variables)
 {
-	std::map<std::pair<std::string, std::string>, const IType*>			\
+	std::map<std::pair<std::string, std::string>, const IType*>				\
 			::const_iterator	it(data.stored.begin());
 	bool						is_constant;
 
 	while (it != data.stored.end())
 	{
-		is_constant = std::find(data.preset_constants.begin(), 			\
-					data.preset_constants.end(), it->first.first) 		\
+		is_constant = std::find(data.preset_constants.begin(), 				\
+					data.preset_constants.end(), it->first.first) 			\
 				!= data.preset_constants.end();
-		if ((print_preset && print_variables && is_constant) 			\
-				|| (!print_preset 										\
-					&& ((print_variables && it->first.second.empty() 	\
-							&& !is_constant) 							\
-						|| (!print_variables && !it->first.second.empty()))))
+		if (((print_preset && print_variables && is_constant) 				\
+					|| (!print_preset 										\
+						&& ((print_variables && it->first.second.empty() 	\
+								&& !is_constant) 							\
+							|| (!print_variables 							\
+								&& !it->first.second.empty()))))			\
+				&& it->first.first != "last")
 		{
-			std::cout << "    ";
+			std::cout << "    " << it->first.first;
 			if (!it->first.second.empty())
-				std::cout << it->first.first << "(" << it->first.second << ")";
-			else
-				std::cout << it->first.first;
-			std::cout << (print_preset ? " ≈ " : " = ") << *it->second 	\
+				std::cout << "(" << it->first.second << ")";
+			std::cout << (print_preset ? " ≈ " : " = ") << *it->second 		\
 					<< std::endl;
 		}
 		it++;

@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/09/08 14:52:08 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/09/08 18:07:10 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ LST_SRC		=	AST/AST.cpp																			\
 				quadratic_equation_resolution/real_part.cpp											\
 				quadratic_equation_resolution/simplify_factors.cpp									\
 				types/IType.cpp																		\
+				types/Boolean.cpp																	\
 				types/Complex.cpp																	\
 				types/DefinedFunction.cpp															\
 				types/Matrix.cpp																	\
@@ -59,6 +60,7 @@ LST_SRC		=	AST/AST.cpp																			\
 				errors.cpp																			\
 				loop.cpp																			\
 				store.cpp																			\
+				store_assignation.cpp																\
 				utils.cpp
 LST_OBJ		=	$(LST_SRC:.cpp=.o)
 LST_DEP		=	$(LST_OBJ:.o=.d)
