@@ -6,6 +6,8 @@ Listing stored variables and functions
 
   Pre-set keywords:
     last => Result of the last command
+    delete <name> => Delete a user-defined variable or function
+    delete all => Delete all user-defined
     history => Display the history of commands and results
     quit => Exit the program
 
