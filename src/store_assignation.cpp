@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/08 18:02:13 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/09 12:14:10 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/09 12:18:45 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@ void		assignation_store(std::map<std::pair				\
 void		assignation(std::string var, 				\
 		std::map<std::pair<std::string, std::string>, 	\
 			const IType*> &stored, 						\
-		IType *result, const bool assign_last)
+		IType *result, const bool last)
 {
 
-	if (!assign_last)
+	if (!last)
 	{
 		stop_preset_terms(var);
 		std::cout << COLOR_BOLD << var << " = " << *result << COLOR_RESET 	\
@@ -52,7 +52,7 @@ void		assignation(std::string var, 				\
 		result->print_rounded(var);
 	}
 	assignation_store(stored, var, result);
-	if (!assign_last)
+	if (!last)
 		assignation("last", stored, result->clone(), true);
 }
 
