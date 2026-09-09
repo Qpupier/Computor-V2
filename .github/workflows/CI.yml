@@ -52,15 +52,24 @@ jobs:
       matrix:
         test: [format, logic_error, numbers, complexes, matrices, polynomials, subject, bonus]
     steps:
-      - name: Download artifact with retry
-        uses: nick-fields/retry@v3
+      - name: Stagger matrix start
+        shell: sh
+        run: |
+          delay=1
+          case "${{ matrix.test }}" in
+            format) delay=1 ;;
+            logic_error) delay=3 ;;
+            numbers) delay=5 ;;
+            complexes) delay=7 ;;
+            matrices) delay=9 ;;
+            polynomials) delay=11 ;;
+            subject) delay=13 ;;
+            bonus) delay=15 ;;
+          esac
+          sleep "$delay"
+      - uses: actions/download-artifact@v4
         with:
-          timeout_minutes: 2
-          max_attempts: 5
-          retry_wait_seconds: 5
-          uses: actions/download-artifact@v4
-          with: |
-            name: binary
+          name: binary
       - run: chmod +x unit_tests/${{ matrix.test }}.sh computor-v2
       - name: Run ${{ matrix.test }}
         run: ./unit_tests/${{ matrix.test }}.sh debug
