@@ -52,6 +52,8 @@ jobs:
       matrix:
         test: [format, logic_error, numbers, complexes, matrices, polynomials, subject, bonus]
     steps:
+      - name: Stagger artifact downloads
+        run: sleep $(( RANDOM % 6 + 1 ))
       - uses: actions/download-artifact@v7
         with:
           name: binary
