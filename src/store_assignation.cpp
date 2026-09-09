@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/08 18:02:13 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/08 18:06:49 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/09 12:14:10 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,15 @@ void		assignation(std::string var, 				\
 		stop_preset_terms(var);
 		std::cout << COLOR_BOLD << var << " = " << *result << COLOR_RESET 	\
 				<< std::endl;
-	}
-	if (!result->in_Q())
-	{
-		std::cout << COLOR_BOLD << COLOR_DIM 								\
-				<< "Real numbers cannot be stored as variables" 			\
-				<< COLOR_RESET << std::endl;
-		return ;
-	}
-	if (!assign_last)
+		if (!result->in_Q())
+		{
+			std::cout << COLOR_BOLD << COLOR_DIM 							\
+					<< "Real numbers cannot be stored as variables" 		\
+					<< COLOR_RESET << std::endl;
+			return ;
+		}
 		result->print_rounded(var);
+	}
 	assignation_store(stored, var, result);
 	if (!assign_last)
 		assignation("last", stored, result->clone(), true);
