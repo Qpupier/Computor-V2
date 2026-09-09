@@ -52,11 +52,15 @@ jobs:
       matrix:
         test: [format, logic_error, numbers, complexes, matrices, polynomials, subject, bonus]
     steps:
-      - name: Stagger artifact downloads
-        run: sleep $(( RANDOM % 6 + 1 ))
-      - uses: actions/download-artifact@v7
-        with:
-          name: binary
+      - name: Download artifact with retry
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          for i in {1..5}; do
+            gh run download ${{ github.run_id }} -n binary && break
+            echo "Erreur 403/réseau, nouvel essai dans $((i * 3))s..."
+            sleep $((i * 3))
+          done
       - run: chmod +x unit_tests/${{ matrix.test }}.sh computor-v2
       - name: Run ${{ matrix.test }}
         run: ./unit_tests/${{ matrix.test }}.sh debug
