@@ -39,7 +39,7 @@ test_leaks_and_errors()
 {
 	echo "$1" | valgrind --leak-check=full ./computor-v2 > output 2> error
 	if ! grep -q "All heap blocks were freed -- no leaks are possible" error || ! grep -q "ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)" error; then
-		echo "❌"
+		echo "☠️"
 		if [ "$2" != "debug" ]; then
 			return 1
 		fi
@@ -67,6 +67,7 @@ run_test()
 		echo "\033[0m"
 		print_error
 	fi
+	echo -n "✅ "
 	test_leaks_and_errors "$1" "$3"
 }
 
@@ -85,6 +86,7 @@ run_error()
 		echo "\033[0m"
 		print_error
 	fi
+	echo -n "✅ "
 	test_leaks_and_errors "$1" "$3"
 }
 
