@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:39:10 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 17:44:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/10 12:05:54 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static unsigned char	sub_infinite_int_digit(		\
 {
 	unsigned char	digit_a((i < rev_a.size()) ? rev_a[i] : 0);
 	unsigned char	digit_b((i < rev_b.size()) ? rev_b[i] : 0);
-	short int		diff(digit_a - digit_b);
+	short int		diff(static_cast<short int>(digit_a) - digit_b);
 
 	if (hold)
 		diff--;
