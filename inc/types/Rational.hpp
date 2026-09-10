@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:43:18 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 17:44:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/10 17:59:10 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ class	Rational: public IType
 		// Methods
 		InfiniteInt		integer_part(void) const;
 		std::string		to_string(void) const;
+		int				to_int(void) const;
 		bool			in_C(void) const;
 		bool			in_D(void) const;
 		bool			in_M(void) const;

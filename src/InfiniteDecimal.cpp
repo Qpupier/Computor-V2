@@ -691,6 +691,16 @@ InfiniteDecimal	InfiniteDecimal::sqrt(void) const
 	return (InfiniteDecimal(result_integer, result_decimal));
 }
 
+int				InfiniteDecimal::to_int(void) const
+{
+	int	result;
+
+	result = this->getIntegerPart().to_int();
+	if (this->getIsNegative())
+		result = -result;
+	return (result);
+}
+
 bool			InfiniteDecimal::in_D(void) const
 {
 	return (this->_decimal_part.size() < InfiniteDecimal::PRINT_PRECISION);

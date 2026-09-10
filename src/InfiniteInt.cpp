@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:39:10 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/10 12:05:54 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/10 18:31:41 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 // Utils
 
-static std::vector<unsigned char>	add_infinite_int(	\
+static std::vector<unsigned char>	add_infinite_int(					\
 		const InfiniteInt &a, const InfiniteInt &b)
 {
 	std::vector<unsigned char>	rev_a(a.getDigits());
@@ -42,9 +42,9 @@ static std::vector<unsigned char>	add_infinite_int(	\
 	return (result);
 }
 
-static unsigned char	sub_infinite_int_digit(		\
-		const std::vector<unsigned char>& rev_a, 	\
-		const std::vector<unsigned char>& rev_b, 	\
+static unsigned char				sub_infinite_int_digit(				\
+		const std::vector<unsigned char>& rev_a, 						\
+		const std::vector<unsigned char>& rev_b, 						\
 		std::vector<unsigned char>::size_type i, bool& hold)
 {
 	unsigned char	digit_a((i < rev_a.size()) ? rev_a[i] : 0);
@@ -63,7 +63,7 @@ static unsigned char	sub_infinite_int_digit(		\
 	return (static_cast<unsigned char>(diff));
 }
 
-static std::vector<unsigned char>	sub_infinite_int(	\
+static std::vector<unsigned char>	sub_infinite_int(					\
 		const InfiniteInt &a, const InfiniteInt &b)
 {
 	std::vector<unsigned char>	rev_a(a.getDigits());
@@ -80,8 +80,8 @@ static std::vector<unsigned char>	sub_infinite_int(	\
 	return (result);
 }
 
-static std::vector<InfiniteInt>		multiplication_part(	\
-		const std::vector<unsigned char> &a, 				\
+static std::vector<InfiniteInt>		multiplication_part(				\
+		const std::vector<unsigned char> &a, 							\
 		const std::vector<unsigned char> &b)
 {
 	std::vector<InfiniteInt>	result;
@@ -636,18 +636,6 @@ InfiniteInt	InfiniteInt::sqrt(void) const
 	return (result);
 }
 
-void	InfiniteInt::pop_front(void)
-{
-	if (this->_digits.empty())
-		throw std::out_of_range("Cannot pop from an empty InfiniteInt");
-	this->_digits.erase(this->_digits.begin());
-}
-
-void		InfiniteInt::push_back(unsigned char digit)
-{
-	this->_digits.push_back(digit);
-}
-
 std::string	InfiniteInt::to_string(void) const
 {
 	std::string	str;
@@ -663,6 +651,30 @@ std::string	InfiniteInt::to_string(void) const
 std::size_t	InfiniteInt::size(void) const
 {
 	return (this->_digits.size());
+}
+
+int			InfiniteInt::to_int(void) const
+{
+	int	result(0);
+
+	for (std::vector<unsigned char>::const_iterator it	\
+			(this->_digits.begin()); it != this->_digits.end(); it++)
+		result = result * 10 + static_cast<int>(*it);
+	if (this->_isNegative)
+		result = -result;
+	return (result);
+}
+
+void		InfiniteInt::pop_front(void)
+{
+	if (this->_digits.empty())
+		throw std::out_of_range("Cannot pop from an empty InfiniteInt");
+	this->_digits.erase(this->_digits.begin());
+}
+
+void		InfiniteInt::push_back(unsigned char digit)
+{
+	this->_digits.push_back(digit);
 }
 
 void		InfiniteInt::reverse(void)

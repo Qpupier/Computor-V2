@@ -6,7 +6,7 @@
 #    By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 17:32:17 by qpupier           #+#    #+#              #
-#    Updated: 2026/09/08 18:07:10 by qpupier          ###   ########lyon.fr    #
+#    Updated: 2026/09/10 16:39:41 by qpupier          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,6 +58,7 @@ LST_SRC		=	AST/AST.cpp																			\
 				equation.cpp																		\
 				equation_resolution.cpp																\
 				errors.cpp																			\
+				graphic.cpp																			\
 				loop.cpp																			\
 				store.cpp																			\
 				store_assignation.cpp																\

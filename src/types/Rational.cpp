@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 19:46:50 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 17:44:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/10 17:31:29 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -913,6 +913,11 @@ std::string		Rational::to_string(void) const
 
 	this->print(oss);
 	return (oss.str());
+}
+
+int				Rational::to_int(void) const
+{
+	return (this->getValue().to_int());
 }
 
 bool			Rational::in_C(void) const

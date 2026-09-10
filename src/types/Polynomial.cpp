@@ -6,12 +6,13 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/01 14:35:48 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/10 19:02:10 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Polynomial.hpp"
 #include "Matrix.hpp"
+#include "graphic.hpp"
 
 // Utils
 
@@ -1006,7 +1007,30 @@ std::ostream&	Polynomial::print(std::ostream &os) const
 		os << " / ";
 		print_terms(os, this->_dividers, this->_name);
 	}
+	this->print_graphic(os);
 	return (os);
+}
+
+std::ostream&	Polynomial::print_graphic(std::ostream& os) const
+{
+	std::vector<std::pair<Rational, Rational>>	points;
+	IType*										y;
+	Rational*									x;
+	Rational*									tmp;
+
+	x = new Rational(GRAPHIC_X_MIN);
+	while (*x <= GRAPHIC_X_MAX)
+	{
+		y = this->function_operator(*x);
+		if (y->in_D())
+			points.push_back(std::pair<Rational, Rational>(*x, *y));
+		delete y;
+		tmp = x;
+		x = *x + Rational(GRAPHIC_X_STEP);
+		delete tmp;
+	}
+	delete x;
+	return (display_graphic(os, points));
 }
 
 IType*			Polynomial::abs(void) const

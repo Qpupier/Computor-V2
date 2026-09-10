@@ -125,6 +125,7 @@ class	InfiniteDecimal
 		// Methods
 		InfiniteDecimal	abs(void) const;
 		InfiniteDecimal	sqrt(void) const;
+		int				to_int(void) const;
 		bool			in_D(void) const;
 		void			push_back_decimal(unsigned char digit);
 		void			push_back_integer(unsigned char digit);

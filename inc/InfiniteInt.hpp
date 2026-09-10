@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/15 14:39:49 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 17:44:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/10 19:00:52 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ class	InfiniteInt
 		InfiniteInt	sqrt(void) const;
 		std::string	to_string(void) const;
 		std::size_t	size(void) const;
+		int			to_int(void) const;
 		void		pop_front(void);
 		void		push_back(unsigned char digit);
 		void		reverse(void);
