@@ -67,7 +67,7 @@ jobs:
             bonus) delay=15 ;;
           esac
           sleep "$delay"
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v7
         with:
           name: binary
       - run: chmod +x unit_tests/${{ matrix.test }}.sh computor-v2
