@@ -106,5 +106,6 @@ run_batch()
 		delete_files
 		exit 1
 	fi
+	echo -n "✅ "
 	test_leaks_and_errors "$1" "$3"
 }
