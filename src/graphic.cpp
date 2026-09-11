@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/10 16:22:54 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/11 12:04:38 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/11 15:17:52 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,8 @@ static void						print_graphic_result(std::ostream& os, 	\
 }
 
 std::ostream&					display_graphic(std::ostream& os, 	\
-		std::vector<std::pair<Rational, Rational>> points, const bool trigo)
+		std::vector<std::pair<Rational, Rational>> points, 			\
+		const bool func, const bool trigo)
 {
 	std::vector<std::string>	reference(trigo 	\
 			? get_reference_trigo() : get_reference());
@@ -112,6 +113,6 @@ std::ostream&					display_graphic(std::ostream& os, 	\
 				&& y >= 0 && y < 24 && reference[y][x] == ' ')
 			reference[y][x] = '*';
 	}
-	print_graphic_result(os, reference, trigo);
+	print_graphic_result(os, reference, func);
 	return (os);
 }

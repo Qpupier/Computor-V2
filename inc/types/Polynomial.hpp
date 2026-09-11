@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/11 12:22:40 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/11 15:35:33 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,15 +94,17 @@ class	Polynomial: public IType
 		// Methods
 		std::string		to_string(void) const;
 		bool			is_constant(void) const;
+		bool			is_degree_one_monic_monomial(void) const;
 		bool			in_C(void) const;
 		bool			in_D(void) const;
 		bool			in_M(void) const;
 		bool			in_Q(void) const;
 		bool			in_Z(void) const;
 		std::ostream&	print(std::ostream &os) const;
-		std::ostream&	print_graphic(std::ostream& os) const;
-		std::ostream&	print_graphic_trigo(std::ostream& os, 	\
-				IType* (IType::*func)(void) const) const;
+		template <typename Func = IType>					\
+		std::ostream&	print_graphic(std::ostream& os, 	\
+				Func* (IType::*func)() const = nullptr, 	\
+				const bool trigo = false) const;
 		IType*			abs(void) const;
 		IType*			clone(void) const;
 		IType*			cos(void) const;

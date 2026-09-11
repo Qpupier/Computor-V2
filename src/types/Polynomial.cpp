@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/11 12:27:36 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/11 15:40:35 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -940,6 +940,15 @@ bool			Polynomial::is_constant(void) const
 	return (false);
 }
 
+bool			Polynomial::is_degree_one_monic_monomial(void) const
+{
+	return (this->getTerms().size() == 2 					\
+			&& !*this->getTerms()[0].coefficient 			\
+			&& *this->getDividers()[0].coefficient == 1 	\
+			&& this->getDividers().size() == 1 				\
+			&& *this->getDividers()[0].coefficient == 1);
+}
+
 bool			Polynomial::in_C(void) const
 {
 	for (const auto& term : this->_terms)
@@ -1011,61 +1020,43 @@ std::ostream&	Polynomial::print(std::ostream &os) const
 	return (os);
 }
 
-std::ostream&	Polynomial::print_graphic(std::ostream& os) const
-{
-	std::vector<std::pair<Rational, Rational>>	points;
-	IType*										y;
-	Rational*									x;
-	Rational*									tmp;
-
-	x = new Rational(GRAPHIC_X_MIN);
-	while (*x <= GRAPHIC_X_MAX)
-	{
-		y = this->function_operator(*x);
-		if (y->in_D())
-			points.push_back(std::pair<Rational, Rational>(*x, *y));
-		delete y;
-		tmp = x;
-		x = *x + Rational(GRAPHIC_X_STEP);
-		delete tmp;
-	}
-	delete x;
-	return (display_graphic(os, points));
-}
-
-std::ostream&	Polynomial::print_graphic_trigo(std::ostream& os, 	\
-		IType* (IType::*func)(void) const) const
+template <typename Func>
+std::ostream&	Polynomial::print_graphic(std::ostream& os, 	\
+		Func* (IType::*func)() const, const bool trigo) const
 {
 	std::vector<std::pair<Rational, Rational>>	points;
 	IType*										y;
 	IType*										x;
 	IType*										tmp;
 
-	if (this->getTerms().size() != 2 					\
-			|| *this->getTerms()[1].coefficient != 1 	\
-			|| this->getDividers().size() != 1 			\
-			|| *this->getDividers()[0].coefficient != 1)
+	if (func && this->is_degree_one_monic_monomial())
 		return (os);
-	x = new Rational(GRAPHIC_TRIGO_X_MIN);
-	while (*x <= GRAPHIC_TRIGO_X_MAX)
+	x = new Rational(trigo ? GRAPHIC_TRIGO_X_MIN : GRAPHIC_X_MIN);
+	while (*x <= (trigo ? GRAPHIC_TRIGO_X_MAX : GRAPHIC_X_MAX))
 	{
-		y = (x->*func)();
-		points.push_back(std::pair<Rational, Rational>(*x, *y));
-		delete y;
+		try
+		{
+			y = func ? (x->*func)() : this->function_operator(*x);
+			points.push_back(std::pair<Rational, Rational>(*x, *y));
+			delete y;
+		}
+		catch (...) {}
 		tmp = x;
-		x = *x + Rational(GRAPHIC_TRIGO_X_STEP);
+		x = *x + Rational(trigo ? GRAPHIC_TRIGO_X_STEP : GRAPHIC_X_STEP);
 		delete tmp;
 	}
 	delete x;
-	display_graphic(std::cout, points, true);
-	return (os);
+	return (display_graphic(os, points, func, trigo));
 }
 
 IType*			Polynomial::abs(void) const
 {
 	if (!this->is_constant())
+	{
+		this->print_graphic(std::cout, &IType::abs);
 		throw UnsupportedError("Absolute function is not defined for "
 				"polynomials, use the norm function instead");
+	}
 	return (this->getTerms()[0].coefficient->abs());
 }
 
@@ -1078,7 +1069,7 @@ IType*			Polynomial::cos(void) const
 {
 	if (!this->is_constant())
 	{
-		this->print_graphic_trigo(std::cout, &IType::cos);
+		this->print_graphic(std::cout, &IType::cos, true);
 		throw UnsupportedError("Cosine of a polynomial is undefined");
 	}
 	return (this->getTerms()[0].coefficient->cos());
@@ -1088,7 +1079,7 @@ IType*			Polynomial::exp(void) const
 {
 	if (!this->is_constant())
 	{
-		this->print_graphic_trigo(std::cout, &IType::exp);// TODO: Changer
+		this->print_graphic(std::cout, &IType::exp);
 		throw UnsupportedError("Exponential of a polynomial is undefined");
 	}
 	return (this->getTerms()[0].coefficient->exp());
@@ -1143,7 +1134,7 @@ IType*			Polynomial::sin(void) const
 {
 	if (!this->is_constant())
 	{
-		this->print_graphic_trigo(std::cout, &IType::sin);
+		this->print_graphic(std::cout, &IType::sin, true);
 		throw UnsupportedError("Sine of a polynomial is undefined");
 	}
 	return (this->getTerms()[0].coefficient->sin());
@@ -1155,6 +1146,7 @@ IType*			Polynomial::sqrt(void) const
 	IType*	denominator_sqrt;
 	IType*	result;
 
+	this->print_graphic(std::cout, &IType::sqrt);
 	numerator_sqrt = terms_sqrt(*this, this->_terms);
 	denominator_sqrt = terms_sqrt(*this, this->_dividers);
 	result = *numerator_sqrt / *denominator_sqrt;
@@ -1167,7 +1159,7 @@ IType*			Polynomial::tan(void) const
 {
 	if (!this->is_constant())
 	{
-		this->print_graphic_trigo(std::cout, &IType::tan);// TODO: Changer
+		this->print_graphic(std::cout, &IType::tan, true);
 		throw UnsupportedError("Tangent of a polynomial is undefined");
 	}
 	return (this->getTerms()[0].coefficient->tan());
@@ -1176,7 +1168,10 @@ IType*			Polynomial::tan(void) const
 Rational*		Polynomial::fact(void) const
 {
 	if (!this->is_constant())
+	{
+		this->print_graphic(std::cout, &IType::fact);
 		throw ERROR_FACTORIAL_FUNCTION;
+	}
 	return (this->getTerms()[0].coefficient->fact());
 }
 
