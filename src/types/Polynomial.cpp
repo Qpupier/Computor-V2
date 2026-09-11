@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/11 15:40:35 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/11 16:30:29 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1040,7 +1040,10 @@ std::ostream&	Polynomial::print_graphic(std::ostream& os, 	\
 			points.push_back(std::pair<Rational, Rational>(*x, *y));
 			delete y;
 		}
-		catch (...) {}
+		catch (...)
+		{
+			delete y;
+		}
 		tmp = x;
 		x = *x + Rational(trigo ? GRAPHIC_TRIGO_X_STEP : GRAPHIC_X_STEP);
 		delete tmp;
