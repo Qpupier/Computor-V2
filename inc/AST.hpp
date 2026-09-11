@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 18:01:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/08 17:04:15 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/11 16:53:24 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void			set_function_right(t_data &data, AST* ast);
 void			stop_preset_terms(const std::string& name, bool change = true);
 void			stored_variables(const t_data& data);
 void			trim_string(std::string &s);
+void			verif_functions(AST* ast, t_data &data, const bool is_function = false);
 void			verif_preset_terms(AST* ast, bool left = true, bool last_operator_is_function = false);
 void			whitespaces_format_error(const std::vector<Token> &tokens);
 

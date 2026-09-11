@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:00:25 by qpupier           #+#    #+#             */
-/*   Updated: 2026/08/31 17:44:30 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/11 16:41:56 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ class	Matrix: public IType
 				unsigned long int line2);
 
 		//Constants
-		static constexpr unsigned char	MAX_NEWTON_ITERATIONS = 7;// [ ] Ajuster ce chiffre
+		static constexpr unsigned char	MAX_NEWTON_ITERATIONS = 7;
 
 	private:
 		// Members

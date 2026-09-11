@@ -6,11 +6,13 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/08 14:45:33 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/08 18:03:20 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/11 16:54:12 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AST.hpp"
+#include "Polynomial.hpp"
+#include "Operator.hpp"
 
 static std::map<std::pair<std::string, std::string>, const IType*>		\
 		::iterator	delete_specific_variable(							\
@@ -84,4 +86,33 @@ unsigned char	read_keyword_delete(const std::string &str_line, t_data &data)
 		return (CONTINUE);
 	}
 	return (NOTHING);
+}
+
+void			verif_functions(AST* ast, t_data &data, const bool is_function)
+{
+	bool		is_next_function(false);
+	Polynomial*	polynomial;
+	Operator*	op;
+
+	if (ast->getNode()->getType() == IType::E_TYPE_OPERATOR)
+	{
+		op = dynamic_cast<Operator*>(ast->getNode());
+		if (op->getOperator() == Operator::E_FUNCTION)
+			is_next_function = true;
+	}
+	if (ast->getLeft())
+		verif_functions(ast->getLeft(), data, is_next_function);
+	if (ast->getRight())
+		verif_functions(ast->getRight(), data, is_next_function);
+	if (!is_function && ast->getNode()->getType() == IType::E_TYPE_POLYNOMIAL)
+	{
+		polynomial = dynamic_cast<Polynomial*>(ast->getNode());
+		for (std::map<std::pair<std::string, std::string>, const IType*>	\
+				::iterator it(data.stored.begin()); 						\
+				it != data.stored.end(); it++)
+			if (to_lower(it->first.first) == to_lower(polynomial->getName()))
+				throw LogicError("Variable "+ it->first.first 				\
+						+ " is defined as a function,"						\
+						" but is used as a variable");
+	}
 }

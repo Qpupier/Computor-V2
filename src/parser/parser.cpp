@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 11:51:00 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/11 16:38:58 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/11 16:49:08 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,9 @@ AST*								compute_expression(						\
 	ast = get_the_only_possibility(possibilities, data, is_right_side, eval);
 	if (!ast)
 		return (nullptr);
-	// verif_functions();TODO
 	try
 	{
+		verif_functions(ast, data);
 		return (compute_AST(ast, data, is_right_side, eval));
 	}
 	catch (...)
