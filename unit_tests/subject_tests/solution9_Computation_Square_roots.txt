@@ -68,15 +68,15 @@ Listing stored variables and functions
 
   Pre-set functions:
     sqrt => Square root
-    norm => Norm
-    abs => Absolute
+    norm (or ||<name>||) => Norm
+    abs (or |<name>|) => Absolute
     cos => Cosine
     sin => Sine
     tan => Tangent
     exp => Exponential
     rad => Degree to radian
     deg => Radian to degree
-    fact => Factorial
+    fact (or <name>!) => Factorial
 
   User-defined variables:
     x = -1

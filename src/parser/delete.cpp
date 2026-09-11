@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/08 14:45:33 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/11 18:46:48 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/11 18:53:13 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	delete_all_variables(const std::string &str_line, t_data &data)
 		it = delete_specific_variable(it, data);
 		count++;
 	}
-	add_history_result(data.history_results, std::to_string(count) 	\
+	add_history_result(data.history_results, std::to_string(count) 			\
 			+ " variables or functions deleted");
 }
 
