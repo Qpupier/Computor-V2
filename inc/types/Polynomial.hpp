@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:06:14 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/10 19:00:15 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/11 12:22:40 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,8 @@ class	Polynomial: public IType
 		bool			in_Z(void) const;
 		std::ostream&	print(std::ostream &os) const;
 		std::ostream&	print_graphic(std::ostream& os) const;
+		std::ostream&	print_graphic_trigo(std::ostream& os, 	\
+				IType* (IType::*func)(void) const) const;
 		IType*			abs(void) const;
 		IType*			clone(void) const;
 		IType*			cos(void) const;

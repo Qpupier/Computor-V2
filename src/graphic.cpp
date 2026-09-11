@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/10 16:22:54 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/10 19:02:37 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/11 12:04:38 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,53 @@ static std::vector<std::string>	get_reference(void)
 	return (array);
 }
 
+static std::vector<std::string>	get_reference_trigo(void)
+{
+	std::vector<std::string>	array;
+
+	array.push_back("┌──────────────────────────────────────────────────────────────────────────────┐");
+	array.push_back("│                                      ^                                       │");
+	array.push_back("│                                    1 ┼                                       │");
+	array.push_back("│                                      │                                       │");
+	array.push_back("│                                      │                                       │");
+	array.push_back("│                                      │                                       │");
+	array.push_back("│                                      │                                       │");
+	array.push_back("│                                  0.5 ┼                                       │");
+	array.push_back("│                                      │                                       │");
+	array.push_back("│                                      │                                       │");
+	array.push_back("│                                      │                                       │");
+	array.push_back("│                                      │                                       │");
+	array.push_back("│──────┼───────┼───────┼───────┼───────┼───────┼───────┼───────┼───────┼──────>│");
+	array.push_back("│     -4      -3      -2      -1      0│       1       2       3       4       │");
+	array.push_back("│                                      │                                       │");
+	array.push_back("│                                      │                                       │");
+	array.push_back("│                                      │                                       │");
+	array.push_back("│                                 -0.5 ┼                                       │");
+	array.push_back("│                                      │                                       │");
+	array.push_back("│                                      │                                       │");
+	array.push_back("│                                      │                                       │");
+	array.push_back("│                                      │                                       │");
+	array.push_back("│                                   -1 ┼                                       │");
+	array.push_back("└──────────────────────────────────────────────────────────────────────────────┘");
+	return (array);
+}
+
 static void						print_graphic_result(std::ostream& os, 	\
-		std::vector<std::string> reference)
+		std::vector<std::string> reference, const bool trigo)
 {
 	for (std::vector<std::string>::iterator it(reference.begin()); 	\
 			it != reference.end(); it++)
-		os << std::endl << *it;
+		if (trigo)
+			os << *it << std::endl;
+		else
+			os << std::endl << *it;
 }
 
-std::ostream&					display_graphic(std::ostream& os, 		\
-		std::vector<std::pair<Rational, Rational>> points)
+std::ostream&					display_graphic(std::ostream& os, 	\
+		std::vector<std::pair<Rational, Rational>> points, const bool trigo)
 {
-	std::vector<std::string>	reference(get_reference());
+	std::vector<std::string>	reference(trigo 	\
+			? get_reference_trigo() : get_reference());
 	Rational*	relative_x;
 	Rational*	relative_y;
 	unsigned long int	x;
@@ -63,8 +98,8 @@ std::ostream&					display_graphic(std::ostream& os, 		\
 	for (std::vector<std::pair<Rational, Rational>>::iterator it	\
 			(points.begin()); it != points.end(); it++)
 	{
-		relative_x = it->first * 4;
-		relative_y = it->second * 2;
+		relative_x = it->first * (trigo ? 8 : 4);
+		relative_y = it->second * (trigo ? 10 : 2);
 		x = GRAPHIC_WIDTH / 2 + 1 	\
 				+ static_cast<unsigned long>(relative_x->to_int());
 		y = GRAPHIC_HEIGHT / 2 		\
@@ -77,6 +112,6 @@ std::ostream&					display_graphic(std::ostream& os, 		\
 				&& y >= 0 && y < 24 && reference[y][x] == ' ')
 			reference[y][x] = '*';
 	}
-	print_graphic_result(os, reference);
+	print_graphic_result(os, reference, trigo);
 	return (os);
 }

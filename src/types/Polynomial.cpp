@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/10 19:02:10 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/11 12:27:36 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1033,6 +1033,34 @@ std::ostream&	Polynomial::print_graphic(std::ostream& os) const
 	return (display_graphic(os, points));
 }
 
+std::ostream&	Polynomial::print_graphic_trigo(std::ostream& os, 	\
+		IType* (IType::*func)(void) const) const
+{
+	std::vector<std::pair<Rational, Rational>>	points;
+	IType*										y;
+	IType*										x;
+	IType*										tmp;
+
+	if (this->getTerms().size() != 2 					\
+			|| *this->getTerms()[1].coefficient != 1 	\
+			|| this->getDividers().size() != 1 			\
+			|| *this->getDividers()[0].coefficient != 1)
+		return (os);
+	x = new Rational(GRAPHIC_TRIGO_X_MIN);
+	while (*x <= GRAPHIC_TRIGO_X_MAX)
+	{
+		y = (x->*func)();
+		points.push_back(std::pair<Rational, Rational>(*x, *y));
+		delete y;
+		tmp = x;
+		x = *x + Rational(GRAPHIC_TRIGO_X_STEP);
+		delete tmp;
+	}
+	delete x;
+	display_graphic(std::cout, points, true);
+	return (os);
+}
+
 IType*			Polynomial::abs(void) const
 {
 	if (!this->is_constant())
@@ -1049,14 +1077,20 @@ IType*			Polynomial::clone(void) const
 IType*			Polynomial::cos(void) const
 {
 	if (!this->is_constant())
+	{
+		this->print_graphic_trigo(std::cout, &IType::cos);
 		throw UnsupportedError("Cosine of a polynomial is undefined");
+	}
 	return (this->getTerms()[0].coefficient->cos());
 }
 
 IType*			Polynomial::exp(void) const
 {
 	if (!this->is_constant())
+	{
+		this->print_graphic_trigo(std::cout, &IType::exp);// TODO: Changer
 		throw UnsupportedError("Exponential of a polynomial is undefined");
+	}
 	return (this->getTerms()[0].coefficient->exp());
 }
 
@@ -1108,7 +1142,10 @@ IType*			Polynomial::norm(void) const
 IType*			Polynomial::sin(void) const
 {
 	if (!this->is_constant())
+	{
+		this->print_graphic_trigo(std::cout, &IType::sin);
 		throw UnsupportedError("Sine of a polynomial is undefined");
+	}
 	return (this->getTerms()[0].coefficient->sin());
 }
 
@@ -1129,7 +1166,10 @@ IType*			Polynomial::sqrt(void) const
 IType*			Polynomial::tan(void) const
 {
 	if (!this->is_constant())
+	{
+		this->print_graphic_trigo(std::cout, &IType::tan);// TODO: Changer
 		throw UnsupportedError("Tangent of a polynomial is undefined");
+	}
 	return (this->getTerms()[0].coefficient->tan());
 }
 
