@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 14:19:47 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/11 16:30:29 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/11 18:10:48 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -492,6 +492,23 @@ static IType*							terms_sqrt(const Polynomial& ref, 	\
 	result = new Polynomial(ref.getName(), (Polynomial::t_term){terms[size - 1].coefficient->sqrt(), sqrt_degree});
 	terms_sqrt_loop(ref.getName(), terms, result, sqrt_degree);
 	return (terms_sqrt_verification(ref, result));
+}
+
+template <typename Func>
+static IType*							graphic_apply_functions(			\
+		const Polynomial* polynomial, IType* x, Func* (IType::*func)() const)
+{
+	IType*	y;
+	IType*	tmp;
+
+	y = polynomial->function_operator(*x);
+	if (func)
+	{
+		tmp = y;
+		y = (y->*func)();
+		delete tmp;
+	}
+	return (y);
 }
 
 
@@ -1029,14 +1046,12 @@ std::ostream&	Polynomial::print_graphic(std::ostream& os, 	\
 	IType*										x;
 	IType*										tmp;
 
-	if (func && this->is_degree_one_monic_monomial())
-		return (os);
 	x = new Rational(trigo ? GRAPHIC_TRIGO_X_MIN : GRAPHIC_X_MIN);
 	while (*x <= (trigo ? GRAPHIC_TRIGO_X_MAX : GRAPHIC_X_MAX))
 	{
 		try
 		{
-			y = func ? (x->*func)() : this->function_operator(*x);
+			y = graphic_apply_functions(this, x, func);
 			points.push_back(std::pair<Rational, Rational>(*x, *y));
 			delete y;
 		}

@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/10 16:22:54 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/11 15:17:52 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/11 18:05:19 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static std::vector<std::string>	get_reference_trigo(void)
 	return (array);
 }
 
-static void						print_graphic_result(std::ostream& os, 	\
+static std::ostream&			print_graphic_result(std::ostream& os, 	\
 		std::vector<std::string> reference, const bool trigo)
 {
 	for (std::vector<std::string>::iterator it(reference.begin()); 	\
@@ -83,36 +83,36 @@ static void						print_graphic_result(std::ostream& os, 	\
 			os << *it << std::endl;
 		else
 			os << std::endl << *it;
+	return (os);
 }
 
 std::ostream&					display_graphic(std::ostream& os, 	\
 		std::vector<std::pair<Rational, Rational>> points, 			\
 		const bool func, const bool trigo)
 {
-	std::vector<std::string>	reference(trigo 	\
-			? get_reference_trigo() : get_reference());
-	Rational*	relative_x;
-	Rational*	relative_y;
-	unsigned long int	x;
-	unsigned long int	y;
+	std::vector<std::string>	reference	\
+			(trigo ? get_reference_trigo() : get_reference());
+	unsigned long int			x;
+	unsigned long int			y;
+	Rational*					relative_x;
+	Rational*					relative_y;
 
 	for (std::vector<std::pair<Rational, Rational>>::iterator it	\
 			(points.begin()); it != points.end(); it++)
 	{
 		relative_x = it->first * (trigo ? 8 : 4);
 		relative_y = it->second * (trigo ? 10 : 2);
-		x = GRAPHIC_WIDTH / 2 + 1 	\
-				+ static_cast<unsigned long>(relative_x->to_int());
-		y = GRAPHIC_HEIGHT / 2 		\
-				- static_cast<unsigned long>(relative_y->to_int());
-		if (*relative_x > 0 && it->second <= 5)
+		x = static_cast<unsigned long>(GRAPHIC_WIDTH / 2 + 1 	\
+				+ relative_x->to_int());
+		y = static_cast<unsigned long>(GRAPHIC_HEIGHT / 2 		\
+				- relative_y->to_int());
+		if (it->first.to_int() > 0 && y != 1)
 			x += 2;
 		delete relative_x;
 		delete relative_y;
 		if (it->first > GRAPHIC_X_MIN && it->first < GRAPHIC_X_MAX 	\
-				&& y >= 0 && y < 24 && reference[y][x] == ' ')
+				&& y >= 0 && y < GRAPHIC_HEIGHT && reference[y][x] == ' ')
 			reference[y][x] = '*';
 	}
-	print_graphic_result(os, reference, func);
-	return (os);
+	return (print_graphic_result(os, reference, func));
 }

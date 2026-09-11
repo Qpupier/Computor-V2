@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/08 14:45:33 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/11 17:13:35 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/11 17:15:40 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void			verif_functions(AST* ast, t_data &data, const bool is_function)
 		verif_functions(ast->getLeft(), data, is_next_function);
 	if (ast->getRight())
 		verif_functions(ast->getRight(), data, is_next_function);
-	if (is_function || !ast->getNode()->getType() == IType::E_TYPE_POLYNOMIAL)
+	if (is_function || ast->getNode()->getType() != IType::E_TYPE_POLYNOMIAL)
 		return ;
 	polynomial = dynamic_cast<Polynomial*>(ast->getNode());
 	for (std::map<std::pair<std::string, std::string>, const IType*>		\
