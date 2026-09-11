@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/25 17:04:19 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/02 17:18:54 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/11 18:20:24 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ static inline bool	is_operator_missing(Token::t_token prev_token, 		\
 			&& prev_token != Token::E_TOKEN_LEFT_NORM 				\
 			&& current_token != Token::E_TOKEN_RIGHT_NORM 			\
 			&& prev_token != Token::E_TOKEN_OPERATOR_INVERSE 		\
+			&& prev_token != Token::E_TOKEN_OPERATOR_FACTORIAL 		\
 			&& current_token != Token::E_TOKEN_OPERATOR_FACTORIAL);
 }
 

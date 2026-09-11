@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/12 14:02:52 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/11 17:51:14 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/11 18:22:45 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,16 @@ bool			handle_operators(t_possibility& possibility, long long int *pos)
 	*pos = select_less_priority_operator(possibility);
 	if (*pos < 0)
 		return (false);
-	if ((!*pos || static_cast<unsigned long int>(*pos) 					\
-				== possibility.tokens.size() - 1) 						\
-			&& possibility.tokens[static_cast<unsigned long int>(*pos)]	\
-				.getType() != Token::E_TOKEN_OPERATOR_INVERSE 			\
-			&& possibility.tokens[static_cast<unsigned long int>(*pos)]	\
-				.getType() != Token::E_TOKEN_OPERATOR_FACTORIAL)
+	if ((!*pos || static_cast<unsigned long int>(*pos) 						\
+				== possibility.tokens.size() - 1) 							\
+			&& possibility.tokens[static_cast<unsigned long int>(*pos)]		\
+				.getType() != Token::E_TOKEN_OPERATOR_INVERSE)
 	{
+		if (static_cast<unsigned long int>(*pos) 							\
+					== possibility.tokens.size() - 1 						\
+				&& possibility.tokens[static_cast<unsigned long int>(*pos)]	\
+					.getType() == Token::E_TOKEN_OPERATOR_FACTORIAL)
+			return (false);
 		insert_token(possibility, pos);
 		return (true);
 	}
