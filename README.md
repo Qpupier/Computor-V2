@@ -1,5 +1,7 @@
 # computor-v2
 
+[![CI](https://github.com/Qpupier/Computor-V2/actions/workflows/CI.yml/badge.svg)](https://github.com/Qpupier/Computor-V2/actions/workflows/CI.yml)
+
 `computor-v2` is an interactive C++ command-line mathematics interpreter. It evaluates expressions, retains variables and user-defined functions for the current session, uses exact rational arithmetic, and solves polynomial equations through degree two.
 
 Developed as an academic project at 42 Lyon.
