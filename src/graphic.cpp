@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/10 16:22:54 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/11 18:05:19 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/11 18:34:00 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ std::ostream&					display_graphic(std::ostream& os, 	\
 				+ relative_x->to_int());
 		y = static_cast<unsigned long>(GRAPHIC_HEIGHT / 2 		\
 				- relative_y->to_int());
-		if (it->first.to_int() > 0 && y != 1)
+		if (it->first > 0 && y != 1)
 			x += 2;
 		delete relative_x;
 		delete relative_y;
