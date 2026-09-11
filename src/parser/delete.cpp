@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/08 14:45:33 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/11 17:15:40 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/11 18:46:48 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,9 @@ static void	delete_variable(const std::string &str_line, t_data &data)
 	variable = re_it->str();
 	while (it != data.stored.end())
 	{
-		if (it->first.first != variable)
+		if (it->first.first != variable 									\
+				|| std::regex_match(it->first.first, 						\
+					std::regex(TOKEN_NO_VARIABLE)))
 		{
 			it++;
 			continue ;
