@@ -6,7 +6,7 @@
 /*   By: qpupier <qpupier@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 17:07:55 by qpupier           #+#    #+#             */
-/*   Updated: 2026/09/07 18:39:57 by qpupier          ###   ########lyon.fr   */
+/*   Updated: 2026/09/14 15:45:23 by qpupier          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -472,12 +472,8 @@ Matrix::Matrix(const Vector &vector): Matrix(vector.size(), 1)
 
 Matrix::Matrix(const Polynomial &polynomial)
 {
-	if (polynomial.getDividers().size() != 1 					\
-			|| *polynomial.getDividers()[0].coefficient != 1 	\
-			|| polynomial.getDividers()[0].power 				\
-			|| polynomial.getTerms().size() != 1 				\
-			|| polynomial.getTerms()[0].power)
-		throw ERROR_UNEXPECTED;
+	if (!polynomial.is_constant())
+		throw LogicError("A polynomial cannot be converted to a matrix");
 	*this = Matrix(*polynomial.getTerms()[0].coefficient);
 }
 
@@ -529,7 +525,7 @@ bool		Matrix::operator==(const IType &other) const
 	{
 		other_matrix = Matrix(other);
 	}
-	catch(const UnexpectedError &e)
+	catch(...)
 	{
 		return (false);
 	}
